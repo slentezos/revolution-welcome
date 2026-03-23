@@ -26,6 +26,9 @@ import EditorialArticle from "./pages/EditorialArticle";
 import ListeAttente from "./pages/ListeAttente";
 import MentionsLegales from "./pages/MentionsLegales";
 import Cookies from "./pages/Cookies";
+import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
+import CGU from "./pages/CGU";
+import SignalerContenu from "./pages/SignalerContenu";
 
 const queryClient = new QueryClient();
 
