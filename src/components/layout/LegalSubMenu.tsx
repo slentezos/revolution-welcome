@@ -1,6 +1,6 @@
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const legalLinks = [
@@ -17,11 +17,24 @@ export default function LegalSubMenu() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef<HTMLAnchorElement>(null);
+
+  // 1. SCROLL AUTO : Centre l'onglet actif dès qu'on change de page
+  useEffect(() => {
+    if (activeRef.current && scrollRef.current) {
+      activeRef.current.scrollIntoView({
+        behavior: "smooth",
+        inline: "center", // Crucial : cela centre le bouton dans la barre
+        block: "nearest",
+      });
+    }
+  }, [pathname]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // 2. NAVIGATION FLÈCHES : Change de page et déclenche le scroll auto
   const navigateByArrow = (direction: "left" | "right") => {
     const currentIndex = legalLinks.findIndex((link) => pathname.replace(/\/$/, "") === link.href.replace(/\/$/, ""));
 
@@ -35,24 +48,25 @@ export default function LegalSubMenu() {
   };
 
   return (
-    <nav className="sticky top-16 md:top-20 z-40 bg-gray-50/95 backdrop-blur-sm border-y border-gray-200 py-4 shadow-sm">
-      <div className="container-main mx-auto px-2 md:px-6 flex items-center">
+    <nav className="sticky top-16 md:top-20 z-40 bg-gray-50 border-y border-gray-200 py-5 shadow-md">
+      <div className="container-main mx-auto px-4 flex items-center relative">
         {/* Flèche Gauche */}
         <button
           onClick={() => navigateByArrow("left")}
           disabled={pathname === legalLinks[0].href}
           className={cn(
-            "p-2 rounded-full transition-all shrink-0 bg-white border border-gray-200 shadow-sm z-10",
-            pathname === legalLinks[0].href ? "opacity-20 cursor-not-allowed" : "hover:bg-gray-100 text-[#1B2333]",
+            "absolute left-2 z-20 p-2 rounded-full bg-white border border-gray-200 shadow-lg transition-all",
+            pathname === legalLinks[0].href ? "opacity-10 cursor-not-allowed" : "hover:scale-110 active:scale-95",
           )}
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-6 w-6 text-[#1B2333]" />
         </button>
 
-        {/* Zone de Scroll avec Padding augmenté */}
+        {/* ZONE DE SCROLL - Masquée mais fonctionnelle */}
         <div
           ref={scrollRef}
-          className="overflow-x-auto whitespace-nowrap flex gap-4 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth py-2 px-10"
+          className="overflow-x-auto whitespace-nowrap flex gap-4 flex-1 scrollbar-hide scroll-smooth px-12 md:px-20"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {legalLinks.map((link) => {
             const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
@@ -60,20 +74,21 @@ export default function LegalSubMenu() {
               <Link
                 key={link.href}
                 to={link.href}
+                ref={isActive ? activeRef : null}
                 onClick={scrollToTop}
                 className={cn(
-                  "inline-block px-6 py-2.5 font-semibold rounded-full transition-all duration-300 shrink-0 text-sm md:text-base border",
+                  "inline-block px-8 py-3 font-bold rounded-full transition-all duration-300 shrink-0 text-base md:text-lg border-2",
                   isActive
-                    ? "bg-[#1B2333] text-white border-[#1B2333] shadow-md scale-105"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-[#1B2333] hover:text-[#1B2333]",
+                    ? "bg-[#1B2333] text-white border-[#1B2333] shadow-xl scale-105"
+                    : "bg-white text-gray-500 border-gray-100 hover:border-[#1B2333] hover:text-[#1B2333]",
                 )}
               >
                 {link.label}
               </Link>
             );
           })}
-          {/* Petit espace vide à la fin pour ne pas que le dernier item soit collé */}
-          <div className="w-10 shrink-0" />
+          {/* Espace de fin pour permettre le centrage du dernier item */}
+          <div className="min-w-[100px] h-1 shrink-0" />
         </div>
 
         {/* Flèche Droite */}
@@ -81,13 +96,13 @@ export default function LegalSubMenu() {
           onClick={() => navigateByArrow("right")}
           disabled={pathname === legalLinks[legalLinks.length - 1].href}
           className={cn(
-            "p-2 rounded-full transition-all shrink-0 bg-white border border-gray-200 shadow-sm z-10",
+            "absolute right-2 z-20 p-2 rounded-full bg-white border border-gray-200 shadow-lg transition-all",
             pathname === legalLinks[legalLinks.length - 1].href
-              ? "opacity-20 cursor-not-allowed"
-              : "hover:bg-gray-100 text-[#1B2333]",
+              ? "opacity-10 cursor-not-allowed"
+              : "hover:scale-110 active:scale-95",
           )}
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-6 w-6 text-[#1B2333]" />
         </button>
       </div>
     </nav>
