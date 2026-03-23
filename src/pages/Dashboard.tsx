@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
-import { Clock, Send, Undo2, X, Sparkles } from "lucide-react";
+import { Send, Undo2, X, Sparkles, Clock } from "lucide-react";
 import dashboardHero from "@/assets/dashboard-hero.jpg";
 import MatchProfileModal from "@/components/dashboard/MatchProfileModal";
 import DashboardMatchCard from "@/components/dashboard/DashboardMatchCard";
@@ -11,6 +11,7 @@ import DashboardProgressCards from "@/components/dashboard/DashboardProgressCard
 import DashboardStatsCards from "@/components/dashboard/DashboardStatsCards";
 import DashboardGreeting from "@/components/dashboard/DashboardGreeting";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import EmptyMatchState from "@/components/dashboard/EmptyMatchState";
 
 // Mock data for matches
 const mockMatches = [
@@ -112,8 +113,15 @@ export default function Dashboard() {
     setUndoBanner(null);
   }, [undoBanner]);
 
+  const sixDaysInMs = 6 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+
   const visibleMatches = mockMatches.filter(
     (m) => !savedForLater.some((s) => s.id === m.id) && !acceptedMatchIds.includes(m.id) && !pendingMatches.some((p) => p.id === m.id)
+  );
+
+  const filteredMatches = visibleMatches.filter(
+    (m) => now - new Date(m.matchedAt).getTime() <= sixDaysInMs
   );
   const visibleSavedForLater = savedForLater.filter(
     (m) => !pendingMatches.some((p) => p.id === m.id) && !acceptedMatchIds.includes(m.id)
@@ -170,7 +178,7 @@ export default function Dashboard() {
           <div data-reveal data-reveal-delay="100">
             <DashboardStatsCards
               onMessagesClick={() => navigate("/messages")}
-              newProposalsCount={visibleMatches.length}
+              newProposalsCount={filteredMatches.length}
               pendingCount={pendingMatches.length}
               savedCount={visibleSavedForLater.length}
               unreadMessageCount={2} />
@@ -197,19 +205,11 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {visibleMatches.length === 0 ? (
-              <div className="bg-card rounded-2xl border border-border/30 shadow-[var(--shadow-card)] flex flex-col items-center justify-center py-20 px-8">
-                <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mb-6">
-                  <Clock className="h-9 w-9 text-muted-foreground/50" />
-                </div>
-                <p className="font-heading text-2xl text-foreground mb-3">Aucune nouvelle proposition pour l'instant</p>
-                <p className="text-lg text-muted-foreground text-center max-w-md leading-relaxed">
-                  Nos experts travaillent à trouver des profils qui vous correspondent. Vous serez averti(e) par e-mail dès qu'une nouvelle affinité vous sera proposée.
-                </p>
-              </div>
+            {filteredMatches.length === 0 ? (
+              <EmptyMatchState />
             ) : (
               <div className="grid grid-cols-1 gap-5">
-                {visibleMatches.map((match) => (
+                {filteredMatches.map((match) => (
                   <DashboardMatchCard key={match.id} match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
                 ))}
               </div>
