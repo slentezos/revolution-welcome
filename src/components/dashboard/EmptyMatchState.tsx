@@ -57,7 +57,7 @@ export default function EmptyMatchState() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10 max-w-md mx-auto">
             <button
               onClick={() => navigate("/profil")}
-              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-300"
+              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-1000"
             >
               <UserCheck className="h-5 w-5 text-gold" />
               <span className="text-white font-medium text-base">Parfaire mon profil</span>
@@ -65,7 +65,7 @@ export default function EmptyMatchState() {
 
             <button
               onClick={() => navigate("/editorial")}
-              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-300"
+              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-1000"
             >
               <Coffee className="h-5 w-5 text-gold" />
               <span className="text-white font-medium text-base">Lire l'Éditorial</span>
