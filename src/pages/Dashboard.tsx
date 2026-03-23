@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
-import { Clock, Send, Undo2, X, Sparkles } from "lucide-react";
+import { Send, Undo2, X, Sparkles, Clock } from "lucide-react";
 import dashboardHero from "@/assets/dashboard-hero.jpg";
 import MatchProfileModal from "@/components/dashboard/MatchProfileModal";
 import DashboardMatchCard from "@/components/dashboard/DashboardMatchCard";
