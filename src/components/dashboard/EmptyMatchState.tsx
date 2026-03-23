@@ -23,52 +23,45 @@ export default function EmptyMatchState() {
 
   return (
     <div className="animate-fade-in [animation-duration:1000ms]">
-      <div className="relative rounded-2xl overflow-hidden border border-gold/40">
+      <div className="relative rounded-2xl overflow-hidden border border-gold/40 shadow-2xl">
         {/* Background image */}
-        <img
-          src={theme.image}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-          width={1280}
-          height={512}
-        />
+        <img src={theme.image} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
 
         {/* Overlay */}
         <div className={`absolute inset-0 bg-gradient-to-b ${theme.overlay}`} />
 
-        {/* Decorative gold line */}
+        {/* Decorative gold line top */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
 
-        <div className="relative z-10 p-8 md:p-12 lg:p-16 text-center max-w-2xl mx-auto">
-          <h3
-            className="font-heading text-4xl md:text-3xl lg:text-4xl tracking-[0.15em] uppercase mb-8"
-            style={{ color: "hsl(var(--text-white))" }}
-          >
+        <div className="relative z-10 p-8 md:p-12 lg:p-20 text-center max-w-4xl mx-auto">
+          {/* Title: Pure White & Bigger */}
+          <h3 className="font-heading text-4xl md:text-5xl lg:text-6xl tracking-[0.15em] uppercase mb-8 text-white drop-shadow-md">
             Savoir attendre, c'est choisir l'excellence
           </h3>
 
-          <p className="text-base md:text-xl leading-relaxed text-white/80">
+          <p className="text-xl md:text-2xl leading-relaxed text-white/90 mb-12 max-w-3xl mx-auto">
             Nos experts sélectionnent vos profils avec soin. Profitez de votre journée, lisez, marchez… Vivez l'instant
             présent. Vous recevrez un email dès qu'une action sera requise.
           </p>
 
-          {/* Actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10 max-w-md mx-auto">
+          {/* Actions: Wider container for single-line text */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <button
               onClick={() => navigate("/profil")}
-              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-1000"
+              className="flex items-center justify-center gap-4 px-8 py-5 rounded-xl border border-gold/30 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all duration-300 group"
             >
-              <UserCheck className="h-6 w-6 text-gold" />
-              <span className="text-white font-medium text-xl">Parfaire mon profil</span>{" "}
+              <UserCheck className="h-7 w-7 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-white font-semibold text-xl md:text-2xl whitespace-nowrap">
+                Parfaire mon profil
+              </span>
             </button>
 
             <button
               onClick={() => navigate("/editorial")}
-              className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-1000"
+              className="flex items-center justify-center gap-4 px-8 py-5 rounded-xl border border-gold/30 bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all duration-300 group"
             >
-              <Coffee className="h-6 w-6 text-gold" />
-              <span className="text-white font-medium text-xl">Lire l'Éditorial</span>{" "}
+              <Coffee className="h-7 w-7 text-gold group-hover:scale-110 transition-transform" />
+              <span className="text-white font-semibold text-xl md:text-2xl whitespace-nowrap">Lire l'Éditorial</span>
             </button>
           </div>
         </div>
