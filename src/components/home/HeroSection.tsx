@@ -37,8 +37,8 @@ export default function HeroSection() {
           L'élégance des rencontres après 60 ans. Déjà disponible en Île-de-France, bientôt chez vous.
         </h1>
 
-        <p data-reveal data-reveal-delay="600" className="text-lg mb-10 md:text-2xl text-foreground/80 font-medium">Retrouver l'amour ou l'amitié, en toute simplicité 
-où chaque profil est vérifié manuellement.
+        <p data-reveal data-reveal-delay="600" className="text-lg mb-10 md:text-2xl text-foreground/80 font-medium">Retrouver l'amour ou l'amitié, en toute simplicité où chaque profil est vérifié manuellement.
+
 
         </p>
 
