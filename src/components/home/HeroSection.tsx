@@ -22,8 +22,6 @@ export default function HeroSection() {
           <span className="font-heading text-6xl md:text-8xl lg:text-9xl font-medium text-primary">Kalimera</span>
         </div>
 
-        
-
         {/* Privilege Badge */}
         <div data-reveal data-reveal-delay="300" className="mb-8">
           <PrivilegeBadge />
@@ -32,14 +30,15 @@ export default function HeroSection() {
         <h1
           data-reveal
           data-reveal-delay="400"
-          className="font-heading text-2xl md:text-3xl lg:text-4xl text-foreground mb-6 leading-relaxed text-balance font-semibold">
-          
+          className="font-heading text-2xl md:text-3xl lg:text-4xl text-foreground mb-6 leading-relaxed text-balance font-semibold"
+        >
           L'élégance des rencontres après 60 ans. Déjà disponible en Île-de-France, bientôt chez vous.
         </h1>
 
-        <p data-reveal data-reveal-delay="600" className="text-lg mb-10 md:text-2xl text-foreground/80 font-medium">L'amour ou l'amitié, en toute sérénité. 
-Profils vérifiés manuellement et 75% d'affinités garanties.
-
+        <p data-reveal data-reveal-delay="600" className="text-lg mb-10 md:text-2xl text-foreground/80 font-medium">
+          L'amour ou l'amitié, en toute sérénité. 
+          <br />
+          Profils vérifiés manuellement et 75% d'affinités garanties.
         </p>
 
         {/* Postal Code Input replaces "Devenir membre" */}
@@ -52,6 +51,6 @@ Profils vérifiés manuellement et 75% d'affinités garanties.
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-float">
         <ArrowDown className="h-6 w-6 text-muted-foreground" />
       </div>
-    </section>);
-
+    </section>
+  );
 }
