@@ -82,36 +82,57 @@ export default function MentionsLegales() {
                 content: (
                   <>
                     <p className="text-xl">
-                      Le site Kalimera ainsi que l’ensemble de ses contenus, notamment les textes, images, vidéos,
-                      graphismes, logo, structure, questionnaires de personnalité, analyses, concepts, algorithmes de
-                      matching et éléments visuels, sont protégés par le droit de la propriété intellectuelle. Le site
-                      Kalimera ainsi que l’ensemble de ses contenus sont la propriété exclusive de l’éditeur.
+                      Le site Kalimera ainsi que l’ensemble de ses contenus (notamment les textes, images, graphismes,
+                      logo, structure, questionnaires, analyses, concepts et éléments visuels, questionnaire de
+                      personnalité, algorithmes de matching…) sont protégés par le droit de la propriété intellectuelle.
+                      Le site Kalimera ainsi que l’ensemble de ses contenus sont la propriété exclusive de l’éditeur.
                     </p>
                     <p className="text-xl mt-4">
                       Toute reproduction, représentation, modification, publication, adaptation ou exploitation, totale
                       ou partielle, de tout ou partie du site ou de son contenu, quel que soit le moyen ou le procédé
-                      utilisé, est formellement interdite sans autorisation préalable et écrite de l'éditeur.
+                      utilisé, est interdite sans autorisation préalable écrite.
                     </p>
                     <p className="text-xl mt-4">
-                      Toute utilisation non autorisée du site ou de son contenu sera considérée comme constitutive d’une
-                      contrefaçon et pourra faire l’objet de poursuites judiciaires.
+                      Toute utilisation non autorisée du site ou de son contenu pourra faire l’objet de poursuites.
                     </p>
                   </>
                 ),
               },
               {
-                title: "5. Données personnelles",
+                title: "5. Responsabilité",
                 content: (
                   <>
                     <p className="text-xl">
-                      Les données personnelles collectées sur le site sont traitées dans le strict respect des
-                      conditions prévues par le Règlement Général sur la Protection des Données (RGPD).
+                      Kalimera met en œuvre tous les moyens raisonnables pour assurer l’exactitude et la mise à jour des
+                      informations diffusées sur le site.
+                    </p>
+                    <p className="text-xl mt-4">Toutefois, l’éditeur ne saurait être tenu responsable :</p>
+                    <ul className="list-disc list-inside text-xl mt-2 space-y-1 ml-4">
+                      <li>des inexactitudes ou omissions présentes sur le site ;</li>
+                      <li>des interruptions de fonctionnement indépendantes de sa volonté ;</li>
+                      <li>du contenu des sites tiers accessibles par lien hypertexte.</li>
+                    </ul>
+                    <p className="text-xl mt-4">
+                      Les utilisateurs demeurent seuls responsables des contenus qu’ils publient et des échanges qu’ils
+                      entretiennent avec les autres utilisateurs.
+                    </p>
+                  </>
+                ),
+              },
+              {
+                title: "6. Données personnelles",
+                content: (
+                  <>
+                    <p className="text-xl">
+                      Les données personnelles collectées sur le site sont traitées dans les conditions prévues par le
+                      Règlement Général sur la Protection des Données (RGPD).
                     </p>
                     <p className="text-xl mt-4">
-                      Conformément à la réglementation applicable, l’utilisateur dispose de droits d’accès, de
-                      rectification, d’effacement, de limitation du traitement, de portabilité et d’opposition. Pour
-                      toute demande relative à l'exercice de ces droits ou pour toute question concernant le traitement
-                      de vos données personnelles, vous pouvez nous écrire à :{" "}
+                      L’utilisateur dispose notamment de droits d’accès, de rectification, d’effacement et d’opposition
+                      dans les conditions prévues par la réglementation applicable.
+                    </p>
+                    <p className="text-xl mt-4">
+                      Pour toute demande relative aux données personnelles :{" "}
                       <a href="mailto:contact@monkalimera.fr" className="text-primary hover:underline">
                         contact@monkalimera.fr
                       </a>
@@ -120,54 +141,19 @@ export default function MentionsLegales() {
                 ),
               },
               {
-                title: "6. Cookies",
-                content: (
-                  <p className="text-xl">
-                    Le site Kalimera utilise exclusivement des cookies strictement nécessaires au fonctionnement
-                    technique du service. Aucun cookie publicitaire ou de traçage n'est utilisé. L'utilisateur peut
-                    configurer son navigateur pour refuser les cookies, mais cette action pourrait limiter l'accès à
-                    certaines fonctionnalités du site.
-                  </p>
-                ),
-              },
-              {
-                title: "7. Responsabilité",
-                content: (
-                  <>
-                    <p className="text-xl">
-                      Kalimera s'efforce de fournir des informations exactes et à jour sur son site. Toutefois, la
-                      société ne saurait être tenue responsable des erreurs, inexactitudes ou omissions présentes sur le
-                      site, ni des résultats obtenus suite à l'utilisation de ces informations.
-                    </p>
-                    <p className="text-xl mt-4">De plus, l'éditeur ne pourra être tenu responsable :</p>
-                    <ul className="list-disc list-inside text-xl mt-2 space-y-1 ml-4">
-                      <li>des interruptions de fonctionnement ou bugs du site indépendants de sa volonté ;</li>
-                      <li>du contenu des sites tiers accessibles par lien hypertexte depuis le site Kalimera.</li>
-                    </ul>
-                    <p className="text-xl mt-4">
-                      L'utilisateur est seul responsable de l'utilisation qu'il fait du contenu du site. Les
-                      utilisateurs demeurent également seuls responsables des contenus qu’ils publient sur la plateforme
-                      et des échanges qu’ils entretiennent avec les autres utilisateurs.
-                    </p>
-                  </>
-                ),
-              },
-              {
-                title: "8. Conditions Générales d’Utilisation (CGU)",
+                title: "7. Conditions d’utilisation",
                 content: (
                   <p className="text-xl">
                     L’utilisation du site implique l’acceptation pleine et entière des Conditions Générales
-                    d’Utilisation (CGU) accessibles sur le site. Nous invitons tous les utilisateurs à en prendre
-                    connaissance.
+                    d’Utilisation (CGU) accessibles sur le site.
                   </p>
                 ),
               },
               {
-                title: "9. Contact",
+                title: "8. Contact",
                 content: (
                   <p className="text-xl">
-                    Pour toute question relative au site, à son contenu ou aux présentes mentions légales, vous pouvez
-                    nous contacter à l'adresse suivante :{" "}
+                    Pour toute question relative au site ou à son contenu, vous pouvez contacter :{" "}
                     <a href="mailto:contact@monkalimera.fr" className="text-primary hover:underline">
                       contact@monkalimera.fr
                     </a>
