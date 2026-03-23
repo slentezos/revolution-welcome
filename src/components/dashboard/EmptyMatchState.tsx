@@ -35,7 +35,7 @@ export default function EmptyMatchState() {
 
         <div className="relative z-10 p-8 md:p-12 lg:p-20 text-center max-w-4xl mx-auto">
           {/* Title: Pure White & Bigger */}
-          <h3 className="font-heading text-4xl md:text-5xl lg:text-6xl tracking-[0.15em] uppercase mb-8 text-white drop-shadow-md">
+          <h3 className="font-heading text-4xl md:text-5xl lg:text-3xl tracking-[0.15em] uppercase mb-8 text-white drop-shadow-md">
             Savoir attendre, c'est choisir l'excellence
           </h3>
 
