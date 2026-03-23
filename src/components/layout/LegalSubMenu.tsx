@@ -1,6 +1,6 @@
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const legalLinks = [
@@ -15,35 +15,43 @@ const legalLinks = [
 
 export default function LegalSubMenu() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Fonction pour remonter en haut de page lors du clic
-  const handleLinkClick = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth", // "smooth" pour une remontée douce, "instant" pour un saut immédiat
-    });
+  // Fonction pour remonter en haut de page
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -250 : 250,
-        behavior: "smooth",
-      });
+  // Navigation via les flèches
+  const navigateByArrow = (direction: "left" | "right") => {
+    const currentIndex = legalLinks.findIndex((link) => pathname.replace(/\/$/, "") === link.href.replace(/\/$/, ""));
+
+    if (direction === "left" && currentIndex > 0) {
+      const newPath = legalLinks[currentIndex - 1].href;
+      navigate(newPath);
+      scrollToTop();
+    } else if (direction === "right" && currentIndex < legalLinks.length - 1) {
+      const newPath = legalLinks[currentIndex + 1].href;
+      navigate(newPath);
+      scrollToTop();
     }
   };
 
   return (
-    <nav className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md border-b border-border py-4 shadow-sm transition-all duration-500">
-      <div className="container-main mx-auto px-4 md:px-12 flex items-center gap-2">
-        {/* Flèche Gauche */}
+    <nav className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md border-b border-border py-4 shadow-sm">
+      <div className="container-main mx-auto px-4 md:px-12 flex items-center gap-4">
+        {/* Flèche Gauche - Change de tab */}
         <button
-          onClick={() => scroll("left")}
-          className="p-2 hover:bg-muted rounded-full transition-colors shrink-0"
-          aria-label="Défiler à gauche"
+          onClick={() => navigateByArrow("left")}
+          disabled={pathname === legalLinks[0].href}
+          className={cn(
+            "p-2 rounded-full transition-all shrink-0",
+            pathname === legalLinks[0].href ? "opacity-20 cursor-not-allowed" : "hover:bg-gray-100 text-[#1B2333]",
+          )}
+          aria-label="Page précédente"
         >
-          <ChevronLeft className="h-5 w-5 text-muted-foreground" />
+          <ChevronLeft className="h-6 w-6" />
         </button>
 
         {/* Conteneur des onglets */}
@@ -52,14 +60,13 @@ export default function LegalSubMenu() {
           className="overflow-x-auto whitespace-nowrap py-1 flex gap-3 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth"
         >
           {legalLinks.map((link) => {
-            // Normalisation des slashes pour une comparaison robuste
             const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
 
             return (
               <Link
                 key={link.href}
                 to={link.href}
-                onClick={handleLinkClick}
+                onClick={scrollToTop}
                 className={cn(
                   "inline-block px-6 py-2.5 font-medium rounded-full transition-all duration-300 shrink-0 text-base md:text-lg",
                   isActive
@@ -73,13 +80,19 @@ export default function LegalSubMenu() {
           })}
         </div>
 
-        {/* Flèche Droite */}
+        {/* Flèche Droite - Change de tab */}
         <button
-          onClick={() => scroll("right")}
-          className="p-2 hover:bg-muted rounded-full transition-colors shrink-0"
-          aria-label="Défiler à droite"
+          onClick={() => navigateByArrow("right")}
+          disabled={pathname === legalLinks[legalLinks.length - 1].href}
+          className={cn(
+            "p-2 rounded-full transition-all shrink-0",
+            pathname === legalLinks[legalLinks.length - 1].href
+              ? "opacity-20 cursor-not-allowed"
+              : "hover:bg-gray-100 text-[#1B2333]",
+          )}
+          aria-label="Page suivante"
         >
-          <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          <ChevronRight className="h-6 w-6" />
         </button>
       </div>
     </nav>
