@@ -4,14 +4,14 @@ import { useRef, useEffect, useLayoutEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const legalLinks = [
-{ href: "/mentions-legales", label: "Mentions légales" },
-{ href: "/politique-confidentialite", label: "Politique de confidentialité (RGPD)" },
-{ href: "/cgu", label: "Conditions générales d'utilisation (CGU)" },
-{ href: "/cookies", label: "Politique relative aux cookies et autres traceurs" },
-{ href: "/charte-bienveillance", label: "Charte de sécurité et de bienveillance" },
-{ href: "/signaler-contenu", label: "Signaler un contenu illégal" },
-{ href: "/faq", label: "FAQ" }];
-
+  { href: "/mentions-legales", label: "Mentions légales" },
+  { href: "/politique-confidentialite", label: "Politique de confidentialité (RGPD)" },
+  { href: "/cgu", label: "Conditions générales d'utilisation (CGU)" },
+  { href: "/cookies", label: "Politique relative aux cookies et autres traceurs" },
+  { href: "/charte-bienveillance", label: "Charte de sécurité et de bienveillance" },
+  { href: "/signaler-contenu", label: "Signaler un contenu illégal" },
+  { href: "/faq", label: "FAQ" },
+];
 
 export default function LegalSubMenu() {
   const { pathname } = useLocation();
@@ -71,9 +71,9 @@ export default function LegalSubMenu() {
           disabled={currentIndex <= 0}
           className={cn(
             "z-20 p-2 rounded-full bg-white border border-gray-200 shadow-sm transition-all ml-2",
-            currentIndex <= 0 ? "opacity-0 invisible" : "hover:bg-gray-50 text-[#1B2333] hover:scale-105"
-          )}>
-          
+            currentIndex <= 0 ? "opacity-0 invisible" : "hover:bg-gray-50 text-[#1B2333] hover:scale-105",
+          )}
+        >
           <ChevronLeft className="h-5 w-5" />
         </button>
 
@@ -86,8 +86,8 @@ export default function LegalSubMenu() {
             ref={scrollRef}
             onScroll={handleScroll}
             className="overflow-x-auto whitespace-nowrap flex gap-4 flex-1 scrollbar-hide px-12"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-            
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
             {legalLinks.map((link) => {
               const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
               return (
@@ -97,15 +97,15 @@ export default function LegalSubMenu() {
                   data-active={isActive}
                   onClick={scrollToTop}
                   className={cn(
-                    "inline-block px-5 py-2.5 text-[13px] uppercase tracking-widest font-bold rounded-full transition-all duration-300 shrink-0 border-2",
-                    isActive ?
-                    "bg-[#1B2333] text-white border-[#1B2333] shadow-lg" :
-                    "bg-transparent text-gray-400 border-transparent hover:text-[#1B2333] hover:border-gray-200"
-                  )}>
-                  
+                    "inline-block px-5 py-2.5 text-[13px] uppercase tracking-widest font-bold rounded-full transition-all duration-1000 shrink-0 border-2",
+                    isActive
+                      ? "bg-[#1B2333] text-white border-[#1B2333] shadow-lg"
+                      : "bg-transparent text-gray-400 border-transparent hover:text-[#1B2333] hover:border-gray-200",
+                  )}
+                >
                   {link.label}
-                </Link>);
-
+                </Link>
+              );
             })}
             <div className="min-w-[80px] h-1 shrink-0" />
           </div>
@@ -119,14 +119,14 @@ export default function LegalSubMenu() {
           disabled={currentIndex >= legalLinks.length - 1}
           className={cn(
             "z-20 p-2 rounded-full bg-white border border-gray-100 shadow-sm transition-all mr-2",
-            currentIndex >= legalLinks.length - 1 ?
-            "opacity-0 invisible" :
-            "hover:bg-gray-50 text-[#1B2333] hover:scale-105"
-          )}>
-          
+            currentIndex >= legalLinks.length - 1
+              ? "opacity-0 invisible"
+              : "hover:bg-gray-50 text-[#1B2333] hover:scale-105",
+          )}
+        >
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
-    </nav>);
-
+    </nav>
+  );
 }
