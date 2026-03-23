@@ -42,8 +42,8 @@ export default function EmptyMatchState() {
 
         <div className="relative z-10 p-8 md:p-12 lg:p-16 text-center max-w-2xl mx-auto">
           <h3
-            className="font-heading text-2xl md:text-3xl lg:text-4xl tracking-[0.15em] uppercase mb-8"
-            style={{ color: "hsl(var(--gold))" }}
+            className="font-heading text-4xl md:text-3xl lg:text-4xl tracking-[0.15em] uppercase mb-8"
+            style={{ color: "hsl(var(--white))" }}
           >
             Savoir attendre, c'est choisir l'excellence
           </h3>
