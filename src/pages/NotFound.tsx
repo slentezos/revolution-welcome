@@ -53,7 +53,7 @@ export default function PolitiqueConfidentialite() {
                     </p>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary">🔹</span> Données d’identification
+                      <span className="text-primary"></span> Données d’identification
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4 mb-4">
                       <li>prénom</li>
@@ -65,7 +65,7 @@ export default function PolitiqueConfidentialite() {
                     </ul>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary">🔹</span> Données de profil
+                      <span className="text-primary"></span> Données de profil
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4 mb-4">
                       <li>niveau d’étude</li>
@@ -79,7 +79,7 @@ export default function PolitiqueConfidentialite() {
                     </ul>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary">🔹</span> Données relatives aux valeurs et sensibilités
+                      <span className="text-primary"></span> Données relatives aux valeurs et sensibilités
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4 mb-4">
                       <li>valeurs personnelles</li>
@@ -89,7 +89,7 @@ export default function PolitiqueConfidentialite() {
                     </ul>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary">🔹</span> Données issues des questionnaires
+                      <span className="text-primary"></span> Données issues des questionnaires
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4 mb-4">
                       <li>données et analyses</li>
@@ -98,7 +98,7 @@ export default function PolitiqueConfidentialite() {
                     </ul>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary">🔹</span> Analyse de personnalité
+                      <span className="text-primary"></span> Analyse de personnalité
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4">
                       <li>questionnaire de compatibilité</li>
