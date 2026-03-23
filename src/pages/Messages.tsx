@@ -30,6 +30,8 @@ import ReportModal from "@/components/messages/ReportModal";
 import UnmatchModal from "@/components/messages/UnmatchModal";
 
 import ChatTooltipOverlay from "@/components/messages/ChatTooltipOverlay";
+import BenevolenceModal from "@/components/messages/BenevolenceModal";
+import { checkMessage } from "@/utils/wordFilter";
 
 const conseils = [
 "Prenez le temps de bien lire le profil de votre correspondant(e).",
