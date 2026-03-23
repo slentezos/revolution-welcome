@@ -12,15 +12,12 @@ const footerLinks = {
   ],
 
   legal: [
-    { href: "/Politique de confidentialité", label: "Politique de confidentialité" },
-    { href: "/conditions", label: "Conditions générales" },
     { href: "/mentions-legales", label: "Mentions légales" },
-    { href: "/cgu", label: "CGU" },
+    { href: "/politique-confidentialite", label: "Politique de confidentialité (RGPD)" },
+    { href: "/cgu", label: "Conditions générales d'utilisation (CGU)" },
     { href: "/cookies", label: "Politique relative aux cookies" },
-    { href: "/conditions-achat", label: "Procédure et conditions d’achat" },
-    { href: "/conditions-sorties", label: "Conditions Générales Sorties" },
+    { href: "/charte-bienveillance", label: "Charte de sécurité et de bienveillance" },
     { href: "/signaler-contenu", label: "Signaler un contenu illégal" },
-    { href: "/charte-bienveillance", label: "Charte de bienveillance" },
     { href: "/faq", label: "FAQ" },
   ],
 
