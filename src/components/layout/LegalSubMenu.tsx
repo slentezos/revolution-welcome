@@ -15,18 +15,24 @@ export default function LegalSubMenu() {
   const { pathname } = useLocation();
 
   return (
-    <nav className="sticky top-16 md:top-20 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
+    <nav className="sticky top-16 md:top-20 z-40 bg-[hsl(var(--cream)/.90)] backdrop-blur-md border-b border-border">
       <div className="container-main mx-auto px-4 md:px-12">
-        <div className="overflow-x-auto whitespace-nowrap scrollbar-hide py-3 flex gap-2">
+        <div
+          className={cn(
+            "flex gap-6 md:gap-8 py-4",
+            "overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+            "md:flex-wrap md:justify-center md:whitespace-normal"
+          )}
+        >
           {legalLinks.map((link) => (
             <Link
               key={link.href}
               to={link.href}
               className={cn(
-                "inline-block px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 shrink-0",
+                "inline-block text-sm uppercase tracking-wider font-medium transition-colors duration-300 shrink-0 text-center",
                 pathname === link.href
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "text-[hsl(var(--gold))] border-b-2 border-[hsl(var(--gold))] pb-1"
+                  : "text-muted-foreground hover:text-foreground pb-1 border-b-2 border-transparent"
               )}
             >
               {link.label}
