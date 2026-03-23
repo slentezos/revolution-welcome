@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout/Layout";
+import LegalSubMenu from "@/components/layout/LegalSubMenu";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ShieldCheck, Heart, Users, Lock, MessageSquare, Coffee, Euro, Star, Phone } from "lucide-react";
@@ -170,6 +171,7 @@ export default function FAQ() {
 
   return (
     <Layout>
+      <LegalSubMenu />
       <section ref={revealRef} className="section-luxury bg-background pt-32 pb-40">
         <div className="container-main mx-auto px-6 max-w-7xl">
           <div className="mb-32 text-center">

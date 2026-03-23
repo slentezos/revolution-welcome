@@ -26,6 +26,9 @@ import EditorialArticle from "./pages/EditorialArticle";
 import ListeAttente from "./pages/ListeAttente";
 import MentionsLegales from "./pages/MentionsLegales";
 import Cookies from "./pages/Cookies";
+import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
+import CGU from "./pages/CGU";
+import SignalerContenu from "./pages/SignalerContenu";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +61,9 @@ const App = () => (
           <Route path="/liste-attente" element={<ListeAttente />} />
           <Route path="/mentions-legales" element={<MentionsLegales />} />
           <Route path="/cookies" element={<Cookies />} />
+          <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
+          <Route path="/cgu" element={<CGU />} />
+          <Route path="/signaler-contenu" element={<SignalerContenu />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
