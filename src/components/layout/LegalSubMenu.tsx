@@ -17,24 +17,38 @@ export default function LegalSubMenu() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const activeRef = useRef<HTMLAnchorElement>(null);
 
+  // 1. Centrage Manuel & Premium : On ne fait bouger QUE le conteneur, pas la page.
   useEffect(() => {
-    if (activeRef.current && scrollRef.current) {
-      activeRef.current.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
+    const container = scrollRef.current;
+    if (container) {
+      // On cherche l'élément actif par son attribut data-active
+      const activeTab = container.querySelector('[data-active="true"]') as HTMLElement;
+
+      if (activeTab) {
+        const containerWidth = container.offsetWidth;
+        const tabOffset = activeTab.offsetLeft;
+        const tabWidth = activeTab.offsetWidth;
+
+        // Calcul précis pour centrer l'onglet dans la zone visible
+        const targetScroll = tabOffset - containerWidth / 2 + tabWidth / 2;
+
+        container.scrollTo({
+          left: targetScroll,
+          behavior: "smooth",
+        });
+      }
     }
   }, [pathname]);
 
+  // 2. Remontée en haut de page (uniquement le contenu principal)
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const currentIndex = legalLinks.findIndex((link) => pathname.replace(/\/$/, "") === link.href.replace(/\/$/, ""));
 
+  // 3. Navigation par flèches : change de route, ce qui déclenche le useEffect de scroll
   const navigateByArrow = (direction: "left" | "right") => {
     if (direction === "left" && currentIndex > 0) {
       navigate(legalLinks[currentIndex - 1].href);
@@ -46,60 +60,68 @@ export default function LegalSubMenu() {
   };
 
   return (
-    <nav className="sticky top-16 md:top-20 z-40 bg-secondary/80 backdrop-blur-md border-b border-border py-4 shadow-[var(--shadow-soft)]">
-      <div className="container-main mx-auto px-4 flex items-center relative">
-        {/* Left Arrow */}
+    <nav className="sticky top-16 md:top-20 z-40 bg-white/90 backdrop-blur-md border-b border-border py-4 shadow-sm">
+      <div className="container-main mx-auto flex items-center relative group">
+        {/* Flèche Gauche */}
         <button
           onClick={() => navigateByArrow("left")}
           disabled={currentIndex <= 0}
           className={cn(
-            "absolute left-1 z-20 p-1.5 rounded-full bg-card border border-border shadow-sm transition-all duration-300",
-            currentIndex <= 0 ? "opacity-20 cursor-not-allowed" : "hover:scale-105 hover:border-primary/30 active:scale-95",
+            "z-20 p-2 rounded-full bg-white border border-border shadow-sm transition-all duration-300 ml-2",
+            currentIndex <= 0 ? "opacity-0 invisible" : "hover:scale-110 hover:border-primary active:scale-95",
           )}
         >
-          <ChevronLeft className="h-4 w-4 text-foreground" />
+          <ChevronLeft className="h-5 w-5 text-foreground" />
         </button>
 
-        {/* Scroll Area */}
-        <div
-          ref={scrollRef}
-          className="overflow-x-auto whitespace-nowrap flex gap-2.5 flex-1 scrollbar-hide scroll-smooth px-10 md:px-14"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {legalLinks.map((link) => {
-            const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
-            return (
-              <Link
-                key={link.href}
-                to={link.href}
-                ref={isActive ? activeRef : null}
-                onClick={scrollToTop}
-                className={cn(
-                  "inline-block px-5 py-2 text-[13px] uppercase tracking-wider font-medium rounded-full transition-all duration-500 shrink-0 border",
-                  isActive
-                    ? "bg-primary text-primary-foreground border-primary shadow-md"
-                    : "bg-card text-muted-foreground border-border hover:border-primary/40 hover:text-foreground",
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-          <div className="min-w-[60px] h-1 shrink-0" />
+        {/* ZONE DE SCROLL FLUIDE AVEC EFFET FADE */}
+        <div className="relative flex-1 flex items-center overflow-hidden">
+          {/* Dégradés élégants pour ne pas couper le texte net */}
+          <div className="absolute left-0 w-8 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+
+          <div
+            ref={scrollRef}
+            className="overflow-x-auto whitespace-nowrap flex gap-4 flex-1 scrollbar-hide scroll-smooth px-10"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {legalLinks.map((link) => {
+              const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
+              return (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  data-active={isActive}
+                  onClick={scrollToTop}
+                  className={cn(
+                    "inline-block px-6 py-2.5 text-[13px] uppercase tracking-widest font-bold rounded-full transition-all duration-500 shrink-0 border-2",
+                    isActive
+                      ? "bg-[#1B2333] text-white border-[#1B2333] shadow-lg scale-105"
+                      : "bg-transparent text-muted-foreground border-transparent hover:text-foreground hover:border-gray-200",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            {/* Espace de fin pour équilibrer le scroll */}
+            <div className="min-w-[50px] h-1 shrink-0" />
+          </div>
+
+          <div className="absolute right-0 w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
         </div>
 
-        {/* Right Arrow */}
+        {/* Flèche Droite */}
         <button
           onClick={() => navigateByArrow("right")}
           disabled={currentIndex >= legalLinks.length - 1}
           className={cn(
-            "absolute right-1 z-20 p-1.5 rounded-full bg-card border border-border shadow-sm transition-all duration-300",
+            "z-20 p-2 rounded-full bg-white border border-border shadow-sm transition-all duration-300 mr-2",
             currentIndex >= legalLinks.length - 1
-              ? "opacity-20 cursor-not-allowed"
-              : "hover:scale-105 hover:border-primary/30 active:scale-95",
+              ? "opacity-0 invisible"
+              : "hover:scale-110 hover:border-primary active:scale-95",
           )}
         >
-          <ChevronRight className="h-4 w-4 text-foreground" />
+          <ChevronRight className="h-5 w-5 text-foreground" />
         </button>
       </div>
     </nav>
