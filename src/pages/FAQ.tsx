@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/layout/Layout";
+import LegalSubMenu from "@/components/layout/LegalSubMenu";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ShieldCheck, Heart, Users, Lock, MessageSquare, Coffee, Euro, Star, Phone } from "lucide-react";
