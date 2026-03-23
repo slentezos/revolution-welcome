@@ -259,10 +259,11 @@ export default function WelcomeRoadmap({
           </h1>
           <div className="divider-gold mx-auto mb-8" />
           <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
-            4 étapes simples et guidées pour créer votre portrait unique.
+            4 étapes simples et guidées pour composer vôtre profil.
             <br className="hidden sm:block" />
-            L’inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd’hui
-            peuvent faire toute la différence demain.
+            L’inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle.
+            <br className="hidden sm:block" />
+            Quelques minutes aujourd’hui peuvent faire toute la différence demain.
           </p>
 
           {/* BOUTON INSÉRÉ EXACTEMENT ENTRE LE TEXTE ET LA NAV */}
