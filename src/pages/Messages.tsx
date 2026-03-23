@@ -261,6 +261,11 @@ export default function Messages() {
 
   const handleSend = () => {
     if (message.trim() && !isSent) {
+      const { isSafe } = checkMessage(message);
+      if (!isSafe) {
+        setBenevolenceModalOpen(true);
+        return;
+      }
       setMessage("");
       setIsSent(true);
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
