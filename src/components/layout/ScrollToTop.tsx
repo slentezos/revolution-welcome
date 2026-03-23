@@ -1,30 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
-const legalRoutes = [
-  "/mentions-legales",
-  "/politique-confidentialite",
-  "/cgu",
-  "/cookies",
-  "/charte-bienveillance",
-  "/signaler-contenu",
-  "/faq",
-];
 
 export default function ScrollToTop() {
   const { pathname } = useLocation();
-  const prevPathname = useRef(pathname);
 
   useEffect(() => {
-    const wasLegal = legalRoutes.includes(prevPathname.current);
-    const isLegal = legalRoutes.includes(pathname);
-
-    // Don't scroll to top when navigating between legal pages
-    if (!(wasLegal && isLegal)) {
-      window.scrollTo(0, 0);
-    }
-
-    prevPathname.current = pathname;
+    // On remonte systématiquement en haut à chaque changement de page
+    // On utilise "instant" pour éviter de voir la page défiler, ce qui fait plus "pro"
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "instant",
+    });
   }, [pathname]);
 
   return null;
