@@ -97,7 +97,7 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
             <span className="text-[hsl(var(--gold))] uppercase tracking-widest text-sm font-bold opacity-80 group-hover:opacity-100 transition-opacity">
               Lire votre analyse
             </span>
-            <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))]/50 flex items-center justify-center group-hover:bg-[hsl(var(--gold))]/10 transition-colors animate-bounce">
+            <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))]/50 flex items-center justify-center group-hover:bg-[hsl(var(--gold))]/10 transition-colors animate-bounce [animation-duration:3s]">
               <ArrowDown className="text-[hsl(var(--gold))] h-5 w-5" />
             </div>
           </button>
