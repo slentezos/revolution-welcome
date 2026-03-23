@@ -30,6 +30,8 @@ import ReportModal from "@/components/messages/ReportModal";
 import UnmatchModal from "@/components/messages/UnmatchModal";
 
 import ChatTooltipOverlay from "@/components/messages/ChatTooltipOverlay";
+import BenevolenceModal from "@/components/messages/BenevolenceModal";
+import { checkMessage } from "@/utils/wordFilter";
 
 const conseils = [
 "Prenez le temps de bien lire le profil de votre correspondant(e).",
@@ -123,6 +125,7 @@ export default function Messages() {
   const [reportTarget, setReportTarget] = useState<string>("");
   const [unmatchModalOpen, setUnmatchModalOpen] = useState(false);
   const [unmatchTarget, setUnmatchTarget] = useState<string>("");
+  const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
 
   const [isListening, setIsListening] = useState(false);
   const [speakingMsgId, setSpeakingMsgId] = useState<number | null>(null);
@@ -258,6 +261,11 @@ export default function Messages() {
 
   const handleSend = () => {
     if (message.trim() && !isSent) {
+      const { isSafe } = checkMessage(message);
+      if (!isSafe) {
+        setBenevolenceModalOpen(true);
+        return;
+      }
       setMessage("");
       setIsSent(true);
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
@@ -766,6 +774,7 @@ export default function Messages() {
           </div>
         </DialogContent>
       </Dialog>
+      <BenevolenceModal open={benevolenceModalOpen} onOpenChange={setBenevolenceModalOpen} />
     </Layout>);
 
 }
