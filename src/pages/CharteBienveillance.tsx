@@ -8,7 +8,7 @@ export default function CharteBienveillance() {
   return (
     <Layout>
       <LegalSubMenu />
-      <section ref={revealRef} className="section-luxury bg-background py-0">
+      <section ref={revealRef} className="section-luxury bg-background py-[50px]">
         <div className="container-main mx-auto px-6 md:px-12 max-w-3xl">
           <span
             data-reveal
