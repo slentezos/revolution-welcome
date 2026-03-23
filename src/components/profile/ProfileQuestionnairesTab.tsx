@@ -8,31 +8,31 @@ interface ProfileQuestionnairesTabProps {
 }
 
 const questionnaires = [
-{
-  title: "Vos photos & vidéo",
-  subtitle: "Infos – photos – vidéo",
-  editable: true,
-  href: "/onboarding?step=media_upload"
-},
-{
-  title: "Quiz des 3 préférences",
-  subtitle: "10 questions",
-  editable: true,
-  href: "/onboarding?step=quiz"
-},
-{
-  title: "Mon profil / son profil",
-  subtitle: "50 questions",
-  editable: false,
-  href: "/onboarding?step=profile"
-},
-{
-  title: "Test de personnalité",
-  subtitle: "40 questions",
-  editable: false,
-  href: "/onboarding?step=personality_result"
-}];
-
+  {
+    title: "Quiz des 3 préférences",
+    subtitle: "10 questions",
+    editable: true,
+    href: "/onboarding?step=quiz",
+  },
+  {
+    title: "Vos photos & vidéo",
+    subtitle: "Infos – photos – vidéo",
+    editable: true,
+    href: "/onboarding?step=media_upload",
+  },
+  {
+    title: "Mon profil / son profil",
+    subtitle: "50 questions",
+    editable: false,
+    href: "/onboarding?step=profile",
+  },
+  {
+    title: "Test de personnalité",
+    subtitle: "40 questions",
+    editable: false,
+    href: "/onboarding?step=personality_result",
+  },
+];
 
 export default function ProfileQuestionnairesTab({ onContactTab }: ProfileQuestionnairesTabProps) {
   const navigate = useNavigate();
@@ -63,36 +63,36 @@ export default function ProfileQuestionnairesTab({ onContactTab }: ProfileQuesti
       <section className="bg-background py-16 md:py-24">
         <div className="px-6 md:px-16 lg:px-20 xl:px-28">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-            {questionnaires.map((q) =>
-            <div
-              key={q.title}
-              className="group bg-secondary/50 hover:bg-secondary p-8 md:p-10 transition-all duration-300 hover:shadow-[var(--shadow-card)]">
-              
+            {questionnaires.map((q) => (
+              <div
+                key={q.title}
+                className="group bg-secondary/50 hover:bg-secondary p-8 md:p-10 transition-all duration-300 hover:shadow-[var(--shadow-card)]"
+              >
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-2">{q.title}</h3>
                 <p className="text-muted-foreground mb-6 text-xl">{q.subtitle}</p>
-                {q.editable ?
-              <a
-                href={q.href}
-                className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-8 py-4 font-medium text-lg transition-all duration-300 hover:shadow-elevated hover:translate-y-[-1px] min-h-[56px]">
-                
+                {q.editable ? (
+                  <a
+                    href={q.href}
+                    className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-8 py-4 font-medium text-lg transition-all duration-300 hover:shadow-elevated hover:translate-y-[-1px] min-h-[56px]"
+                  >
                     <Pencil className="h-5 w-5" />
                     Modifier
-                  </a> :
-
-              <Button
-                variant="outline"
-                className="gap-3 px-8 py-4 text-lg min-h-[56px]"
-                onClick={() => navigate(`${q.href}&mode=view`)}>
-                
+                  </a>
+                ) : (
+                  <Button
+                    variant="outline"
+                    className="gap-3 px-8 py-4 text-lg min-h-[56px]"
+                    onClick={() => navigate(`${q.href}&mode=view`)}
+                  >
                     <Eye className="h-5 w-5" />
                     Visualiser
                   </Button>
-              }
+                )}
               </div>
-            )}
+            ))}
           </div>
         </div>
       </section>
-    </div>);
-
+    </div>
+  );
 }
