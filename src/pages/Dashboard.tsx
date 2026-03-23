@@ -113,8 +113,15 @@ export default function Dashboard() {
     setUndoBanner(null);
   }, [undoBanner]);
 
+  const sixDaysInMs = 6 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+
   const visibleMatches = mockMatches.filter(
     (m) => !savedForLater.some((s) => s.id === m.id) && !acceptedMatchIds.includes(m.id) && !pendingMatches.some((p) => p.id === m.id)
+  );
+
+  const filteredMatches = visibleMatches.filter(
+    (m) => now - new Date(m.matchedAt).getTime() <= sixDaysInMs
   );
   const visibleSavedForLater = savedForLater.filter(
     (m) => !pendingMatches.some((p) => p.id === m.id) && !acceptedMatchIds.includes(m.id)
