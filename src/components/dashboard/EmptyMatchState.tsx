@@ -43,7 +43,7 @@ export default function EmptyMatchState() {
         <div className="relative z-10 p-8 md:p-12 lg:p-16 text-center max-w-2xl mx-auto">
           <h3
             className="font-heading text-4xl md:text-3xl lg:text-4xl tracking-[0.15em] uppercase mb-8"
-            style={{ color: "hsl(var(--white))" }}
+            style={{ color: "hsl(var(--text-white))" }}
           >
             Savoir attendre, c'est choisir l'excellence
           </h3>
@@ -59,7 +59,7 @@ export default function EmptyMatchState() {
               onClick={() => navigate("/profil")}
               className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-1000"
             >
-              <UserCheck className="h-5 w-5 text-gold" />
+              <UserCheck className="h-6 w-6 text-gold" />
               <span className="text-white font-medium text-base">Parfaire mon profil</span>
             </button>
 
@@ -67,7 +67,7 @@ export default function EmptyMatchState() {
               onClick={() => navigate("/editorial")}
               className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-1000"
             >
-              <Coffee className="h-5 w-5 text-gold" />
+              <Coffee className="h-6 w-6 text-gold" />
               <span className="text-white font-medium text-base">Lire l'Éditorial</span>
             </button>
           </div>
