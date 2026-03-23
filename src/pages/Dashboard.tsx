@@ -205,19 +205,11 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {visibleMatches.length === 0 ? (
-              <div className="bg-card rounded-2xl border border-border/30 shadow-[var(--shadow-card)] flex flex-col items-center justify-center py-20 px-8">
-                <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mb-6">
-                  <Clock className="h-9 w-9 text-muted-foreground/50" />
-                </div>
-                <p className="font-heading text-2xl text-foreground mb-3">Aucune nouvelle proposition pour l'instant</p>
-                <p className="text-lg text-muted-foreground text-center max-w-md leading-relaxed">
-                  Nos experts travaillent à trouver des profils qui vous correspondent. Vous serez averti(e) par e-mail dès qu'une nouvelle affinité vous sera proposée.
-                </p>
-              </div>
+            {filteredMatches.length === 0 ? (
+              <EmptyMatchState />
             ) : (
               <div className="grid grid-cols-1 gap-5">
-                {visibleMatches.map((match) => (
+                {filteredMatches.map((match) => (
                   <DashboardMatchCard key={match.id} match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
                 ))}
               </div>
