@@ -60,7 +60,7 @@ export default function EmptyMatchState() {
               className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-1000"
             >
               <UserCheck className="h-6 w-6 text-gold" />
-              <span className="text-white font-medium text-base">Parfaire mon profil</span>
+              <span className="text-white font-medium text-xl">Parfaire mon profil</span>{" "}
             </button>
 
             <button
@@ -68,7 +68,7 @@ export default function EmptyMatchState() {
               className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-1000"
             >
               <Coffee className="h-6 w-6 text-gold" />
-              <span className="text-white font-medium text-base">Lire l'Éditorial</span>
+              <span className="text-white font-medium text-xl">Lire l'Éditorial</span>{" "}
             </button>
           </div>
         </div>
