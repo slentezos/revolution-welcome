@@ -1,6 +1,7 @@
+import { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Check, X, ArrowLeft } from "lucide-react";
+import { Check, X, ArrowLeft, ArrowDown } from "lucide-react";
 import { computeMBTI, getDimensionScores, mbtiProfiles } from "@/data/personalityProfiles";
 
 import personalityHero from "@/assets/personality-hero.jpg";
@@ -24,6 +25,19 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
   const mbtiType = computeMBTI(answers);
   const profile = mbtiProfiles[mbtiType] || mbtiProfiles["ENFP"];
   const dimensions = getDimensionScores(answers);
+
+  // 1. Création de la référence pour le scroll
+  const introRef = useRef<HTMLDivElement>(null);
+
+  // 2. Fonction de défilement doux
+  const scrollToIntro = () => {
+    if (introRef.current) {
+      window.scrollTo({
+        top: introRef.current.offsetTop - 80, // -80px pour ne pas coller au menu
+        behavior: "smooth",
+      });
+    }
+  };
 
   const sections = [
     { number: 1, title: "Votre vision de l'amour", subtitle: "Votre façon d'aimer", content: [profile.loveVision] },
@@ -56,7 +70,7 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
         <div className="absolute inset-0 bg-[hsl(var(--navy))] opacity-70" />
         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))] via-transparent to-transparent opacity-50" />
 
-        <div className="relative z-10 text-center px-6 py-16 max-w-5xl mx-auto">
+        <div className="relative z-10 text-center px-6 py-16 max-w-5xl mx-auto w-full flex flex-col items-center">
           <p className="text-[hsl(var(--gold))] tracking-[0.3em] uppercase md:text-base font-medium mb-6 text-xl">
             Votre profil de personnalité
           </p>
@@ -66,7 +80,7 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
           </h1>
 
           {/* Dimension pills */}
-          <div className="flex flex-wrap justify-center gap-3 md:gap-5 mt-8">
+          <div className="flex flex-wrap justify-center gap-3 md:gap-5 mt-8 mb-16">
             {dimensions.map((dim) => (
               <div
                 key={dim.id}
@@ -77,11 +91,22 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
               </div>
             ))}
           </div>
+
+          {/* 3. Le bouton flottant pour scroller vers le bas */}
+          <button onClick={scrollToIntro} className="flex flex-col items-center gap-4 group cursor-pointer mt-4">
+            <span className="text-[hsl(var(--gold))] uppercase tracking-widest text-sm font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+              Lire votre analyse
+            </span>
+            <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))]/50 flex items-center justify-center group-hover:bg-[hsl(var(--gold))]/10 transition-colors">
+              <ArrowDown className="text-[hsl(var(--gold))] h-5 w-5" />
+            </div>
+          </button>
         </div>
       </section>
 
       {/* ═══════════════ INTRODUCTION ═══════════════ */}
-      <section className="bg-[hsl(var(--cream))]">
+      {/* 4. On attache la référence ici */}
+      <section ref={introRef} className="bg-[hsl(var(--cream))]">
         <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 md:py-24">
           <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto mb-12" />
           {profile.temperament.map((paragraph, i) => (
