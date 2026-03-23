@@ -178,7 +178,7 @@ export default function Dashboard() {
           <div data-reveal data-reveal-delay="100">
             <DashboardStatsCards
               onMessagesClick={() => navigate("/messages")}
-              newProposalsCount={visibleMatches.length}
+              newProposalsCount={filteredMatches.length}
               pendingCount={pendingMatches.length}
               savedCount={visibleSavedForLater.length}
               unreadMessageCount={2} />
