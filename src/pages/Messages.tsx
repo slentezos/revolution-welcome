@@ -774,6 +774,7 @@ export default function Messages() {
           </div>
         </DialogContent>
       </Dialog>
+      <BenevolenceModal open={benevolenceModalOpen} onOpenChange={setBenevolenceModalOpen} />
     </Layout>);
 
 }
