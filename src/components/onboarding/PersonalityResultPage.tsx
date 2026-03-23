@@ -92,13 +92,13 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
             ))}
           </div>
 
-          {/* 3. Le bouton flottant animé (animate-bounce) */}
-          <button onClick={scrollToIntro} className="flex flex-col items-center gap-4 group cursor-pointer mt-4">
-            <span className="text-[hsl(var(--gold))] uppercase tracking-widest text-sm font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+          {/* 3. Le bouton flottant (Avec l'effet majestueux) */}
+          <button onClick={scrollToIntro} className="flex flex-col items-center gap-4 group cursor-pointer mt-8">
+            <span className="text-[#D4AF37] uppercase tracking-widest text-sm font-bold opacity-80 group-hover:opacity-100 transition-opacity">
               Lire votre analyse
             </span>
-            <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))]/50 flex items-center justify-center group-hover:bg-[hsl(var(--gold))]/10 transition-colors animate-bounce [animation-duration:3s]">
-              <ArrowDown className="text-[hsl(var(--gold))] h-5 w-5" />
+            <div className="w-16 h-16 rounded-full border-2 border-[#D4AF37]/30 flex items-center justify-center animate-slow-float bg-[#D4AF37]/5 group-hover:bg-[#D4AF37]/20 transition-all">
+              <ArrowDown className="h-8 w-8 text-[#D4AF37]" />
             </div>
           </button>
         </div>
