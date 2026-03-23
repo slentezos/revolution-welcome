@@ -8,29 +8,29 @@ export default function CharteBienveillance() {
   return (
     <Layout>
       <LegalSubMenu />
-      <section ref={revealRef} className="section-luxury bg-background">
+      <section ref={revealRef} className="section-luxury bg-background py-0">
         <div className="container-main mx-auto px-6 md:px-12 max-w-3xl">
           <span
             data-reveal
-            className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-center text-lg"
-          >
+            className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-center text-lg">
+            
             Nos engagements
           </span>
           <h1
             data-reveal
             data-reveal-delay="150"
-            className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground text-center mb-6"
-          >
+            className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground text-center mb-6">
+            
             Charte de sécurité et de bienveillance
           </h1>
           <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto mb-16" />
 
           <div className="space-y-12 text-lg leading-relaxed text-muted-foreground">
             {[
-              {
-                title: "Un climat serein et respectueux",
-                content: (
-                  <>
+            {
+              title: "Un climat serein et respectueux",
+              content:
+              <>
                     <p className="text-xl mb-4">
                       Kalimera est un service de rencontres sérieux, pensé pour des seniors qui souhaitent nouer une
                       relation sincère, stable et respectueuse. La qualité des échanges, la sécurité des adhérents et la
@@ -52,12 +52,12 @@ export default function CharteBienveillance() {
                       respectueux pour chacun.
                     </p>
                   </>
-                ),
-              },
-              {
-                title: "Sécurité et protection de la vie privée",
-                content: (
-                  <>
+
+            },
+            {
+              title: "Sécurité et protection de la vie privée",
+              content:
+              <>
                     <p className="text-xl mb-4">
                       Pour votre sécurité, il est recommandé de ne pas communiquer trop rapidement vos informations
                       personnelles, telles que votre numéro de téléphone, votre adresse email, votre adresse postale,
@@ -76,23 +76,23 @@ export default function CharteBienveillance() {
                       privée peuvent être refusés, masqués ou supprimés.
                     </p>
                   </>
-                ),
-              },
-              {
-                title: "Confidentialité renforcée",
-                content: (
-                  <p className="text-xl">
+
+            },
+            {
+              title: "Confidentialité renforcée",
+              content:
+              <p className="text-xl">
                     Si vous le souhaitez, vous pouvez opter pour une confidentialité renforcée. Dans ce cas, vos
                     informations ne seront visibles qu’après votre acceptation d’une proposition de rencontre. Cette
                     option vous permet de ne pas révéler votre identité à des adhérents dont le profil ne vous intéresse
                     pas.
                   </p>
-                ),
-              },
-              {
-                title: "Un usage strictement personnel et discret",
-                content: (
-                  <>
+
+            },
+            {
+              title: "Un usage strictement personnel et discret",
+              content:
+              <>
                     <p className="text-xl mb-4">
                       Kalimera n’a pas vocation à être utilisé à des fins commerciales, promotionnelles ou
                       publicitaires. Toute utilisation de la plateforme pour promouvoir une activité, une entreprise, un
@@ -106,12 +106,12 @@ export default function CharteBienveillance() {
                       va de même pour tout contenu protégé par des droits d’auteur.
                     </p>
                   </>
-                ),
-              },
-              {
-                title: "Signalement et accompagnement",
-                content: (
-                  <>
+
+            },
+            {
+              title: "Signalement et accompagnement",
+              content:
+              <>
                     <p className="text-xl mb-4">
                       Si un échange vous met mal à l’aise, si un comportement vous paraît inapproprié ou si un membre ne
                       respecte pas les règles de la plateforme, vous pouvez le signaler facilement depuis votre espace
@@ -123,14 +123,14 @@ export default function CharteBienveillance() {
                       meilleures conditions.
                     </p>
                   </>
-                ),
-              },
-            ].map((section, i) => (
-              <div key={i} data-reveal data-reveal-delay={String(300 + i * 120)}>
+
+            }].
+            map((section, i) =>
+            <div key={i} data-reveal data-reveal-delay={String(300 + i * 120)}>
                 <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-4">{section.title}</h2>
                 {section.content}
               </div>
-            ))}
+            )}
 
             <div data-reveal data-reveal-delay="1000" className="bg-secondary p-8 md:p-10 text-center">
               <p className="text-foreground font-medium text-2xl leading-relaxed">
@@ -141,6 +141,6 @@ export default function CharteBienveillance() {
           </div>
         </div>
       </section>
-    </Layout>
-  );
+    </Layout>);
+
 }
