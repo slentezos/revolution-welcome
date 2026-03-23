@@ -18,7 +18,7 @@ export default function LegalSubMenu() {
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // 1. MÉMOIREinstantanée : On restaure la position AVANT le premier rendu visuel
+  // 1. RESTAURATION INSTANTANÉE (Zéro saut visuel)
   useLayoutEffect(() => {
     const savedScroll = sessionStorage.getItem("legalMenuScroll");
     if (scrollRef.current && savedScroll) {
@@ -26,19 +26,24 @@ export default function LegalSubMenu() {
     }
   }, []);
 
-  // 2. CENTRAGE DOUX : Une fois monté, on ajuste pour centrer l'onglet actif
+  // 2. CENTRAGE "CHUCHOTÉ" (Lent et fluide)
   useEffect(() => {
     const container = scrollRef.current;
     if (container) {
       const activeTab = container.querySelector('[data-active="true"]') as HTMLElement;
       if (activeTab) {
+        // Calcul pour placer l'élément au centre exact
         const targetScroll = activeTab.offsetLeft - container.offsetWidth / 2 + activeTab.offsetWidth / 2;
-        container.scrollTo({ left: targetScroll, behavior: "smooth" });
+
+        // On utilise un timeout léger pour laisser le temps au rendu de se stabiliser
+        const timeout = setTimeout(() => {
+          container.scrollTo({ left: targetScroll, behavior: "smooth" });
+        }, 50);
+        return () => clearTimeout(timeout);
       }
     }
   }, [pathname]);
 
-  // 3. SAUVEGARDE : On note la position à chaque mouvement
   const handleScroll = () => {
     if (scrollRef.current) {
       sessionStorage.setItem("legalMenuScroll", scrollRef.current.scrollLeft.toString());
@@ -46,7 +51,6 @@ export default function LegalSubMenu() {
   };
 
   const scrollToTop = () => {
-    // On remonte la page, mais on laisse le menu gérer son propre scroll horizontal
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -63,54 +67,57 @@ export default function LegalSubMenu() {
   };
 
   return (
-    <nav className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 py-4 shadow-sm">
-      <div className="container-main mx-auto flex items-center relative">
-        {/* Flèche Gauche */}
+    <nav className="sticky top-16 md:top-20 z-40 bg-white/70 backdrop-blur-xl border-b border-gray-100 py-5 transition-all duration-1000 ease-in-out">
+      <div className="container-main mx-auto flex items-center relative px-2">
+        {/* Dégradés de masquage ultra-doux */}
+        <div className="absolute left-12 w-20 h-full bg-gradient-to-r from-white via-white/40 to-transparent z-10 pointer-events-none" />
+
+        {/* Flèche Gauche - Style minimaliste luxe */}
         <button
           onClick={() => navigateByArrow("left")}
           disabled={currentIndex <= 0}
           className={cn(
-            "z-20 p-2 rounded-full bg-white border border-gray-200 shadow-sm transition-all ml-2",
-            currentIndex <= 0 ? "opacity-0 invisible" : "hover:bg-gray-50 text-[#1B2333] hover:scale-105",
+            "z-20 p-2.5 rounded-full bg-white/80 border border-gray-100 shadow-sm transition-all duration-700 ease-out ml-2",
+            currentIndex <= 0 ? "opacity-0 scale-75" : "hover:bg-white hover:scale-110 hover:shadow-md text-[#1B2333]",
           )}
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
 
-        {/* ZONE DE SCROLL AVEC MÉMOIRE */}
-        <div className="relative flex-1 flex items-center overflow-hidden">
-          {/* Dégradés premium pour masquer la coupe du texte */}
-          <div className="absolute left-0 w-12 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-
-          <div
-            ref={scrollRef}
-            onScroll={handleScroll}
-            className="overflow-x-auto whitespace-nowrap flex gap-4 flex-1 scrollbar-hide px-12"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {legalLinks.map((link) => {
-              const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
-              return (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  data-active={isActive}
-                  onClick={scrollToTop}
+        {/* ZONE DE DÉFILEMENT */}
+        <div
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="overflow-x-auto whitespace-nowrap flex gap-8 flex-1 scrollbar-hide px-16"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {legalLinks.map((link) => {
+            const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
+            return (
+              <Link
+                key={link.href}
+                to={link.href}
+                data-active={isActive}
+                onClick={scrollToTop}
+                className={cn(
+                  "inline-block py-2 text-[13px] uppercase tracking-[0.2em] transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) shrink-0 relative",
+                  isActive
+                    ? "text-[#1B2333] font-bold opacity-100"
+                    : "text-gray-400 hover:text-gray-600 font-medium opacity-70 hover:opacity-100",
+                )}
+              >
+                {link.label}
+                {/* Ligne d'accentuation Dorée/Marine qui s'anime en douceur */}
+                <span
                   className={cn(
-                    "inline-block px-5 py-2.5 text-[13px] uppercase tracking-widest font-bold rounded-full transition-all duration-300 shrink-0 border-2",
-                    isActive
-                      ? "bg-[#1B2333] text-white border-[#1B2333] shadow-lg"
-                      : "bg-transparent text-gray-400 border-transparent hover:text-[#1B2333] hover:border-gray-200",
+                    "absolute -bottom-1 left-0 h-[1.5px] bg-[#C5A059] transition-all duration-1000 ease-in-out",
+                    isActive ? "w-full opacity-100" : "w-0 opacity-0",
                   )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-            <div className="min-w-[80px] h-1 shrink-0" />
-          </div>
-
-          <div className="absolute right-0 w-12 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+                />
+              </Link>
+            );
+          })}
+          <div className="min-w-[150px] h-1 shrink-0" />
         </div>
 
         {/* Flèche Droite */}
@@ -118,14 +125,16 @@ export default function LegalSubMenu() {
           onClick={() => navigateByArrow("right")}
           disabled={currentIndex >= legalLinks.length - 1}
           className={cn(
-            "z-20 p-2 rounded-full bg-white border border-gray-100 shadow-sm transition-all mr-2",
+            "z-20 p-2.5 rounded-full bg-white/80 border border-gray-100 shadow-sm transition-all duration-700 ease-out mr-2",
             currentIndex >= legalLinks.length - 1
-              ? "opacity-0 invisible"
-              : "hover:bg-gray-50 text-[#1B2333] hover:scale-105",
+              ? "opacity-0 scale-75"
+              : "hover:bg-white hover:scale-110 hover:shadow-md text-[#1B2333]",
           )}
         >
           <ChevronRight className="h-5 w-5" />
         </button>
+
+        <div className="absolute right-12 w-20 h-full bg-gradient-to-l from-white via-white/40 to-transparent z-10 pointer-events-none" />
       </div>
     </nav>
   );
