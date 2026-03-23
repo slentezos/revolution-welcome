@@ -5,13 +5,17 @@ export default function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // On remonte systématiquement en haut à chaque changement de page
-    // On utilise "instant" pour éviter de voir la page défiler, ce qui fait plus "pro"
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "instant",
-    });
+    // Un micro-délai pour assurer que le rendu de la page a commencé
+    // Cela rend le démarrage du scroll beaucoup plus "naturel"
+    const timeout = setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth", // La clé pour la douceur
+      });
+    }, 10);
+
+    return () => clearTimeout(timeout);
   }, [pathname]);
 
   return null;
