@@ -1,4 +1,5 @@
 import Layout from "@/components/layout/Layout";
+import LegalSubMenu from "@/components/layout/LegalSubMenu";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export default function Cookies() {
