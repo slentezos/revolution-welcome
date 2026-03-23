@@ -263,7 +263,6 @@ export default function WelcomeRoadmap({
             <br className="hidden sm:block" />
             L’inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle.
             <br className="hidden sm:block" />
-            <br className="hidden sm:block" />
             Quelques minutes aujourd’hui peuvent faire toute la différence demain.
           </p>
 
