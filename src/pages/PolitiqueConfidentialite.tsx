@@ -1,11 +1,19 @@
+import { useEffect } from "react";
 import Layout from "@/components/layout/Layout";
+import LegalSubMenu from "@/components/layout/LegalSubMenu";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 export default function PolitiqueConfidentialite() {
   const revealRef = useScrollReveal<HTMLElement>();
 
+  // S'assure que la page commence toujours en haut lors du chargement ou changement d'onglet
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
+
   return (
     <Layout>
+      <LegalSubMenu />
       <section ref={revealRef} className="section-luxury bg-background">
         <div className="container-main mx-auto px-6 md:px-12 max-w-3xl">
           <span
@@ -53,7 +61,7 @@ export default function PolitiqueConfidentialite() {
                     </p>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary"></span> Données d’identification
+                      Données d’identification
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4 mb-4">
                       <li>prénom</li>
@@ -65,7 +73,7 @@ export default function PolitiqueConfidentialite() {
                     </ul>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary"></span> Données de profil
+                      Données de profil
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4 mb-4">
                       <li>niveau d’étude</li>
@@ -79,7 +87,7 @@ export default function PolitiqueConfidentialite() {
                     </ul>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary"></span> Données relatives aux valeurs et sensibilités
+                      Données relatives aux valeurs et sensibilités
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4 mb-4">
                       <li>valeurs personnelles</li>
@@ -89,7 +97,7 @@ export default function PolitiqueConfidentialite() {
                     </ul>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary"></span> Données issues des questionnaires
+                      Données issues des questionnaires
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4 mb-4">
                       <li>données et analyses</li>
@@ -98,7 +106,7 @@ export default function PolitiqueConfidentialite() {
                     </ul>
 
                     <h3 className="text-xl font-bold text-foreground mt-6 mb-2 flex items-center gap-2">
-                      <span className="text-primary"></span> Analyse de personnalité
+                      Analyse de personnalité
                     </h3>
                     <ul className="list-disc list-inside text-xl space-y-1 ml-4">
                       <li>questionnaire de compatibilité</li>
