@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const legalLinks = [
@@ -16,59 +16,55 @@ const legalLinks = [
 export default function LegalSubMenu() {
   const { pathname } = useLocation();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const activeLinkRef = useRef<HTMLAnchorElement>(null);
 
-  // Auto-scroll to active link when pathname changes
-  useEffect(() => {
-    if (activeLinkRef.current && scrollRef.current) {
-      const container = scrollRef.current;
-      const activeEl = activeLinkRef.current;
-      const containerRect = container.getBoundingClientRect();
-      const activeRect = activeEl.getBoundingClientRect();
-
-      const scrollLeft =
-        activeRect.left -
-        containerRect.left -
-        containerRect.width / 2 +
-        activeRect.width / 2 +
-        container.scrollLeft;
-
-      container.scrollTo({ left: scrollLeft, behavior: "smooth" });
-    }
-  }, [pathname]);
+  // Fonction pour remonter en haut de page lors du clic
+  const handleLinkClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // "smooth" pour une remontée douce, "instant" pour un saut immédiat
+    });
+  };
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
-        left: direction === "left" ? -200 : 200,
+        left: direction === "left" ? -250 : 250,
         behavior: "smooth",
       });
     }
   };
 
   return (
-    <nav className="sticky top-16 md:top-20 z-40 bg-background/95 backdrop-blur-sm border-b border-border py-[30px] pt-[50px] pb-[20px] my-0">
+    <nav className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md border-b border-border py-4 shadow-sm transition-all duration-500">
       <div className="container-main mx-auto px-4 md:px-12 flex items-center gap-2">
-        <button onClick={() => scroll("left")} className="p-1 hover:bg-muted rounded-full">
+        {/* Flèche Gauche */}
+        <button
+          onClick={() => scroll("left")}
+          className="p-2 hover:bg-muted rounded-full transition-colors shrink-0"
+          aria-label="Défiler à gauche"
+        >
           <ChevronLeft className="h-5 w-5 text-muted-foreground" />
         </button>
 
+        {/* Conteneur des onglets */}
         <div
           ref={scrollRef}
-          className="overflow-x-auto whitespace-nowrap py-3 flex gap-2 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="overflow-x-auto whitespace-nowrap py-1 flex gap-3 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth"
         >
           {legalLinks.map((link) => {
-            const isActive = pathname === link.href;
+            // Normalisation des slashes pour une comparaison robuste
+            const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
+
             return (
               <Link
                 key={link.href}
                 to={link.href}
-                ref={isActive ? activeLinkRef : undefined}
+                onClick={handleLinkClick}
                 className={cn(
-                  "inline-block px-4 py-2 font-medium rounded-full transition-colors duration-200 shrink-0 text-lg",
+                  "inline-block px-6 py-2.5 font-medium rounded-full transition-all duration-300 shrink-0 text-base md:text-lg",
                   isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    ? "bg-[#1B2333] text-white shadow-md scale-105"
+                    : "text-muted-foreground hover:text-[#1B2333] hover:bg-gray-100",
                 )}
               >
                 {link.label}
@@ -77,7 +73,12 @@ export default function LegalSubMenu() {
           })}
         </div>
 
-        <button onClick={() => scroll("right")} className="p-1 hover:bg-muted rounded-full">
+        {/* Flèche Droite */}
+        <button
+          onClick={() => scroll("right")}
+          className="p-2 hover:bg-muted rounded-full transition-colors shrink-0"
+          aria-label="Défiler à droite"
+        >
           <ChevronRight className="h-5 w-5 text-muted-foreground" />
         </button>
       </div>
