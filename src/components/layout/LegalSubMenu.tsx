@@ -18,60 +18,54 @@ export default function LegalSubMenu() {
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Fonction pour remonter en haut de page
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Navigation via les flèches
   const navigateByArrow = (direction: "left" | "right") => {
     const currentIndex = legalLinks.findIndex((link) => pathname.replace(/\/$/, "") === link.href.replace(/\/$/, ""));
 
     if (direction === "left" && currentIndex > 0) {
-      const newPath = legalLinks[currentIndex - 1].href;
-      navigate(newPath);
+      navigate(legalLinks[currentIndex - 1].href);
       scrollToTop();
     } else if (direction === "right" && currentIndex < legalLinks.length - 1) {
-      const newPath = legalLinks[currentIndex + 1].href;
-      navigate(newPath);
+      navigate(legalLinks[currentIndex + 1].href);
       scrollToTop();
     }
   };
 
   return (
-    <nav className="sticky top-16 md:top-20 z-40 bg-white/95 backdrop-blur-md border-b border-border py-4 shadow-sm">
+    <nav className="sticky top-16 md:top-20 z-40 bg-gray-50 border-y border-gray-200 py-3 shadow-sm">
       <div className="container-main mx-auto px-4 md:px-12 flex items-center gap-4">
-        {/* Flèche Gauche - Change de tab */}
+        {/* Bouton Précédent */}
         <button
           onClick={() => navigateByArrow("left")}
           disabled={pathname === legalLinks[0].href}
           className={cn(
-            "p-2 rounded-full transition-all shrink-0",
-            pathname === legalLinks[0].href ? "opacity-20 cursor-not-allowed" : "hover:bg-gray-100 text-[#1B2333]",
+            "p-2 rounded-full transition-all shrink-0 bg-white border border-gray-200 shadow-sm",
+            pathname === legalLinks[0].href ? "opacity-30 cursor-not-allowed" : "hover:bg-gray-50 text-[#1B2333]",
           )}
-          aria-label="Page précédente"
         >
-          <ChevronLeft className="h-6 w-6" />
+          <ChevronLeft className="h-5 w-5" />
         </button>
 
-        {/* Conteneur des onglets */}
+        {/* Liste des Onglets */}
         <div
           ref={scrollRef}
-          className="overflow-x-auto whitespace-nowrap py-1 flex gap-3 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth"
+          className="overflow-x-auto whitespace-nowrap flex gap-3 flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth py-1"
         >
           {legalLinks.map((link) => {
             const isActive = pathname.replace(/\/$/, "") === link.href.replace(/\/$/, "");
-
             return (
               <Link
                 key={link.href}
                 to={link.href}
                 onClick={scrollToTop}
                 className={cn(
-                  "inline-block px-6 py-2.5 font-medium rounded-full transition-all duration-300 shrink-0 text-base md:text-lg",
+                  "inline-block px-5 py-2 font-semibold rounded-full transition-all duration-300 shrink-0 text-sm md:text-base border",
                   isActive
-                    ? "bg-[#1B2333] text-white shadow-md scale-105"
-                    : "text-muted-foreground hover:text-[#1B2333] hover:bg-gray-100",
+                    ? "bg-[#1B2333] text-white border-[#1B2333] shadow-md scale-105"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-[#1B2333] hover:text-[#1B2333]",
                 )}
               >
                 {link.label}
@@ -80,19 +74,18 @@ export default function LegalSubMenu() {
           })}
         </div>
 
-        {/* Flèche Droite - Change de tab */}
+        {/* Bouton Suivant */}
         <button
           onClick={() => navigateByArrow("right")}
           disabled={pathname === legalLinks[legalLinks.length - 1].href}
           className={cn(
-            "p-2 rounded-full transition-all shrink-0",
+            "p-2 rounded-full transition-all shrink-0 bg-white border border-gray-200 shadow-sm",
             pathname === legalLinks[legalLinks.length - 1].href
-              ? "opacity-20 cursor-not-allowed"
-              : "hover:bg-gray-100 text-[#1B2333]",
+              ? "opacity-30 cursor-not-allowed"
+              : "hover:bg-gray-50 text-[#1B2333]",
           )}
-          aria-label="Page suivante"
         >
-          <ChevronRight className="h-6 w-6" />
+          <ChevronRight className="h-5 w-5" />
         </button>
       </div>
     </nav>
