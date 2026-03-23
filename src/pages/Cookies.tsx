@@ -7,6 +7,7 @@ export default function Cookies() {
 
   return (
     <Layout>
+      <LegalSubMenu />
       <section ref={revealRef} className="section-luxury bg-background">
         <div className="container-main mx-auto px-6 md:px-12 max-w-3xl">
           <span

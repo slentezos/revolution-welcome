@@ -171,6 +171,7 @@ export default function FAQ() {
 
   return (
     <Layout>
+      <LegalSubMenu />
       <section ref={revealRef} className="section-luxury bg-background pt-32 pb-40">
         <div className="container-main mx-auto px-6 max-w-7xl">
           <div className="mb-32 text-center">
