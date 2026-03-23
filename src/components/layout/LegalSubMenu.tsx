@@ -45,11 +45,11 @@ export default function LegalSubMenu() {
           <Link
             key={link.href}
             to={link.href}
-            className={cn(
-              "inline-block px-4 py-2 text-sm font-medium rounded-full transition-colors duration-200 shrink-0",
-              pathname === link.href ?
-              "bg-primary text-primary-foreground" :
-              "text-muted-foreground hover:text-foreground hover:bg-muted"
+            className={cn("inline-block px-4 py-2 font-medium rounded-full transition-colors duration-200 shrink-0 text-lg",
+
+            pathname === link.href ?
+            "bg-primary text-primary-foreground" :
+            "text-muted-foreground hover:text-foreground hover:bg-muted"
             )}>
             
               {link.label}
