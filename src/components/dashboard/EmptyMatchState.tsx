@@ -48,10 +48,9 @@ export default function EmptyMatchState() {
             Savoir attendre, c'est choisir l'excellence
           </h3>
 
-          <p className="text-base md:text-lg leading-relaxed text-white/80">
-            Nos experts sélectionnent vos profils avec soin. Profitez de votre
-            journée, lisez, marchez… Vivez l'instant présent. Vous recevrez un
-            email dès qu'une action sera requise.
+          <p className="text-base md:text-xl leading-relaxed text-white/80">
+            Nos experts sélectionnent vos profils avec soin. Profitez de votre journée, lisez, marchez… Vivez l'instant
+            présent. Vous recevrez un email dès qu'une action sera requise.
           </p>
 
           {/* Actions */}
@@ -61,9 +60,7 @@ export default function EmptyMatchState() {
               className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-300"
             >
               <UserCheck className="h-5 w-5 text-gold" />
-              <span className="text-white font-medium text-base">
-                Parfaire mon profil
-              </span>
+              <span className="text-white font-medium text-base">Parfaire mon profil</span>
             </button>
 
             <button
@@ -71,9 +68,7 @@ export default function EmptyMatchState() {
               className="flex items-center justify-center gap-3 px-6 py-4 rounded-xl border border-gold/30 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-colors duration-300"
             >
               <Coffee className="h-5 w-5 text-gold" />
-              <span className="text-white font-medium text-base">
-                Lire l'Éditorial
-              </span>
+              <span className="text-white font-medium text-base">Lire l'Éditorial</span>
             </button>
           </div>
         </div>
