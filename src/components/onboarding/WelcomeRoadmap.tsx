@@ -261,7 +261,8 @@ export default function WelcomeRoadmap({
           <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
             4 étapes simples et guidées pour créer votre portrait unique.
             <br className="hidden sm:block" />
-            Prenez votre temps, nous sommes là pour vous accompagner.
+            L’inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd’hui
+            peuvent faire toute la différence demain.
           </p>
 
           {/* BOUTON INSÉRÉ EXACTEMENT ENTRE LE TEXTE ET LA NAV */}
