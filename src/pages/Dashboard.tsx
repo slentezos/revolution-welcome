@@ -11,6 +11,7 @@ import DashboardProgressCards from "@/components/dashboard/DashboardProgressCard
 import DashboardStatsCards from "@/components/dashboard/DashboardStatsCards";
 import DashboardGreeting from "@/components/dashboard/DashboardGreeting";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import EmptyMatchState from "@/components/dashboard/EmptyMatchState";
 
 // Mock data for matches
 const mockMatches = [
