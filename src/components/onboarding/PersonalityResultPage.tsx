@@ -43,33 +43,33 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
     if (introRef.current) {
       window.scrollTo({
         top: introRef.current.offsetTop - 80,
-        behavior: "smooth",
+        behavior: "smooth"
       });
     }
   };
 
   const sections = [
-    { number: 1, title: "Votre vision de l'amour", subtitle: "Votre façon d'aimer", content: [profile.loveVision] },
-    {
-      number: 2,
-      title: "Vos forces et fragilités",
-      subtitle: "Ce qui vous définit",
-      content: [profile.strengthsAndFragilities],
-    },
-    {
-      number: 3,
-      title: "Vos attirances et frustrations",
-      subtitle: "Ce qui vous attire",
-      content: profile.attractions,
-    },
-    {
-      number: 4,
-      title: "Votre quotidien et rapport au stress",
-      subtitle: "Votre rythme de vie",
-      content: profile.dailyLife,
-    },
-    { number: 5, title: "Vos affinités et vos rejets", subtitle: "Vos compatibilités", content: profile.affinities },
-  ];
+  { number: 1, title: "Votre vision de l'amour", subtitle: "Votre façon d'aimer", content: [profile.loveVision] },
+  {
+    number: 2,
+    title: "Vos forces et fragilités",
+    subtitle: "Ce qui vous définit",
+    content: [profile.strengthsAndFragilities]
+  },
+  {
+    number: 3,
+    title: "Vos attirances et frustrations",
+    subtitle: "Ce qui vous attire",
+    content: profile.attractions
+  },
+  {
+    number: 4,
+    title: "Votre quotidien et rapport au stress",
+    subtitle: "Votre rythme de vie",
+    content: profile.dailyLife
+  },
+  { number: 5, title: "Vos affinités et vos rejets", subtitle: "Vos compatibilités", content: profile.affinities }];
+
 
   return (
     <div className="-mx-4 sm:-mx-6 md:-mx-8 lg:-mx-0">
@@ -91,19 +91,19 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
           </h1>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-5 mt-8 mb-16">
-            {dimensions.map((dim) => (
-              <div
-                key={dim.id}
-                className="bg-[hsl(var(--cream))]/10 backdrop-blur-sm border border-[hsl(var(--cream))]/20 rounded-full px-5 md:px-7 py-2.5 md:py-3"
-              >
+            {dimensions.map((dim) =>
+            <div
+              key={dim.id}
+              className="bg-[hsl(var(--cream))]/10 backdrop-blur-sm border border-[hsl(var(--cream))]/20 rounded-full px-5 md:px-7 py-2.5 md:py-3">
+              
                 <span className="text-[hsl(var(--cream))] md:text-lg font-medium text-xl">{dim.dominant}</span>
                 <span className="text-[hsl(var(--gold))] md:text-lg font-bold ml-2 text-2xl">{dim.percent}%</span>
               </div>
-            ))}
+            )}
           </div>
 
           <button onClick={scrollToIntro} className="flex flex-col items-center gap-4 group cursor-pointer mt-8">
-            <span className="text-[hsl(var(--gold))] uppercase tracking-widest text-sm font-bold opacity-80 group-hover:opacity-100 transition-opacity">
+            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity text-xl">
               Lire votre analyse
             </span>
             <div className="w-16 h-16 rounded-full border-2 border-[hsl(var(--gold))]/30 flex items-center justify-center animate-slow-float bg-[hsl(var(--gold))]/5 group-hover:bg-[hsl(var(--gold))]/20 transition-all">
@@ -117,11 +117,11 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
       <section ref={introRef} className="bg-[hsl(var(--cream))]">
         <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 md:py-24">
           <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto mb-12" />
-          {profile.temperament.map((paragraph, i) => (
-            <p key={i} className="font-heading text-xl md:text-2xl text-foreground leading-relaxed mb-8 last:mb-0">
+          {profile.temperament.map((paragraph, i) =>
+          <p key={i} className="font-heading text-xl md:text-2xl text-foreground leading-relaxed mb-8 last:mb-0">
               {paragraph}
             </p>
-          ))}
+          )}
         </div>
       </section>
 
@@ -133,14 +133,14 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-10">Vos points forts</h2>
           <ul className="space-y-5">
-            {profile.strengths.map((item, i) => (
-              <li key={i} className="flex items-start gap-4">
+            {profile.strengths.map((item, i) =>
+            <li key={i} className="flex items-start gap-4">
                 <span className="w-8 h-8 rounded-full bg-[hsl(var(--gold))]/15 flex items-center justify-center shrink-0 mt-0.5">
                   <Check className="w-4 h-4 text-[hsl(var(--gold))]" />
                 </span>
                 <span className="text-lg md:text-xl text-foreground leading-relaxed">{item}</span>
               </li>
-            ))}
+            )}
           </ul>
         </div>
 
@@ -152,14 +152,14 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
             Vos points faibles
           </h2>
           <ul className="space-y-5">
-            {profile.weaknesses.map((item, i) => (
-              <li key={i} className="flex items-start gap-4">
+            {profile.weaknesses.map((item, i) =>
+            <li key={i} className="flex items-start gap-4">
                 <span className="w-8 h-8 rounded-full bg-[hsl(var(--cream))]/10 flex items-center justify-center shrink-0 mt-0.5">
                   <X className="w-4 h-4 text-[hsl(var(--cream))]/60" />
                 </span>
                 <span className="text-lg md:text-xl text-[hsl(var(--cream))]/85 leading-relaxed">{item}</span>
               </li>
-            ))}
+            )}
           </ul>
         </div>
       </section>
@@ -169,8 +169,8 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
         const imageLeft = idx % 2 === 0;
         const image = sectionImages[idx];
 
-        const textBlock = (
-          <div className="flex items-center px-8 md:px-16 lg:px-20 py-16 md:py-20 bg-[hsl(var(--cream))]">
+        const textBlock =
+        <div className="flex items-center px-8 md:px-16 lg:px-20 py-16 md:py-20 bg-[hsl(var(--cream))]">
             <div className="max-w-xl">
               <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
                 {section.subtitle}
@@ -179,36 +179,36 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
                 {section.number}. {section.title}
               </h2>
               <div className="w-12 h-px bg-[hsl(var(--gold))] mb-8" />
-              {section.content.map((paragraph, i) => (
-                <p key={i} className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6 last:mb-0">
+              {section.content.map((paragraph, i) =>
+            <p key={i} className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6 last:mb-0">
                   {paragraph}
                 </p>
-              ))}
+            )}
             </div>
-          </div>
-        );
+          </div>;
 
-        const imageBlock = (
-          <div className="relative min-h-[400px] lg:min-h-0">
+
+        const imageBlock =
+        <div className="relative min-h-[400px] lg:min-h-0">
             <img src={image} alt="" className="absolute inset-0 w-full h-full object-cover" />
-          </div>
-        );
+          </div>;
+
 
         return (
           <section key={section.number} className="grid lg:grid-cols-2 gap-0">
-            {imageLeft ? (
-              <>
+            {imageLeft ?
+            <>
                 {imageBlock}
                 {textBlock}
-              </>
-            ) : (
-              <>
+              </> :
+
+            <>
                 {textBlock}
                 {imageBlock}
               </>
-            )}
-          </section>
-        );
+            }
+          </section>);
+
       })}
 
       {/* ═══════════════ CTA FOOTER ═══════════════ */}
@@ -218,22 +218,22 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
           <p className="font-heading text-2xl md:text-3xl text-foreground mb-10">
             {isViewMode ? "Votre profil de personnalité est complet." : "Prêt·e à trouver votre partenaire idéal·e ?"}
           </p>
-          {isViewMode ? (
-            <Button
-              onClick={() => (window.location.href = "/profil?tab=questionnaires")}
-              className="px-12 py-6 text-lg h-auto rounded-xl gap-3"
-              variant="outline"
-            >
+          {isViewMode ?
+          <Button
+            onClick={() => window.location.href = "/profil?tab=questionnaires"}
+            className="px-12 py-6 text-lg h-auto rounded-xl gap-3"
+            variant="outline">
+            
               <ArrowLeft className="h-5 w-5" />
               Retour au profil
-            </Button>
-          ) : (
-            <Button onClick={onContinue} className="px-12 py-6 text-lg h-auto rounded-xl">
+            </Button> :
+
+          <Button onClick={onContinue} className="px-12 py-6 text-lg h-auto rounded-xl">
               Continuer mon inscription
             </Button>
-          )}
+          }
         </div>
       </section>
-    </div>
-  );
+    </div>);
+
 }
