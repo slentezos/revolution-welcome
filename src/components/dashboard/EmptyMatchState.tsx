@@ -39,7 +39,7 @@ export default function EmptyMatchState() {
             Savoir attendre, c'est choisir l'excellence
           </h3>
 
-          <p className="text-xl md:text-2xl leading-relaxed text-white/90 mb-12 max-w-3xl mx-auto">
+          <p className="text-xl md:text-xl leading-relaxed text-white/90 mb-12 max-w-3xl mx-auto">
             Nos experts sélectionnent vos profils avec soin. Profitez de votre journée, lisez, marchez… Vivez l'instant
             présent. Vous recevrez un email dès qu'une action sera requise.
           </p>
