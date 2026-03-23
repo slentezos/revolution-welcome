@@ -27,7 +27,7 @@ const greetings = [
   },
   {
     range: [14, 18] as const,
-    title: (n: string) => `Hello ${n},`,
+    title: (n: string) => `Bonjour ${n},`,
     message: "Promenade, lecture, quelques courses… À moins que ce soit le jour des petits-enfants. Détendez-vous.",
     image: greetingAfternoon,
     accent: "from-violet-900/70 via-violet-800/40 to-transparent",
