@@ -125,6 +125,7 @@ export default function Messages() {
   const [reportTarget, setReportTarget] = useState<string>("");
   const [unmatchModalOpen, setUnmatchModalOpen] = useState(false);
   const [unmatchTarget, setUnmatchTarget] = useState<string>("");
+  const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
 
   const [isListening, setIsListening] = useState(false);
   const [speakingMsgId, setSpeakingMsgId] = useState<number | null>(null);
