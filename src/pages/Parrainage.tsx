@@ -1,13 +1,21 @@
-import { useState, useRef } from "react";
-import { Gift, UserPlus, Mail, Heart, Shield, Clock, Star, Eye, Send, CheckCircle2, Ticket } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import {
+  Gift,
+  UserPlus,
+  Mail,
+  Heart,
+  Shield,
+  Clock,
+  Star,
+  CheckCircle2,
+  Ticket,
+  Share2,
+  Copy,
+  MessageCircle,
+} from "lucide-react";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { useToast } from "@/hooks/use-toast";
 import parrainageHero from "@/assets/parrainage-hero.jpg";
 import parrainageFormBg from "@/assets/parrainage-form-bg.jpg";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
@@ -64,18 +72,18 @@ function HeroSection() {
 const steps = [
   {
     icon: UserPlus,
-    title: "Remplissez le formulaire",
-    description: "Indiquez vos coordonnées et celles de la personne que vous souhaitez inviter.",
+    title: "Obtenez votre lien unique",
+    description: "En tant que membre, nous vous confions des invitations privilégiées à partager.",
   },
   {
-    icon: Mail,
-    title: "Nous envoyons l'invitation",
-    description: "Votre proche reçoit un e-mail personnalisé avec son accès offert de 3 mois.",
+    icon: Share2,
+    title: "Transmettez l'invitation",
+    description: "Envoyez le message pré-rédigé par WhatsApp, e-mail ou SMS en un seul clic.",
   },
   {
     icon: Heart,
     title: "Il/elle découvre Kalimera",
-    description: "Votre proche crée son profil et commence à recevoir des propositions de rencontres.",
+    description: "Votre proche active son accès de 3 mois offerts et commence de belles rencontres.",
   },
 ];
 
@@ -174,20 +182,16 @@ const faqs = [
     a: "Oui, votre proche bénéficie de 3 mois d'accès complet à Kalimera, sans frais ni engagement. À l'issue de la période, il pourra choisir de poursuivre ou non.",
   },
   {
-    q: "Qui peut être parrainé ?",
-    a: "Toute personne de 60 ans et plus, et à la recherche de l'amour ou de l'amitié. Un parent, un ami, un voisin… offrez du bonheur !",
+    q: "Qui peut être invité ?",
+    a: "Toute personne de 60 ans et plus, à la recherche de l'amour ou de l'amitié. Un parent, un ami, un voisin… offrez du bonheur !",
   },
   {
     q: "Comment mon proche recevra-t-il son invitation ?",
-    a: "Un e-mail personnalisé lui sera envoyé avec un lien d'inscription et un message de votre part si vous le souhaitez.",
-  },
-  {
-    q: "Mon proche saura-t-il que c'est moi qui l'ai invité ?",
-    a: "Oui, votre prénom sera mentionné dans l'e-mail d'invitation. Si vous préférez rester anonyme, précisez-le dans le message.",
+    a: "Vous lui transmettez directement le message via l'application de votre choix (WhatsApp, SMS, E-mail). C'est vous qui faites le premier pas.",
   },
   {
     q: "Puis-je inviter plusieurs personnes ?",
-    a: "Choisissez avec soin. Kalimera grandit grâce à la qualité de ses membres. Nous vous suggérons d'inviter en priorité les 3 personnes de votre entourage qui apprécieront le plus cette nouvelle élégance.",
+    a: "Vous disposez de 3 invitations. Choisissez avec soin. Kalimera grandit grâce à la qualité de ses membres. Nous vous suggérons d'inviter en priorité les personnes de votre entourage qui apprécieront cette nouvelle élégance.",
   },
 ];
 
@@ -232,221 +236,173 @@ function FAQSection() {
   );
 }
 
-/* ─── Section 5 — Bottom Form (SÉCURISÉ & UX 2026) ─── */
+/* ─── Section 5 — Bottom Form (SÉCURISÉ & UX 2026 - PARTAGE NATIF) ─── */
 function FormSection() {
-  const { toast } = useToast();
   const revealRef = useScrollReveal<HTMLElement>();
 
-  const [step, setStep] = useState<"form" | "preview">("form");
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    senderName: "",
-    senderEmail: "",
-    receiverName: "",
-    receiverEmail: "",
-    message: "",
-    website_url_trap: "", // HONEYPOT (Champ invisible pour piéger les bots)
-  });
+  // États de l'interface
+  const [invitesLeft, setInvitesLeft] = useState(3);
+  const [copied, setCopied] = useState(false);
+  const [shareSupported, setShareSupported] = useState(false);
 
-  // Regex simple pour valider l'email en temps réel
-  const isEmailValid = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // Le message de cooptation (Copywriting "No BS" et luxueux)
+  const inviteLink = "https://kalimera.fr/cercle/invitation-privee";
+  const inviteText =
+    "Bonjour, j'ai découvert Kalimera, un cercle privé pour faire de vraies belles rencontres. J'ai obtenu une invitation confidentielle qui t'offre tes 3 premiers mois d'accès privilégié. J'ai pensé à toi. Voici mon lien direct :";
+  const fullMessage = `${inviteText}\n\n${inviteLink}`;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-
-    // SÉCURITÉ : Interdire la saisie de liens (http://, https://, www.) dans le message
-    if (name === "message") {
-      const sanitizedValue = value.replace(/(https?:\/\/[^\s]+)|(www\.[^\s]+)/gi, "");
-      setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
-      return;
+  // Vérification de l'API de partage natif (Mobile / Navigateurs modernes)
+  useEffect(() => {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      setShareSupported(true);
     }
+  }, []);
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  // Action 1 : Partage Natif (iPhone, Android, Safari Mac)
+  const handleNativeShare = async () => {
+    try {
+      await navigator.share({
+        title: "Votre invitation privée Kalimera",
+        text: inviteText,
+        url: inviteLink,
+      });
+      if (invitesLeft > 0) setInvitesLeft((prev) => prev - 1);
+    } catch (err) {
+      console.log("Partage fermé ou non abouti.");
+    }
   };
 
-  const handlePreview = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStep("preview");
+  // Action 2 : Copier dans le presse-papier (PC, ou si Native Share échoue)
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(fullMessage);
+      setCopied(true);
+      if (invitesLeft > 0) setInvitesLeft((prev) => prev - 1);
+      setTimeout(() => setCopied(false), 3000);
+    } catch (err) {
+      console.error("Échec de la copie", err);
+    }
   };
 
-  const handleFinalSubmit = () => {
-    setLoading(true);
-
-    // SÉCURITÉ INVISIBLE : Si le bot a rempli le champ caché, on bloque silencieusement.
-    if (formData.website_url_trap.length > 0) {
-      setTimeout(() => {
-        setLoading(false);
-        setStep("form");
-        setFormData({
-          senderName: "",
-          senderEmail: "",
-          receiverName: "",
-          receiverEmail: "",
-          message: "",
-          website_url_trap: "",
-        });
-      }, 1000);
-      return;
-    }
-
-    setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: "Magnifique !",
-        description: `L'invitation a bien été envoyée à ${formData.receiverName}.`,
-      });
-      setStep("form");
-      setFormData({
-        senderName: "",
-        senderEmail: "",
-        receiverName: "",
-        receiverEmail: "",
-        message: "",
-        website_url_trap: "",
-      });
-    }, 1500);
+  // Action 3 : Clic direct sur lien (WhatsApp/Email) pour décrémenter visuellement
+  const handleLinkClick = () => {
+    if (invitesLeft > 0) setInvitesLeft((prev) => prev - 1);
   };
 
   return (
     <section ref={revealRef} id="formulaire" className="relative overflow-hidden min-h-[80vh] flex items-center py-24">
+      {/* Fond sombre et élégant */}
       <div className="absolute inset-0">
         <img src={parrainageFormBg} alt="Couple senior écrivant ensemble" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1B2333]/95 via-[#1B2333]/90 to-[#1B2333]/95" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1B2333]/95 via-[#1B2333]/95 to-[#1B2333]/95" />
       </div>
 
-  /* ─── Section 5 — Invitation Générateur (SÉCURISÉ & UX 2026) ─── */
-function InvitationSection() {
-  const { toast } = useToast();
-  const revealRef = useScrollReveal<HTMLElement>();
-
-  const [step, setStep] = useState<"initial" | "generating" | "ready">("initial");
-  const [inviteCode, setInviteCode] = useState("");
-  const [copied, setCopied] = useState(false);
-
-  // Message pré-rédigé ultra-premium
-  const getShareMessage = (code: string) => {
-    return `Bonjour, j'ai découvert Kalimera, un cercle privé pour faire de belles rencontres. J'ai obtenu un accès confidentiel pour t'offrir tes 3 premiers mois. Voici le lien direct : https://kalimera.fr/cercle/${code}`;
-  };
-
-  const handleGenerate = () => {
-    setStep("generating");
-    // Simulation d'un appel API sécurisé pour générer un lien unique
-    setTimeout(() => {
-      const mockUniqueCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-      setInviteCode(mockUniqueCode);
-      setStep("ready");
-    }, 1500);
-  };
-
-  const handleNativeShare = async () => {
-    const text = getShareMessage(inviteCode);
-    
-    // UX 2026 : Si le mobile/navigateur supporte le partage natif (iOS/Android)
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Votre invitation Kalimera",
-          text: text,
-        });
-        toast({ title: "Excellente nouvelle", description: "Votre invitation a été transmise." });
-      } catch (err) {
-        console.log("Partage annulé");
-      }
-    } else {
-      // Dégradation Gracieuse : Copie dans le presse-papier pour les PC
-      navigator.clipboard.writeText(text);
-      setCopied(true);
-      toast({ title: "Message copié", description: "Le message et le lien sont copiés. Vous pouvez les coller." });
-      setTimeout(() => setCopied(false), 3000);
-    }
-  };
-
-  const handleWhatsAppWeb = () => {
-    const text = encodeURIComponent(getShareMessage(inviteCode));
-    window.open(`https://web.whatsapp.com/send?text=${text}`, "_blank");
-  };
-
-  const handleEmailDesktop = () => {
-    const subject = encodeURIComponent("Une invitation privée pour Kalimera");
-    const body = encodeURIComponent(getShareMessage(inviteCode));
-    window.open(`mailto:?subject=${subject}&body=${body}`, "_self");
-  };
-
-  return (
-    <section ref={revealRef} id="invitation" className="relative overflow-hidden min-h-[80vh] flex items-center py-24">
-      <div className="absolute inset-0">
-        <img src={parrainageFormBg} alt="Ambiance élégante" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1B2333]/95 via-[#1B2333]/90 to-[#1B2333]/95" />
-      </div>
-
-      <div className="relative z-10 w-full text-xl text-white">
-        <div className="container-main max-w-2xl">
-          
+      <div className="relative z-10 w-full text-xl text-[#d1d1d1]">
+        <div className="container-main max-w-3xl">
+          {/* En-tête avec Compteur */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center px-5 py-2 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 mb-8 backdrop-blur-md shadow-lg">
-              <Ticket className="w-5 h-5 text-[#D4AF37] mr-2" />
+            <div className="inline-flex items-center justify-center px-5 py-2 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 mb-8 backdrop-blur-sm shadow-lg">
+              <Ticket className="w-5 h-5 text-[#D4AF37] mr-3" />
               <span className="text-[#D4AF37] text-sm font-bold uppercase tracking-widest">
-                Vos privilèges : 3 invitations
+                {invitesLeft > 0
+                  ? `Il vous reste ${invitesLeft} invitation${invitesLeft > 1 ? "s" : ""} ce mois-ci`
+                  : "Toutes vos invitations ont été envoyées"}
               </span>
             </div>
-            <h2 className="font-heading text-3xl md:text-5xl text-white mb-4 leading-tight">
-              Générer une invitation
+
+            <h2 className="font-heading text-4xl md:text-5xl text-white mb-4 leading-tight">
+              {invitesLeft > 0 ? "Transmettez votre privilège" : "Merci pour votre confiance"}
             </h2>
             <div className="divider-gold mx-auto mt-6 mb-2" />
           </div>
 
-          {/* La Carte Digitale */}
-          <div className="bg-[#1B2333] border border-[#D4AF37]/30 rounded-[32px] p-8 md:p-12 shadow-2xl relative overflow-hidden transition-all duration-500 min-h-[400px] flex flex-col justify-center">
-            
-            {/* Ornements visuels */}
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-50" />
-            
-            {step === "initial" && (
-              <div className="text-center animate-in fade-in duration-500">
-                <Gift className="w-16 h-16 text-[#D4AF37] mx-auto mb-6" />
-                <p className="text-xl text-white/80 leading-relaxed mb-10">
-                  Créez un accès unique et sécurisé. Vous pourrez ensuite l'envoyer directement via l'application de votre choix (WhatsApp, SMS, E-mail).
+          {/* L'ÉCRIN : La Carte Privilège */}
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-8 md:p-12 shadow-2xl transition-all duration-500 relative overflow-hidden">
+            {invitesLeft > 0 ? (
+              <div className="animate-in fade-in zoom-in-95 duration-700">
+                <p className="text-center text-white/80 text-lg mb-8 leading-relaxed">
+                  Pas de formulaire compliqué. Voici le message d'invitation qui a été préparé pour vous. Transmettez-le
+                  directement à la personne de votre choix.
                 </p>
-                <Button onClick={handleGenerate} className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-7 text-xl rounded-xl font-bold shadow-xl transition-all h-auto">
-                  Générer le lien d'accès
-                </Button>
-              </div>
-            )}
 
-            {step === "generating" && (
-              <div className="text-center animate-in fade-in duration-500 flex flex-col items-center justify-center">
-                <Loader2 className="w-16 h-16 text-[#D4AF37] animate-spin mb-6" />
-                <p className="text-xl text-[#D4AF37] font-medium tracking-wide">
-                  Création de la clé sécurisée...
-                </p>
-              </div>
-            )}
-
-            {step === "ready" && (
-              <div className="text-center animate-in zoom-in-95 duration-500">
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 backdrop-blur-sm">
-                  <p className="text-sm text-white/50 uppercase tracking-widest font-bold mb-2">Code d'invitation généré</p>
-                  <p className="font-mono text-3xl text-[#D4AF37] tracking-[0.2em]">{inviteCode}</p>
+                {/* La Carte Visuelle */}
+                <div className="bg-gradient-to-br from-[#111827] to-[#1e1e2f] border border-[#D4AF37]/40 shadow-2xl rounded-2xl p-8 mb-10 relative">
+                  <Gift className="w-24 h-24 text-[#D4AF37]/5 absolute -top-4 -right-4" />
+                  <p className="italic text-white/90 text-xl leading-relaxed font-serif relative z-10">
+                    "{inviteText}"
+                  </p>
+                  <div className="mt-6 inline-block bg-white/10 border border-[#D4AF37]/30 text-[#D4AF37] px-6 py-3 rounded-xl font-medium text-lg font-mono">
+                    {inviteLink}
+                  </div>
                 </div>
 
-                {/* Bouton Principal (Smart : Share API ou Copy) */}
-                <Button onClick={handleNativeShare} className={`w-full py-7 text-xl rounded-xl font-bold shadow-xl transition-all h-auto mb-6 flex items-center justify-center gap-3 ${copied ? "bg-green-500 text-white hover:bg-green-600" : "bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333]"}`}>
-                  {copied ? <><CheckCircle2 className="w-6 h-6" /> Invitation copiée</> : <><Share2 className="w-6 h-6" /> Transmettre l'invitation</>}
-                </Button>
+                {/* LES ACTIONS : Dégradation Gracieuse selon l'appareil */}
+                <div className="space-y-4">
+                  {/* Option A : Partage Natif (Mobile) */}
+                  {shareSupported && (
+                    <Button
+                      onClick={handleNativeShare}
+                      className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-8 text-2xl rounded-xl font-bold shadow-[0_0_30px_rgba(212,175,55,0.3)] transition-all flex items-center justify-center gap-3 h-auto"
+                    >
+                      <Share2 className="w-7 h-7" /> Transmettre cette invitation
+                    </Button>
+                  )}
 
-                {/* Boutons Fallback pour PC */}
-                <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-white/10">
-                  <Button onClick={handleWhatsAppWeb} variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10 py-6 h-auto text-lg rounded-xl">
-                    <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp Web
-                  </Button>
-                  <Button onClick={handleEmailDesktop} variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10 py-6 h-auto text-lg rounded-xl">
-                    <Mail className="w-5 h-5 mr-2" /> Par E-mail
-                  </Button>
+                  {/* Option B : Boutons de Fallback (PC ou si pas de Native Share) */}
+                  <div className={`grid grid-cols-1 ${!shareSupported ? "md:grid-cols-1" : "md:grid-cols-2"} gap-4`}>
+                    {!shareSupported && (
+                      <Button
+                        onClick={handleCopy}
+                        className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-8 text-2xl rounded-xl font-bold shadow-[0_0_30px_rgba(212,175,55,0.3)] transition-all flex items-center justify-center gap-3 h-auto"
+                      >
+                        {copied ? (
+                          <>
+                            <CheckCircle2 className="w-7 h-7 text-green-700" /> Copié avec succès !
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-7 h-7" /> Copier le message
+                          </>
+                        )}
+                      </Button>
+                    )}
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 col-span-full">
+                      <a
+                        href={`https://api.whatsapp.com/send?text=${encodeURIComponent(fullMessage)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={handleLinkClick}
+                        className="flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white py-4 px-6 rounded-xl transition-all text-lg font-medium"
+                      >
+                        <MessageCircle className="w-6 h-6 text-green-400" /> WhatsApp
+                      </a>
+
+                      <a
+                        href={`mailto:?subject=${encodeURIComponent("Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`}
+                        onClick={handleLinkClick}
+                        className="flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white py-4 px-6 rounded-xl transition-all text-lg font-medium"
+                      >
+                        <Mail className="w-6 h-6 text-blue-400" /> E-mail direct
+                      </a>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            ) : (
+              /* ETAT VIDE : Plus d'invitations */
+              <div className="text-center py-12 animate-in fade-in zoom-in-95 duration-500">
+                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#D4AF37]/10 mb-6">
+                  <CheckCircle2 className="w-12 h-12 text-[#D4AF37]" />
+                </div>
+                <h3 className="font-heading text-3xl text-white mb-4">Vos invitations ont été distribuées</h3>
+                <p className="text-xl text-white/70 max-w-lg mx-auto">
+                  Merci de faire grandir le Cercle Kalimera. Vos proches vont pouvoir découvrir l'élégance de nos
+                  rencontres. De nouveaux privilèges vous seront accordés le mois prochain.
+                </p>
               </div>
             )}
           </div>
-
         </div>
       </div>
     </section>
@@ -461,7 +417,7 @@ export default function Parrainage() {
       <HowItWorksSection />
       <ValuePropositionSection />
       <FAQSection />
-      <InvitationSection />
+      <FormSection />
     </Layout>
   );
 }
