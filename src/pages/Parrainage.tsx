@@ -314,184 +314,139 @@ function FormSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#1B2333]/95 via-[#1B2333]/90 to-[#1B2333]/95" />
       </div>
 
-      <div className="relative z-10 w-full text-xl text-[#d1d1d1]">
-        <div className="container-main max-w-3xl">
+  /* ─── Section 5 — Invitation Générateur (SÉCURISÉ & UX 2026) ─── */
+function InvitationSection() {
+  const { toast } = useToast();
+  const revealRef = useScrollReveal<HTMLElement>();
+
+  const [step, setStep] = useState<"initial" | "generating" | "ready">("initial");
+  const [inviteCode, setInviteCode] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  // Message pré-rédigé ultra-premium
+  const getShareMessage = (code: string) => {
+    return `Bonjour, j'ai découvert Kalimera, un cercle privé pour faire de belles rencontres. J'ai obtenu un accès confidentiel pour t'offrir tes 3 premiers mois. Voici le lien direct : https://kalimera.fr/cercle/${code}`;
+  };
+
+  const handleGenerate = () => {
+    setStep("generating");
+    // Simulation d'un appel API sécurisé pour générer un lien unique
+    setTimeout(() => {
+      const mockUniqueCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+      setInviteCode(mockUniqueCode);
+      setStep("ready");
+    }, 1500);
+  };
+
+  const handleNativeShare = async () => {
+    const text = getShareMessage(inviteCode);
+    
+    // UX 2026 : Si le mobile/navigateur supporte le partage natif (iOS/Android)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Votre invitation Kalimera",
+          text: text,
+        });
+        toast({ title: "Excellente nouvelle", description: "Votre invitation a été transmise." });
+      } catch (err) {
+        console.log("Partage annulé");
+      }
+    } else {
+      // Dégradation Gracieuse : Copie dans le presse-papier pour les PC
+      navigator.clipboard.writeText(text);
+      setCopied(true);
+      toast({ title: "Message copié", description: "Le message et le lien sont copiés. Vous pouvez les coller." });
+      setTimeout(() => setCopied(false), 3000);
+    }
+  };
+
+  const handleWhatsAppWeb = () => {
+    const text = encodeURIComponent(getShareMessage(inviteCode));
+    window.open(`https://web.whatsapp.com/send?text=${text}`, "_blank");
+  };
+
+  const handleEmailDesktop = () => {
+    const subject = encodeURIComponent("Une invitation privée pour Kalimera");
+    const body = encodeURIComponent(getShareMessage(inviteCode));
+    window.open(`mailto:?subject=${subject}&body=${body}`, "_self");
+  };
+
+  return (
+    <section ref={revealRef} id="invitation" className="relative overflow-hidden min-h-[80vh] flex items-center py-24">
+      <div className="absolute inset-0">
+        <img src={parrainageFormBg} alt="Ambiance élégante" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1B2333]/95 via-[#1B2333]/90 to-[#1B2333]/95" />
+      </div>
+
+      <div className="relative z-10 w-full text-xl text-white">
+        <div className="container-main max-w-2xl">
+          
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10 mb-8 backdrop-blur-sm">
+            <div className="inline-flex items-center justify-center px-5 py-2 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 mb-8 backdrop-blur-md shadow-lg">
               <Ticket className="w-5 h-5 text-[#D4AF37] mr-2" />
               <span className="text-[#D4AF37] text-sm font-bold uppercase tracking-widest">
-                Il vous reste 3 invitations ce mois-ci
+                Vos privilèges : 3 invitations
               </span>
             </div>
             <h2 className="font-heading text-3xl md:text-5xl text-white mb-4 leading-tight">
-              {step === "form" ? "Créez votre carte d'invitation" : "Aperçu de votre cadeau"}
+              Générer une invitation
             </h2>
             <div className="divider-gold mx-auto mt-6 mb-2" />
           </div>
 
-          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-8 md:p-12 shadow-2xl transition-all duration-500">
-            {/* ETAPE 1 : LE FORMULAIRE */}
-            {step === "form" && (
-              <form onSubmit={handlePreview} className="space-y-8 animate-in fade-in zoom-in-95 duration-500">
-                {/* HONEYPOT (Invisible pour les humains, appât pour les bots) */}
-                <div className="absolute opacity-0 -z-10 h-0 overflow-hidden" aria-hidden="true">
-                  <input
-                    type="text"
-                    name="website_url_trap"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    value={formData.website_url_trap}
-                    onChange={handleInputChange}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <Label className="text-white/80 text-lg">Votre prénom</Label>
-                    <Input
-                      required
-                      name="senderName"
-                      value={formData.senderName}
-                      onChange={handleInputChange}
-                      placeholder="Ex: Jean"
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/30 h-14 text-lg focus-visible:ring-[#D4AF37] focus-visible:border-[#D4AF37] rounded-xl"
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <Label className="text-white/80 text-lg flex items-center justify-between">
-                      Votre e-mail{" "}
-                      {isEmailValid(formData.senderEmail) && <CheckCircle2 className="w-5 h-5 text-green-400" />}
-                    </Label>
-                    <Input
-                      required
-                      type="email"
-                      name="senderEmail"
-                      value={formData.senderEmail}
-                      onChange={handleInputChange}
-                      placeholder="votre@email.com"
-                      className="bg-white/5 border-white/10 text-white placeholder:text-white/30 h-14 text-lg focus-visible:ring-[#D4AF37] focus-visible:border-[#D4AF37] rounded-xl"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-2xl bg-white/5 border border-white/5">
-                  <div className="space-y-3">
-                    <Label className="text-[#D4AF37] text-lg font-bold">Prénom de l'invité(e)</Label>
-                    <Input
-                      required
-                      name="receiverName"
-                      value={formData.receiverName}
-                      onChange={handleInputChange}
-                      placeholder="Ex: Marie"
-                      className="bg-black/20 border-black/20 text-white placeholder:text-white/30 h-14 text-lg focus-visible:ring-[#D4AF37] rounded-xl"
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <Label className="text-[#D4AF37] text-lg font-bold flex items-center justify-between">
-                      Son e-mail{" "}
-                      {isEmailValid(formData.receiverEmail) && <CheckCircle2 className="w-5 h-5 text-green-400" />}
-                    </Label>
-                    <Input
-                      required
-                      type="email"
-                      name="receiverEmail"
-                      value={formData.receiverEmail}
-                      onChange={handleInputChange}
-                      placeholder="son@email.com"
-                      className="bg-black/20 border-black/20 text-white placeholder:text-white/30 h-14 text-lg focus-visible:ring-[#D4AF37] rounded-xl"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <Label className="text-white/80 text-lg flex items-center justify-between">
-                    Message personnel{" "}
-                    <span className="text-sm font-normal text-white/40">
-                      (Les liens web sont désactivés par sécurité)
-                    </span>
-                  </Label>
-                  <Textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder="Un petit mot affectueux pour accompagner votre cadeau..."
-                    rows={4}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-[#D4AF37] resize-none rounded-xl text-lg p-4"
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-7 text-xl rounded-xl font-bold shadow-xl transition-all flex items-center justify-center gap-3"
-                >
-                  <Eye className="w-6 h-6" /> Prévisualiser la carte
-                </Button>
-
-                <p className="text-center text-white/40 text-sm italic mt-4">
-                  En continuant, vous acceptez notre{" "}
-                  <Link to="/charte-bienveillance" className="underline hover:text-white/70">
-                    charte de bienveillance
-                  </Link>
-                  .
+          {/* La Carte Digitale */}
+          <div className="bg-[#1B2333] border border-[#D4AF37]/30 rounded-[32px] p-8 md:p-12 shadow-2xl relative overflow-hidden transition-all duration-500 min-h-[400px] flex flex-col justify-center">
+            
+            {/* Ornements visuels */}
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-50" />
+            
+            {step === "initial" && (
+              <div className="text-center animate-in fade-in duration-500">
+                <Gift className="w-16 h-16 text-[#D4AF37] mx-auto mb-6" />
+                <p className="text-xl text-white/80 leading-relaxed mb-10">
+                  Créez un accès unique et sécurisé. Vous pourrez ensuite l'envoyer directement via l'application de votre choix (WhatsApp, SMS, E-mail).
                 </p>
-              </form>
+                <Button onClick={handleGenerate} className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-7 text-xl rounded-xl font-bold shadow-xl transition-all h-auto">
+                  Générer le lien d'accès
+                </Button>
+              </div>
             )}
 
-            {/* ETAPE 2 : LA PRÉVISUALISATION (LA FRICTION POSITIVE) */}
-            {step === "preview" && (
-              <div className="animate-in fade-in slide-in-from-right-8 duration-500">
-                <div className="bg-[#FDFBF7] rounded-[24px] p-8 md:p-12 text-[#1B2333] shadow-2xl relative overflow-hidden mb-8 border border-[#D4AF37]/30">
-                  {/* Ornements visuels pour faire "Carte cadeau" */}
-                  <div className="absolute top-0 left-0 w-full h-2 bg-[#D4AF37]" />
-                  <Gift className="w-16 h-16 text-[#D4AF37]/20 absolute top-8 right-8" />
+            {step === "generating" && (
+              <div className="text-center animate-in fade-in duration-500 flex flex-col items-center justify-center">
+                <Loader2 className="w-16 h-16 text-[#D4AF37] animate-spin mb-6" />
+                <p className="text-xl text-[#D4AF37] font-medium tracking-wide">
+                  Création de la clé sécurisée...
+                </p>
+              </div>
+            )}
 
-                  <p className="font-heading text-2xl mb-6">
-                    Chèr(e) <span className="font-bold text-[#D4AF37]">{formData.receiverName}</span>,
-                  </p>
-                  <p className="text-xl leading-relaxed mb-8">
-                    <strong>{formData.senderName}</strong> a pensé à vous et souhaite vous offrir{" "}
-                    <strong>3 mois d'accès privilégié</strong> à Kalimera, la plateforme de rencontres dédiée à
-                    l'élégance et à l'authenticité.
-                  </p>
-
-                  {formData.message && (
-                    <div className="bg-white p-6 rounded-xl border border-gray-100 italic text-lg text-gray-600 shadow-sm">
-                      "{formData.message}"
-                    </div>
-                  )}
-
-                  <div className="mt-10 text-center">
-                    <div className="inline-block border-2 border-[#1B2333] text-[#1B2333] px-8 py-3 rounded-full font-bold uppercase tracking-widest text-sm opacity-50">
-                      Bouton d'accès sécurisé
-                    </div>
-                  </div>
+            {step === "ready" && (
+              <div className="text-center animate-in zoom-in-95 duration-500">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-8 backdrop-blur-sm">
+                  <p className="text-sm text-white/50 uppercase tracking-widest font-bold mb-2">Code d'invitation généré</p>
+                  <p className="font-mono text-3xl text-[#D4AF37] tracking-[0.2em]">{inviteCode}</p>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-4">
-                  <Button
-                    onClick={() => setStep("form")}
-                    variant="outline"
-                    className="flex-1 py-7 text-lg rounded-xl border-white/20 text-white hover:bg-white/10 bg-transparent h-auto"
-                  >
-                    Modifier
+                {/* Bouton Principal (Smart : Share API ou Copy) */}
+                <Button onClick={handleNativeShare} className={`w-full py-7 text-xl rounded-xl font-bold shadow-xl transition-all h-auto mb-6 flex items-center justify-center gap-3 ${copied ? "bg-green-500 text-white hover:bg-green-600" : "bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333]"}`}>
+                  {copied ? <><CheckCircle2 className="w-6 h-6" /> Invitation copiée</> : <><Share2 className="w-6 h-6" /> Transmettre l'invitation</>}
+                </Button>
+
+                {/* Boutons Fallback pour PC */}
+                <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-white/10">
+                  <Button onClick={handleWhatsAppWeb} variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10 py-6 h-auto text-lg rounded-xl">
+                    <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp Web
                   </Button>
-                  <Button
-                    onClick={handleFinalSubmit}
-                    disabled={loading}
-                    className="flex-[2] bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-7 text-xl rounded-xl font-bold shadow-xl transition-all h-auto flex items-center justify-center gap-3"
-                  >
-                    {loading ? (
-                      "Envoi sécurisé en cours..."
-                    ) : (
-                      <>
-                        <Send className="w-6 h-6" /> Confirmer et Envoyer
-                      </>
-                    )}
+                  <Button onClick={handleEmailDesktop} variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10 py-6 h-auto text-lg rounded-xl">
+                    <Mail className="w-5 h-5 mr-2" /> Par E-mail
                   </Button>
                 </div>
               </div>
             )}
           </div>
+
         </div>
       </div>
     </section>
@@ -506,7 +461,7 @@ export default function Parrainage() {
       <HowItWorksSection />
       <ValuePropositionSection />
       <FAQSection />
-      <FormSection />
+      <InvitationSection />
     </Layout>
   );
 }
