@@ -8,6 +8,9 @@ import PrivilegeBadge from "@/components/location/PrivilegeBadge";
 import privilegesHero from "@/assets/privileges-hero.jpg";
 import giftBannerPrivileges from "@/assets/gift-banner-privileges.jpg";
 
+// Imports pour la modale Shadcn UI (Assurez-vous d'avoir ce composant dans votre projet Lovable)
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+
 const cerclePriveFeatures = [
   "Messagerie illimitée",
   "Appels Audio & Vidéo illimités",
@@ -46,7 +49,10 @@ export default function Privileges() {
   const giftRef = useScrollReveal<HTMLElement>();
   const reassuranceRef = useScrollReveal<HTMLElement>();
   const finalRef = useScrollReveal<HTMLElement>();
+
+  // États pour les modales
   const [modalOpen, setModalOpen] = useState(false);
+  const [expertModalOpen, setExpertModalOpen] = useState(false);
 
   return (
     <Layout>
@@ -157,7 +163,6 @@ export default function Privileges() {
               data-reveal-delay="100"
               className="group relative bg-card border border-border p-10 md:p-12 transition-all duration-500 hover:shadow-[var(--shadow-luxury)] hover:border-primary/20 flex flex-col overflow-hidden"
             >
-              {/* Hover accent bar */}
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary/60 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
 
               <div className="flex items-center gap-3 mb-6">
@@ -198,10 +203,8 @@ export default function Privileges() {
               data-reveal-delay="250"
               className="group relative bg-card border-2 border-[hsl(var(--gold)/0.4)] p-10 md:p-12 transition-all duration-500 hover:shadow-[var(--shadow-luxury)] hover:border-[hsl(var(--gold)/0.6)] flex flex-col overflow-hidden"
             >
-              {/* Gold accent bar */}
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-light))] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
 
-              {/* VIP Badge */}
               <div className="absolute -top-4 right-8 bg-[hsl(var(--gold))] text-primary px-5 py-1.5 text-xs font-bold tracking-[0.2em] uppercase">
                 VIP
               </div>
@@ -241,7 +244,7 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Bloc 3 — L'Expertise — Rich gradient background like NotreMethode matching section */}
+      {/* Bloc 3 — L'Expertise — Avec logique Modale ajoutée */}
       <section ref={expertRef} className="relative py-32 lg:py-40 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-[hsl(var(--navy-light))]" />
         <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -272,25 +275,29 @@ export default function Privileges() {
             <p
               data-reveal
               data-reveal-delay="350"
-              className="text-lg md:text-xl text-primary-foreground/70 leading-relaxed mb-12 max-w-3xl mx-auto"
+              className="text-lg md:text-xl text-primary-foreground/70 leading-relaxed mb-10 max-w-3xl mx-auto"
             >
               Réservez un entretien privé avec nos experts pour décrypter votre test de personnalité et maximiser la
               qualité de vos rencontres.
+              <span className="block mt-4 italic text-[hsl(var(--gold-light))] text-base md:text-lg font-medium opacity-90">
+                Un service d'accompagnement exclusif et totalement facultatif.
+              </span>
             </p>
             <div data-reveal data-reveal-delay="450">
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-3 border border-primary-foreground/30 text-primary-foreground px-10 py-5 text-base font-medium tracking-wide transition-all duration-500 hover:bg-primary-foreground hover:text-primary"
+              {/* Le Link a été remplacé par le bouton ouvrant la modale */}
+              <button
+                onClick={() => setExpertModalOpen(true)}
+                className="inline-flex items-center gap-3 border border-primary-foreground/30 text-primary-foreground px-10 py-5 text-base font-medium tracking-wide transition-all duration-500 hover:bg-primary-foreground hover:text-primary group"
               >
                 Découvrir ce service à la carte
-                <ArrowRight className="h-5 w-5" />
-              </Link>
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Bloc 4 — L'Invitation Privée — Brand new image */}
+      {/* Bloc 4 — L'Invitation Privée (Inchangé de votre code) */}
       <section ref={giftRef} className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -414,7 +421,49 @@ export default function Privileges() {
         </div>
       </section>
 
+      {/* --- MODALES --- */}
+
+      {/* Modale d'admission classique (Existante) */}
       <LocationCheckModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
+      {/* NOUVELLE Modale Teaser Expertise (Service à la carte) */}
+      <Dialog open={expertModalOpen} onOpenChange={setExpertModalOpen}>
+        <DialogContent className="sm:max-w-[500px] bg-white border-[hsl(var(--gold)/0.2)] p-8">
+          <DialogHeader className="text-center">
+            <div className="mx-auto w-12 h-12 bg-[hsl(var(--navy-light))/0.05] rounded-full flex items-center justify-center mb-4">
+              <Crown className="h-6 w-6 text-[hsl(var(--gold))]" />
+            </div>
+            <DialogTitle className="font-heading text-2xl md:text-3xl text-primary mb-2">
+              Un privilège réservé à nos membres
+            </DialogTitle>
+            <DialogDescription className="text-lg text-slate-600 leading-relaxed pt-2">
+              Pour garantir la qualité de notre accompagnement, l'accès à la Conciergerie est{" "}
+              <strong>exclusivement réservé aux membres admis</strong> du Cercle Kalimera.
+              <br />
+              <br />
+              Ce service est entièrement facultatif et peut être sollicité à tout moment dès la validation de votre
+              profil.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-8 flex flex-col gap-3">
+            <button
+              onClick={() => {
+                setExpertModalOpen(false);
+                setTimeout(() => setModalOpen(true), 150); // Ouvre la modale d'admission juste après
+              }}
+              className="w-full bg-primary text-white py-4 font-medium tracking-wide hover:bg-primary/90 transition-colors shadow-sm"
+            >
+              Demander mon admission pour accéder au service
+            </button>
+            <button
+              onClick={() => setExpertModalOpen(false)}
+              className="w-full py-3 text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+            >
+              Continuer la découverte du site
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
