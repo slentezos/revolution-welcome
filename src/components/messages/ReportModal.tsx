@@ -19,11 +19,20 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
   const [reportText, setReportText] = useState("");
   const [sending, setSending] = useState(false);
 
-  // États pour l'auto-expand et la dictée
+  // États pour l'auto-expand et la dictée indestructible
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isListening, setIsListening] = useState(false);
+
+  // Les "Coffres-forts" pour empêcher l'API vocale d'effacer le texte
   const recognitionRef = useRef<any>(null);
-  const originalTextRef = useRef<string>("");
+  const manualStopRef = useRef(false);
+  const reportTextRef = useRef(reportText);
+  const baseTextRef = useRef("");
+
+  // Garde la référence toujours à jour avec le texte actuel
+  useEffect(() => {
+    reportTextRef.current = reportText;
+  }, [reportText]);
 
   // Ajustement automatique de la hauteur du textarea
   useEffect(() => {
@@ -37,13 +46,14 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
     setStep("intro");
     setReason("");
     setReportText("");
-    if (isListening) toggleDictation(); // Coupe le micro si on ferme
+    if (isListening) forceStopDictation();
     onOpenChange(false);
   };
 
   const handleSubmit = async () => {
     if (!reason || !reportText.trim()) return;
     setSending(true);
+    if (isListening) forceStopDictation();
     await new Promise((r) => setTimeout(r, 800));
     setSending(false);
     toast.success(`Votre signalement concernant ${name} a bien été envoyé.`);
@@ -55,44 +65,79 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
     onUnmatchInstead();
   };
 
-  // Logique de dictée vocale "No BS"
-  const toggleDictation = () => {
+  // ---- LE MOTEUR DE DICTÉE VOCALE "CRÈME DE LA CRÈME" ----
+  const initRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      toast.error("Votre navigateur ne supporte pas la dictée vocale.");
-      return;
-    }
-
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-      return;
-    }
-
-    // Sauvegarde du texte déjà écrit avant de commencer à parler
-    originalTextRef.current = reportText;
+    if (!SpeechRecognition) return null;
 
     const recognition = new SpeechRecognition();
     recognition.lang = "fr-FR";
     recognition.continuous = true;
     recognition.interimResults = true;
 
+    // Quand le micro s'allume (même après une pause), on verrouille le texte existant
+    recognition.onstart = () => {
+      baseTextRef.current = reportTextRef.current;
+    };
+
     recognition.onresult = (event: any) => {
       let transcript = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         transcript += event.results[i][0].transcript;
       }
-      // On combine proprement l'ancien texte avec ce qui est dicté
-      setReportText((originalTextRef.current + " " + transcript).trim());
+      // On combine le texte verrouillé avec les nouveaux mots
+      const newText = (baseTextRef.current + " " + transcript).trim();
+      setReportText(newText);
     };
 
-    recognition.onerror = () => setIsListening(false);
-    recognition.onend = () => setIsListening(false);
+    recognition.onerror = (event: any) => {
+      if (event.error === "not-allowed") {
+        manualStopRef.current = true;
+        setIsListening(false);
+      }
+    };
 
-    recognitionRef.current = recognition;
-    recognition.start();
-    setIsListening(true);
+    // Si le navigateur fait une pause, on le relance automatiquement (sauf si l'utilisateur a cliqué sur "Arrêter")
+    recognition.onend = () => {
+      if (!manualStopRef.current) {
+        try {
+          recognition.start();
+        } catch (e) {
+          setIsListening(false);
+        }
+      } else {
+        setIsListening(false);
+      }
+    };
+
+    return recognition;
+  };
+
+  const toggleDictation = () => {
+    if (isListening) {
+      forceStopDictation();
+    } else {
+      manualStopRef.current = false;
+      if (!recognitionRef.current) {
+        recognitionRef.current = initRecognition();
+      }
+      if (!recognitionRef.current) {
+        toast.error("Votre navigateur ne supporte pas la dictée vocale.");
+        return;
+      }
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (e) {
+        console.error("Erreur de démarrage audio");
+      }
+    }
+  };
+
+  const forceStopDictation = () => {
+    manualStopRef.current = true;
+    recognitionRef.current?.stop();
+    setIsListening(false);
   };
 
   return (
@@ -160,7 +205,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
             <button
               onClick={() => {
                 setStep("intro");
-                if (isListening) toggleDictation();
+                if (isListening) forceStopDictation();
               }}
               className="flex items-center gap-2 text-gray-500 hover:text-[#1B2333] transition-colors text-lg"
             >
@@ -177,7 +222,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
               Sélectionnez un motif et décrivez la situation en détail.
             </p>
 
-            <div className="space-y-5 pt-2">
+            <div className="space-y-6 pt-2">
               <div className="space-y-2">
                 <Label className="text-lg font-medium text-[#1B2333]">Motif principal</Label>
                 <Select value={reason} onValueChange={setReason}>
@@ -201,40 +246,61 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label className="text-lg font-medium text-[#1B2333]">Détails supplémentaires</Label>
-                <div className="relative">
-                  <textarea
-                    ref={textareaRef}
-                    value={reportText}
-                    onChange={(e) => setReportText(e.target.value)}
-                    placeholder="Écrivez ou dictez votre message ici..."
-                    className="w-full min-h-[140px] rounded-xl text-base border border-gray-200 bg-gray-50/80 resize-none outline-none focus:ring-2 focus:ring-[#1B2333] p-4 pb-14 overflow-hidden transition-all"
-                    maxLength={1000}
-                  />
 
-                  {/* Bouton de dictée flottant en bas à droite */}
-                  <div className="absolute bottom-3 right-3 flex items-center gap-2">
-                    <button
-                      onClick={toggleDictation}
-                      className={`flex items-center justify-center w-10 h-10 rounded-full transition-all shadow-sm border ${
-                        isListening
-                          ? "bg-red-50 border-red-200 text-red-500 animate-pulse"
-                          : "bg-white border-gray-200 text-gray-500 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/30 hover:text-[#D4AF37]"
-                      }`}
-                      title={isListening ? "Arrêter la dictée" : "Dicter vocalement"}
-                    >
-                      {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
-                    </button>
-                  </div>
+                {/* L'UX 2026 : Barre d'outils de dictée */}
+                <div className="flex items-center gap-4 mb-1">
+                  <button
+                    onClick={toggleDictation}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all text-base ${
+                      isListening
+                        ? "bg-[#D4AF37]/20 text-[#D4AF37] shadow-inner"
+                        : "bg-[#E5C18D]/40 text-[#1B2333] hover:bg-[#E5C18D]/60 shadow-sm"
+                    }`}
+                  >
+                    {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                    {isListening ? "Arrêter" : "Dicter"}
+                  </button>
+
+                  {/* L'indicateur animé "Je vous écoute..." */}
+                  {isListening && (
+                    <div className="flex items-center gap-2 text-[#D4AF37] font-bold text-lg animate-in fade-in duration-300">
+                      Je vous écoute...
+                      <div className="flex items-end gap-[3px] h-4 ml-1">
+                        <span className="w-1.5 bg-[#D4AF37] animate-pulse rounded-full h-2"></span>
+                        <span
+                          className="w-1.5 bg-[#D4AF37] animate-pulse rounded-full h-4"
+                          style={{ animationDelay: "150ms" }}
+                        ></span>
+                        <span
+                          className="w-1.5 bg-[#D4AF37] animate-pulse rounded-full h-3"
+                          style={{ animationDelay: "300ms" }}
+                        ></span>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                <textarea
+                  ref={textareaRef}
+                  value={reportText}
+                  onChange={(e) => setReportText(e.target.value)}
+                  placeholder="Écrivez ou dictez votre message ici..."
+                  className={`w-full min-h-[140px] rounded-xl text-lg border bg-white resize-none outline-none p-4 overflow-hidden transition-all ${
+                    isListening
+                      ? "border-[#D4AF37] ring-2 ring-[#D4AF37]/20"
+                      : "border-gray-200 focus:border-[#1B2333] focus:ring-1 focus:ring-[#1B2333]"
+                  }`}
+                  maxLength={1000}
+                />
                 <p className="text-gray-500 text-right text-sm mt-1">{reportText.length}/1000</p>
               </div>
 
               <Button
                 onClick={handleSubmit}
                 disabled={!reason || !reportText.trim() || sending}
-                className="w-full h-14 rounded-xl text-white text-lg font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all"
+                className="w-full h-14 rounded-xl text-white text-lg font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all mt-4"
               >
                 {sending ? "Envoi sécurisé..." : "Confirmer le signalement"}
               </Button>
