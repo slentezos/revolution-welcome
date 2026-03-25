@@ -8,19 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 /* ─── FAQ Content ─── */
 const faqSections = [
@@ -137,8 +126,7 @@ export default function ContactMember() {
 
   /* ─── Speech Recognition ─── */
   const startDictation = useCallback(() => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
 
     const recognition = new SpeechRecognition();
@@ -202,9 +190,7 @@ export default function ContactMember() {
             <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
               <Send className="h-8 w-8 text-primary" />
             </div>
-            <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
-              Message transmis
-            </h2>
+            <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">Message transmis</h2>
             <p className="text-muted-foreground text-lg mb-8">
               Notre équipe vous répondra personnellement sous 24 heures ouvrées.
             </p>
@@ -246,8 +232,7 @@ export default function ContactMember() {
                 data-reveal-delay="300"
                 className="text-lg text-muted-foreground leading-relaxed md:text-2xl"
               >
-                Un espace dédié pour échanger avec notre équipe, à votre rythme
-                et en toute confidentialité.
+                Un espace dédié pour échanger avec notre équipe, à votre rythme et en toute confidentialité.
               </p>
             </div>
           </div>
@@ -271,34 +256,23 @@ export default function ContactMember() {
               Questions fréquentes
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Retrouvez ici les réponses aux interrogations les plus courantes de
-              nos membres.
+              Retrouvez ici les réponses aux interrogations les plus courantes de nos membres.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
             {faqSections.map((section) => (
-              <div
-                key={section.id}
-                data-reveal
-                className="rounded-2xl border border-border bg-secondary/30 p-6 md:p-8"
-              >
+              <div key={section.id} data-reveal className="rounded-2xl border border-border bg-secondary/30 p-6 md:p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                     <section.icon className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="font-heading text-xl md:text-2xl font-semibold text-foreground">
-                    {section.title}
-                  </h3>
+                  <h3 className="font-heading text-2xl md:text-2xl font-semibold text-foreground">{section.title}</h3>
                 </div>
 
                 <Accordion type="single" collapsible className="w-full">
                   {section.questions.map((faq, idx) => (
-                    <AccordionItem
-                      key={idx}
-                      value={`${section.id}-${idx}`}
-                      className="border-border/50"
-                    >
+                    <AccordionItem key={idx} value={`${section.id}-${idx}`} className="border-border/50">
                       <AccordionTrigger className="text-left text-base md:text-lg font-medium text-foreground hover:no-underline py-3">
                         {faq.q}
                       </AccordionTrigger>
@@ -321,9 +295,7 @@ export default function ContactMember() {
             <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
               Écrivez à votre conseiller
             </h2>
-            <p className="text-muted-foreground text-lg">
-              Choisissez un motif, puis rédigez ou dictez votre message.
-            </p>
+            <p className="text-muted-foreground text-xl">Choisissez un motif, puis rédigez ou dictez votre message.</p>
           </div>
 
           <form
@@ -333,16 +305,14 @@ export default function ContactMember() {
           >
             {/* Motif selector */}
             <div className="space-y-2">
-              <label className="font-medium text-foreground text-lg">
-                Motif de votre demande
-              </label>
+              <label className="font-medium text-foreground text-xl">Motif de votre demande</label>
               <Select value={motif} onValueChange={setMotif}>
-                <SelectTrigger className="h-12 rounded-xl bg-background border-border/50 text-lg">
+                <SelectTrigger className="h-12 rounded-xl bg-background border-border/50 text-xl">
                   <SelectValue placeholder="Sélectionnez un motif..." />
                 </SelectTrigger>
                 <SelectContent>
                   {contactMotifs.map((m) => (
-                    <SelectItem key={m.value} value={m.value} className="text-lg">
+                    <SelectItem key={m.value} value={m.value} className="text-xl">
                       {m.label}
                     </SelectItem>
                   ))}
@@ -353,23 +323,21 @@ export default function ContactMember() {
             {/* Message area */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="font-medium text-foreground text-lg">
-                  Votre message
-                </label>
+                <label className="font-medium text-foreground text-xl">Votre message</label>
 
                 {/* Dictation button */}
                 <Button
                   type="button"
                   variant="outline"
-                  size="sm"
+                  size="lg"
                   disabled={isFormLocked}
                   onClick={isListening ? stopDictation : startDictation}
                   className={`gap-2 rounded-xl transition-all duration-300 ${
                     isFormLocked
                       ? "opacity-40 cursor-not-allowed"
                       : isListening
-                      ? "border-[hsl(var(--gold))] text-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]"
-                      : "hover:border-primary"
+                        ? "border-[hsl(var(--gold))] text-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]"
+                        : "hover:border-primary"
                   }`}
                 >
                   {isListening ? (
@@ -401,7 +369,7 @@ export default function ContactMember() {
                       />
                     ))}
                   </div>
-                  <span className="text-[hsl(var(--gold))] text-sm font-medium">
+                  <span className="text-[hsl(var(--gold))] text-xl font-medium">
                     Je vous écoute... et j'écris votre message.
                   </span>
                 </div>
@@ -421,7 +389,7 @@ export default function ContactMember() {
                     ? "Veuillez d'abord sélectionner un motif..."
                     : "Décrivez votre demande en quelques mots..."
                 }
-                className={`flex w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-lg resize-none overflow-hidden transition-opacity duration-300 ${
+                className={`flex w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-xl resize-none overflow-hidden transition-opacity duration-1000 ${
                   isFormLocked ? "opacity-40 cursor-not-allowed" : ""
                 }`}
                 style={{ minHeight: "140px" }}
@@ -432,7 +400,7 @@ export default function ContactMember() {
             <Button
               type="submit"
               disabled={isFormLocked || !message.trim()}
-              className="btn-primary w-full sm:w-auto group"
+              className="btn-primary w-full lg:w-auto group"
             >
               Envoyer à mon conseiller
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
