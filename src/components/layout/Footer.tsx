@@ -8,6 +8,7 @@ const footerLinks = {
     { href: "/a-propos", label: "Notre histoire" },
     { href: "/editorial", label: "L'éditorial" },
     { href: "/conseils", label: "Conseils" },
+    { href: "/privileges", label: "Privilèges" },
     { href: "/contact", label: "Contact" },
   ],
 
