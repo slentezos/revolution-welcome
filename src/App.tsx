@@ -29,6 +29,7 @@ import Cookies from "./pages/Cookies";
 import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
 import CGU from "./pages/CGU";
 import SignalerContenu from "./pages/SignalerContenu";
+import ContactMember from "./pages/ContactMember";
 
 const queryClient = new QueryClient();
 
