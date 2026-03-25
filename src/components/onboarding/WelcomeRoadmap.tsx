@@ -40,7 +40,8 @@ const TABS = [
 ];
 
 /* ═══════════════════════════════════════════════
-   PRICING MODAL (Inchangé)
+/* ═══════════════════════════════════════════════
+   PRICING MODAL (Design Pixel-Perfect)
    ═══════════════════════════════════════════════ */
 
 function PricingModal({
@@ -64,91 +65,113 @@ function PricingModal({
         if (!v) setView("story");
       }}
     >
-      <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
+      <DialogContent className="max-w-5xl w-[calc(100%-2rem)] rounded-sm border-border shadow-2xl p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
         {view === "story" ? (
           <div className="p-10 sm:p-20 text-center space-y-8 flex flex-col items-center justify-center min-h-[500px] animate-in fade-in duration-500">
-            <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-xl">
+            <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-sm sm:text-base">
               Notre Engagement
             </span>
-            <DialogTitle className="font-heading text-4xl sm:text-6xl text-foreground leading-tight">
+            <DialogTitle className="font-heading text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight">
               Kalimera a été pensé <br /> pour votre sérénité
             </DialogTitle>
-            <div className="divider-gold mx-auto" />
-            <DialogDescription className="text-muted-foreground text-xl sm:text-2xl leading-relaxed max-w-3xl italic font-light">
+            <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto" />
+            <DialogDescription className="text-slate-600 text-lg sm:text-xl leading-relaxed max-w-2xl italic font-light">
               "Nous comprenons que la technologie peut parfois sembler intimidante. C'est pourquoi nous avons tout
               simplifié pour que vous puissiez vous concentrer sur l'essentiel : faire de belles rencontres."
             </DialogDescription>
             <button
               onClick={() => setView("pricing")}
-              className="btn-primary px-12 py-5 text-xl mt-8 shadow-xl hover:scale-105 transition-transform"
+              className="mt-8 border border-foreground text-foreground px-10 py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground hover:text-background transition-colors"
             >
-              Découvrir mes options d'accueil →
+              Découvrir mes options
             </button>
           </div>
         ) : (
-          <div className="flex flex-col flex-1 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center px-6 pt-8 pb-4">
-              <h2 className="font-heading text-3xl sm:text-4xl text-foreground">Comment souhaitez-vous débuter ?</h2>
-              <p className="text-muted-foreground mt-2 text-2xl">
+          <div className="flex flex-col flex-1 animate-in slide-in-from-bottom-4 duration-500 bg-[#FAFAFA]">
+            {/* HEADER MODAL */}
+            <div className="text-center px-6 pt-12 pb-8">
+              <h2 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">
+                Comment souhaitez-vous débuter ?
+              </h2>
+              <p className="text-slate-500 text-lg sm:text-xl font-light">
                 Deux chemins, une même destination : votre épanouissement.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 pb-6 flex-1 overflow-y-auto">
-              <div className="bg-card border border-border p-8 flex flex-col h-full">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-10 h-10 bg-secondary flex items-center justify-center">
+
+            {/* GRILLE DES CARTES */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 px-6 lg:px-12 pb-8 flex-1 overflow-y-auto">
+              {/* CARTE GAUCHE : MODE AUTONOME */}
+              <div className="bg-white border border-slate-200 p-8 sm:p-10 flex flex-col h-full shadow-sm rounded-sm">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-10 h-10 border border-slate-200 flex items-center justify-center rounded-sm">
                     <Star className="h-5 w-5 text-[hsl(var(--gold))]" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-muted-foreground text-xl">
-                    Mode Autonome
-                  </span>
+                  <span className="font-medium tracking-[0.15em] uppercase text-slate-500 text-sm">Mode Autonome</span>
                 </div>
-                <h3 className="font-heading mb-2 text-3xl">Vos premières impressions</h3>
-                <div className="divider-gold mb-6" />
-                <p className="text-muted-foreground leading-relaxed flex-grow mb-8 text-xl">
+
+                <h3 className="font-heading mb-4 text-3xl text-foreground">Vos premières impressions</h3>
+                {/* Liseré or court */}
+                <div className="w-12 h-px bg-[hsl(var(--gold))] mb-6" />
+
+                <p className="text-slate-500 leading-relaxed flex-grow mb-10 text-lg font-light">
                   Profitez de vos 3 mois d'accès offerts en complétant votre portrait à votre rythme : commencez par
                   notre <strong>quiz ludique</strong>, ajoutez vos plus belles <strong>photos</strong>, suivez notre{" "}
                   <strong>tutoriel pour réussir votre vidéo</strong>, enregistrez votre <strong>son</strong>, puis
                   complétez votre <strong>profil</strong> et votre test de <strong>personnalité</strong> en toute
                   sérénité.
                 </p>
-                <button onClick={onStartAutonomous} className="w-full btn-outline py-4 font-medium text-xl">
+
+                <button
+                  onClick={onStartAutonomous}
+                  className="w-full border border-foreground text-foreground py-4 text-sm sm:text-base font-medium hover:bg-slate-50 transition-colors rounded-sm"
+                >
                   Je débute à mon rythme (Inclus)
                 </button>
               </div>
-              <div className="bg-primary text-primary-foreground p-8 flex flex-col h-full relative shadow-2xl">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
-                    <Phone className="h-5 w-5 text-[hsl(var(--gold-light))]" />
+
+              {/* CARTE DROITE : SERVICE CONCIERGERIE */}
+              <div className="bg-[#1b2333] text-white p-8 sm:p-10 flex flex-col h-full relative shadow-xl rounded-sm">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center rounded-sm">
+                    <Phone className="h-5 w-5 text-[hsl(var(--gold))]" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-white/70 text-lg">
+                  <span className="font-medium tracking-[0.15em] uppercase text-slate-300 text-sm">
                     Service Conciergerie
                   </span>
                 </div>
-                <h3 className="font-heading mb-2 text-white text-3xl">L'Accompagnement Privé</h3>
-                <div className="divider-gold mb-6 border-white/20" />
-                <ul className="space-y-4 mb-8 flex-grow">
+
+                <h3 className="font-heading mb-4 text-white text-3xl">L'Accompagnement Privé</h3>
+                {/* Liseré or court */}
+                <div className="w-12 h-px bg-[hsl(var(--gold))] mb-6" />
+
+                <ul className="space-y-5 flex-grow mb-10">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-[hsl(var(--gold-light))] shrink-0 mt-0.5" />
-                      <span className="text-white/90 leading-snug text-xl">{benefit}</span>
+                    <li key={i} className="flex items-start gap-4">
+                      <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                      <span className="text-slate-200 leading-relaxed text-lg font-light">{benefit}</span>
                     </li>
                   ))}
                 </ul>
+
                 <button
                   onClick={onStartConcierge}
-                  className="w-full bg-[hsl(var(--gold))] text-white py-4 font-bold hover:brightness-110 transition-all shadow-lg text-xl"
+                  className="w-full bg-[hsl(var(--gold))] text-[#1b2333] py-4 text-sm sm:text-base font-bold hover:bg-white transition-colors rounded-sm"
                 >
                   Réserver mon entretien (89 €)
                 </button>
               </div>
             </div>
-            <div className="text-center py-4">
+
+            {/* FOOTER MODAL (Lien retour) */}
+            <div className="text-center py-6 pb-8">
               <button
                 onClick={() => setView("story")}
-                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-xl"
+                className="text-slate-500 hover:text-foreground text-base sm:text-lg font-light flex items-center justify-center gap-2 mx-auto"
               >
-                ← Revoir notre engagement de sérénité
+                <span className="text-slate-400">←</span>
+                <span className="underline underline-offset-4 decoration-slate-300 hover:decoration-foreground transition-colors">
+                  Revoir notre engagement de sérénité
+                </span>
               </button>
             </div>
           </div>
