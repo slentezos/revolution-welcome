@@ -7,7 +7,7 @@ import OnboardingQuiz from "@/components/onboarding/OnboardingQuiz";
 import OnboardingProfile from "@/components/onboarding/OnboardingProfile";
 import OnboardingPersonality from "@/components/onboarding/OnboardingPersonality";
 import WelcomeRoadmap from "@/components/onboarding/WelcomeRoadmap";
-import { Image, HelpCircle, ClipboardList, Brain } from "lucide-react";
+import { Image, HelpCircle, ClipboardList, Brain, BookOpen } from "lucide-react";
 
 type OnboardingStep =
   | "welcome"
@@ -19,6 +19,7 @@ type OnboardingStep =
   | "completed";
 
 const tabs = [
+  { id: "welcome", label: "Notre Tutoriel", icon: BookOpen },
   { id: "quiz", label: "Quiz des 3 préférences", icon: HelpCircle },
   { id: "media_upload", label: "Vos photos & vidéo", icon: Image },
   { id: "profile", label: "Mon profil / son profil", icon: ClipboardList },
@@ -135,7 +136,6 @@ export default function Onboarding() {
   return (
     <Layout>
       <div className="min-h-screen bg-background">
-        {step !== "welcome" && (
           <nav className="bg-secondary border-b border-border/30 sticky top-0 z-[100]">
             <div className="flex overflow-x-auto scrollbar-none">
               {tabs.map((tab, index) => {
@@ -162,7 +162,6 @@ export default function Onboarding() {
               })}
             </div>
           </nav>
-        )}
 
         {step === "welcome" && (
           <WelcomeRoadmap onStartAutonomous={handleStartAutonomous} onStartConcierge={handleStartConcierge} />
