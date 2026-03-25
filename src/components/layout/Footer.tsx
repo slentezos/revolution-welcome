@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
+import VisualComfortToggle from "./VisualComfortToggle";
 
 const footerLinks = {
   discover: [
@@ -105,6 +106,9 @@ export default function Footer() {
               >
                 Rejoindre le cercle
               </button>
+              <div className="mt-6">
+                <VisualComfortToggle />
+              </div>
             </div>
           </div>
         </div>
