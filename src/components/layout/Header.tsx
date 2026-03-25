@@ -122,10 +122,12 @@ export default function Header() {
               ))}
             </div>
             {/* 3. CTA / Profile Buttons */}
-            <div className="flex items-center gap-3">
-              <div className="hidden lg:block">
-                <VisualComfortToggle />
-              </div>
+             <div className="flex items-center gap-3">
+              {user && (
+                <div className="hidden lg:block">
+                  <VisualComfortToggle />
+                </div>
+              )}
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
