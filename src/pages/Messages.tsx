@@ -22,7 +22,14 @@ import {
   Check,
   Phone,
   Video,
+  Info,
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import MatchProfileModal from "@/components/dashboard/MatchProfileModal";
@@ -423,10 +430,21 @@ export default function Messages() {
               <div className="p-5 border-b border-amber-100/40">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="font-heading text-2xl font-bold text-[#1B2333]">Mes conversations</h2>
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50/50 border border-amber-100/40">
-                    <Lock className="h-3 w-3 text-[hsl(var(--gold))]" />
-                    <span className="font-medium text-[hsl(var(--gold))] text-lg">Cercle privé</span>
-                  </div>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50/50 border border-amber-100/40 cursor-help">
+                          <Lock className="h-3 w-3 text-[hsl(var(--gold))]" />
+                          <span className="font-medium text-[hsl(var(--gold))] text-lg">Cercle privé</span>
+                          <Info className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-sm leading-relaxed">
+                        <p className="font-semibold text-[#1B2333] mb-1">Votre Cercle Privé</p>
+                        <p className="text-muted-foreground">Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés peuvent vous écrire.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
                 <div className="relative">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -537,38 +555,64 @@ export default function Messages() {
                           className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors"
                           aria-label="Réduire la taille du texte"
                         >
-                          <span className="text-xs font-bold text-[#1B2333]">A−</span>
+                          <span className="text-sm font-bold text-[#1B2333]">A−</span>
                         </button>
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.min(FONT_SIZES.length - 1, i + 1))}
                           className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors"
                           aria-label="Augmenter la taille du texte"
                         >
-                          <span className="text-xs font-bold text-[#1B2333]">A+</span>
+                          <span className="text-sm font-bold text-[#1B2333]">A+</span>
                         </button>
                         <div className="w-px h-6 bg-amber-100/60 mx-1" />
-                        <button
-                          className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-1.5 transition-colors"
-                          aria-label="Appel audio"
-                          onClick={() => toast.info("Les appels seront disponibles prochainement.")}
-                        >
-                          <Phone className="h-3.5 w-3.5 text-[#1B2333]" />
-                          <span className="text-xs font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
-                        </button>
-                        <button
-                          className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-1.5 transition-colors"
-                          aria-label="Appel vidéo"
-                          onClick={() => toast.info("Les appels vidéo seront disponibles prochainement.")}
-                        >
-                          <Video className="h-3.5 w-3.5 text-[#1B2333]" />
-                          <span className="text-xs font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
-                        </button>
+                        {(() => {
+                          const messageCount = mockMessages.length;
+                          const isLocked = messageCount < 5;
+                          return (
+                            <>
+                              <button
+                                className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-1.5 transition-colors"
+                                aria-label="Appel audio"
+                                onClick={() => {
+                                  if (isLocked) {
+                                    toast("🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés (minimum 5).", {
+                                      position: "bottom-left",
+                                      duration: 4000,
+                                    });
+                                  } else {
+                                    toast.info("Lancement de l'appel...");
+                                  }
+                                }}
+                              >
+                                {isLocked ? <Lock className="h-3.5 w-3.5 text-muted-foreground" /> : <Phone className="h-3.5 w-3.5 text-[#1B2333]" />}
+                                <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
+                              </button>
+                              <button
+                                className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-1.5 transition-colors"
+                                aria-label="Appel vidéo"
+                                onClick={() => {
+                                  if (isLocked) {
+                                    toast("🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés (minimum 5).", {
+                                      position: "bottom-left",
+                                      duration: 4000,
+                                    });
+                                  } else {
+                                    toast.info("Lancement de l'appel vidéo...");
+                                  }
+                                }}
+                              >
+                                {isLocked ? <Lock className="h-3.5 w-3.5 text-muted-foreground" /> : <Video className="h-3.5 w-3.5 text-[#1B2333]" />}
+                                <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
+                              </button>
+                            </>
+                          );
+                        })()}
                         <div className="w-px h-6 bg-amber-100/60 mx-1" />
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handleViewProfile(selectedChat as (typeof initialConversations)[0])}
-                          className="gap-1.5 text-[#1B2333] hover:bg-amber-50 rounded-lg h-9 text-xs font-medium"
+                          className="gap-1.5 text-[#1B2333] hover:bg-amber-50 rounded-lg h-9 text-sm font-medium"
                         >
                           <Eye className="h-3.5 w-3.5" />
                           Voir le profil
@@ -577,7 +621,7 @@ export default function Messages() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleReport(selectedChat.name)}
-                          className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-9 text-xs font-medium"
+                          className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-9 text-sm font-medium"
                         >
                           <Flag className="h-3.5 w-3.5" />
                           Signaler
@@ -588,15 +632,21 @@ export default function Messages() {
 
                   <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-5 space-y-4 flex flex-col">
                     {selectedChat.isNew && !dismissedNewConv.has(selectedChat.id) ? (
-                      <div className="flex-1 flex flex-col items-center justify-center h-full gap-4 py-12">
+                      <div className="flex-1 flex flex-col items-center justify-center h-full gap-5 py-12 px-6">
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
-                          className="w-24 h-24 rounded-full object-cover ring-4 ring-amber-100/40"
+                          className="w-24 h-24 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
+                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[0], e)}
                         />
-                        <p className="text-foreground text-lg font-medium text-center">
-                          Démarrez la conversation avec{" "}
-                          <span className="font-heading font-bold text-[#1B2333]">{selectedChat.name}</span>
+                        <p className="text-muted-foreground text-sm text-center italic">
+                          Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
+                        </p>
+                        <p className="text-foreground text-base font-medium text-center max-w-md leading-relaxed">
+                          ⏳ Voici une nouvelle proposition. Le temps est précieux. Sans premier échange de votre part d'ici <span className="font-bold text-[#1B2333]">6 jours</span>, votre mise en relation avec <span className="font-heading font-bold text-[#1B2333]">{selectedChat.name}</span> sera discrètement archivée pour laisser place à de nouvelles rencontres.
+                        </p>
+                        <p className="text-muted-foreground text-sm text-center">
+                          ✍️ Rédigez votre message au clavier ou utilisez le dictaphone pour dicter votre texte.
                         </p>
                         <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1B2333]/10 text-[#1B2333] font-semibold text-sm">
                           <Send className="h-4 w-4" />
@@ -626,8 +676,7 @@ export default function Messages() {
                               className={`max-w-[70%] rounded-2xl px-4 py-3 shadow-sm ${msg.sender === "me" ? "bg-[#1B2333] text-white rounded-br-md" : "bg-white rounded-bl-md border border-amber-100/40"}`}
                             >
                               <p
-                                className={`leading-relaxed ${msg.sender === "them" ? "text-foreground" : "text-white"}`}
-                                style={{ fontSize: `${chatFontSize}px` }}
+                                className={`leading-relaxed text-sm ${msg.sender === "them" ? "text-foreground" : "text-white"}`}
                               >
                                 {msg.text}
                               </p>
@@ -690,7 +739,7 @@ export default function Messages() {
                             }
                           }}
                           rows={1}
-                          className="w-full min-h-[48px] max-h-[200px] resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl text-base font-medium text-foreground placeholder:text-muted-foreground placeholder:text-sm focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 overflow-hidden py-3"
+                          className="w-full min-h-[48px] max-h-[200px] resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl text-base font-medium text-foreground placeholder:text-muted-foreground placeholder:text-lg focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 overflow-hidden py-3"
                           style={{ height: "auto" }}
                         />
                       </div>
