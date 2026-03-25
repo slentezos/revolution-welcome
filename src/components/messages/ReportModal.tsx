@@ -67,7 +67,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
 
   // ---- LE MOTEUR DE DICTÉE VOCALE "CRÈME DE LA CRÈME" ----
   const initRecognition = () => {
-    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return null;
 
     const recognition = new SpeechRecognition();
