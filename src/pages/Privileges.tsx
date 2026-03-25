@@ -256,35 +256,36 @@ export default function Privileges() {
           <div className="max-w-4xl mx-auto text-center">
             <span
               data-reveal
-              className="inline-block px-6 py-2 bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 font-medium tracking-[0.3em] uppercase text-primary-foreground/70 mb-8 text-lg"
+              className="inline-block px-4 py-1.5 border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold))] font-medium tracking-[0.2em] uppercase mb-8 text-sm md:text-base"
             >
-              L'Expertise
+              Privilège Optionnel
             </span>
             <h2
               data-reveal
               data-reveal-delay="150"
-              className="font-heading text-3xl md:text-4xl lg:text-6xl text-primary-foreground mb-6 leading-tight"
+              className="font-heading text-4xl md:text-5xl lg:text-6xl text-primary-foreground mb-8 leading-tight"
             >
-              Optimisez vos rencontres
+              L'Accompagnement Signature
             </h2>
-            <div
-              data-reveal
-              data-reveal-delay="250"
-              className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mx-auto mb-8"
-            />
+
             <p
               data-reveal
               data-reveal-delay="350"
-              className="text-lg md:text-xl text-primary-foreground/70 leading-relaxed mb-10 max-w-3xl mx-auto"
+              className="text-lg md:text-xl text-primary-foreground/80 leading-relaxed mb-6 max-w-4xl mx-auto"
             >
-              Réservez un entretien privé avec nos experts pour décrypter votre test de personnalité et maximiser la
-              qualité de vos rencontres.
-              <span className="block mt-4 italic text-[hsl(var(--gold-light))] text-base md:text-lg font-medium opacity-90">
-                Un service d'accompagnement exclusif et totalement facultatif.
-              </span>
+              Allez au-delà de l'algorithme. Profitez d'une expertise humaine sur-mesure pour décrypter votre test de
+              personnalité ou confier la création de votre profil à notre conciergerie.
             </p>
+
+            <p
+              data-reveal
+              data-reveal-delay="400"
+              className="text-lg md:text-xl text-primary-foreground/60 italic mb-12"
+            >
+              Un service exclusif et facultatif pour nos membres les plus exigeants.
+            </p>
+
             <div data-reveal data-reveal-delay="450">
-              {/* Le Link a été remplacé par le bouton ouvrant la modale */}
               <button
                 onClick={() => setExpertModalOpen(true)}
                 className="inline-flex items-center gap-3 border border-primary-foreground/30 text-primary-foreground px-10 py-5 text-base font-medium tracking-wide transition-all duration-500 hover:bg-primary-foreground hover:text-primary group"
