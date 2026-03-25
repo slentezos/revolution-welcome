@@ -300,110 +300,99 @@ function FormSection() {
   };
 
   return (
-    <section ref={revealRef} id="formulaire" className="relative overflow-hidden min-h-[80vh] flex items-center py-24">
-      <div className="absolute inset-0">
-        <img src={parrainageFormBg} alt="Envoi d'invitation" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1B2333]/95 via-[#1B2333]/95 to-[#1B2333]/95" />
-      </div>
-
-      <div className="relative z-10 w-full text-xl text-[#d1d1d1]">
-        <div className="container-main max-w-3xl">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 mb-8 backdrop-blur-sm shadow-lg">
-              <Ticket className="w-5 h-5 text-[#D4AF37] mr-3" />
-              <span className="text-[#D4AF37] text-sm font-bold uppercase tracking-widest">
-                {invitesLeft > 0
-                  ? `VOTRE ALLOCATION : ${invitesLeft} INVITATION${invitesLeft > 1 ? "S" : ""} PRIVÉE${invitesLeft > 1 ? "S" : ""}`
-                  : "VOTRE ALLOCATION EST ÉPUISÉE"}
-              </span>
-            </div>
-
-            <h2 className="font-heading text-4xl md:text-5xl text-white mb-4 leading-tight">
-              {invitesLeft > 0 ? "Transmettez vos privilèges" : "Merci pour votre confiance"}
-            </h2>
-            <div className="divider-gold mx-auto mt-6 mb-2" />
+    <section ref={revealRef} id="formulaire" className="section-luxury bg-primary">
+      <div className="container-main max-w-3xl">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <div data-reveal className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.1)] mb-8">
+            <Ticket className="w-5 h-5 text-[hsl(var(--gold))] mr-3" />
+            <span className="text-[hsl(var(--gold))] text-sm font-medium uppercase tracking-widest">
+              {invitesLeft > 0
+                ? `Votre allocation : ${invitesLeft} invitation${invitesLeft > 1 ? "s" : ""} privée${invitesLeft > 1 ? "s" : ""}`
+                : "Votre allocation est épuisée"}
+            </span>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-8 md:p-12 shadow-2xl transition-all duration-500 relative overflow-hidden">
-            {invitesLeft > 0 ? (
-              <div className="animate-in fade-in zoom-in-95 duration-700">
-                <p className="text-center text-white/80 text-lg mb-8 leading-relaxed">
-                  Pas de formulaire compliqué. Voici le message d'invitation qui a été préparé pour vous. Transmettez-le
-                  directement à la personne de votre choix.
+          <h2 data-reveal data-reveal-delay="150" className="font-heading text-3xl md:text-4xl lg:text-5xl text-primary-foreground mb-4 leading-tight">
+            {invitesLeft > 0 ? "Transmettez vos privilèges" : "Merci pour votre confiance"}
+          </h2>
+          <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto mt-6" />
+        </div>
+
+        {/* Card */}
+        <div data-reveal data-reveal-delay="350" className="card-luxury border-[hsl(var(--gold)/0.15)] bg-primary-foreground/5 backdrop-blur-sm">
+          {invitesLeft > 0 ? (
+            <div className="space-y-8">
+              <p className="text-center text-primary-foreground/80 text-lg leading-relaxed">
+                Voici le message d'invitation préparé pour vous. Transmettez-le directement à la personne de votre choix.
+              </p>
+
+              {/* Message preview */}
+              <div className="border border-[hsl(var(--gold)/0.2)] bg-primary/60 rounded-sm p-8 relative overflow-hidden">
+                <Gift className="w-28 h-28 text-[hsl(var(--gold)/0.06)] absolute -top-6 -right-6" />
+                <p className="italic text-primary-foreground/90 text-lg leading-relaxed relative z-10">
+                  « {inviteText} »
                 </p>
-
-                <div className="bg-black/40 border border-[#D4AF37]/30 shadow-inner rounded-2xl p-8 mb-10 relative overflow-hidden">
-                  <Gift className="w-32 h-32 text-[#D4AF37]/5 absolute -top-8 -right-8" />
-                  <p className="italic text-white/90 text-xl leading-relaxed font-serif relative z-10">
-                    "{inviteText}"
-                  </p>
-                  <div className="mt-6 inline-block bg-white/5 border border-[#D4AF37]/20 text-[#D4AF37] px-6 py-3 rounded-xl font-medium text-lg font-mono relative z-10">
-                    {inviteLink}
-                  </div>
+                <div className="mt-6 inline-block border border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold))] px-5 py-2.5 rounded-sm font-medium text-base relative z-10">
+                  {inviteLink}
                 </div>
+              </div>
 
-                <div className="space-y-4">
-                  {shareSupported && (
-                    <Button
-                      onClick={handleNativeShare}
-                      className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-8 text-2xl rounded-xl font-bold shadow-[0_0_30px_rgba(212,175,55,0.2)] transition-all flex items-center justify-center gap-3 h-auto"
-                    >
-                      <Share2 className="w-7 h-7" /> Transmettre cette invitation
-                    </Button>
-                  )}
+              {/* Actions */}
+              <div className="space-y-4">
+                {shareSupported && (
+                  <button
+                    onClick={handleNativeShare}
+                    className="w-full bg-primary-foreground text-primary py-5 text-lg font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] flex items-center justify-center gap-3"
+                  >
+                    <Share2 className="w-5 h-5" /> Transmettre cette invitation
+                  </button>
+                )}
 
-                  <div className={`grid grid-cols-1 ${!shareSupported ? "md:grid-cols-1" : "md:grid-cols-2"} gap-4`}>
-                    {!shareSupported && (
-                      <Button
-                        onClick={handleCopy}
-                        className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-8 text-2xl rounded-xl font-bold shadow-[0_0_30px_rgba(212,175,55,0.2)] transition-all flex items-center justify-center gap-3 h-auto"
-                      >
-                        {copied ? (
-                          <>
-                            <CheckCircle2 className="w-7 h-7 text-[#1B2333]" /> Copié avec succès !
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-7 h-7" /> Copier le message
-                          </>
-                        )}
-                      </Button>
+                {!shareSupported && (
+                  <button
+                    onClick={handleCopy}
+                    className="w-full bg-primary-foreground text-primary py-5 text-lg font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] flex items-center justify-center gap-3"
+                  >
+                    {copied ? (
+                      <><CheckCircle2 className="w-5 h-5" /> Copié avec succès !</>
+                    ) : (
+                      <><Copy className="w-5 h-5" /> Copier le message</>
                     )}
+                  </button>
+                )}
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 col-span-full">
-                      <a
-                        href={`https://wa.me/?text=${encodeURIComponent(fullMessage)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={decrementInvites}
-                        className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-4 px-6 rounded-xl transition-all text-lg font-medium backdrop-blur-sm"
-                      >
-                        <MessageCircle className="w-6 h-6 text-green-400" /> WhatsApp
-                      </a>
-                      <a
-                        href={`mailto:?subject=${encodeURIComponent("Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`}
-                        onClick={decrementInvites}
-                        className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-4 px-6 rounded-xl transition-all text-lg font-medium backdrop-blur-sm"
-                      >
-                        <Mail className="w-6 h-6 text-blue-400" /> E-mail direct
-                      </a>
-                    </div>
-                  </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <a
+                    href={`https://wa.me/?text=${encodeURIComponent(fullMessage)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={decrementInvites}
+                    className="flex items-center justify-center gap-3 border border-primary-foreground/15 text-primary-foreground py-4 px-6 transition-all duration-500 hover:border-[hsl(var(--gold)/0.4)] hover:bg-primary-foreground/5 text-base font-medium"
+                  >
+                    <MessageCircle className="w-5 h-5 text-[hsl(var(--gold))]" /> WhatsApp
+                  </a>
+                  <a
+                    href={`mailto:?subject=${encodeURIComponent("Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`}
+                    onClick={decrementInvites}
+                    className="flex items-center justify-center gap-3 border border-primary-foreground/15 text-primary-foreground py-4 px-6 transition-all duration-500 hover:border-[hsl(var(--gold)/0.4)] hover:bg-primary-foreground/5 text-base font-medium"
+                  >
+                    <Mail className="w-5 h-5 text-[hsl(var(--gold))]" /> E-mail direct
+                  </a>
                 </div>
               </div>
-            ) : (
-              <div className="text-center py-12 animate-in fade-in zoom-in-95 duration-500">
-                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#D4AF37]/10 mb-6">
-                  <CheckCircle2 className="w-12 h-12 text-[#D4AF37]" />
-                </div>
-                <h3 className="font-heading text-3xl text-white mb-4">Vos invitations ont été distribuées</h3>
-                <p className="text-xl text-white/70 max-w-lg mx-auto">
-                  Merci de faire grandir le Cercle Kalimera. Vos proches vont pouvoir découvrir l'élégance de nos
-                  rencontres.
-                </p>
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-[hsl(var(--gold)/0.3)] mb-8">
+                <CheckCircle2 className="w-9 h-9 text-[hsl(var(--gold))]" />
               </div>
-            )}
-          </div>
+              <h3 className="font-heading text-3xl text-primary-foreground mb-4">Vos invitations ont été distribuées</h3>
+              <p className="text-lg text-primary-foreground/70 max-w-lg mx-auto leading-relaxed">
+                Merci de faire grandir le Cercle Kalimera. Vos proches vont pouvoir découvrir l'élégance de nos rencontres.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>
