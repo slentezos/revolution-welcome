@@ -22,7 +22,14 @@ import {
   Check,
   Phone,
   Video,
+  Info,
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import MatchProfileModal from "@/components/dashboard/MatchProfileModal";
