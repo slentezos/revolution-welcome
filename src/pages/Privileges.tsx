@@ -8,6 +8,9 @@ import PrivilegeBadge from "@/components/location/PrivilegeBadge";
 import privilegesHero from "@/assets/privileges-hero.jpg";
 import giftBannerPrivileges from "@/assets/gift-banner-privileges.jpg";
 
+// Imports pour la modale Shadcn UI (Assurez-vous d'avoir ce composant dans votre projet Lovable)
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+
 const cerclePriveFeatures = [
   "Messagerie illimitée",
   "Appels Audio & Vidéo illimités",
@@ -47,12 +50,13 @@ export default function Privileges() {
   const reassuranceRef = useScrollReveal<HTMLElement>();
   const finalRef = useScrollReveal<HTMLElement>();
 
-  // État unique pour la demande d'admission (plus besoin de l'état expertModal)
+  // États pour les modales
   const [modalOpen, setModalOpen] = useState(false);
+  const [expertModalOpen, setExpertModalOpen] = useState(false);
 
   return (
     <Layout>
-      {/* Bloc 1 — Hero : L'Invitation */}
+      {/* Bloc 1 — Hero : L'Invitation — Full-screen with background image */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -65,13 +69,14 @@ export default function Privileges() {
           <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/90" />
         </div>
 
+        {/* Decorative blurs */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute top-20 right-20 w-96 h-96 bg-[hsl(var(--gold))] rounded-full blur-3xl" />
           <div className="absolute bottom-32 left-10 w-80 h-80 bg-[hsl(var(--gold-light))] rounded-full blur-3xl" />
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <span className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl md:text-xl animate-fade-in">
+          <span className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-lg md:text-xl animate-fade-in">
             L'Invitation
           </span>
 
@@ -81,17 +86,19 @@ export default function Privileges() {
 
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mx-auto mb-10 animate-fade-in delay-200" />
 
+          {/* Gold Banner */}
           <div className="inline-block border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.1)] backdrop-blur-sm px-8 py-5 md:px-12 md:py-6 mb-10 animate-fade-up delay-300">
-            <p className="font-heading text-xl md:text-4xl text-[hsl(var(--gold-light))] font-medium">
+            <p className="font-heading text-xl md:text-2xl text-[hsl(var(--gold-light))] font-medium">
               L'élégance de la confiance : Vos 3 premiers mois offerts.
             </p>
           </div>
 
-          <p className="text-xl md:text-xl text-primary-foreground/80 leading-relaxed max-w-3xl mx-auto mb-12 animate-fade-up delay-400">
+          <p className="text-lg md:text-xl text-primary-foreground/80 leading-relaxed max-w-3xl mx-auto mb-12 animate-fade-up delay-400">
             Prenez le temps de faire des rencontres authentiques. Aucune empreinte bancaire ne vous sera demandée lors
             de votre admission.
           </p>
 
+          {/* Stats row */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto animate-fade-up delay-500">
             {[
               { value: "90", label: "Jours de découverte offerts" },
@@ -106,7 +113,7 @@ export default function Privileges() {
                 <span className="font-heading text-3xl md:text-4xl text-[hsl(var(--gold-light))] font-medium block mb-2">
                   {stat.value}
                 </span>
-                <p className="text-primary-foreground/90 text-xl md:text-base leading-snug">{stat.label}</p>
+                <p className="text-primary-foreground/90 text-lg md:text-base leading-snug">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -114,126 +121,130 @@ export default function Privileges() {
       </section>
 
       {/* Bloc 2 — Les Adhésions */}
-      <section ref={cardsRef} className="section-luxury bg-[#FCF9F5] py-24 md:py-32">
-        <div className="container-main mx-auto px-4 md:px-8">
-          {/* Titre et Signature 3 mois (Plus grand, plus lisible, plus autoritaire) */}
-          <div className="text-center max-w-4xl mx-auto mb-16 md:mb-20">
-            <h2 data-reveal className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-8">
-              Choisissez votre cercle
-            </h2>
-
-            <div
+      <section ref={cardsRef} className="section-luxury bg-secondary">
+        <div className="container-main mx-auto px-6 md:px-12">
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <span
+              data-reveal
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
+            >
+              Les Adhésions
+            </span>
+            <h2
               data-reveal
               data-reveal-delay="150"
-              className="flex flex-col md:flex-row items-center justify-center gap-4"
+              className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6"
             >
-              <div className="h-px w-16 bg-gradient-to-r from-transparent to-[hsl(var(--gold))] hidden md:block" />
-              <div className="flex items-center gap-3">
-                <Gift className="w-6 h-6 text-[hsl(var(--gold))]" />
-                <p className="text-xl md:text-2xl text-foreground font-heading tracking-wide">
-                  Vos 3 premiers mois gracieusement offerts, sans carte bancaire.
-                </p>
+              Choisissez votre cercle
+            </h2>
+            <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto mb-8" />
+          </div>
+
+          {/* Free trial highlight banner */}
+          <div data-reveal data-reveal-delay="300" className="max-w-3xl mx-auto mb-16">
+            <div className="relative overflow-hidden bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--gold-light)/0.08)] border border-[hsl(var(--gold)/0.3)] p-6 md:p-8 text-center">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[hsl(var(--gold)/0.1)] rounded-full blur-2xl" />
+              <div className="relative flex flex-col items-center gap-3">
+                <PrivilegeBadge variant="light" />
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <CreditCard className="h-5 w-5 text-[hsl(var(--gold))]" />
+                  <p className="text-base md:text-lg font-medium">
+                    Aucune carte bancaire requise — Commencez librement, décidez ensuite.
+                  </p>
+                </div>
               </div>
-              <div className="h-px w-16 bg-gradient-to-l from-transparent to-[hsl(var(--gold))] hidden md:block" />
             </div>
           </div>
 
-          {/* Les Cartes */}
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-10 max-w-5xl mx-auto items-center">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
             {/* Carte Cercle Privé */}
             <div
               data-reveal
-              data-reveal-delay="200"
-              className="group bg-white border border-slate-200/60 shadow-sm p-10 md:p-12 transition-all duration-500 hover:shadow-lg flex flex-col h-full"
+              data-reveal-delay="100"
+              className="group relative bg-card border border-border p-10 md:p-12 transition-all duration-500 hover:shadow-[var(--shadow-luxury)] hover:border-primary/20 flex flex-col overflow-hidden"
             >
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 border border-slate-200 flex items-center justify-center rounded-sm">
-                  <Sparkles className="h-5 w-5 text-slate-400" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary/60 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-primary/10 flex items-center justify-center">
+                  <Sparkles className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground">Cercle Privé</h3>
               </div>
 
-              {/* Nouveau Pricing : Barré élégant + 0€ + Transparence absolue */}
-              <div className="mb-10 pb-8 border-b border-slate-100">
-                <div className="flex items-baseline gap-3 mb-2">
-                  <span className="font-heading text-3xl text-slate-300 line-through decoration-slate-300">50€</span>
-                  <span className="font-heading text-6xl text-foreground">0€</span>
+              <div className="mb-8">
+                <div className="flex items-baseline gap-2 mb-1">
+                  <span className="font-heading text-4xl md:text-5xl text-foreground font-semibold">50€</span>
+                  <span className="text-muted-foreground text-lg">/mois</span>
                 </div>
-                <p className="text-[12px] text-foreground font-bold tracking-widest uppercase mb-1">
-                  Pendant 3 mois, sans carte.
-                </p>
-                <p className="text-[11px] text-muted-foreground tracking-widest uppercase">
-                  Puis 50€/mois (ou 120€ / 3 mois)
-                </p>
+                <p className="text-muted-foreground text-base">ou 120€ pour 3 mois</p>
               </div>
 
-              <ul className="space-y-5 mb-12 flex-1">
+              <ul className="space-y-4 mb-10 flex-1">
                 {cerclePriveFeatures.map((feature) => (
-                  <li key={feature} className="flex items-start gap-4">
+                  <li key={feature} className="flex items-start gap-3">
                     <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                    <span className="text-foreground/80 leading-relaxed">{feature}</span>
+                    <span className="text-foreground text-lg">{feature}</span>
                   </li>
                 ))}
               </ul>
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full border border-primary text-primary py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-primary hover:text-white"
+                className="w-full bg-primary text-primary-foreground py-4 text-base font-medium tracking-wide transition-all duration-500 hover:shadow-[var(--shadow-elevated)] hover:translate-y-[-2px]"
               >
                 Demander mon admission
               </button>
             </div>
 
-            {/* Carte Discrétion Absolue (VIP) */}
+            {/* Carte Discrétion Absolue — VIP */}
             <div
               data-reveal
-              data-reveal-delay="300"
-              className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 transition-all duration-500 hover:border-[hsl(var(--gold)/0.6)] flex flex-col h-full md:scale-105 z-10"
+              data-reveal-delay="250"
+              className="group relative bg-card border-2 border-[hsl(var(--gold)/0.4)] p-10 md:p-12 transition-all duration-500 hover:shadow-[var(--shadow-luxury)] hover:border-[hsl(var(--gold)/0.6)] flex flex-col overflow-hidden"
             >
-              <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 text-xs font-bold tracking-[0.2em] uppercase rounded-b-sm">
-                Privilège
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-light))] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+
+              <div className="absolute -top-4 right-8 bg-[hsl(var(--gold))] text-primary px-5 py-1.5 text-xs font-bold tracking-[0.2em] uppercase">
+                VIP
               </div>
 
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
-                  <Crown className="h-5 w-5 text-[hsl(var(--gold))]" />
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-[hsl(var(--gold)/0.15)] flex items-center justify-center">
+                  <Crown className="h-6 w-6 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-2xl md:text-3xl text-white">Discrétion Absolue</h3>
+                <h3 className="font-heading text-2xl md:text-3xl text-[hsl(var(--gold))]">Discrétion Absolue</h3>
               </div>
 
-              {/* Nouveau Pricing VIP : Barré élégant + 0€ Or + Transparence absolue */}
-              <div className="mb-10 pb-8 border-b border-white/10">
-                <div className="flex items-baseline gap-3 mb-2">
-                  <span className="font-heading text-3xl text-white/30 line-through decoration-white/30">65€</span>
-                  <span className="font-heading text-6xl text-[hsl(var(--gold))]">0€</span>
+              <div className="mb-8">
+                <div className="flex items-baseline gap-2 mb-1">
+                  <span className="font-heading text-4xl md:text-5xl text-foreground font-semibold">65€</span>
+                  <span className="text-muted-foreground text-lg">/mois</span>
                 </div>
-                <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
-                  Pendant 3 mois, sans carte.
-                </p>
-                <p className="text-[11px] text-white/50 tracking-widest uppercase">Puis 65€/mois (ou 150€ / 3 mois)</p>
+                <p className="text-muted-foreground text-base">ou 150€ pour 3 mois</p>
               </div>
 
-              <ul className="space-y-5 mb-12 flex-1">
+              <ul className="space-y-4 mb-10 flex-1">
                 {discretionFeatures.map((feature) => (
-                  <li key={feature} className="flex items-start gap-4">
+                  <li key={feature} className="flex items-start gap-3">
                     <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                    <span className="text-white/90 leading-relaxed">{feature}</span>
+                    <span className="text-foreground text-lg">{feature}</span>
                   </li>
                 ))}
               </ul>
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold transition-all duration-300 hover:bg-white hover:text-primary"
+                className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-base font-medium tracking-wide transition-all duration-500 hover:bg-[hsl(var(--gold-light))] hover:shadow-[var(--shadow-elevated)] hover:translate-y-[-2px]"
               >
-                Demander mon admission VIP
+                Demander mon admission
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Bloc 3 — L'Expertise */}
+      {/* Bloc 3 — L'Expertise — Avec logique Modale ajoutée */}
       <section ref={expertRef} className="relative py-32 lg:py-40 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-[hsl(var(--navy-light))]" />
         <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -275,12 +286,11 @@ export default function Privileges() {
             </p>
 
             <div data-reveal data-reveal-delay="450">
-              {/* Le bouton déclenche maintenant directement l'admission (modalOpen) */}
               <button
-                onClick={() => setModalOpen(true)}
+                onClick={() => setExpertModalOpen(true)}
                 className="inline-flex items-center gap-3 border border-primary-foreground/30 text-primary-foreground px-10 py-5 text-base font-medium tracking-wide transition-all duration-500 hover:bg-primary-foreground hover:text-primary group"
               >
-                Demander mon admission
+                Découvrir ce service à la carte
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -288,46 +298,7 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Bloc 4 (Ex-Bloc 5) — Sécurité & Sérénité (Remonté avant le parrainage) */}
-      <section ref={reassuranceRef} className="section-luxury bg-background">
-        <div className="container-main mx-auto px-6 md:px-12">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span
-              data-reveal
-              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
-            >
-              Sécurité & Sérénité
-            </span>
-            <h2
-              data-reveal
-              data-reveal-delay="150"
-              className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6"
-            >
-              Votre tranquillité d'esprit
-            </h2>
-            <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto" />
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
-            {reassuranceItems.map((item, index) => (
-              <div
-                key={item.title}
-                data-reveal
-                data-reveal-delay={String(100 + index * 150)}
-                className="group text-center p-10 bg-secondary border border-border hover:border-primary/20 transition-all duration-500 hover:shadow-[var(--shadow-card)]"
-              >
-                <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full border border-[hsl(var(--gold)/0.3)] mb-6 group-hover:border-[hsl(var(--gold)/0.6)] transition-colors">
-                  <item.icon className="h-7 w-7 text-[hsl(var(--gold))]" />
-                </div>
-                <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">{item.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Bloc 5 (Ex-Bloc 4) — L'Invitation Privée (Descendu après la sécurité) */}
+      {/* Bloc 4 — L'Invitation Privée (Inchangé de votre code) */}
       <section ref={giftRef} className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -377,11 +348,50 @@ export default function Privileges() {
             <div data-reveal data-reveal-delay="600">
               <Link
                 to="/parrainage"
-                className="inline-block bg-primary-foreground text-secondary-foreground px-12 py-5 text-xl font-medium tracking-wide transition-all duration-500 hover:shadow-[var(--shadow-elevated)] hover:translate-y-[-2px]"
+                className="inline-block bg-primary-foreground text-secondary-foreground px-12 py-5 text-lg font-medium tracking-wide transition-all duration-500 hover:shadow-[var(--shadow-elevated)] hover:translate-y-[-2px]"
               >
                 J'invite un proche
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bloc 5 — Sécurité & Sérénité */}
+      <section ref={reassuranceRef} className="section-luxury bg-background">
+        <div className="container-main mx-auto px-6 md:px-12">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span
+              data-reveal
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
+            >
+              Sécurité & Sérénité
+            </span>
+            <h2
+              data-reveal
+              data-reveal-delay="150"
+              className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6"
+            >
+              Votre tranquillité d'esprit
+            </h2>
+            <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto" />
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
+            {reassuranceItems.map((item, index) => (
+              <div
+                key={item.title}
+                data-reveal
+                data-reveal-delay={String(100 + index * 150)}
+                className="group text-center p-10 bg-secondary border border-border hover:border-primary/20 transition-all duration-500 hover:shadow-[var(--shadow-card)]"
+              >
+                <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full border border-[hsl(var(--gold)/0.3)] mb-6 group-hover:border-[hsl(var(--gold)/0.6)] transition-colors">
+                  <item.icon className="h-7 w-7 text-[hsl(var(--gold))]" />
+                </div>
+                <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">{item.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -412,8 +422,49 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Modale d'admission classique (Unique point d'entrée) */}
+      {/* --- MODALES --- */}
+
+      {/* Modale d'admission classique (Existante) */}
       <LocationCheckModal open={modalOpen} onClose={() => setModalOpen(false)} />
+
+      {/* NOUVELLE Modale Teaser Expertise (Service à la carte) */}
+      <Dialog open={expertModalOpen} onOpenChange={setExpertModalOpen}>
+        <DialogContent className="sm:max-w-[500px] bg-white border-[hsl(var(--gold)/0.2)] p-8">
+          <DialogHeader className="text-center">
+            <div className="mx-auto w-12 h-12 bg-[hsl(var(--navy-light))/0.05] rounded-full flex items-center justify-center mb-4">
+              <Crown className="h-6 w-6 text-[hsl(var(--gold))]" />
+            </div>
+            <DialogTitle className="font-heading text-2xl md:text-3xl text-primary mb-2">
+              Un privilège réservé à nos membres
+            </DialogTitle>
+            <DialogDescription className="text-lg text-slate-600 leading-relaxed pt-2">
+              Pour garantir la qualité de notre accompagnement, l'accès à la Conciergerie est{" "}
+              <strong>exclusivement réservé aux membres admis</strong> du Cercle Kalimera.
+              <br />
+              <br />
+              Ce service est entièrement facultatif et peut être sollicité à tout moment dès la validation de votre
+              profil.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-8 flex flex-col gap-3">
+            <button
+              onClick={() => {
+                setExpertModalOpen(false);
+                setTimeout(() => setModalOpen(true), 150); // Ouvre la modale d'admission juste après
+              }}
+              className="w-full bg-primary text-white py-4 font-medium tracking-wide hover:bg-primary/90 transition-colors shadow-sm"
+            >
+              Demander mon admission pour accéder au service
+            </button>
+            <button
+              onClick={() => setExpertModalOpen(false)}
+              className="w-full py-3 text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+            >
+              Continuer la découverte du site
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
