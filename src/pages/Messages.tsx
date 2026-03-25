@@ -24,12 +24,7 @@ import {
   Video,
   Info,
 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import MatchProfileModal from "@/components/dashboard/MatchProfileModal";
@@ -143,7 +138,7 @@ export default function Messages() {
 
   const [speakingMsgId, setSpeakingMsgId] = useState<number | null>(null);
   const [isSent, setIsSent] = useState(false);
-  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(2);
+  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(2); // Démarre à l'index 2 (18px = text-lg)
   const sendTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -439,9 +434,15 @@ export default function Messages() {
                           <Info className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
                         </div>
                       </TooltipTrigger>
-                      <TooltipContent side="bottom" className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-sm leading-relaxed">
+                      <TooltipContent
+                        side="bottom"
+                        className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-sm leading-relaxed"
+                      >
                         <p className="font-semibold text-[#1B2333] mb-1">Votre Cercle Privé</p>
-                        <p className="text-muted-foreground">Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés peuvent vous écrire.</p>
+                        <p className="text-muted-foreground">
+                          Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés
+                          peuvent vous écrire.
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -575,16 +576,23 @@ export default function Messages() {
                                 aria-label="Appel audio"
                                 onClick={() => {
                                   if (isLocked) {
-                                    toast("🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés (minimum 5).", {
-                                      position: "bottom-left",
-                                      duration: 4000,
-                                    });
+                                    toast(
+                                      "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés (minimum 5).",
+                                      {
+                                        position: "bottom-left",
+                                        duration: 4000,
+                                      },
+                                    );
                                   } else {
                                     toast.info("Lancement de l'appel...");
                                   }
                                 }}
                               >
-                                {isLocked ? <Lock className="h-3.5 w-3.5 text-muted-foreground" /> : <Phone className="h-3.5 w-3.5 text-[#1B2333]" />}
+                                {isLocked ? (
+                                  <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+                                ) : (
+                                  <Phone className="h-3.5 w-3.5 text-[#1B2333]" />
+                                )}
                                 <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
                               </button>
                               <button
@@ -592,16 +600,23 @@ export default function Messages() {
                                 aria-label="Appel vidéo"
                                 onClick={() => {
                                   if (isLocked) {
-                                    toast("🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés (minimum 5).", {
-                                      position: "bottom-left",
-                                      duration: 4000,
-                                    });
+                                    toast(
+                                      "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés (minimum 5).",
+                                      {
+                                        position: "bottom-left",
+                                        duration: 4000,
+                                      },
+                                    );
                                   } else {
                                     toast.info("Lancement de l'appel vidéo...");
                                   }
                                 }}
                               >
-                                {isLocked ? <Lock className="h-3.5 w-3.5 text-muted-foreground" /> : <Video className="h-3.5 w-3.5 text-[#1B2333]" />}
+                                {isLocked ? (
+                                  <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+                                ) : (
+                                  <Video className="h-3.5 w-3.5 text-[#1B2333]" />
+                                )}
                                 <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
                               </button>
                             </>
@@ -643,7 +658,10 @@ export default function Messages() {
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
                         </p>
                         <p className="text-foreground text-base font-medium text-center max-w-md leading-relaxed">
-                          ⏳ Voici une nouvelle proposition. Le temps est précieux. Sans premier échange de votre part d'ici <span className="font-bold text-[#1B2333]">6 jours</span>, votre mise en relation avec <span className="font-heading font-bold text-[#1B2333]">{selectedChat.name}</span> sera discrètement archivée pour laisser place à de nouvelles rencontres.
+                          ⏳ Voici une nouvelle proposition. Le temps est précieux. Sans premier échange de votre part
+                          d'ici <span className="font-bold text-[#1B2333]">6 jours</span>, votre mise en relation avec{" "}
+                          <span className="font-heading font-bold text-[#1B2333]">{selectedChat.name}</span> sera
+                          discrètement archivée pour laisser place à de nouvelles rencontres.
                         </p>
                         <p className="text-muted-foreground text-sm text-center">
                           ✍️ Rédigez votre message au clavier ou utilisez le dictaphone pour dicter votre texte.
@@ -675,8 +693,10 @@ export default function Messages() {
                             <div
                               className={`max-w-[70%] rounded-2xl px-4 py-3 shadow-sm ${msg.sender === "me" ? "bg-[#1B2333] text-white rounded-br-md" : "bg-white rounded-bl-md border border-amber-100/40"}`}
                             >
+                              {/* APPLICATION DYNAMIQUE DU A- / A+ SUR LE TEXTE */}
                               <p
-                                className={`leading-relaxed text-sm ${msg.sender === "them" ? "text-foreground" : "text-white"}`}
+                                className={`leading-relaxed ${msg.sender === "them" ? "text-foreground" : "text-white"}`}
+                                style={{ fontSize: `${chatFontSize}px` }}
                               >
                                 {msg.text}
                               </p>
@@ -727,6 +747,7 @@ export default function Messages() {
                         {isListening ? "Arrêter de dicter" : "Dicter"}
                       </button>
                       <div className="flex-1">
+                        {/* APPLICATION DYNAMIQUE DU A- / A+ SUR LE TEXTAREA */}
                         <Textarea
                           ref={textareaRef}
                           placeholder="Écrivez votre message..."
@@ -739,8 +760,8 @@ export default function Messages() {
                             }
                           }}
                           rows={1}
-                          className="w-full min-h-[48px] max-h-[200px] resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl text-base font-medium text-foreground placeholder:text-muted-foreground placeholder:text-lg focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 overflow-hidden py-3"
-                          style={{ height: "auto" }}
+                          className="w-full min-h-[48px] max-h-[200px] resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 overflow-hidden py-3"
+                          style={{ height: "auto", fontSize: `${chatFontSize}px` }}
                         />
                       </div>
                       <Button
