@@ -236,29 +236,38 @@ function FAQSection() {
   );
 }
 
-/* ─── Section 5 — Bottom Form (SÉCURISÉ & UX 2026 - PARTAGE NATIF) ─── */
+/* ─── Section 5 — Bottom Form (SÉCURISÉ & UX 2026 - PARTAGE PUBLIC) ─── */
 function FormSection() {
   const revealRef = useScrollReveal<HTMLElement>();
 
-  // États de l'interface
-  const [invitesLeft, setInvitesLeft] = useState(3);
+  // Gestion du Soft-Lock (LocalStorage) pour les visiteurs publics
+  const [invitesLeft, setInvitesLeft] = useState<number>(3);
   const [copied, setCopied] = useState(false);
   const [shareSupported, setShareSupported] = useState(false);
 
-  // Le message de cooptation (Copywriting "No BS" et luxueux)
-  const inviteLink = "https://kalimera.fr/cercle/invitation-privee";
-  const inviteText =
-    "Bonjour, j'ai découvert Kalimera, un cercle privé pour faire de vraies belles rencontres. J'ai obtenu une invitation confidentielle qui t'offre tes 3 premiers mois d'accès privilégié. J'ai pensé à toi. Voici mon lien direct :";
-  const fullMessage = `${inviteText}\n\n${inviteLink}`;
-
-  // Vérification de l'API de partage natif (Mobile / Navigateurs modernes)
   useEffect(() => {
     if (typeof navigator !== "undefined" && navigator.share) {
       setShareSupported(true);
     }
+    const savedInvites = localStorage.getItem("kalimera_public_invites");
+    if (savedInvites !== null) {
+      setInvitesLeft(parseInt(savedInvites, 10));
+    }
   }, []);
 
-  // Action 1 : Partage Natif (iPhone, Android, Safari Mac)
+  const decrementInvites = () => {
+    if (invitesLeft > 0) {
+      const newCount = invitesLeft - 1;
+      setInvitesLeft(newCount);
+      localStorage.setItem("kalimera_public_invites", newCount.toString());
+    }
+  };
+
+  const inviteLink = "https://kalimera.fr/cercle/invitation-privee";
+  const inviteText =
+    "Bonjour, je te partage ce nouveau site de rencontres, Kalimera. C'est très sérieux et élégant. J'ai une invitation qui t'offre les 3 premiers mois si tu veux regarder. Voici mon lien :";
+  const fullMessage = `${inviteText}\n\n${inviteLink}`;
+
   const handleNativeShare = async () => {
     try {
       await navigator.share({
@@ -266,57 +275,55 @@ function FormSection() {
         text: inviteText,
         url: inviteLink,
       });
-      if (invitesLeft > 0) setInvitesLeft((prev) => prev - 1);
-    } catch (err) {
-      console.log("Partage fermé ou non abouti.");
+      decrementInvites();
+    } catch (err: any) {
+      // SÉCURITÉ UX : Si l'utilisateur a juste fermé le menu (Annulation), on ne fait rien
+      if (err.name === "AbortError" || (err.message && err.message.includes("abort"))) {
+        console.log("Partage annulé par l'utilisateur.");
+        return;
+      }
+      // Si c'est un vrai blocage technique, on active le Plan B (Copie)
+      console.log("Partage natif non supporté/bloqué, bascule sur la copie.");
+      handleCopy();
     }
   };
 
-  // Action 2 : Copier dans le presse-papier (PC, ou si Native Share échoue)
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(fullMessage);
       setCopied(true);
-      if (invitesLeft > 0) setInvitesLeft((prev) => prev - 1);
+      decrementInvites();
       setTimeout(() => setCopied(false), 3000);
     } catch (err) {
       console.error("Échec de la copie", err);
     }
   };
 
-  // Action 3 : Clic direct sur lien (WhatsApp/Email) pour décrémenter visuellement
-  const handleLinkClick = () => {
-    if (invitesLeft > 0) setInvitesLeft((prev) => prev - 1);
-  };
-
   return (
     <section ref={revealRef} id="formulaire" className="relative overflow-hidden min-h-[80vh] flex items-center py-24">
-      {/* Fond sombre et élégant */}
       <div className="absolute inset-0">
-        <img src={parrainageFormBg} alt="Couple senior écrivant ensemble" className="w-full h-full object-cover" />
+        <img src={parrainageFormBg} alt="Envoi d'invitation" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1B2333]/95 via-[#1B2333]/95 to-[#1B2333]/95" />
       </div>
 
       <div className="relative z-10 w-full text-xl text-[#d1d1d1]">
         <div className="container-main max-w-3xl">
-          {/* En-tête avec Compteur */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center px-5 py-2 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 mb-8 backdrop-blur-sm shadow-lg">
+            <div className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-[#D4AF37]/40 bg-[#D4AF37]/10 mb-8 backdrop-blur-sm shadow-lg">
               <Ticket className="w-5 h-5 text-[#D4AF37] mr-3" />
               <span className="text-[#D4AF37] text-sm font-bold uppercase tracking-widest">
                 {invitesLeft > 0
-                  ? `Il vous reste ${invitesLeft} invitation${invitesLeft > 1 ? "s" : ""} ce mois-ci`
-                  : "Toutes vos invitations ont été envoyées"}
+                  ? `VOTRE ALLOCATION : ${invitesLeft} INVITATION${invitesLeft > 1 ? "S" : ""} PRIVÉE${invitesLeft > 1 ? "S" : ""}`
+                  : "VOTRE ALLOCATION EST ÉPUISÉE"}
               </span>
             </div>
 
             <h2 className="font-heading text-4xl md:text-5xl text-white mb-4 leading-tight">
-              {invitesLeft > 0 ? "Transmettez votre privilège" : "Merci pour votre confiance"}
+              {invitesLeft > 0 ? "Transmettez vos privilèges" : "Merci pour votre confiance"}
             </h2>
             <div className="divider-gold mx-auto mt-6 mb-2" />
           </div>
 
-          {/* L'ÉCRIN : La Carte Privilège */}
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[32px] p-8 md:p-12 shadow-2xl transition-all duration-500 relative overflow-hidden">
             {invitesLeft > 0 ? (
               <div className="animate-in fade-in zoom-in-95 duration-700">
@@ -325,39 +332,35 @@ function FormSection() {
                   directement à la personne de votre choix.
                 </p>
 
-                {/* La Carte Visuelle */}
-                <div className="bg-gradient-to-br from-[#111827] to-[#1e1e2f] border border-[#D4AF37]/40 shadow-2xl rounded-2xl p-8 mb-10 relative">
-                  <Gift className="w-24 h-24 text-[#D4AF37]/5 absolute -top-4 -right-4" />
+                <div className="bg-black/40 border border-[#D4AF37]/30 shadow-inner rounded-2xl p-8 mb-10 relative overflow-hidden">
+                  <Gift className="w-32 h-32 text-[#D4AF37]/5 absolute -top-8 -right-8" />
                   <p className="italic text-white/90 text-xl leading-relaxed font-serif relative z-10">
                     "{inviteText}"
                   </p>
-                  <div className="mt-6 inline-block bg-white/10 border border-[#D4AF37]/30 text-[#D4AF37] px-6 py-3 rounded-xl font-medium text-lg font-mono">
+                  <div className="mt-6 inline-block bg-white/5 border border-[#D4AF37]/20 text-[#D4AF37] px-6 py-3 rounded-xl font-medium text-lg font-mono relative z-10">
                     {inviteLink}
                   </div>
                 </div>
 
-                {/* LES ACTIONS : Dégradation Gracieuse selon l'appareil */}
                 <div className="space-y-4">
-                  {/* Option A : Partage Natif (Mobile) */}
                   {shareSupported && (
                     <Button
                       onClick={handleNativeShare}
-                      className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-8 text-2xl rounded-xl font-bold shadow-[0_0_30px_rgba(212,175,55,0.3)] transition-all flex items-center justify-center gap-3 h-auto"
+                      className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-8 text-2xl rounded-xl font-bold shadow-[0_0_30px_rgba(212,175,55,0.2)] transition-all flex items-center justify-center gap-3 h-auto"
                     >
                       <Share2 className="w-7 h-7" /> Transmettre cette invitation
                     </Button>
                   )}
 
-                  {/* Option B : Boutons de Fallback (PC ou si pas de Native Share) */}
                   <div className={`grid grid-cols-1 ${!shareSupported ? "md:grid-cols-1" : "md:grid-cols-2"} gap-4`}>
                     {!shareSupported && (
                       <Button
                         onClick={handleCopy}
-                        className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-8 text-2xl rounded-xl font-bold shadow-[0_0_30px_rgba(212,175,55,0.3)] transition-all flex items-center justify-center gap-3 h-auto"
+                        className="w-full bg-[#D4AF37] hover:bg-[#D4AF37]/90 text-[#1B2333] py-8 text-2xl rounded-xl font-bold shadow-[0_0_30px_rgba(212,175,55,0.2)] transition-all flex items-center justify-center gap-3 h-auto"
                       >
                         {copied ? (
                           <>
-                            <CheckCircle2 className="w-7 h-7 text-green-700" /> Copié avec succès !
+                            <CheckCircle2 className="w-7 h-7 text-[#1B2333]" /> Copié avec succès !
                           </>
                         ) : (
                           <>
@@ -369,19 +372,18 @@ function FormSection() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 col-span-full">
                       <a
-                        href={`https://api.whatsapp.com/send?text=${encodeURIComponent(fullMessage)}`}
+                        href={`https://wa.me/?text=${encodeURIComponent(fullMessage)}`}
                         target="_blank"
-                        rel="noreferrer"
-                        onClick={handleLinkClick}
-                        className="flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white py-4 px-6 rounded-xl transition-all text-lg font-medium"
+                        rel="noopener noreferrer"
+                        onClick={decrementInvites}
+                        className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-4 px-6 rounded-xl transition-all text-lg font-medium backdrop-blur-sm"
                       >
                         <MessageCircle className="w-6 h-6 text-green-400" /> WhatsApp
                       </a>
-
                       <a
                         href={`mailto:?subject=${encodeURIComponent("Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`}
-                        onClick={handleLinkClick}
-                        className="flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white py-4 px-6 rounded-xl transition-all text-lg font-medium"
+                        onClick={decrementInvites}
+                        className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-4 px-6 rounded-xl transition-all text-lg font-medium backdrop-blur-sm"
                       >
                         <Mail className="w-6 h-6 text-blue-400" /> E-mail direct
                       </a>
@@ -390,7 +392,6 @@ function FormSection() {
                 </div>
               </div>
             ) : (
-              /* ETAT VIDE : Plus d'invitations */
               <div className="text-center py-12 animate-in fade-in zoom-in-95 duration-500">
                 <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[#D4AF37]/10 mb-6">
                   <CheckCircle2 className="w-12 h-12 text-[#D4AF37]" />
@@ -398,7 +399,7 @@ function FormSection() {
                 <h3 className="font-heading text-3xl text-white mb-4">Vos invitations ont été distribuées</h3>
                 <p className="text-xl text-white/70 max-w-lg mx-auto">
                   Merci de faire grandir le Cercle Kalimera. Vos proches vont pouvoir découvrir l'élégance de nos
-                  rencontres. De nouveaux privilèges vous seront accordés le mois prochain.
+                  rencontres.
                 </p>
               </div>
             )}
@@ -406,18 +407,5 @@ function FormSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-/* ─── Page ─── */
-export default function Parrainage() {
-  return (
-    <Layout>
-      <HeroSection />
-      <HowItWorksSection />
-      <ValuePropositionSection />
-      <FAQSection />
-      <FormSection />
-    </Layout>
   );
 }
