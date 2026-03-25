@@ -8,7 +8,7 @@ import ProfileInfoTab from "@/components/profile/ProfileInfoTab";
 import ProfileQuestionnairesTab from "@/components/profile/ProfileQuestionnairesTab";
 import ProfileSubscriptionTab from "@/components/profile/ProfileSubscriptionTab";
 import ProfileTermsTab from "@/components/profile/ProfileTermsTab";
-import ProfileContactTab from "@/components/profile/ProfileContactTab";
+import ContactMemberContent from "@/components/profile/ContactMemberContent";
 import ProfileGiftTab from "@/components/profile/ProfileGiftTab";
 
 const tabs = [
