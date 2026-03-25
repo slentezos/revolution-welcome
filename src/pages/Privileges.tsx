@@ -71,7 +71,7 @@ export default function Privileges() {
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <span className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-lg md:text-xl animate-fade-in">
+          <span className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl md:text-xl animate-fade-in">
             L'Invitation
           </span>
 
@@ -82,12 +82,12 @@ export default function Privileges() {
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mx-auto mb-10 animate-fade-in delay-200" />
 
           <div className="inline-block border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.1)] backdrop-blur-sm px-8 py-5 md:px-12 md:py-6 mb-10 animate-fade-up delay-300">
-            <p className="font-heading text-xl md:text-2xl text-[hsl(var(--gold-light))] font-medium">
+            <p className="font-heading text-xl md:text-4xl text-[hsl(var(--gold-light))] font-medium">
               L'élégance de la confiance : Vos 3 premiers mois offerts.
             </p>
           </div>
 
-          <p className="text-lg md:text-xl text-primary-foreground/80 leading-relaxed max-w-3xl mx-auto mb-12 animate-fade-up delay-400">
+          <p className="text-xl md:text-xl text-primary-foreground/80 leading-relaxed max-w-3xl mx-auto mb-12 animate-fade-up delay-400">
             Prenez le temps de faire des rencontres authentiques. Aucune empreinte bancaire ne vous sera demandée lors
             de votre admission.
           </p>
@@ -106,7 +106,7 @@ export default function Privileges() {
                 <span className="font-heading text-3xl md:text-4xl text-[hsl(var(--gold-light))] font-medium block mb-2">
                   {stat.value}
                 </span>
-                <p className="text-primary-foreground/90 text-lg md:text-base leading-snug">{stat.label}</p>
+                <p className="text-primary-foreground/90 text-xl md:text-base leading-snug">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -129,7 +129,7 @@ export default function Privileges() {
               <div className="h-px w-16 bg-gradient-to-r from-transparent to-[hsl(var(--gold))] hidden md:block" />
               <div className="flex items-center gap-3">
                 <Gift className="w-5 h-5 text-[hsl(var(--gold))]" />
-                <p className="text-lg md:text-xl text-[hsl(var(--gold))] font-serif italic tracking-wide">
+                <p className="text-xl md:text-xl text-[hsl(var(--gold))] font-serif italic tracking-wide">
                   Vos 3 premiers mois gracieusement offerts, sans carte bancaire.
                 </p>
               </div>
@@ -156,7 +156,7 @@ export default function Privileges() {
                   <span className="font-heading text-5xl text-foreground">50€</span>
                   <span className="text-muted-foreground">/mois</span>
                 </div>
-                <p className="text-sm text-muted-foreground uppercase tracking-widest">ou 120€ pour 3 mois</p>
+                <p className="text-lg text-muted-foreground uppercase tracking-widest">ou 120€ pour 3 mois</p>
               </div>
 
               <ul className="space-y-5 mb-12 flex-1">
@@ -170,7 +170,7 @@ export default function Privileges() {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full border border-primary text-primary py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-primary hover:text-white"
+                className="w-full border border-primary text-primary py-4 text-lg uppercase tracking-widest font-medium transition-all duration-300 hover:bg-primary hover:text-white"
               >
                 Demander mon admission
               </button>
@@ -182,7 +182,7 @@ export default function Privileges() {
               data-reveal-delay="300"
               className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 transition-all duration-500 hover:border-[hsl(var(--gold)/0.6)] flex flex-col h-full md:scale-105 z-10"
             >
-              <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 text-xs font-bold tracking-[0.2em] uppercase rounded-b-sm">
+              <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 text-lg font-bold tracking-[0.2em] uppercase rounded-b-sm">
                 Privilège
               </div>
 
@@ -198,7 +198,7 @@ export default function Privileges() {
                   <span className="font-heading text-5xl text-white">65€</span>
                   <span className="text-white/60">/mois</span>
                 </div>
-                <p className="text-sm text-[hsl(var(--gold-light))] uppercase tracking-widest">ou 150€ pour 3 mois</p>
+                <p className="text-lg text-[hsl(var(--gold-light))] uppercase tracking-widest">ou 150€ pour 3 mois</p>
               </div>
 
               <ul className="space-y-5 mb-12 flex-1">
@@ -212,7 +212,7 @@ export default function Privileges() {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold transition-all duration-300 hover:bg-white hover:text-primary"
+                className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-lg uppercase tracking-widest font-bold transition-all duration-300 hover:bg-white hover:text-primary"
               >
                 Demander mon admission VIP
               </button>
@@ -365,7 +365,7 @@ export default function Privileges() {
             <div data-reveal data-reveal-delay="600">
               <Link
                 to="/parrainage"
-                className="inline-block bg-primary-foreground text-secondary-foreground px-12 py-5 text-lg font-medium tracking-wide transition-all duration-500 hover:shadow-[var(--shadow-elevated)] hover:translate-y-[-2px]"
+                className="inline-block bg-primary-foreground text-secondary-foreground px-12 py-5 text-xl font-medium tracking-wide transition-all duration-500 hover:shadow-[var(--shadow-elevated)] hover:translate-y-[-2px]"
               >
                 J'invite un proche
               </Link>
