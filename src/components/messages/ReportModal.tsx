@@ -212,12 +212,9 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
             </div>
           </div>
         ) : (
-          <div className="px-6 sm:px-8 py-8 space-y-6">
+       <div className="px-6 sm:px-8 py-8 space-y-6">
             <button
-              onClick={() => {
-                setStep("intro");
-                if (isListening) forceStopDictation();
-              }}
+              onClick={() => { setStep("intro"); if (isListening) forceStopDictation(); }}
               className="flex items-center gap-2 text-gray-500 hover:text-[#1B2333] transition-colors text-lg"
             >
               <ArrowLeft className="h-5 w-5" />
@@ -228,68 +225,55 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
               <Flag className="h-6 w-6" />
             </div>
 
-            <h2 className="text-center font-heading font-bold text-[#1B2333] text-3xl">Que s'est-il passé ?</h2>
+            <h2 className="text-center font-heading font-bold text-[#1B2333] text-3xl">
+              Que s'est-il passé ?
+            </h2>
             <p className="text-center text-foreground text-lg">
               Sélectionnez un motif et décrivez la situation en détail.
             </p>
 
             <div className="space-y-6 pt-2">
               <div className="space-y-2">
-                <Label className="text-lg font-medium text-[#1B2333]">Motif principal</Label>
+                <Label className="text-lg font-medium text-[#1B2333]">Motif principal <span className="text-destructive">*</span></Label>
                 <Select value={reason} onValueChange={setReason}>
-                  <SelectTrigger className="w-full h-14 text-lg rounded-xl border-gray-200 bg-gray-50/80 focus:ring-[#1B2333]">
+                  <SelectTrigger className={`w-full h-14 text-lg rounded-xl border-gray-200 bg-gray-50/80 focus:ring-[#1B2333] transition-all ${!reason ? "ring-2 ring-amber-100/50" : ""}`}>
                     <SelectValue placeholder="Sélectionnez une raison..." />
                   </SelectTrigger>
                   <SelectContent className="bg-white">
-                    <SelectItem value="comportement" className="text-base py-3">
-                      Comportement déplacé ou irrespectueux
-                    </SelectItem>
-                    <SelectItem value="fraude" className="text-base py-3">
-                      Suspicion de faux profil ou fraude
-                    </SelectItem>
-                    <SelectItem value="contenu" className="text-base py-3">
-                      Contenu inapproprié ou choquant
-                    </SelectItem>
-                    <SelectItem value="vie_privee" className="text-base py-3">
-                      Atteinte à la vie privée
-                    </SelectItem>
+                    <SelectItem value="comportement" className="text-base py-3">Comportement déplacé ou irrespectueux</SelectItem>
+                    <SelectItem value="fraude" className="text-base py-3">Suspicion de faux profil ou fraude</SelectItem>
+                    <SelectItem value="contenu" className="text-base py-3">Contenu inapproprié ou choquant</SelectItem>
+                    <SelectItem value="vie_privee" className="text-base py-3">Atteinte à la vie privée</SelectItem>
+                    <SelectItem value="autre" className="text-base py-3">Autre situation</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-3">
+              {/* Le bloc détails se grise et se verrouille si aucun motif n'est choisi */}
+              <div className={`space-y-3 transition-all duration-300 ${!reason ? "opacity-50" : "opacity-100"}`}>
                 <Label className="text-lg font-medium text-[#1B2333]">Détails supplémentaires</Label>
-
-                {/* L'UX 2026 : Barre d'outils de dictée */}
+                
                 <div className="flex items-center gap-4 mb-1">
                   <button
                     onClick={toggleDictation}
+                    disabled={!reason}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all text-base ${
-                      isListening
-                        ? "bg-[#D4AF37]/20 text-[#D4AF37] shadow-inner"
-                        : "bg-[#E5C18D]/40 text-[#1B2333] hover:bg-[#E5C18D]/60 shadow-sm"
+                      !reason 
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed" 
+                        : isListening
+                          ? "bg-[#D4AF37]/20 text-[#D4AF37] shadow-inner"
+                          : "bg-[#E5C18D]/40 text-[#1B2333] hover:bg-[#E5C18D]/60 shadow-sm"
                     }`}
                   >
                     {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                     {isListening ? "Arrêter" : "Dicter"}
                   </button>
 
-                  {/* L'indicateur animé "Je vous écoute..." */}
                   {isListening && (
-                    <div className="flex items-center gap-2 text-[#D4AF37] font-bold text-lg animate-in fade-in duration-300">
-                      Je vous écoute...
-                      <div className="flex items-end gap-[3px] h-4 ml-1">
-                        <span className="w-1.5 bg-[#D4AF37] animate-pulse rounded-full h-2"></span>
-                        <span
-                          className="w-1.5 bg-[#D4AF37] animate-pulse rounded-full h-4"
-                          style={{ animationDelay: "150ms" }}
-                        ></span>
-                        <span
-                          className="w-1.5 bg-[#D4AF37] animate-pulse rounded-full h-3"
-                          style={{ animationDelay: "300ms" }}
-                        ></span>
-                      </div>
-                    </div>
+                    <p className="font-bold text-2xl text-[hsl(var(--gold))] flex items-baseline gap-2 animate-in fade-in duration-300">
+                      Je vous écoute... 
+                      <span className="text-lg font-normal opacity-80 hidden sm:inline">et j'écris votre message.</span>
+                    </p>
                   )}
                 </div>
 
@@ -297,13 +281,16 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
                   ref={textareaRef}
                   value={reportText}
                   onChange={(e) => setReportText(e.target.value)}
-                  placeholder="Écrivez ou dictez votre message ici..."
+                  disabled={!reason}
+                  placeholder={!reason ? "Sélectionnez d'abord un motif principal ci-dessus..." : "Écrivez ou dictez votre message ici..."}
                   className={`w-full min-h-[140px] rounded-xl text-lg border bg-white resize-none outline-none p-4 overflow-hidden transition-all ${
-                    isListening
-                      ? "border-[#D4AF37] ring-2 ring-[#D4AF37]/20"
-                      : "border-gray-200 focus:border-[#1B2333] focus:ring-1 focus:ring-[#1B2333]"
+                    !reason 
+                      ? "cursor-not-allowed bg-gray-50/50" 
+                      : isListening 
+                        ? "border-[#D4AF37] ring-2 ring-[#D4AF37]/20" 
+                        : "border-gray-200 focus:border-[#1B2333] focus:ring-1 focus:ring-[#1B2333]"
                   }`}
-                  maxLength={1000}
+                  maxLength={1000} 
                 />
                 <p className="text-gray-500 text-right text-sm mt-1">{reportText.length}/1000</p>
               </div>
@@ -317,8 +304,3 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
               </Button>
             </div>
           </div>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-}
