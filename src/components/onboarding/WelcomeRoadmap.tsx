@@ -255,7 +255,7 @@ export default function WelcomeRoadmap({
             Bienvenue sur Kalimera
           </span>
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
-            Votre parcours vers <br /> de belles rencontres
+            Votre parcours en 4 étapes vers <br /> de belles rencontres
           </h1>
           <div className="divider-gold mx-auto mb-8" />
           <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
