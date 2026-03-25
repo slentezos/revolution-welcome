@@ -150,7 +150,7 @@ function PricingModal({
 }
 
 /* ═══════════════════════════════════════════════
-   STEP CARD
+   STEP CARD (Design "Split-Screen" 100vh sans scroll)
    ═══════════════════════════════════════════════ */
 
 function StepCard({
@@ -160,9 +160,6 @@ function StepCard({
   description,
   highlights,
   nextSteps,
-  nextLabel,
-  onNext,
-  isLast,
 }: {
   number: string;
   title: string;
@@ -170,52 +167,59 @@ function StepCard({
   description: string;
   highlights: string[];
   nextSteps: string[];
-  nextLabel?: string;
-  onNext: () => void;
-  isLast?: boolean;
 }) {
   return (
-    <section className="section-luxury">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="text-center mb-12">
-          <span className="font-heading text-[120px] leading-none text-muted-foreground/10 block select-none">
-            {number}
-          </span>
-          <h2 className="font-heading text-3xl sm:text-4xl text-foreground -mt-10">{title}</h2>
-          <p className="text-[hsl(var(--gold))] font-medium mt-3 text-2xl">{duration}</p>
-          <div className="divider-gold mx-auto mt-6" />
-        </div>
-        <p className="leading-relaxed text-center max-w-2xl mx-auto mb-12 font-normal text-[#232a39] text-3xl">
-          {description}
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
-          {highlights.map((h, i) => (
-            <div key={i} className="flex items-start gap-4 p-5 bg-card border border-border">
-              <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-1" />
-              <span className="leading-relaxed text-xl text-[#232a39] font-medium">{h}</span>
+    // min-h-[calc(100vh-80px)] garantit que l'étape prend exactement la hauteur de l'écran (moins la barre de navigation)
+    <section className="relative w-full min-h-[calc(100vh-80px)] flex items-center py-16 md:py-0 border-b border-border/40">
+      <div className="max-w-6xl mx-auto px-6 md:px-16 w-full">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* COLONNE GAUCHE : Storytelling (Titre et Description) */}
+          <div className="relative z-10">
+            {/* Le grand numéro passe en arrière-plan (filigrane) pour ne pas casser la hauteur */}
+            <span className="absolute -top-16 -left-10 font-heading text-[160px] leading-none text-muted-foreground/5 select-none -z-10">
+              {number}
+            </span>
+
+            <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-foreground mb-4 leading-tight">
+              {title}
+            </h2>
+            <p className="text-[hsl(var(--gold))] font-medium text-xl sm:text-2xl mb-8 flex items-center gap-2">
+              <span className="text-2xl">⏱️</span> {duration}
+            </p>
+
+            <div className="w-16 h-px bg-[hsl(var(--gold))] mb-8" />
+
+            <p className="leading-relaxed text-[#232a39] text-xl sm:text-2xl font-light max-w-lg">{description}</p>
+          </div>
+
+          {/* COLONNE DROITE : Action (Highlights et Next Steps) */}
+          <div className="flex flex-col gap-8 z-10">
+            {/* Grille de réassurance (plus compacte et lisible) */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {highlights.map((h, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-3 p-5 bg-white border border-slate-200 shadow-sm rounded-sm"
+                >
+                  <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                  <span className="leading-snug text-lg text-[#232a39] font-medium">{h}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="border border-border p-8 sm:p-10 mb-12 bg-[#b27615]">
-          <h3 className="font-heading mb-6 text-2xl font-semibold text-primary-foreground">
-            Que se passe-t-il ensuite ?
-          </h3>
-          <ul className="space-y-4">
-            {nextSteps.map((s, i) => (
-              <li key={i} className="flex items-start gap-3">
-                <span className="text-[hsl(var(--gold))] font-bold mt-0.5">→</span>
-                <span className="leading-relaxed text-xl text-secondary">{s}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="text-center">
-          <button
-            onClick={onNext}
-            className={`${isLast ? "btn-primary px-14 py-5 text-xl shadow-xl hover:scale-105 transition-transform" : "text-foreground hover:text-[hsl(var(--gold))] text-lg font-medium underline underline-offset-8 decoration-[hsl(var(--gold))]/40 hover:decoration-[hsl(var(--gold))] transition-colors"}`}
-          >
-            {nextLabel || `Découvrir l'Étape suivante ↓`}
-          </button>
+
+            {/* Bloc Marron (Remonté, impossible à rater) */}
+            <div className="border border-[hsl(var(--gold)/0.2)] p-8 sm:p-10 bg-[#b27615] rounded-sm shadow-md">
+              <h3 className="font-heading mb-6 text-2xl font-semibold text-white">Que se passe-t-il ensuite ?</h3>
+              <ul className="space-y-4">
+                {nextSteps.map((s, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="text-[hsl(var(--gold-light))] font-bold mt-1">→</span>
+                    <span className="leading-relaxed text-lg text-white/95">{s}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
