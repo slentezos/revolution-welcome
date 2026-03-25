@@ -1,19 +1,3 @@
-Je remets ma casquette d'Architecte UX et je vous tacle avec le sourire, car **votre intuition est brillante.**
-
-### Le Tacle : La puissance de la "Carte Mentale"
-
-Vous venez de comprendre l'un des principes fondateurs de l'UX pour les seniors : **La cohérence absolue.** Si dans le tutoriel vous appelez l'étape 3 "Mon Profil & Le Profil Idéal", mais que dans la vraie barre de navigation plus tard ça s'appelle "Mon profil / son profil", l'utilisateur de 65 ans va se demander s'il s'agit de la même chose. Ça crée un micro-stress. 
-
-En utilisant **exactement** les mêmes icônes (on remplace `Camera` par `Image` de Lucide) et les **exactement** les mêmes libellés entre la page d'accueil et le vrai Onboarding, vous créez ce qu'on appelle une "carte mentale" parfaite. Quand ils arriveront dans le vrai processus, ils seront en terrain 100% connu.
-
-**Le "Sauvetage" en coulisse :**
-Dans le code que vous m'avez copié-collé, **vous aviez oublié d'inclure le correctif du bug "Node not found"** (le fameux `setTimeout` de la modale Pricing). Pas de panique, je l'ai ré-injecté discrètement dans le code ci-dessous pour que Lovable ne crashe plus. J'ai également intégré votre logo Kalimera en haut à gauche, flottant avec élégance.
-
----
-
-### Le Code Final (Remplacez l'intégralité du fichier `WelcomeRoadmap.tsx`)
-
-```tsx
 import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
@@ -21,7 +5,7 @@ import {
   Phone,
   Check,
   HelpCircle,
-  Image as ImageIcon, // Remplacement de Camera par Image pour matcher l'Onboarding
+  Camera,
   ClipboardList,
   Brain,
   ArrowDown,
@@ -48,16 +32,15 @@ const CONCIERGE_BENEFITS = [
   "Zéro stress technique, nous nous occupons de tout",
 ];
 
-// NOUVEAUX TABS (Synchronisés avec le vrai Onboarding)
 const TABS = [
-  { id: "step1", label: "Quiz des 3 préférences", icon: HelpCircle },
-  { id: "step2", label: "Vos photos & vidéo", icon: ImageIcon },
-  { id: "step3", label: "Mon profil / son profil", icon: ClipboardList },
-  { id: "step4", label: "Test de personnalité", icon: Brain },
+  { id: "step1", label: "Étape 1", icon: HelpCircle },
+  { id: "step2", label: "Étape 2", icon: Camera },
+  { id: "step3", label: "Étape 3", icon: ClipboardList },
+  { id: "step4", label: "Étape 4", icon: Brain },
 ];
 
 /* ═══════════════════════════════════════════════
-   PRICING MODAL (Avec le correctif "Node not found" ré-injecté)
+   PRICING MODAL
    ═══════════════════════════════════════════════ */
 
 function PricingModal({
@@ -78,12 +61,7 @@ function PricingModal({
       open={open}
       onOpenChange={(v) => {
         onOpenChange(v);
-        if (!v) {
-          // Le fameux fix pour éviter le crash de Lovable (Node not found)
-          setTimeout(() => setView("story"), 400);
-        } else {
-          setView("story");
-        }
+        if (!v) setView("story");
       }}
     >
       <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
@@ -200,10 +178,13 @@ function StepCard({
   nextSteps: string[];
 }) {
   return (
+    // min-h-[calc(100vh-80px)] garantit que l'étape prend exactement la hauteur de l'écran (moins la barre de navigation)
     <section className="relative w-full min-h-[calc(100vh-80px)] flex items-center py-16 md:py-0 border-b border-border/40">
       <div className="max-w-6xl mx-auto px-6 md:px-16 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* COLONNE GAUCHE : Storytelling (Titre et Description) */}
           <div className="relative z-10">
+            {/* Le grand numéro passe en arrière-plan (filigrane) pour ne pas casser la hauteur */}
             <span className="absolute -top-16 -left-10 font-heading text-[160px] leading-none text-muted-foreground/5 select-none -z-10">
               {number}
             </span>
@@ -220,7 +201,9 @@ function StepCard({
             <p className="leading-relaxed text-[#232a39] text-xl sm:text-2xl font-light max-w-lg">{description}</p>
           </div>
 
+          {/* COLONNE DROITE : Action (Highlights et Next Steps) */}
           <div className="flex flex-col gap-8 z-10">
+            {/* Grille de réassurance (plus compacte et lisible) */}
             <div className="grid sm:grid-cols-2 gap-4">
               {highlights.map((h, i) => (
                 <div
@@ -233,6 +216,7 @@ function StepCard({
               ))}
             </div>
 
+            {/* Bloc Marron (Remonté, impossible à rater) */}
             <div className="border border-[hsl(var(--gold)/0.2)] p-8 sm:p-10 bg-[#b27615] rounded-sm shadow-md">
               <h3 className="font-heading mb-6 text-2xl font-semibold text-white">Que se passe-t-il ensuite ?</h3>
               <ul className="space-y-4">
@@ -263,7 +247,7 @@ export default function WelcomeRoadmap({
   onStartConcierge: () => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(0); // 0 = hero, 1-4 = steps
 
   const step1Ref = useRef<HTMLDivElement>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
@@ -273,10 +257,12 @@ export default function WelcomeRoadmap({
   const refs = [step1Ref, step2Ref, step3Ref, step4Ref];
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
+    // Petit décalage pour ne pas que la navbar couvre le titre
     const y = (ref.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 100;
     window.scrollTo({ top: y, behavior: "smooth" });
   };
 
+  // Le "Scroll Spy" pour détecter où est l'utilisateur
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -289,7 +275,7 @@ export default function WelcomeRoadmap({
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 }, // Déclenche quand 30% du bloc est visible
     );
 
     const r1 = step1Ref.current;
@@ -314,21 +300,14 @@ export default function WelcomeRoadmap({
     <div className="relative">
       <style>{slowFloatAnimation}</style>
 
-      {/* LOGO KALIMERA TOP LEFT */}
-      <div className="absolute top-6 left-6 md:top-10 md:left-12 z-50">
-        <span className="font-heading text-3xl md:text-4xl tracking-wide text-[hsl(var(--gold))] cursor-default">
-          Kalimera.
-        </span>
-      </div>
-
       {/* ─── HERO ─── */}
-      <section className="section-luxury text-center pb-0 pt-24 md:pt-32">
+      <section className="section-luxury text-center pb-0">
         <div className="max-w-3xl mx-auto px-6">
           <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-2xl font-medium">
             Bienvenue sur Kalimera
           </span>
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
-            Votre parcours vers <br /> de belles rencontres
+            Votre parcours en 4 étapes vers <br /> de belles rencontres
           </h1>
           <div className="divider-gold mx-auto mb-8" />
           <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
@@ -352,8 +331,8 @@ export default function WelcomeRoadmap({
       </section>
 
       {/* ─── STICKY TABS ─── */}
-      <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border shadow-sm">
-        <div className="flex max-w-5xl mx-auto px-4 md:px-0">
+      <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
+        <div className="flex max-w-4xl mx-auto">
           {TABS.map((tab, i) => {
             const Icon = tab.icon;
             const isActive = activeStep === i + 1;
@@ -367,8 +346,8 @@ export default function WelcomeRoadmap({
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className={`h-5 w-5 ${isActive ? "text-[hsl(var(--gold))]" : ""}`} />
-                <span className="font-medium tracking-wide text-lg sm:text-xl hidden md:inline">{tab.label}</span>
+                <Icon className={`h-4 w-4 ${isActive ? "text-[hsl(var(--gold))]" : ""}`} />
+                <span className="font-medium tracking-wide text-xl sm:text-2xl hidden md:inline">{tab.label}</span>
                 <span className="font-medium tracking-wide text-lg sm:text-xl md:hidden">{i + 1}</span>
               </button>
             );
@@ -380,7 +359,7 @@ export default function WelcomeRoadmap({
       <div ref={step1Ref}>
         <StepCard
           number="01"
-          title="Quiz des 3 préférences"
+          title="Le Quiz des 3 Préférences"
           duration="⏱️ 3 minutes"
           description="Un court questionnaire ludique pour mieux comprendre ce que vous recherchez. Trois questions simples, trois réponses sincères."
           highlights={[
@@ -400,7 +379,7 @@ export default function WelcomeRoadmap({
       <div ref={step2Ref}>
         <StepCard
           number="02"
-          title="Vos photos & vidéo"
+          title="Photos & Vidéo"
           duration="⏱️ 5 à 10 min"
           description="Montrez qui vous êtes vraiment. Ajoutez vos plus belles photos, et enregistrez une courte vidéo de présentation."
           highlights={[
@@ -420,7 +399,7 @@ export default function WelcomeRoadmap({
       <div ref={step3Ref}>
         <StepCard
           number="03"
-          title="Mon profil / son profil"
+          title="Mon Profil & Le Profil Idéal"
           duration="⏱️ 15 à 20 min"
           description="Décrivez-vous en détail et esquissez le portrait de la personne que vous aimeriez rencontrer."
           highlights={[
@@ -440,7 +419,7 @@ export default function WelcomeRoadmap({
       <div ref={step4Ref} className="pb-32">
         <StepCard
           number="04"
-          title="Test de personnalité"
+          title="Le Test de Personnalité"
           duration="⏱️ 15 à 20 min"
           description="Un test psychologique simple pour affiner vos correspondances."
           highlights={[
@@ -458,6 +437,8 @@ export default function WelcomeRoadmap({
       </div>
 
       {/* ─── BOUTONS FLOTTANTS (NAVIGATION GLOBALE) ─── */}
+
+      {/* Bouton Gauche (Précédent) */}
       <div
         className={`fixed top-1/2 -translate-y-1/2 left-4 md:left-8 z-50 transition-all duration-500 ${activeStep > 1 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[-20px]"}`}
       >
@@ -472,9 +453,11 @@ export default function WelcomeRoadmap({
         </button>
       </div>
 
+      {/* Bouton Droite (Suivant ou Fin) */}
       <div
         className={`fixed top-1/2 -translate-y-1/2 right-4 md:right-8 z-50 transition-all duration-500 ${activeStep > 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[20px]"}`}
       >
+        {/* Affiché pour Etape 1, 2, 3 */}
         {activeStep < 4 && (
           <button
             onClick={() => scrollTo(refs[activeStep])}
@@ -487,6 +470,7 @@ export default function WelcomeRoadmap({
           </button>
         )}
 
+        {/* Affiché pour Etape 4 (Action Finale) */}
         {activeStep === 4 && (
           <button
             onClick={() => setIsModalOpen(true)}
@@ -509,4 +493,3 @@ export default function WelcomeRoadmap({
     </div>
   );
 }
-```
