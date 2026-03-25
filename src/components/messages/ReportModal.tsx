@@ -23,16 +23,11 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isListening, setIsListening] = useState(false);
 
-  // Les "Coffres-forts" pour empêcher l'API vocale d'effacer le texte
+  // Les "Coffres-forts" (Refs) pour empêcher l'API vocale d'effacer le texte
   const recognitionRef = useRef<any>(null);
   const manualStopRef = useRef(false);
-  const reportTextRef = useRef(reportText);
-  const baseTextRef = useRef("");
-
-  // Garde la référence toujours à jour avec le texte actuel
-  useEffect(() => {
-    reportTextRef.current = reportText;
-  }, [reportText]);
+  const baseTextRef = useRef(""); // Le texte avant la dictée (ou avant la pause)
+  const sessionFinalRef = useRef(""); // Le texte validé pendant la dictée en cours
 
   // Ajustement automatique de la hauteur du textarea
   useEffect(() => {
@@ -65,43 +60,68 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
     onUnmatchInstead();
   };
 
-  // ---- LE MOTEUR DE DICTÉE VOCALE "CRÈME DE LA CRÈME" ----
-  const initRecognition = () => {
+  // ---- LE MOTEUR DE DICTÉE VOCALE "MÉMOIRE ABSOLUE" ----
+  const startDictation = () => {
+    // Correctif TypeScript natif
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) return null;
+    if (!SpeechRecognition) {
+      toast.error("Votre navigateur ne supporte pas la dictée vocale.");
+      return;
+    }
+
+    manualStopRef.current = false;
+
+    // 1. On verrouille tout ce qui est déjà écrit dans le champ comme "base"
+    baseTextRef.current = reportText;
+    sessionFinalRef.current = "";
 
     const recognition = new SpeechRecognition();
     recognition.lang = "fr-FR";
     recognition.continuous = true;
     recognition.interimResults = true;
 
-    // Quand le micro s'allume (même après une pause), on verrouille le texte existant
-    recognition.onstart = () => {
-      baseTextRef.current = reportTextRef.current;
-    };
-
     recognition.onresult = (event: any) => {
-      let transcript = "";
+      let interim = "";
+      let finalStr = "";
+
+      // On sépare ce que l'API a validé définitivement de ce qu'elle est en train d'écouter
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        transcript += event.results[i][0].transcript;
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalStr += transcript + " ";
+        } else {
+          interim += transcript;
+        }
       }
-      // On combine le texte verrouillé avec les nouveaux mots
-      const newText = (baseTextRef.current + " " + transcript).trim();
-      setReportText(newText);
+
+      if (finalStr) {
+        sessionFinalRef.current += finalStr;
+      }
+
+      // 2. On additionne TOUT : La base d'avant + Les mots validés + Les mots en cours
+      const fullText = (baseTextRef.current + " " + sessionFinalRef.current + interim)
+        .replace(/\s+/g, " ") // Nettoie les doubles espaces
+        .trimStart(); // Nettoie les espaces au début
+
+      setReportText(fullText);
     };
 
     recognition.onerror = (event: any) => {
       if (event.error === "not-allowed") {
-        manualStopRef.current = true;
-        setIsListening(false);
+        forceStopDictation();
       }
     };
 
-    // Si le navigateur fait une pause, on le relance automatiquement (sauf si l'utilisateur a cliqué sur "Arrêter")
     recognition.onend = () => {
       if (!manualStopRef.current) {
+        // 3. LA MAGIE ANTI-EFFACEMENT EST ICI :
+        // Le navigateur a fait une pause. Il va vider sa mémoire avant de redémarrer.
+        // On fusionne donc la session en cours avec la baseTextRef !
+        baseTextRef.current = (baseTextRef.current + " " + sessionFinalRef.current).replace(/\s+/g, " ").trimStart();
+        sessionFinalRef.current = ""; // On vide pour la prochaine phrase
+
         try {
-          recognition.start();
+          recognition.start(); // Redémarrage silencieux
         } catch (e) {
           setIsListening(false);
         }
@@ -110,34 +130,25 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
       }
     };
 
-    return recognition;
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
+  };
+
+  const forceStopDictation = () => {
+    manualStopRef.current = true;
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+    setIsListening(false);
   };
 
   const toggleDictation = () => {
     if (isListening) {
       forceStopDictation();
     } else {
-      manualStopRef.current = false;
-      if (!recognitionRef.current) {
-        recognitionRef.current = initRecognition();
-      }
-      if (!recognitionRef.current) {
-        toast.error("Votre navigateur ne supporte pas la dictée vocale.");
-        return;
-      }
-      try {
-        recognitionRef.current.start();
-        setIsListening(true);
-      } catch (e) {
-        console.error("Erreur de démarrage audio");
-      }
+      startDictation();
     }
-  };
-
-  const forceStopDictation = () => {
-    manualStopRef.current = true;
-    recognitionRef.current?.stop();
-    setIsListening(false);
   };
 
   return (
