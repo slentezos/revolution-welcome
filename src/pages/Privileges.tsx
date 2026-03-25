@@ -25,7 +25,8 @@ const reassuranceItems = [
   {
     icon: Lock,
     title: "Paiement 100% sécurisé",
-    description: "Normes bancaires françaises. Vos données financières sont protégées par les standards les plus stricts.",
+    description:
+      "Normes bancaires françaises. Vos données financières sont protégées par les standards les plus stricts.",
   },
   {
     icon: Shield,
@@ -52,7 +53,13 @@ export default function Privileges() {
       {/* Bloc 1 — Hero : L'Invitation — Full-screen with background image */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={privilegesHero} alt="Le Cercle Kalimera" className="w-full h-full object-cover" width={1920} height={1080} />
+          <img
+            src={privilegesHero}
+            alt="Le Cercle Kalimera"
+            className="w-full h-full object-cover"
+            width={1920}
+            height={1080}
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/90" />
         </div>
 
@@ -81,7 +88,8 @@ export default function Privileges() {
           </div>
 
           <p className="text-lg md:text-xl text-primary-foreground/80 leading-relaxed max-w-3xl mx-auto mb-12 animate-fade-up delay-400">
-            Prenez le temps de faire des rencontres authentiques. Aucune empreinte bancaire ne vous sera demandée lors de votre admission.
+            Prenez le temps de faire des rencontres authentiques. Aucune empreinte bancaire ne vous sera demandée lors
+            de votre admission.
           </p>
 
           {/* Stats row */}
@@ -99,7 +107,7 @@ export default function Privileges() {
                 <span className="font-heading text-3xl md:text-4xl text-[hsl(var(--gold-light))] font-medium block mb-2">
                   {stat.value}
                 </span>
-                <p className="text-primary-foreground/90 text-sm md:text-base leading-snug">{stat.label}</p>
+                <p className="text-primary-foreground/90 text-lg md:text-base leading-snug">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -110,21 +118,24 @@ export default function Privileges() {
       <section ref={cardsRef} className="section-luxury bg-secondary">
         <div className="container-main mx-auto px-6 md:px-12">
           <div className="text-center max-w-3xl mx-auto mb-8">
-            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg">
+            <span
+              data-reveal
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
+            >
               Les Adhésions
             </span>
-            <h2 data-reveal data-reveal-delay="150" className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6">
+            <h2
+              data-reveal
+              data-reveal-delay="150"
+              className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6"
+            >
               Choisissez votre cercle
             </h2>
             <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto mb-8" />
           </div>
 
           {/* Free trial highlight banner */}
-          <div
-            data-reveal
-            data-reveal-delay="300"
-            className="max-w-3xl mx-auto mb-16"
-          >
+          <div data-reveal data-reveal-delay="300" className="max-w-3xl mx-auto mb-16">
             <div className="relative overflow-hidden bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--gold-light)/0.08)] border border-[hsl(var(--gold)/0.3)] p-6 md:p-8 text-center">
               <div className="absolute top-0 right-0 w-40 h-40 bg-[hsl(var(--gold)/0.1)] rounded-full blur-2xl" />
               <div className="relative flex flex-col items-center gap-3">
@@ -240,15 +251,31 @@ export default function Privileges() {
 
         <div className="relative z-10 container-main mx-auto px-6 md:px-12">
           <div className="max-w-4xl mx-auto text-center">
-            <span data-reveal className="inline-block px-6 py-2 bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 font-medium tracking-[0.3em] uppercase text-primary-foreground/70 mb-8 text-lg">
+            <span
+              data-reveal
+              className="inline-block px-6 py-2 bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 font-medium tracking-[0.3em] uppercase text-primary-foreground/70 mb-8 text-lg"
+            >
               L'Expertise
             </span>
-            <h2 data-reveal data-reveal-delay="150" className="font-heading text-3xl md:text-4xl lg:text-6xl text-primary-foreground mb-6 leading-tight">
+            <h2
+              data-reveal
+              data-reveal-delay="150"
+              className="font-heading text-3xl md:text-4xl lg:text-6xl text-primary-foreground mb-6 leading-tight"
+            >
               Optimisez vos rencontres
             </h2>
-            <div data-reveal data-reveal-delay="250" className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mx-auto mb-8" />
-            <p data-reveal data-reveal-delay="350" className="text-lg md:text-xl text-primary-foreground/70 leading-relaxed mb-12 max-w-3xl mx-auto">
-              Réservez un entretien privé avec nos experts pour décrypter votre test de personnalité et maximiser la qualité de vos rencontres.
+            <div
+              data-reveal
+              data-reveal-delay="250"
+              className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mx-auto mb-8"
+            />
+            <p
+              data-reveal
+              data-reveal-delay="350"
+              className="text-lg md:text-xl text-primary-foreground/70 leading-relaxed mb-12 max-w-3xl mx-auto"
+            >
+              Réservez un entretien privé avec nos experts pour décrypter votre test de personnalité et maximiser la
+              qualité de vos rencontres.
             </p>
             <div data-reveal data-reveal-delay="450">
               <Link
@@ -279,7 +306,10 @@ export default function Privileges() {
 
         <div className="relative z-10 py-20 md:py-28 px-6 md:px-12">
           <div className="max-w-4xl mx-auto text-center">
-            <div data-reveal className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-[hsl(var(--gold)/0.4)] mb-8">
+            <div
+              data-reveal
+              className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-[hsl(var(--gold)/0.4)] mb-8"
+            >
               <Gift className="w-7 h-7 text-[hsl(var(--gold))]" />
             </div>
 
@@ -289,13 +319,21 @@ export default function Privileges() {
               <PrivilegeBadge variant="dark" />
             </div>
 
-            <h2 data-reveal data-reveal-delay="300" className="font-heading text-3xl md:text-4xl lg:text-5xl text-primary-foreground mb-4 leading-tight">
+            <h2
+              data-reveal
+              data-reveal-delay="300"
+              className="font-heading text-3xl md:text-4xl lg:text-5xl text-primary-foreground mb-4 leading-tight"
+            >
               Une personne de votre entourage mérite
               <br />
               de faire de belles rencontres ?
             </h2>
 
-            <p data-reveal data-reveal-delay="450" className="font-heading text-2xl text-[hsl(var(--gold-light))] mb-10 md:text-4xl">
+            <p
+              data-reveal
+              data-reveal-delay="450"
+              className="font-heading text-2xl text-[hsl(var(--gold-light))] mb-10 md:text-4xl"
+            >
               Invitez-la en lui offrant 3 mois gratuits.
             </p>
 
@@ -315,10 +353,17 @@ export default function Privileges() {
       <section ref={reassuranceRef} className="section-luxury bg-background">
         <div className="container-main mx-auto px-6 md:px-12">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg">
+            <span
+              data-reveal
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
+            >
               Sécurité & Sérénité
             </span>
-            <h2 data-reveal data-reveal-delay="150" className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6">
+            <h2
+              data-reveal
+              data-reveal-delay="150"
+              className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6"
+            >
               Votre tranquillité d'esprit
             </h2>
             <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto" />
@@ -350,7 +395,11 @@ export default function Privileges() {
             Prêt à rejoindre le Cercle ?
           </h2>
           <div data-reveal data-reveal-delay="150" className="divider-gold mx-auto mb-8" />
-          <p data-reveal data-reveal-delay="250" className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10">
+          <p
+            data-reveal
+            data-reveal-delay="250"
+            className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10"
+          >
             Profitez de vos 90 jours de découverte sans engagement.
           </p>
           <div data-reveal data-reveal-delay="350">
