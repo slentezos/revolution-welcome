@@ -113,9 +113,10 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Bloc 2 — Les Adhésions (Design Palace Validé) */}
+      {/* Bloc 2 — Les Adhésions */}
       <section ref={cardsRef} className="section-luxury bg-[#FCF9F5] py-24 md:py-32">
         <div className="container-main mx-auto px-4 md:px-8">
+          {/* Titre et Signature 3 mois (Plus grand, plus lisible, plus autoritaire) */}
           <div className="text-center max-w-4xl mx-auto mb-16 md:mb-20">
             <h2 data-reveal className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-8">
               Choisissez votre cercle
@@ -128,8 +129,8 @@ export default function Privileges() {
             >
               <div className="h-px w-16 bg-gradient-to-r from-transparent to-[hsl(var(--gold))] hidden md:block" />
               <div className="flex items-center gap-3">
-                <Gift className="w-5 h-5 text-[hsl(var(--gold))]" />
-                <p className="text-xl md:text-xl text-[hsl(var(--gold))] font-serif italic tracking-wide">
+                <Gift className="w-6 h-6 text-[hsl(var(--gold))]" />
+                <p className="text-xl md:text-2xl text-foreground font-heading tracking-wide">
                   Vos 3 premiers mois gracieusement offerts, sans carte bancaire.
                 </p>
               </div>
@@ -137,6 +138,7 @@ export default function Privileges() {
             </div>
           </div>
 
+          {/* Les Cartes */}
           <div className="grid md:grid-cols-2 gap-6 lg:gap-10 max-w-5xl mx-auto items-center">
             {/* Carte Cercle Privé */}
             <div
@@ -151,12 +153,18 @@ export default function Privileges() {
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground">Cercle Privé</h3>
               </div>
 
+              {/* Nouveau Pricing : Barré élégant + 0€ + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-slate-100">
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="font-heading text-5xl text-foreground">50€</span>
-                  <span className="text-muted-foreground">/mois</span>
+                <div className="flex items-baseline gap-3 mb-2">
+                  <span className="font-heading text-3xl text-slate-300 line-through decoration-slate-300">50€</span>
+                  <span className="font-heading text-6xl text-foreground">0€</span>
                 </div>
-                <p className="text-lg text-muted-foreground uppercase tracking-widest">ou 120€ pour 3 mois</p>
+                <p className="text-[12px] text-foreground font-bold tracking-widest uppercase mb-1">
+                  Pendant 3 mois, sans carte.
+                </p>
+                <p className="text-[11px] text-muted-foreground tracking-widest uppercase">
+                  Puis 50€/mois (ou 120€ / 3 mois)
+                </p>
               </div>
 
               <ul className="space-y-5 mb-12 flex-1">
@@ -170,19 +178,19 @@ export default function Privileges() {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full border border-primary text-primary py-4 text-lg uppercase tracking-widest font-medium transition-all duration-300 hover:bg-primary hover:text-white"
+                className="w-full border border-primary text-primary py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-primary hover:text-white"
               >
                 Demander mon admission
               </button>
             </div>
 
-            {/* Carte Discrétion Absolue */}
+            {/* Carte Discrétion Absolue (VIP) */}
             <div
               data-reveal
               data-reveal-delay="300"
               className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 transition-all duration-500 hover:border-[hsl(var(--gold)/0.6)] flex flex-col h-full md:scale-105 z-10"
             >
-              <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 text-lg font-bold tracking-[0.2em] uppercase rounded-b-sm">
+              <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 text-xs font-bold tracking-[0.2em] uppercase rounded-b-sm">
                 Privilège
               </div>
 
@@ -193,12 +201,16 @@ export default function Privileges() {
                 <h3 className="font-heading text-2xl md:text-3xl text-white">Discrétion Absolue</h3>
               </div>
 
+              {/* Nouveau Pricing VIP : Barré élégant + 0€ Or + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-white/10">
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="font-heading text-5xl text-white">65€</span>
-                  <span className="text-white/60">/mois</span>
+                <div className="flex items-baseline gap-3 mb-2">
+                  <span className="font-heading text-3xl text-white/30 line-through decoration-white/30">65€</span>
+                  <span className="font-heading text-6xl text-[hsl(var(--gold))]">0€</span>
                 </div>
-                <p className="text-lg text-[hsl(var(--gold-light))] uppercase tracking-widest">ou 150€ pour 3 mois</p>
+                <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
+                  Pendant 3 mois, sans carte.
+                </p>
+                <p className="text-[11px] text-white/50 tracking-widest uppercase">Puis 65€/mois (ou 150€ / 3 mois)</p>
               </div>
 
               <ul className="space-y-5 mb-12 flex-1">
@@ -212,7 +224,7 @@ export default function Privileges() {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-lg uppercase tracking-widest font-bold transition-all duration-300 hover:bg-white hover:text-primary"
+                className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold transition-all duration-300 hover:bg-white hover:text-primary"
               >
                 Demander mon admission VIP
               </button>
