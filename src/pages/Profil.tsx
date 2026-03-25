@@ -8,7 +8,7 @@ import ProfileInfoTab from "@/components/profile/ProfileInfoTab";
 import ProfileQuestionnairesTab from "@/components/profile/ProfileQuestionnairesTab";
 import ProfileSubscriptionTab from "@/components/profile/ProfileSubscriptionTab";
 import ProfileTermsTab from "@/components/profile/ProfileTermsTab";
-import ProfileContactTab from "@/components/profile/ProfileContactTab";
+import ContactMemberContent from "@/components/profile/ContactMemberContent";
 import ProfileGiftTab from "@/components/profile/ProfileGiftTab";
 
 const tabs = [
@@ -148,7 +148,7 @@ export default function Profil() {
         <ProfileSubscriptionTab firstName={profile?.first_name} />
         }
         {activeTab === "conditions" && <ProfileTermsTab />}
-        {activeTab === "contact" && <ProfileContactTab />}
+        {activeTab === "contact" && <ContactMemberContent />}
         {activeTab === "offrir" && <ProfileGiftTab />}
       </div>
     </Layout>);
