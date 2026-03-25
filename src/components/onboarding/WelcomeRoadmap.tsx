@@ -1,17 +1,6 @@
 import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import {
-  Star,
-  Phone,
-  Check,
-  HelpCircle,
-  Camera,
-  ClipboardList,
-  Brain,
-  ArrowDown,
-  ArrowRight,
-  ArrowLeft,
-} from "lucide-react";
+import { Star, Phone, Check, HelpCircle, Camera, ClipboardList, Brain, ArrowDown } from "lucide-react";
 
 /* ─── ANIMATION DOUCE PERSONNALISÉE ─── */
 const slowFloatAnimation = `
@@ -40,7 +29,7 @@ const TABS = [
 ];
 
 /* ═══════════════════════════════════════════════
-   PRICING MODAL
+   PRICING MODAL (Texte mis à jour & Ordonné)
    ═══════════════════════════════════════════════ */
 
 function PricingModal({
@@ -161,7 +150,7 @@ function PricingModal({
 }
 
 /* ═══════════════════════════════════════════════
-   STEP CARD (Avec Navigation Latérale Élégante)
+   STEP CARD (Design "Split-Screen" 100vh sans scroll)
    ═══════════════════════════════════════════════ */
 
 function StepCard({
@@ -171,11 +160,6 @@ function StepCard({
   description,
   highlights,
   nextSteps,
-  prevLabel,
-  onPrev,
-  nextLabel,
-  onNext,
-  isLast,
 }: {
   number: string;
   title: string;
@@ -183,89 +167,58 @@ function StepCard({
   description: string;
   highlights: string[];
   nextSteps: string[];
-  prevLabel?: string;
-  onPrev?: () => void;
-  nextLabel: string;
-  onNext: () => void;
-  isLast?: boolean;
 }) {
   return (
-    <section className="section-luxury">
-      <div className="max-w-4xl mx-auto px-6">
-        <div className="text-center mb-12">
-          <span className="font-heading text-[120px] leading-none text-muted-foreground/10 block select-none">
-            {number}
-          </span>
-          <h2 className="font-heading text-3xl sm:text-4xl text-foreground -mt-10">{title}</h2>
-          <p className="text-[hsl(var(--gold))] font-medium mt-3 text-2xl">{duration}</p>
-          <div className="divider-gold mx-auto mt-6" />
-        </div>
+    // min-h-[calc(100vh-80px)] garantit que l'étape prend exactement la hauteur de l'écran (moins la barre de navigation)
+    <section className="relative w-full min-h-[calc(100vh-80px)] flex items-center py-16 md:py-0 border-b border-border/40">
+      <div className="max-w-6xl mx-auto px-6 md:px-16 w-full">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* COLONNE GAUCHE : Storytelling (Titre et Description) */}
+          <div className="relative z-10">
+            {/* Le grand numéro passe en arrière-plan (filigrane) pour ne pas casser la hauteur */}
+            <span className="absolute -top-16 -left-10 font-heading text-[160px] leading-none text-muted-foreground/5 select-none -z-10">
+              {number}
+            </span>
 
-        <p className="leading-relaxed text-center max-w-2xl mx-auto mb-12 font-normal text-[#232a39] text-3xl">
-          {description}
-        </p>
+            <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-foreground mb-4 leading-tight">
+              {title}
+            </h2>
+            <p className="text-[hsl(var(--gold))] font-medium text-xl sm:text-2xl mb-8 flex items-center gap-2">
+              <span className="text-2xl">⏱️</span> {duration}
+            </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
-          {highlights.map((h, i) => (
-            <div key={i} className="flex items-start gap-4 p-5 bg-card border border-border">
-              <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-1" />
-              <span className="leading-relaxed text-xl text-[#232a39] font-medium">{h}</span>
-            </div>
-          ))}
-        </div>
+            <div className="w-16 h-px bg-[hsl(var(--gold))] mb-8" />
 
-        <div className="border border-border p-8 sm:p-10 mb-12 bg-[#b27615]">
-          <h3 className="font-heading mb-6 text-2xl font-semibold text-primary-foreground">
-            Que se passe-t-il ensuite ?
-          </h3>
-          <ul className="space-y-4">
-            {nextSteps.map((s, i) => (
-              <li key={i} className="flex items-start gap-3">
-                <span className="text-[hsl(var(--gold))] font-bold mt-0.5">→</span>
-                <span className="leading-relaxed text-xl text-secondary">{s}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* NAVIGATION GAUCHE / DROITE */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 w-full pt-8">
-          {/* Bouton Précédent (Gauche) */}
-          <div className="flex-1 flex justify-start w-full sm:w-auto">
-            {onPrev && prevLabel ? (
-              <button onClick={onPrev} className="flex items-center gap-3 group text-left">
-                <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-700 shrink-0">
-                  <ArrowLeft className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
-                </div>
-                <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-xl sm:text-2xl">
-                  {prevLabel}
-                </span>
-              </button>
-            ) : (
-              <div />
-            )}
+            <p className="leading-relaxed text-[#232a39] text-xl sm:text-2xl font-light max-w-lg">{description}</p>
           </div>
 
-          {/* Bouton Suivant (Droite) */}
-          <div className="flex-1 flex justify-end w-full sm:w-auto">
-            {isLast ? (
-              <button
-                onClick={onNext}
-                className="btn-primary px-10 py-4 text-xl shadow-xl hover:scale-105 transition-transform flex items-center gap-3"
-              >
-                {nextLabel}
-                <ArrowRight className="h-5 w-5" />
-              </button>
-            ) : (
-              <button onClick={onNext} className="flex items-center gap-3 group text-right">
-                <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-xl sm:text-2xl">
-                  {nextLabel}
-                </span>
-                <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-700 shrink-0">
-                  <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+          {/* COLONNE DROITE : Action (Highlights et Next Steps) */}
+          <div className="flex flex-col gap-8 z-10">
+            {/* Grille de réassurance (plus compacte et lisible) */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {highlights.map((h, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-3 p-5 bg-white border border-slate-200 shadow-sm rounded-sm"
+                >
+                  <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                  <span className="leading-snug text-lg text-[#232a39] font-medium">{h}</span>
                 </div>
-              </button>
-            )}
+              ))}
+            </div>
+
+            {/* Bloc Marron (Remonté, impossible à rater) */}
+            <div className="border border-[hsl(var(--gold)/0.2)] p-8 sm:p-10 bg-[#b27615] rounded-sm shadow-md">
+              <h3 className="font-heading mb-6 text-2xl font-semibold text-white">Que se passe-t-il ensuite ?</h3>
+              <ul className="space-y-4">
+                {nextSteps.map((s, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="text-[hsl(var(--gold-light))] font-bold mt-1">→</span>
+                    <span className="leading-relaxed text-lg text-white/95">{s}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -285,14 +238,12 @@ export default function WelcomeRoadmap({
   onStartConcierge: () => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const step1Ref = useRef<HTMLDivElement>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
   const step3Ref = useRef<HTMLDivElement>(null);
   const step4Ref = useRef<HTMLDivElement>(null);
 
   const refs = [step1Ref, step2Ref, step3Ref, step4Ref];
-
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -308,7 +259,7 @@ export default function WelcomeRoadmap({
             Bienvenue sur Kalimera
           </span>
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
-            Votre parcours vers <br /> de belles rencontres
+            Votre parcours en 4 étapes vers <br /> de belles rencontres
           </h1>
           <div className="divider-gold mx-auto mb-8" />
           <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
@@ -318,6 +269,7 @@ export default function WelcomeRoadmap({
             peuvent faire toute la différence demain.
           </p>
 
+          {/* BOUTON INSÉRÉ EXACTEMENT ENTRE LE TEXTE ET LA NAV */}
           <div className="flex justify-center pb-16 animate-slow-float">
             <button onClick={() => scrollTo(step1Ref)} className="flex flex-col items-center gap-3 group">
               <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-3xl">
@@ -350,7 +302,7 @@ export default function WelcomeRoadmap({
         </div>
       </nav>
 
-      {/* ─── ÉTAPES ─── */}
+      {/* ─── ÉTAPES (DÉTAILLÉES SANS '...') ─── */}
       <div ref={step1Ref}>
         <StepCard
           number="01"
@@ -368,7 +320,6 @@ export default function WelcomeRoadmap({
             "Elles nous permettent de vous proposer des profils compatibles.",
             "Vous passez ensuite à la présentation de vos photos et vidéo.",
           ]}
-          nextLabel="Étape 2"
           onNext={() => scrollTo(step2Ref)}
         />
       </div>
@@ -390,9 +341,6 @@ export default function WelcomeRoadmap({
             "Ils permettent aux autres de mieux vous découvrir.",
             "Vous poursuivez ensuite avec la construction de votre profil.",
           ]}
-          prevLabel="Étape 1"
-          onPrev={() => scrollTo(step1Ref)}
-          nextLabel="Étape 3"
           onNext={() => scrollTo(step3Ref)}
         />
       </div>
@@ -414,9 +362,6 @@ export default function WelcomeRoadmap({
             "Il est croisé avec les profils existants.",
             "Dernière étape : le test de personnalité.",
           ]}
-          prevLabel="Étape 2"
-          onPrev={() => scrollTo(step2Ref)}
-          nextLabel="Étape 4"
           onNext={() => scrollTo(step4Ref)}
         />
       </div>
@@ -438,9 +383,7 @@ export default function WelcomeRoadmap({
             "Il complète votre portrait unique.",
             "Votre espace personnel s'ouvre enfin !",
           ]}
-          prevLabel="Étape 3"
-          onPrev={() => scrollTo(step3Ref)}
-          nextLabel="Choisir mon mode d'inscription"
+          nextLabel="Choisir mon mode d'inscription ➡️"
           onNext={() => setIsModalOpen(true)}
           isLast
         />
