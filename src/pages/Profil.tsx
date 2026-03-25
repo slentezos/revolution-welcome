@@ -148,7 +148,7 @@ export default function Profil() {
         <ProfileSubscriptionTab firstName={profile?.first_name} />
         }
         {activeTab === "conditions" && <ProfileTermsTab />}
-        {activeTab === "contact" && <ProfileContactTab />}
+        {activeTab === "contact" && <ContactMemberContent />}
         {activeTab === "offrir" && <ProfileGiftTab />}
       </div>
     </Layout>);
