@@ -30,6 +30,7 @@ import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
 import CGU from "./pages/CGU";
 import SignalerContenu from "./pages/SignalerContenu";
 import ContactMember from "./pages/ContactMember";
+import Privileges from "./pages/Privileges";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,7 @@ const App = () => (
           <Route path="/cgu" element={<CGU />} />
           <Route path="/signaler-contenu" element={<SignalerContenu />} />
           <Route path="/contact-prive" element={<ContactMember />} />
+          <Route path="/privileges" element={<Privileges />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
