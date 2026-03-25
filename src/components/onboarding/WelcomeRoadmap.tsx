@@ -1,6 +1,17 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Star, Phone, Check, HelpCircle, Camera, ClipboardList, Brain, ArrowDown } from "lucide-react";
+import {
+  Star,
+  Phone,
+  Check,
+  HelpCircle,
+  Camera,
+  ClipboardList,
+  Brain,
+  ArrowDown,
+  ArrowRight,
+  ArrowLeft,
+} from "lucide-react";
 
 /* ─── ANIMATION DOUCE PERSONNALISÉE ─── */
 const slowFloatAnimation = `
@@ -29,7 +40,7 @@ const TABS = [
 ];
 
 /* ═══════════════════════════════════════════════
-   PRICING MODAL (Texte mis à jour & Ordonné)
+   PRICING MODAL
    ═══════════════════════════════════════════════ */
 
 function PricingModal({
@@ -53,7 +64,7 @@ function PricingModal({
         if (!v) setView("story");
       }}
     >
-      <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col">
+      <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
         {view === "story" ? (
           <div className="p-10 sm:p-20 text-center space-y-8 flex flex-col items-center justify-center min-h-[500px] animate-in fade-in duration-500">
             <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-xl">
@@ -83,7 +94,6 @@ function PricingModal({
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 pb-6 flex-1 overflow-y-auto">
-              {/* MODE AUTONOME */}
               <div className="bg-card border border-border p-8 flex flex-col h-full">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-10 h-10 bg-secondary flex items-center justify-center">
@@ -106,7 +116,6 @@ function PricingModal({
                   Je débute à mon rythme (Inclus)
                 </button>
               </div>
-              {/* SERVICE CONCIERGERIE */}
               <div className="bg-primary text-primary-foreground p-8 flex flex-col h-full relative shadow-2xl">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
@@ -150,7 +159,7 @@ function PricingModal({
 }
 
 /* ═══════════════════════════════════════════════
-   STEP CARD
+   STEP CARD (Epuré, la navigation est maintenant globale)
    ═══════════════════════════════════════════════ */
 
 function StepCard({
@@ -160,9 +169,6 @@ function StepCard({
   description,
   highlights,
   nextSteps,
-  nextLabel,
-  onNext,
-  isLast,
 }: {
   number: string;
   title: string;
@@ -170,9 +176,6 @@ function StepCard({
   description: string;
   highlights: string[];
   nextSteps: string[];
-  nextLabel?: string;
-  onNext: () => void;
-  isLast?: boolean;
 }) {
   return (
     <section className="section-luxury">
@@ -185,9 +188,11 @@ function StepCard({
           <p className="text-[hsl(var(--gold))] font-medium mt-3 text-2xl">{duration}</p>
           <div className="divider-gold mx-auto mt-6" />
         </div>
+
         <p className="leading-relaxed text-center max-w-2xl mx-auto mb-12 font-normal text-[#232a39] text-3xl">
           {description}
         </p>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
           {highlights.map((h, i) => (
             <div key={i} className="flex items-start gap-4 p-5 bg-card border border-border">
@@ -196,7 +201,8 @@ function StepCard({
             </div>
           ))}
         </div>
-        <div className="border border-border p-8 sm:p-10 mb-12 bg-[#b27615]">
+
+        <div className="border border-border p-8 sm:p-10 mb-8 bg-[#b27615]">
           <h3 className="font-heading mb-6 text-2xl font-semibold text-primary-foreground">
             Que se passe-t-il ensuite ?
           </h3>
@@ -208,14 +214,6 @@ function StepCard({
               </li>
             ))}
           </ul>
-        </div>
-        <div className="text-center">
-          <button
-            onClick={onNext}
-            className={`${isLast ? "btn-primary px-14 py-5 text-xl shadow-xl hover:scale-105 transition-transform" : "text-foreground hover:text-[hsl(var(--gold))] text-lg font-medium underline underline-offset-8 decoration-[hsl(var(--gold))]/40 hover:decoration-[hsl(var(--gold))] transition-colors"}`}
-          >
-            {nextLabel || `Découvrir l'Étape suivante ↓`}
-          </button>
         </div>
       </div>
     </section>
@@ -234,18 +232,57 @@ export default function WelcomeRoadmap({
   onStartConcierge: () => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0); // 0 = hero, 1-4 = steps
+
   const step1Ref = useRef<HTMLDivElement>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
   const step3Ref = useRef<HTMLDivElement>(null);
   const step4Ref = useRef<HTMLDivElement>(null);
 
   const refs = [step1Ref, step2Ref, step3Ref, step4Ref];
+
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Petit décalage pour ne pas que la navbar couvre le titre
+    const y = (ref.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 100;
+    window.scrollTo({ top: y, behavior: "smooth" });
   };
 
+  // Le "Scroll Spy" pour détecter où est l'utilisateur
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === step1Ref.current) setActiveStep(1);
+            if (entry.target === step2Ref.current) setActiveStep(2);
+            if (entry.target === step3Ref.current) setActiveStep(3);
+            if (entry.target === step4Ref.current) setActiveStep(4);
+          }
+        });
+      },
+      { threshold: 0.3 }, // Déclenche quand 30% du bloc est visible
+    );
+
+    const r1 = step1Ref.current;
+    const r2 = step2Ref.current;
+    const r3 = step3Ref.current;
+    const r4 = step4Ref.current;
+
+    if (r1) observer.observe(r1);
+    if (r2) observer.observe(r2);
+    if (r3) observer.observe(r3);
+    if (r4) observer.observe(r4);
+
+    return () => {
+      if (r1) observer.unobserve(r1);
+      if (r2) observer.unobserve(r2);
+      if (r3) observer.unobserve(r3);
+      if (r4) observer.unobserve(r4);
+    };
+  }, []);
+
   return (
-    <div>
+    <div className="relative">
       <style>{slowFloatAnimation}</style>
 
       {/* ─── HERO ─── */}
@@ -255,7 +292,7 @@ export default function WelcomeRoadmap({
             Bienvenue sur Kalimera
           </span>
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
-            Votre parcours en 4 étapes vers <br /> de belles rencontres
+            Votre parcours vers <br /> de belles rencontres
           </h1>
           <div className="divider-gold mx-auto mb-8" />
           <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
@@ -265,10 +302,9 @@ export default function WelcomeRoadmap({
             peuvent faire toute la différence demain.
           </p>
 
-          {/* BOUTON INSÉRÉ EXACTEMENT ENTRE LE TEXTE ET LA NAV */}
           <div className="flex justify-center pb-16 animate-slow-float">
             <button onClick={() => scrollTo(step1Ref)} className="flex flex-col items-center gap-3 group">
-              <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-3xl">
+              <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-2xl sm:text-3xl">
                 Découvrir votre parcours pas à pas
               </span>
               <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-700">
@@ -284,21 +320,27 @@ export default function WelcomeRoadmap({
         <div className="flex max-w-4xl mx-auto">
           {TABS.map((tab, i) => {
             const Icon = tab.icon;
+            const isActive = activeStep === i + 1;
             return (
               <button
                 key={tab.id}
                 onClick={() => scrollTo(refs[i])}
-                className="flex-1 flex items-center justify-center gap-2 py-4 text-muted-foreground hover:text-foreground transition-colors border-b-2 border-transparent hover:border-[hsl(var(--gold))]"
+                className={`flex-1 flex items-center justify-center gap-2 py-4 transition-colors border-b-2 ${
+                  isActive
+                    ? "border-[hsl(var(--gold))] text-foreground"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
               >
-                <Icon className="h-4 w-4" />
-                <span className="font-medium tracking-wide text-3xl">{tab.label}</span>
+                <Icon className={`h-4 w-4 ${isActive ? "text-[hsl(var(--gold))]" : ""}`} />
+                <span className="font-medium tracking-wide text-xl sm:text-2xl hidden md:inline">{tab.label}</span>
+                <span className="font-medium tracking-wide text-lg sm:text-xl md:hidden">{i + 1}</span>
               </button>
             );
           })}
         </div>
       </nav>
 
-      {/* ─── ÉTAPES (DÉTAILLÉES SANS '...') ─── */}
+      {/* ─── ÉTAPES ─── */}
       <div ref={step1Ref}>
         <StepCard
           number="01"
@@ -316,7 +358,6 @@ export default function WelcomeRoadmap({
             "Elles nous permettent de vous proposer des profils compatibles.",
             "Vous passez ensuite à la présentation de vos photos et vidéo.",
           ]}
-          onNext={() => scrollTo(step2Ref)}
         />
       </div>
 
@@ -337,7 +378,6 @@ export default function WelcomeRoadmap({
             "Ils permettent aux autres de mieux vous découvrir.",
             "Vous poursuivez ensuite avec la construction de votre profil.",
           ]}
-          onNext={() => scrollTo(step3Ref)}
         />
       </div>
 
@@ -358,11 +398,10 @@ export default function WelcomeRoadmap({
             "Il est croisé avec les profils existants.",
             "Dernière étape : le test de personnalité.",
           ]}
-          onNext={() => scrollTo(step4Ref)}
         />
       </div>
 
-      <div ref={step4Ref}>
+      <div ref={step4Ref} className="pb-32">
         <StepCard
           number="04"
           title="Le Test de Personnalité"
@@ -379,10 +418,55 @@ export default function WelcomeRoadmap({
             "Il complète votre portrait unique.",
             "Votre espace personnel s'ouvre enfin !",
           ]}
-          nextLabel="Choisir mon mode d'inscription ➡️"
-          onNext={() => setIsModalOpen(true)}
-          isLast
         />
+      </div>
+
+      {/* ─── BOUTONS FLOTTANTS (NAVIGATION GLOBALE) ─── */}
+
+      {/* Bouton Gauche (Précédent) */}
+      <div
+        className={`fixed top-1/2 -translate-y-1/2 left-4 md:left-8 z-50 transition-all duration-500 ${activeStep > 1 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[-20px]"}`}
+      >
+        <button
+          onClick={() => scrollTo(refs[activeStep - 2])}
+          className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pr-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
+        >
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
+            <ArrowLeft className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+          </div>
+          <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep - 1}</span>
+        </button>
+      </div>
+
+      {/* Bouton Droite (Suivant ou Fin) */}
+      <div
+        className={`fixed top-1/2 -translate-y-1/2 right-4 md:right-8 z-50 transition-all duration-500 ${activeStep > 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[20px]"}`}
+      >
+        {/* Affiché pour Etape 1, 2, 3 */}
+        {activeStep < 4 && (
+          <button
+            onClick={() => scrollTo(refs[activeStep])}
+            className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
+          >
+            <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep + 1}</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
+              <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+            </div>
+          </button>
+        )}
+
+        {/* Affiché pour Etape 4 (Action Finale) */}
+        {activeStep === 4 && (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-4 group bg-[hsl(var(--gold))] p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[hsl(var(--gold))] hover:brightness-110 transition-all"
+          >
+            <span className="hidden md:block font-heading text-xl text-primary font-bold mt-1">Choisir mon mode</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center shrink-0">
+              <ArrowRight className="h-5 w-5 text-primary" />
+            </div>
+          </button>
+        )}
       </div>
 
       <PricingModal
