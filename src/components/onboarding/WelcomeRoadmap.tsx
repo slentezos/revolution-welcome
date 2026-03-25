@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Star, Phone, Check, HelpCircle, Camera, ClipboardList, Brain, ArrowDown } from "lucide-react";
+import { Star, Phone, Check, HelpCircle, Camera, ClipboardList, Brain, ArrowDown, ArrowRight, ArrowLeft } from "lucide-react";
 
 /* ─── ANIMATION DOUCE PERSONNALISÉE ─── */
 const slowFloatAnimation = `
@@ -29,7 +29,7 @@ const TABS = [
 ];
 
 /* ═══════════════════════════════════════════════
-   PRICING MODAL (Texte mis à jour & Ordonné)
+   PRICING MODAL
    ═══════════════════════════════════════════════ */
 
 function PricingModal({
@@ -150,7 +150,7 @@ function PricingModal({
 }
 
 /* ═══════════════════════════════════════════════
-   STEP CARD
+   STEP CARD (Avec Navigation Latérale Élégante)
    ═══════════════════════════════════════════════ */
 
 function StepCard({
@@ -160,6 +160,8 @@ function StepCard({
   description,
   highlights,
   nextSteps,
+  prevLabel,
+  onPrev,
   nextLabel,
   onNext,
   isLast,
@@ -170,7 +172,9 @@ function StepCard({
   description: string;
   highlights: string[];
   nextSteps: string[];
-  nextLabel?: string;
+  prevLabel?: string;
+  onPrev?: () => void;
+  nextLabel: string;
   onNext: () => void;
   isLast?: boolean;
 }) {
@@ -185,9 +189,11 @@ function StepCard({
           <p className="text-[hsl(var(--gold))] font-medium mt-3 text-2xl">{duration}</p>
           <div className="divider-gold mx-auto mt-6" />
         </div>
+        
         <p className="leading-relaxed text-center max-w-2xl mx-auto mb-12 font-normal text-[#232a39] text-3xl">
           {description}
         </p>
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
           {highlights.map((h, i) => (
             <div key={i} className="flex items-start gap-4 p-5 bg-card border border-border">
@@ -196,6 +202,7 @@ function StepCard({
             </div>
           ))}
         </div>
+        
         <div className="border border-border p-8 sm:p-10 mb-12 bg-[#b27615]">
           <h3 className="font-heading mb-6 text-2xl font-semibold text-primary-foreground">
             Que se passe-t-il ensuite ?
@@ -209,13 +216,46 @@ function StepCard({
             ))}
           </ul>
         </div>
-        <div className="text-center">
-          <button
-            onClick={onNext}
-            className={`${isLast ? "btn-primary px-14 py-5 text-xl shadow-xl hover:scale-105 transition-transform" : "text-foreground hover:text-[hsl(var(--gold))] text-lg font-medium underline underline-offset-8 decoration-[hsl(var(--gold))]/40 hover:decoration-[hsl(var(--gold))] transition-colors"}`}
-          >
-            {nextLabel || `Découvrir l'Étape suivante ↓`}
-          </button>
+
+        {/* NAVIGATION GAUCHE / DROITE */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 w-full pt-8">
+          
+          {/* Bouton Précédent (Gauche) */}
+          <div className="flex-1 flex justify-start w-full sm:w-auto">
+            {onPrev && prevLabel ? (
+              <button onClick={onPrev} className="flex items-center gap-3 group text-left">
+                <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-700 shrink-0">
+                  <ArrowLeft className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+                </div>
+                <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-xl sm:text-2xl">
+                  {prevLabel}
+                </span>
+              </button>
+            ) : <div />}
+          </div>
+
+          {/* Bouton Suivant (Droite) */}
+          <div className="flex-1 flex justify-end w-full sm:w-auto">
+            {isLast ? (
+              <button
+                onClick={onNext}
+                className="btn-primary px-10 py-4 text-xl shadow-xl hover:scale-105 transition-transform flex items-center gap-3"
+              >
+                {nextLabel}
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            ) : (
+              <button onClick={onNext} className="flex items-center gap-3 group text-right">
+                <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-xl sm:text-2xl">
+                  {nextLabel}
+                </span>
+                <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-700 shrink-0">
+                  <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+                </div>
+              </button>
+            )}
+          </div>
+
         </div>
       </div>
     </section>
@@ -234,12 +274,14 @@ export default function WelcomeRoadmap({
   onStartConcierge: () => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
   const step1Ref = useRef<HTMLDivElement>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
   const step3Ref = useRef<HTMLDivElement>(null);
   const step4Ref = useRef<HTMLDivElement>(null);
 
   const refs = [step1Ref, step2Ref, step3Ref, step4Ref];
+  
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -265,7 +307,6 @@ export default function WelcomeRoadmap({
             peuvent faire toute la différence demain.
           </p>
 
-          {/* BOUTON INSÉRÉ EXACTEMENT ENTRE LE TEXTE ET LA NAV */}
           <div className="flex justify-center pb-16 animate-slow-float">
             <button onClick={() => scrollTo(step1Ref)} className="flex flex-col items-center gap-3 group">
               <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-3xl">
@@ -298,7 +339,7 @@ export default function WelcomeRoadmap({
         </div>
       </nav>
 
-      {/* ─── ÉTAPES (DÉTAILLÉES SANS '...') ─── */}
+      {/* ─── ÉTAPES ─── */}
       <div ref={step1Ref}>
         <StepCard
           number="01"
@@ -316,6 +357,7 @@ export default function WelcomeRoadmap({
             "Elles nous permettent de vous proposer des profils compatibles.",
             "Vous passez ensuite à la présentation de vos photos et vidéo.",
           ]}
+          nextLabel="Étape 2"
           onNext={() => scrollTo(step2Ref)}
         />
       </div>
@@ -337,6 +379,9 @@ export default function WelcomeRoadmap({
             "Ils permettent aux autres de mieux vous découvrir.",
             "Vous poursuivez ensuite avec la construction de votre profil.",
           ]}
+          prevLabel="Étape 1"
+          onPrev={() => scrollTo(step1Ref)}
+          nextLabel="Étape 3"
           onNext={() => scrollTo(step3Ref)}
         />
       </div>
@@ -358,6 +403,9 @@ export default function WelcomeRoadmap({
             "Il est croisé avec les profils existants.",
             "Dernière étape : le test de personnalité.",
           ]}
+          prevLabel="Étape 2"
+          onPrev={() => scrollTo(step2Ref)}
+          nextLabel="Étape 4"
           onNext={() => scrollTo(step4Ref)}
         />
       </div>
@@ -379,7 +427,9 @@ export default function WelcomeRoadmap({
             "Il complète votre portrait unique.",
             "Votre espace personnel s'ouvre enfin !",
           ]}
-          nextLabel="Choisir mon mode d'inscription ➡️"
+          prevLabel="Étape 3"
+          onPrev={() => scrollTo(step3Ref)}
+          nextLabel="Choisir mon mode d'inscription"
           onNext={() => setIsModalOpen(true)}
           isLast
         />
@@ -394,3 +444,4 @@ export default function WelcomeRoadmap({
     </div>
   );
 }
+```
