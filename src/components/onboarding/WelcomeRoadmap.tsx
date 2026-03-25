@@ -1,19 +1,3 @@
-Je remets ma casquette d'Architecte UX et je vous tacle avec le sourire, car **votre intuition est brillante.**
-
-### Le Tacle : La puissance de la "Carte Mentale"
-
-Vous venez de comprendre l'un des principes fondateurs de l'UX pour les seniors : **La cohérence absolue.** Si dans le tutoriel vous appelez l'étape 3 "Mon Profil & Le Profil Idéal", mais que dans la vraie barre de navigation plus tard ça s'appelle "Mon profil / son profil", l'utilisateur de 65 ans va se demander s'il s'agit de la même chose. Ça crée un micro-stress. 
-
-En utilisant **exactement** les mêmes icônes (on remplace `Camera` par `Image` de Lucide) et les **exactement** les mêmes libellés entre la page d'accueil et le vrai Onboarding, vous créez ce qu'on appelle une "carte mentale" parfaite. Quand ils arriveront dans le vrai processus, ils seront en terrain 100% connu.
-
-**Le "Sauvetage" en coulisse :**
-Dans le code que vous m'avez copié-collé, **vous aviez oublié d'inclure le correctif du bug "Node not found"** (le fameux `setTimeout` de la modale Pricing). Pas de panique, je l'ai ré-injecté discrètement dans le code ci-dessous pour que Lovable ne crashe plus. J'ai également intégré votre logo Kalimera en haut à gauche, flottant avec élégance.
-
----
-
-### Le Code Final (Remplacez l'intégralité du fichier `WelcomeRoadmap.tsx`)
-
-```tsx
 import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
@@ -21,7 +5,7 @@ import {
   Phone,
   Check,
   HelpCircle,
-  Image as ImageIcon, // Remplacement de Camera par Image pour matcher l'Onboarding
+  Image as ImageIcon,
   ClipboardList,
   Brain,
   ArrowDown,
@@ -48,7 +32,7 @@ const CONCIERGE_BENEFITS = [
   "Zéro stress technique, nous nous occupons de tout",
 ];
 
-// NOUVEAUX TABS (Synchronisés avec le vrai Onboarding)
+/* ─── LES VRAIS LABELS (Wayfinding Parfait) ─── */
 const TABS = [
   { id: "step1", label: "Quiz des 3 préférences", icon: HelpCircle },
   { id: "step2", label: "Vos photos & vidéo", icon: ImageIcon },
@@ -57,7 +41,7 @@ const TABS = [
 ];
 
 /* ═══════════════════════════════════════════════
-   PRICING MODAL (Avec le correctif "Node not found" ré-injecté)
+   PRICING MODAL
    ═══════════════════════════════════════════════ */
 
 function PricingModal({
@@ -79,98 +63,106 @@ function PricingModal({
       onOpenChange={(v) => {
         onOpenChange(v);
         if (!v) {
-          // Le fameux fix pour éviter le crash de Lovable (Node not found)
-          setTimeout(() => setView("story"), 400);
+          setTimeout(() => setView("story"), 400); // Fix "Node not found"
         } else {
           setView("story");
         }
       }}
     >
-      <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
+      <DialogContent className="max-w-5xl w-[calc(100%-2rem)] rounded-sm border-border shadow-2xl p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
         {view === "story" ? (
           <div className="p-10 sm:p-20 text-center space-y-8 flex flex-col items-center justify-center min-h-[500px] animate-in fade-in duration-500">
-            <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-xl">
+            <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-sm sm:text-base">
               Notre Engagement
             </span>
-            <DialogTitle className="font-heading text-4xl sm:text-6xl text-foreground leading-tight">
+            <DialogTitle className="font-heading text-4xl sm:text-5xl lg:text-6xl text-foreground leading-tight">
               Kalimera a été pensé <br /> pour votre sérénité
             </DialogTitle>
-            <div className="divider-gold mx-auto" />
-            <DialogDescription className="text-muted-foreground text-xl sm:text-2xl leading-relaxed max-w-3xl italic font-light">
+            <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto" />
+            <DialogDescription className="text-slate-600 text-lg sm:text-xl leading-relaxed max-w-2xl italic font-light mx-auto">
               "Nous comprenons que la technologie peut parfois sembler intimidante. C'est pourquoi nous avons tout
               simplifié pour que vous puissiez vous concentrer sur l'essentiel : faire de belles rencontres."
             </DialogDescription>
             <button
               onClick={() => setView("pricing")}
-              className="btn-primary px-12 py-5 text-xl mt-8 shadow-xl hover:scale-105 transition-transform"
+              className="mt-8 border border-foreground text-foreground px-10 py-4 text-sm tracking-widest uppercase font-medium hover:bg-foreground hover:text-background transition-colors"
             >
-              Découvrir mes options d'accueil →
+              Découvrir mes options
             </button>
           </div>
         ) : (
-          <div className="flex flex-col flex-1 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center px-6 pt-8 pb-4">
-              <h2 className="font-heading text-3xl sm:text-4xl text-foreground">Comment souhaitez-vous débuter ?</h2>
-              <p className="text-muted-foreground mt-2 text-2xl">
+          <div className="flex flex-col flex-1 animate-in slide-in-from-bottom-4 duration-500 bg-[#FAFAFA]">
+            <div className="text-center px-6 pt-12 pb-8">
+              <h2 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">
+                Comment souhaitez-vous débuter ?
+              </h2>
+              <p className="text-slate-500 text-lg sm:text-xl font-light">
                 Deux chemins, une même destination : votre épanouissement.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 pb-6 flex-1 overflow-y-auto">
-              <div className="bg-card border border-border p-8 flex flex-col h-full">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-10 h-10 bg-secondary flex items-center justify-center">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 px-6 lg:px-12 pb-8 flex-1 overflow-y-auto">
+              <div className="bg-white border border-slate-200 p-8 sm:p-10 flex flex-col h-full shadow-sm rounded-sm">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-10 h-10 border border-slate-200 flex items-center justify-center rounded-sm">
                     <Star className="h-5 w-5 text-[hsl(var(--gold))]" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-muted-foreground text-xl">
-                    Mode Autonome
-                  </span>
+                  <span className="font-medium tracking-[0.15em] uppercase text-slate-500 text-sm">Mode Autonome</span>
                 </div>
-                <h3 className="font-heading mb-2 text-3xl">Vos premières impressions</h3>
-                <div className="divider-gold mb-6" />
-                <p className="text-muted-foreground leading-relaxed flex-grow mb-8 text-xl">
+                <h3 className="font-heading mb-4 text-3xl text-foreground">Vos premières impressions</h3>
+                <div className="w-12 h-px bg-[hsl(var(--gold))] mb-6" />
+                <p className="text-slate-500 leading-relaxed flex-grow mb-10 text-lg font-light">
                   Profitez de vos 3 mois d'accès offerts en complétant votre portrait à votre rythme : commencez par
                   notre <strong>quiz ludique</strong>, ajoutez vos plus belles <strong>photos</strong>, suivez notre{" "}
                   <strong>tutoriel pour réussir votre vidéo</strong>, enregistrez votre <strong>son</strong>, puis
                   complétez votre <strong>profil</strong> et votre test de <strong>personnalité</strong> en toute
                   sérénité.
                 </p>
-                <button onClick={onStartAutonomous} className="w-full btn-outline py-4 font-medium text-xl">
+                <button
+                  onClick={onStartAutonomous}
+                  className="w-full border border-foreground text-foreground py-4 text-sm sm:text-base font-medium hover:bg-slate-50 transition-colors rounded-sm"
+                >
                   Je débute à mon rythme (Inclus)
                 </button>
               </div>
-              <div className="bg-primary text-primary-foreground p-8 flex flex-col h-full relative shadow-2xl">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
-                    <Phone className="h-5 w-5 text-[hsl(var(--gold-light))]" />
+
+              <div className="bg-[#1b2333] text-white p-8 sm:p-10 flex flex-col h-full relative shadow-xl rounded-sm">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center rounded-sm">
+                    <Phone className="h-5 w-5 text-[hsl(var(--gold))]" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-white/70 text-lg">
+                  <span className="font-medium tracking-[0.15em] uppercase text-slate-300 text-sm">
                     Service Conciergerie
                   </span>
                 </div>
-                <h3 className="font-heading mb-2 text-white text-3xl">L'Accompagnement Privé</h3>
-                <div className="divider-gold mb-6 border-white/20" />
-                <ul className="space-y-4 mb-8 flex-grow">
+                <h3 className="font-heading mb-4 text-white text-3xl">L'Accompagnement Privé</h3>
+                <div className="w-12 h-px bg-[hsl(var(--gold))] mb-6" />
+                <ul className="space-y-5 flex-grow mb-10">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-[hsl(var(--gold-light))] shrink-0 mt-0.5" />
-                      <span className="text-white/90 leading-snug text-xl">{benefit}</span>
+                    <li key={i} className="flex items-start gap-4">
+                      <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                      <span className="text-slate-200 leading-relaxed text-lg font-light">{benefit}</span>
                     </li>
                   ))}
                 </ul>
                 <button
                   onClick={onStartConcierge}
-                  className="w-full bg-[hsl(var(--gold))] text-white py-4 font-bold hover:brightness-110 transition-all shadow-lg text-xl"
+                  className="w-full bg-[hsl(var(--gold))] text-[#1b2333] py-4 text-sm sm:text-base font-bold hover:bg-white transition-colors rounded-sm"
                 >
                   Réserver mon entretien (89 €)
                 </button>
               </div>
             </div>
-            <div className="text-center py-4">
+
+            <div className="text-center py-6 pb-8">
               <button
                 onClick={() => setView("story")}
-                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-xl"
+                className="text-slate-500 hover:text-foreground text-base sm:text-lg font-light flex items-center justify-center gap-2 mx-auto"
               >
-                ← Revoir notre engagement de sérénité
+                <span className="text-slate-400">←</span>
+                <span className="underline underline-offset-4 decoration-slate-300 hover:decoration-foreground transition-colors">
+                  Revoir notre engagement de sérénité
+                </span>
               </button>
             </div>
           </div>
@@ -181,7 +173,7 @@ function PricingModal({
 }
 
 /* ═══════════════════════════════════════════════
-   STEP CARD (Design "Split-Screen" 100vh sans scroll)
+   STEP CARD (Aérien, Split-Screen)
    ═══════════════════════════════════════════════ */
 
 function StepCard({
@@ -200,46 +192,42 @@ function StepCard({
   nextSteps: string[];
 }) {
   return (
-    <section className="relative w-full min-h-[calc(100vh-80px)] flex items-center py-16 md:py-0 border-b border-border/40">
-      <div className="max-w-6xl mx-auto px-6 md:px-16 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="relative z-10">
-            <span className="absolute -top-16 -left-10 font-heading text-[160px] leading-none text-muted-foreground/5 select-none -z-10">
+    <section className="relative w-full min-h-[calc(100vh-80px)] flex items-center py-20 border-b border-border/30">
+      <div className="max-w-7xl mx-auto px-6 md:px-20 w-full">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <div className="relative z-10 pr-0 lg:pr-10">
+            <span className="absolute -top-20 -left-12 font-heading text-[200px] leading-none text-muted-foreground/[0.03] select-none -z-10">
               {number}
             </span>
-
-            <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-foreground mb-4 leading-tight">
+            <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
               {title}
             </h2>
-            <p className="text-[hsl(var(--gold))] font-medium text-xl sm:text-2xl mb-8 flex items-center gap-2">
+            <p className="text-[hsl(var(--gold))] font-medium text-xl sm:text-2xl mb-10 flex items-center gap-3">
               <span className="text-2xl">⏱️</span> {duration}
             </p>
-
-            <div className="w-16 h-px bg-[hsl(var(--gold))] mb-8" />
-
-            <p className="leading-relaxed text-[#232a39] text-xl sm:text-2xl font-light max-w-lg">{description}</p>
+            <div className="w-20 h-[2px] bg-[hsl(var(--gold)/0.4)] mb-10" />
+            <p className="leading-loose text-[#232a39] text-xl sm:text-2xl font-light">{description}</p>
           </div>
 
-          <div className="flex flex-col gap-8 z-10">
-            <div className="grid sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-14 z-10">
+            <div className="space-y-6">
               {highlights.map((h, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-3 p-5 bg-white border border-slate-200 shadow-sm rounded-sm"
-                >
-                  <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                  <span className="leading-snug text-lg text-[#232a39] font-medium">{h}</span>
+                <div key={i} className="flex items-start gap-5">
+                  <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center shrink-0 mt-1">
+                    <Check className="h-4 w-4 text-[hsl(var(--gold))]" />
+                  </div>
+                  <span className="leading-relaxed text-xl text-foreground/80 font-light">{h}</span>
                 </div>
               ))}
             </div>
 
-            <div className="border border-[hsl(var(--gold)/0.2)] p-8 sm:p-10 bg-[#b27615] rounded-sm shadow-md">
-              <h3 className="font-heading mb-6 text-2xl font-semibold text-white">Que se passe-t-il ensuite ?</h3>
-              <ul className="space-y-4">
+            <div className="relative p-10 border border-[hsl(var(--gold)/0.2)] bg-gradient-to-br from-[hsl(var(--gold)/0.03)] to-transparent">
+              <h3 className="font-heading mb-8 text-2xl text-foreground">Que se passe-t-il ensuite ?</h3>
+              <ul className="space-y-6">
                 {nextSteps.map((s, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="text-[hsl(var(--gold-light))] font-bold mt-1">→</span>
-                    <span className="leading-relaxed text-lg text-white/95">{s}</span>
+                  <li key={i} className="flex items-start gap-5">
+                    <span className="text-[hsl(var(--gold))] font-serif italic text-2xl mt-0.5">0{i + 1}.</span>
+                    <span className="leading-relaxed text-lg text-foreground/70 font-light">{s}</span>
                   </li>
                 ))}
               </ul>
@@ -289,7 +277,7 @@ export default function WelcomeRoadmap({
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     const r1 = step1Ref.current;
@@ -330,30 +318,31 @@ export default function WelcomeRoadmap({
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
             Votre parcours vers <br /> de belles rencontres
           </h1>
-          <div className="divider-gold mx-auto mb-8" />
-          <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
+          <div className="divider-gold mx-auto mb-10" />
+          <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-16 font-medium">
             4 étapes simples et guidées pour composer vôtre profil.
             <br className="hidden sm:block" />
             L’inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd’hui
             peuvent faire toute la différence demain.
           </p>
 
-          <div className="flex justify-center pb-16 animate-slow-float">
-            <button onClick={() => scrollTo(step1Ref)} className="flex flex-col items-center gap-3 group">
+          <div className="flex justify-center pb-20 animate-slow-float">
+            <button onClick={() => scrollTo(step1Ref)} className="flex flex-col items-center gap-4 group">
               <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-2xl sm:text-3xl">
                 Découvrir votre parcours pas à pas
               </span>
-              <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-700">
-                <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+              <div className="w-14 h-14 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-700">
+                <ArrowDown className="h-6 w-6 text-[hsl(var(--gold))] group-hover:text-white" />
               </div>
             </button>
           </div>
         </div>
       </section>
 
-      {/* ─── STICKY TABS ─── */}
-      <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border shadow-sm">
-        <div className="flex max-w-5xl mx-auto px-4 md:px-0">
+      {/* ─── STICKY TABS (Design "Onboarding" avec scroll horizontal si besoin) ─── */}
+      <nav className="sticky top-0 z-40 bg-[#FAFAFA] md:bg-secondary/95 backdrop-blur-md border-b border-border shadow-sm">
+        {/* On utilise overflow-x-auto et scrollbar-none pour que les textes longs tiennent sans sauter de ligne */}
+        <div className="flex overflow-x-auto scrollbar-none w-full">
           {TABS.map((tab, i) => {
             const Icon = tab.icon;
             const isActive = activeStep === i + 1;
@@ -361,15 +350,14 @@ export default function WelcomeRoadmap({
               <button
                 key={tab.id}
                 onClick={() => scrollTo(refs[i])}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 transition-colors border-b-2 ${
+                className={`flex-1 min-w-[240px] flex items-center justify-center gap-3 py-5 px-6 transition-all border-b-2 ${
                   isActive
                     ? "border-[hsl(var(--gold))] text-foreground"
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className={`h-5 w-5 ${isActive ? "text-[hsl(var(--gold))]" : ""}`} />
-                <span className="font-medium tracking-wide text-lg sm:text-xl hidden md:inline">{tab.label}</span>
-                <span className="font-medium tracking-wide text-lg sm:text-xl md:hidden">{i + 1}</span>
+                <Icon className={`h-5 w-5 shrink-0 ${isActive ? "text-[hsl(var(--gold))]" : ""}`} />
+                <span className="font-medium tracking-wide text-base lg:text-lg whitespace-nowrap">{tab.label}</span>
               </button>
             );
           })}
@@ -463,12 +451,12 @@ export default function WelcomeRoadmap({
       >
         <button
           onClick={() => scrollTo(refs[activeStep - 2])}
-          className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pr-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
+          className="flex items-center gap-4 group bg-white/95 backdrop-blur-sm p-4 pr-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-[hsl(var(--gold)/0.2)] hover:border-[hsl(var(--gold))] transition-all"
         >
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
-            <ArrowLeft className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+          <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
+            <ArrowLeft className="h-6 w-6 text-[hsl(var(--gold))] group-hover:text-white" />
           </div>
-          <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep - 1}</span>
+          <span className="hidden xl:block font-heading text-xl text-foreground mt-1">Étape {activeStep - 1}</span>
         </button>
       </div>
 
@@ -478,11 +466,11 @@ export default function WelcomeRoadmap({
         {activeStep < 4 && (
           <button
             onClick={() => scrollTo(refs[activeStep])}
-            className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
+            className="flex items-center gap-4 group bg-white/95 backdrop-blur-sm p-4 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-[hsl(var(--gold)/0.2)] hover:border-[hsl(var(--gold))] transition-all"
           >
-            <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep + 1}</span>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
-              <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+            <span className="hidden xl:block font-heading text-xl text-foreground mt-1">Étape {activeStep + 1}</span>
+            <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
+              <ArrowRight className="h-6 w-6 text-[hsl(var(--gold))] group-hover:text-white" />
             </div>
           </button>
         )}
@@ -490,11 +478,11 @@ export default function WelcomeRoadmap({
         {activeStep === 4 && (
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-4 group bg-[hsl(var(--gold))] p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[hsl(var(--gold))] hover:brightness-110 transition-all"
+            className="flex items-center gap-4 group bg-[hsl(var(--gold))] p-4 pl-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.15)] border border-[hsl(var(--gold))] hover:brightness-110 transition-all"
           >
             <span className="hidden md:block font-heading text-xl text-primary font-bold mt-1">Choisir mon mode</span>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center shrink-0">
-              <ArrowRight className="h-5 w-5 text-primary" />
+            <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shrink-0">
+              <ArrowRight className="h-6 w-6 text-primary" />
             </div>
           </button>
         )}
@@ -509,4 +497,3 @@ export default function WelcomeRoadmap({
     </div>
   );
 }
-```
