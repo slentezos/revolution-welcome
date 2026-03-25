@@ -7,7 +7,7 @@ import Index from "./pages/Index";
 import APropos from "./pages/APropos";
 import NotreDémarche from "./pages/NotreMethode";
 import Conseils from "./pages/Conseils";
-import Contact from "./pages/Contact";
+import ContactRouter from "./pages/ContactRouter";
 import Connexion from "./pages/Connexion";
 import Inscription from "./pages/Inscription";
 import MotDePasseOublie from "./pages/MotDePasseOublie";
@@ -44,7 +44,7 @@ const App = () => (
           <Route path="/a-propos" element={<APropos />} />
           <Route path="/notre-démarche" element={<NotreDémarche />} />
           <Route path="/conseils" element={<Conseils />} />
-          <Route path="/contact" element={<Contact />} />
+          <Route path="/contact" element={<ContactRouter />} />
           <Route path="/connexion" element={<Connexion />} />
           <Route path="/inscription" element={<Inscription />} />
           <Route path="/mot-de-passe-oublie" element={<MotDePasseOublie />} />
