@@ -136,7 +136,6 @@ export default function Onboarding() {
   return (
     <Layout>
       <div className="min-h-screen bg-background">
-        {step !== "welcome" && (
           <nav className="bg-secondary border-b border-border/30 sticky top-0 z-[100]">
             <div className="flex overflow-x-auto scrollbar-none">
               {tabs.map((tab, index) => {
@@ -163,7 +162,6 @@ export default function Onboarding() {
               })}
             </div>
           </nav>
-        )}
 
         {step === "welcome" && (
           <WelcomeRoadmap onStartAutonomous={handleStartAutonomous} onStartConcierge={handleStartConcierge} />
