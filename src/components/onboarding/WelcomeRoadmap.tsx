@@ -11,6 +11,7 @@ import {
   ArrowDown,
   ArrowRight,
   ArrowLeft,
+  Image as ImageIcon,
 } from "lucide-react";
 
 /* ─── ANIMATION DOUCE PERSONNALISÉE ─── */
@@ -33,10 +34,10 @@ const CONCIERGE_BENEFITS = [
 ];
 
 const TABS = [
-  { id: "step1", label: "Étape 1", icon: HelpCircle },
-  { id: "step2", label: "Étape 2", icon: Camera },
-  { id: "step3", label: "Étape 3", icon: ClipboardList },
-  { id: "step4", label: "Étape 4", icon: Brain },
+  { id: "step1", label: "Quiz des 3 préférences", icon: HelpCircle },
+  { id: "step2", label: "Vos photos & vidéo", icon: ImageIcon },
+  { id: "step3", label: "Mon profil / son profil", icon: ClipboardList },
+  { id: "step4", label: "Test de personnalité", icon: Brain },
 ];
 
 /* ═══════════════════════════════════════════════
@@ -61,7 +62,11 @@ function PricingModal({
       open={open}
       onOpenChange={(v) => {
         onOpenChange(v);
-        if (!v) setView("story");
+        if (!v) {
+          setTimeout(() => setView("story"), 400); // Fix pour éviter l'erreur "Node not found" de Lovable
+        } else {
+          setView("story");
+        }
       }}
     >
       <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
@@ -178,13 +183,10 @@ function StepCard({
   nextSteps: string[];
 }) {
   return (
-    // min-h-[calc(100vh-80px)] garantit que l'étape prend exactement la hauteur de l'écran (moins la barre de navigation)
     <section className="relative w-full min-h-[calc(100vh-80px)] flex items-center py-16 md:py-0 border-b border-border/40">
       <div className="max-w-6xl mx-auto px-6 md:px-16 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* COLONNE GAUCHE : Storytelling (Titre et Description) */}
           <div className="relative z-10">
-            {/* Le grand numéro passe en arrière-plan (filigrane) pour ne pas casser la hauteur */}
             <span className="absolute -top-16 -left-10 font-heading text-[160px] leading-none text-muted-foreground/5 select-none -z-10">
               {number}
             </span>
@@ -201,9 +203,7 @@ function StepCard({
             <p className="leading-relaxed text-[#232a39] text-xl sm:text-2xl font-light max-w-lg">{description}</p>
           </div>
 
-          {/* COLONNE DROITE : Action (Highlights et Next Steps) */}
           <div className="flex flex-col gap-8 z-10">
-            {/* Grille de réassurance (plus compacte et lisible) */}
             <div className="grid sm:grid-cols-2 gap-4">
               {highlights.map((h, i) => (
                 <div
@@ -216,7 +216,6 @@ function StepCard({
               ))}
             </div>
 
-            {/* Bloc Marron (Remonté, impossible à rater) */}
             <div className="border border-[hsl(var(--gold)/0.2)] p-8 sm:p-10 bg-[#b27615] rounded-sm shadow-md">
               <h3 className="font-heading mb-6 text-2xl font-semibold text-white">Que se passe-t-il ensuite ?</h3>
               <ul className="space-y-4">
@@ -257,12 +256,10 @@ export default function WelcomeRoadmap({
   const refs = [step1Ref, step2Ref, step3Ref, step4Ref];
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
-    // Petit décalage pour ne pas que la navbar couvre le titre
     const y = (ref.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 100;
     window.scrollTo({ top: y, behavior: "smooth" });
   };
 
-  // Le "Scroll Spy" pour détecter où est l'utilisateur
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -275,7 +272,7 @@ export default function WelcomeRoadmap({
           }
         });
       },
-      { threshold: 0.3 }, // Déclenche quand 30% du bloc est visible
+      { threshold: 0.3 },
     );
 
     const r1 = step1Ref.current;
@@ -300,14 +297,21 @@ export default function WelcomeRoadmap({
     <div className="relative">
       <style>{slowFloatAnimation}</style>
 
+      {/* LOGO KALIMERA TOP LEFT */}
+      <div className="absolute top-6 left-6 md:top-10 md:left-12 z-50">
+        <span className="font-heading text-3xl md:text-4xl tracking-wide text-[hsl(var(--gold))] cursor-default">
+          Kalimera.
+        </span>
+      </div>
+
       {/* ─── HERO ─── */}
-      <section className="section-luxury text-center pb-0">
+      <section className="section-luxury text-center pb-0 pt-24 md:pt-32">
         <div className="max-w-3xl mx-auto px-6">
           <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-2xl font-medium">
             Bienvenue sur Kalimera
           </span>
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
-            Votre parcours en 4 étapes vers <br /> de belles rencontres
+            Votre parcours vers <br /> de belles rencontres
           </h1>
           <div className="divider-gold mx-auto mb-8" />
           <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
@@ -332,7 +336,7 @@ export default function WelcomeRoadmap({
 
       {/* ─── STICKY TABS ─── */}
       <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="flex max-w-4xl mx-auto">
+        <div className="flex overflow-x-auto scrollbar-none max-w-5xl mx-auto px-4 md:px-0">
           {TABS.map((tab, i) => {
             const Icon = tab.icon;
             const isActive = activeStep === i + 1;
@@ -340,15 +344,14 @@ export default function WelcomeRoadmap({
               <button
                 key={tab.id}
                 onClick={() => scrollTo(refs[i])}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 transition-colors border-b-2 ${
+                className={`flex-1 min-w-[240px] flex items-center justify-center gap-3 py-5 transition-colors border-b-2 ${
                   isActive
                     ? "border-[hsl(var(--gold))] text-foreground"
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Icon className={`h-4 w-4 ${isActive ? "text-[hsl(var(--gold))]" : ""}`} />
-                <span className="font-medium tracking-wide text-xl sm:text-2xl hidden md:inline">{tab.label}</span>
-                <span className="font-medium tracking-wide text-lg sm:text-xl md:hidden">{i + 1}</span>
+                <Icon className={`h-5 w-5 shrink-0 ${isActive ? "text-[hsl(var(--gold))]" : ""}`} />
+                <span className="font-medium tracking-wide text-base lg:text-lg whitespace-nowrap">{tab.label}</span>
               </button>
             );
           })}
@@ -437,8 +440,6 @@ export default function WelcomeRoadmap({
       </div>
 
       {/* ─── BOUTONS FLOTTANTS (NAVIGATION GLOBALE) ─── */}
-
-      {/* Bouton Gauche (Précédent) */}
       <div
         className={`fixed top-1/2 -translate-y-1/2 left-4 md:left-8 z-50 transition-all duration-500 ${activeStep > 1 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[-20px]"}`}
       >
@@ -453,11 +454,9 @@ export default function WelcomeRoadmap({
         </button>
       </div>
 
-      {/* Bouton Droite (Suivant ou Fin) */}
       <div
         className={`fixed top-1/2 -translate-y-1/2 right-4 md:right-8 z-50 transition-all duration-500 ${activeStep > 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[20px]"}`}
       >
-        {/* Affiché pour Etape 1, 2, 3 */}
         {activeStep < 4 && (
           <button
             onClick={() => scrollTo(refs[activeStep])}
@@ -470,7 +469,6 @@ export default function WelcomeRoadmap({
           </button>
         )}
 
-        {/* Affiché pour Etape 4 (Action Finale) */}
         {activeStep === 4 && (
           <button
             onClick={() => setIsModalOpen(true)}
