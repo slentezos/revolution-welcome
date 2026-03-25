@@ -409,3 +409,14 @@ function FormSection() {
     </section>
   );
 }
+export default function Parrainage() {
+  return (
+    <Layout>
+      <HeroSection />
+      <HowItWorksSection />
+      <ValuePropositionSection />
+      <FAQSection />
+      <FormSection />
+    </Layout>
+  );
+}
