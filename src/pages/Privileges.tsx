@@ -8,9 +8,6 @@ import PrivilegeBadge from "@/components/location/PrivilegeBadge";
 import privilegesHero from "@/assets/privileges-hero.jpg";
 import giftBannerPrivileges from "@/assets/gift-banner-privileges.jpg";
 
-// Imports pour la modale Shadcn UI (Assurez-vous d'avoir ce composant dans votre projet Lovable)
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-
 const cerclePriveFeatures = [
   "Messagerie illimitée",
   "Appels Audio & Vidéo illimités",
@@ -50,13 +47,12 @@ export default function Privileges() {
   const reassuranceRef = useScrollReveal<HTMLElement>();
   const finalRef = useScrollReveal<HTMLElement>();
 
-  // États pour les modales
+  // État unique pour la demande d'admission (plus besoin de l'état expertModal)
   const [modalOpen, setModalOpen] = useState(false);
-  const [expertModalOpen, setExpertModalOpen] = useState(false);
 
   return (
     <Layout>
-      {/* Bloc 1 — Hero : L'Invitation — Full-screen with background image */}
+      {/* Bloc 1 — Hero : L'Invitation */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -69,7 +65,6 @@ export default function Privileges() {
           <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/90" />
         </div>
 
-        {/* Decorative blurs */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute top-20 right-20 w-96 h-96 bg-[hsl(var(--gold))] rounded-full blur-3xl" />
           <div className="absolute bottom-32 left-10 w-80 h-80 bg-[hsl(var(--gold-light))] rounded-full blur-3xl" />
@@ -86,7 +81,6 @@ export default function Privileges() {
 
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mx-auto mb-10 animate-fade-in delay-200" />
 
-          {/* Gold Banner */}
           <div className="inline-block border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.1)] backdrop-blur-sm px-8 py-5 md:px-12 md:py-6 mb-10 animate-fade-up delay-300">
             <p className="font-heading text-xl md:text-2xl text-[hsl(var(--gold-light))] font-medium">
               L'élégance de la confiance : Vos 3 premiers mois offerts.
@@ -98,7 +92,6 @@ export default function Privileges() {
             de votre admission.
           </p>
 
-          {/* Stats row */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto animate-fade-up delay-500">
             {[
               { value: "90", label: "Jours de découverte offerts" },
@@ -120,10 +113,9 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Bloc 2 — Les Adhésions */}
+      {/* Bloc 2 — Les Adhésions (Design Palace Validé) */}
       <section ref={cardsRef} className="section-luxury bg-[#FCF9F5] py-24 md:py-32">
         <div className="container-main mx-auto px-4 md:px-8">
-          {/* Titre et Signature 3 mois (Fini la grosse boîte cheap) */}
           <div className="text-center max-w-4xl mx-auto mb-16 md:mb-20">
             <h2 data-reveal className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-8">
               Choisissez votre cercle
@@ -145,9 +137,8 @@ export default function Privileges() {
             </div>
           </div>
 
-          {/* Les Cartes */}
           <div className="grid md:grid-cols-2 gap-6 lg:gap-10 max-w-5xl mx-auto items-center">
-            {/* Carte Cercle Privé (Style Épuré) */}
+            {/* Carte Cercle Privé */}
             <div
               data-reveal
               data-reveal-delay="200"
@@ -185,13 +176,12 @@ export default function Privileges() {
               </button>
             </div>
 
-            {/* Carte Discrétion Absolue (Style Amex Black / VIP) */}
+            {/* Carte Discrétion Absolue */}
             <div
               data-reveal
               data-reveal-delay="300"
               className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 transition-all duration-500 hover:border-[hsl(var(--gold)/0.6)] flex flex-col h-full md:scale-105 z-10"
             >
-              {/* Badge VIP intégré élégamment */}
               <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 text-xs font-bold tracking-[0.2em] uppercase rounded-b-sm">
                 Privilège
               </div>
@@ -231,7 +221,7 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Bloc 3 — L'Expertise — Avec logique Modale ajoutée */}
+      {/* Bloc 3 — L'Expertise */}
       <section ref={expertRef} className="relative py-32 lg:py-40 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-[hsl(var(--navy-light))]" />
         <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -273,11 +263,12 @@ export default function Privileges() {
             </p>
 
             <div data-reveal data-reveal-delay="450">
+              {/* Le bouton déclenche maintenant directement l'admission (modalOpen) */}
               <button
-                onClick={() => setExpertModalOpen(true)}
+                onClick={() => setModalOpen(true)}
                 className="inline-flex items-center gap-3 border border-primary-foreground/30 text-primary-foreground px-10 py-5 text-base font-medium tracking-wide transition-all duration-500 hover:bg-primary-foreground hover:text-primary group"
               >
-                Découvrir ce service à la carte
+                Demander mon admission
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -285,7 +276,46 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Bloc 4 — L'Invitation Privée (Inchangé de votre code) */}
+      {/* Bloc 4 (Ex-Bloc 5) — Sécurité & Sérénité (Remonté avant le parrainage) */}
+      <section ref={reassuranceRef} className="section-luxury bg-background">
+        <div className="container-main mx-auto px-6 md:px-12">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span
+              data-reveal
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
+            >
+              Sécurité & Sérénité
+            </span>
+            <h2
+              data-reveal
+              data-reveal-delay="150"
+              className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6"
+            >
+              Votre tranquillité d'esprit
+            </h2>
+            <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto" />
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
+            {reassuranceItems.map((item, index) => (
+              <div
+                key={item.title}
+                data-reveal
+                data-reveal-delay={String(100 + index * 150)}
+                className="group text-center p-10 bg-secondary border border-border hover:border-primary/20 transition-all duration-500 hover:shadow-[var(--shadow-card)]"
+              >
+                <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full border border-[hsl(var(--gold)/0.3)] mb-6 group-hover:border-[hsl(var(--gold)/0.6)] transition-colors">
+                  <item.icon className="h-7 w-7 text-[hsl(var(--gold))]" />
+                </div>
+                <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">{item.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bloc 5 (Ex-Bloc 4) — L'Invitation Privée (Descendu après la sécurité) */}
       <section ref={giftRef} className="relative overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -344,45 +374,6 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Bloc 5 — Sécurité & Sérénité */}
-      <section ref={reassuranceRef} className="section-luxury bg-background">
-        <div className="container-main mx-auto px-6 md:px-12">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span
-              data-reveal
-              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
-            >
-              Sécurité & Sérénité
-            </span>
-            <h2
-              data-reveal
-              data-reveal-delay="150"
-              className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6"
-            >
-              Votre tranquillité d'esprit
-            </h2>
-            <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto" />
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
-            {reassuranceItems.map((item, index) => (
-              <div
-                key={item.title}
-                data-reveal
-                data-reveal-delay={String(100 + index * 150)}
-                className="group text-center p-10 bg-secondary border border-border hover:border-primary/20 transition-all duration-500 hover:shadow-[var(--shadow-card)]"
-              >
-                <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full border border-[hsl(var(--gold)/0.3)] mb-6 group-hover:border-[hsl(var(--gold)/0.6)] transition-colors">
-                  <item.icon className="h-7 w-7 text-[hsl(var(--gold))]" />
-                </div>
-                <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">{item.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Bloc 6 — Rappel Final */}
       <section ref={finalRef} className="relative py-24 md:py-32 overflow-hidden bg-secondary border-t border-border">
         <div className="container-main mx-auto px-6 md:px-12 text-center max-w-3xl relative z-10">
@@ -409,49 +400,8 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* --- MODALES --- */}
-
-      {/* Modale d'admission classique (Existante) */}
+      {/* Modale d'admission classique (Unique point d'entrée) */}
       <LocationCheckModal open={modalOpen} onClose={() => setModalOpen(false)} />
-
-      {/* NOUVELLE Modale Teaser Expertise (Service à la carte) */}
-      <Dialog open={expertModalOpen} onOpenChange={setExpertModalOpen}>
-        <DialogContent className="sm:max-w-[500px] bg-white border-[hsl(var(--gold)/0.2)] p-8">
-          <DialogHeader className="text-center">
-            <div className="mx-auto w-12 h-12 bg-[hsl(var(--navy-light))/0.05] rounded-full flex items-center justify-center mb-4">
-              <Crown className="h-6 w-6 text-[hsl(var(--gold))]" />
-            </div>
-            <DialogTitle className="font-heading text-2xl md:text-3xl text-primary mb-2">
-              Un privilège réservé à nos membres
-            </DialogTitle>
-            <DialogDescription className="text-lg text-slate-600 leading-relaxed pt-2">
-              Pour garantir la qualité de notre accompagnement, l'accès à la Conciergerie est{" "}
-              <strong>exclusivement réservé aux membres admis</strong> du Cercle Kalimera.
-              <br />
-              <br />
-              Ce service est entièrement facultatif et peut être sollicité à tout moment dès la validation de votre
-              profil.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="mt-8 flex flex-col gap-3">
-            <button
-              onClick={() => {
-                setExpertModalOpen(false);
-                setTimeout(() => setModalOpen(true), 150); // Ouvre la modale d'admission juste après
-              }}
-              className="w-full bg-primary text-white py-4 font-medium tracking-wide hover:bg-primary/90 transition-colors shadow-sm"
-            >
-              Demander mon admission pour accéder au service
-            </button>
-            <button
-              onClick={() => setExpertModalOpen(false)}
-              className="w-full py-3 text-slate-400 text-sm font-medium hover:text-primary transition-colors"
-            >
-              Continuer la découverte du site
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </Layout>
   );
 }
