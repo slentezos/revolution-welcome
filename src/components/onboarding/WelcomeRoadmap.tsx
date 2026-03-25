@@ -1,6 +1,17 @@
 import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Star, Phone, Check, HelpCircle, Camera, ClipboardList, Brain, ArrowDown, ArrowRight, ArrowLeft } from "lucide-react";
+import {
+  Star,
+  Phone,
+  Check,
+  HelpCircle,
+  Camera,
+  ClipboardList,
+  Brain,
+  ArrowDown,
+  ArrowRight,
+  ArrowLeft,
+} from "lucide-react";
 
 /* ─── ANIMATION DOUCE PERSONNALISÉE ─── */
 const slowFloatAnimation = `
@@ -189,11 +200,11 @@ function StepCard({
           <p className="text-[hsl(var(--gold))] font-medium mt-3 text-2xl">{duration}</p>
           <div className="divider-gold mx-auto mt-6" />
         </div>
-        
+
         <p className="leading-relaxed text-center max-w-2xl mx-auto mb-12 font-normal text-[#232a39] text-3xl">
           {description}
         </p>
-        
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-16">
           {highlights.map((h, i) => (
             <div key={i} className="flex items-start gap-4 p-5 bg-card border border-border">
@@ -202,7 +213,7 @@ function StepCard({
             </div>
           ))}
         </div>
-        
+
         <div className="border border-border p-8 sm:p-10 mb-12 bg-[#b27615]">
           <h3 className="font-heading mb-6 text-2xl font-semibold text-primary-foreground">
             Que se passe-t-il ensuite ?
@@ -219,7 +230,6 @@ function StepCard({
 
         {/* NAVIGATION GAUCHE / DROITE */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 w-full pt-8">
-          
           {/* Bouton Précédent (Gauche) */}
           <div className="flex-1 flex justify-start w-full sm:w-auto">
             {onPrev && prevLabel ? (
@@ -231,7 +241,9 @@ function StepCard({
                   {prevLabel}
                 </span>
               </button>
-            ) : <div />}
+            ) : (
+              <div />
+            )}
           </div>
 
           {/* Bouton Suivant (Droite) */}
@@ -255,7 +267,6 @@ function StepCard({
               </button>
             )}
           </div>
-
         </div>
       </div>
     </section>
@@ -274,14 +285,14 @@ export default function WelcomeRoadmap({
   onStartConcierge: () => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const step1Ref = useRef<HTMLDivElement>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
   const step3Ref = useRef<HTMLDivElement>(null);
   const step4Ref = useRef<HTMLDivElement>(null);
 
   const refs = [step1Ref, step2Ref, step3Ref, step4Ref];
-  
+
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -444,4 +455,3 @@ export default function WelcomeRoadmap({
     </div>
   );
 }
-```
