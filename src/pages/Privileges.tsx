@@ -189,7 +189,7 @@ export default function Privileges() {
               data-reveal-delay="300"
               className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 transition-all duration-500 hover:border-[hsl(var(--gold)/0.6)] flex flex-col h-full md:scale-105 z-10"
             >
-              <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 text-xs font-bold tracking-[0.2em] uppercase rounded-b-sm">
+              <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 font-bold tracking-[0.2em] uppercase rounded-b-sm text-base">
                 Privilège
               </div>
 
