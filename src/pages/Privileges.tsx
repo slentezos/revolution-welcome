@@ -71,7 +71,7 @@ export default function Privileges() {
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <span className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl md:text-xl animate-fade-in">
+          <span className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl animate-fade-in md:text-2xl">
             L'Invitation
           </span>
 
@@ -87,7 +87,7 @@ export default function Privileges() {
             </p>
           </div>
 
-          <p className="text-xl md:text-xl text-primary-foreground/80 leading-relaxed max-w-3xl mx-auto mb-12 animate-fade-up delay-400">
+          <p className="text-xl leading-relaxed max-w-3xl mx-auto mb-12 animate-fade-up delay-400 text-primary-foreground font-medium md:text-2xl">
             Prenez le temps de faire des rencontres authentiques. Aucune empreinte bancaire ne vous sera demandée lors
             de votre admission.
           </p>
@@ -106,7 +106,7 @@ export default function Privileges() {
                 <span className="font-heading text-3xl md:text-4xl text-[hsl(var(--gold-light))] font-medium block mb-2">
                   {stat.value}
                 </span>
-                <p className="text-primary-foreground/90 text-xl md:text-base leading-snug">{stat.label}</p>
+                <p className="text-primary-foreground/90 text-xl leading-snug md:text-xl">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -130,8 +130,8 @@ export default function Privileges() {
               <div className="h-px w-16 bg-gradient-to-r from-transparent to-[hsl(var(--gold))] hidden md:block" />
               <div className="flex items-center gap-3">
                 <Gift className="w-6 h-6 text-[hsl(var(--gold))]" />
-                <p className="text-xl md:text-2xl text-foreground font-heading tracking-wide">
-                  Vos 3 premiers mois gracieusement offerts, sans carte bancaire.
+                <p className="text-xl text-foreground font-heading tracking-wide md:text-3xl">
+                  Vos 3 premiers mois offerts, sans carte bancaire.
                 </p>
               </div>
               <div className="h-px w-16 bg-gradient-to-l from-transparent to-[hsl(var(--gold))] hidden md:block" />
@@ -243,7 +243,7 @@ export default function Privileges() {
           <div className="max-w-4xl mx-auto text-center">
             <span
               data-reveal
-              className="inline-block px-4 py-1.5 border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold))] font-medium tracking-[0.2em] uppercase mb-8 text-sm md:text-base"
+              className="inline-block px-4 py-1.5 border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold))] font-medium tracking-[0.2em] uppercase mb-8 md:text-base text-xl"
             >
               Privilège Optionnel
             </span>
@@ -258,7 +258,7 @@ export default function Privileges() {
             <p
               data-reveal
               data-reveal-delay="350"
-              className="text-lg md:text-xl text-primary-foreground/80 leading-relaxed mb-6 max-w-4xl mx-auto"
+              className="text-lg text-primary-foreground/80 leading-relaxed mb-6 max-w-4xl mx-auto md:text-2xl"
             >
               Allez au-delà de l'algorithme. Profitez d'une expertise humaine sur-mesure pour décrypter votre test de
               personnalité ou confier la création de votre profil à notre conciergerie.
@@ -267,7 +267,7 @@ export default function Privileges() {
             <p
               data-reveal
               data-reveal-delay="400"
-              className="text-lg md:text-xl text-primary-foreground/60 italic mb-12"
+              className="text-lg text-primary-foreground/60 italic mb-12 md:text-2xl"
             >
               Un service exclusif et facultatif pour nos membres les plus exigeants.
             </p>
@@ -292,7 +292,7 @@ export default function Privileges() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span
               data-reveal
-              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl"
             >
               Sécurité & Sérénité
             </span>
@@ -317,8 +317,8 @@ export default function Privileges() {
                 <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full border border-[hsl(var(--gold)/0.3)] mb-6 group-hover:border-[hsl(var(--gold)/0.6)] transition-colors">
                   <item.icon className="h-7 w-7 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-xl md:text-2xl text-foreground mb-4">{item.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
+                <h3 className="font-heading text-xl text-foreground mb-4 md:text-3xl">{item.title}</h3>
+                <p className="text-muted-foreground leading-relaxed text-xl">{item.description}</p>
               </div>
             ))}
           </div>
@@ -394,7 +394,7 @@ export default function Privileges() {
           <p
             data-reveal
             data-reveal-delay="250"
-            className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-10"
+            className="text-lg text-muted-foreground leading-relaxed mb-10 md:text-2xl"
           >
             Profitez de vos 90 jours de découverte sans engagement.
           </p>
