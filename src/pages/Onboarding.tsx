@@ -8,6 +8,7 @@ import OnboardingProfile from "@/components/onboarding/OnboardingProfile";
 import OnboardingPersonality from "@/components/onboarding/OnboardingPersonality";
 import WelcomeRoadmap from "@/components/onboarding/WelcomeRoadmap";
 import { Image, HelpCircle, ClipboardList, Brain, BookOpen } from "lucide-react";
+import { useCriteriaCooldown } from "@/hooks/useCriteriaCooldown";
 
 type OnboardingStep =
   | "welcome"
@@ -18,14 +19,6 @@ type OnboardingStep =
   | "personality-results"
   | "completed";
 
-const tabs = [
-  { id: "welcome", label: "Notre Tutoriel", icon: BookOpen },
-  { id: "quiz", label: "Quiz des 3 préférences", icon: HelpCircle },
-  { id: "media_upload", label: "Vos photos & vidéo", icon: Image },
-  { id: "profile", label: "Mon profil / son profil", icon: ClipboardList },
-  { id: "personality", label: "Test de personnalité", icon: Brain },
-];
-
 export default function Onboarding() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -33,6 +26,9 @@ export default function Onboarding() {
   const [profileId, setProfileId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isReturningUser, setIsReturningUser] = useState(false);
+  const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
+
+  const cooldown = useCriteriaCooldown(profileId);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -52,15 +48,16 @@ export default function Onboarding() {
 
       if (profile) {
         setProfileId(profile.id);
+        const completed = profile.onboarding_step === "completed";
+        setIsOnboardingCompleted(completed);
 
         const requestedStep = searchParams.get("step");
-        // ON UTILISE LE TIRET ICI AUSSI
         const validSteps = ["welcome", "media_upload", "quiz", "profile", "personality", "personality-results"];
 
         if (requestedStep && validSteps.includes(requestedStep)) {
-          if (profile.onboarding_step === "completed") setIsReturningUser(true);
+          if (completed) setIsReturningUser(true);
           setStep(requestedStep as OnboardingStep);
-        } else if (profile.onboarding_step === "completed") {
+        } else if (completed) {
           navigate("/dashboard");
           return;
         } else {
@@ -93,6 +90,8 @@ export default function Onboarding() {
 
   const handleQuizComplete = async () => {
     if (isReturningUser) {
+      // Record criteria update when returning user edits quiz
+      await cooldown.recordCriteriaUpdate();
       navigate("/profil");
       return;
     }
@@ -109,6 +108,8 @@ export default function Onboarding() {
 
   const handleProfileComplete = async () => {
     if (isReturningUser) {
+      // Record criteria update when returning user edits profile criteria
+      await cooldown.recordCriteriaUpdate();
       navigate("/profil");
       return;
     }
@@ -120,12 +121,27 @@ export default function Onboarding() {
       navigate("/profil");
       return;
     }
+    // Record onboarding completion timestamp
+    await cooldown.recordOnboardingComplete();
     navigate("/dashboard");
   };
 
   const handleTabClick = (tabId: string) => {
     setStep(tabId as OnboardingStep);
   };
+
+  // Dynamic tabs based on completion state
+  const tabs = [
+    { id: "welcome", label: "Notre Tutoriel", icon: BookOpen },
+    { id: "quiz", label: "Quiz des 3 préférences", icon: HelpCircle },
+    { id: "media_upload", label: "Vos photos & vidéo", icon: Image },
+    { id: "profile", label: "Mon profil / son profil", icon: ClipboardList },
+    {
+      id: "personality",
+      label: isOnboardingCompleted ? "Ma personnalité" : "Test de personnalité",
+      icon: Brain,
+    },
+  ];
 
   const isViewMode = searchParams.get("mode") === "view";
   const effectiveTab = step === "personality-results" ? "personality" : (step as string);
@@ -141,7 +157,7 @@ export default function Onboarding() {
               {tabs.map((tab, index) => {
                 const Icon = tab.icon;
                 const isActive = tab.id === effectiveTab;
-                const isLockedTab = tab.id === "quiz" || tab.id === "media_upload";
+                const isLockedTab = !isReturningUser && (tab.id === "quiz" || tab.id === "media_upload");
                 const canClick = !isLockedTab && (index <= currentTabIndex || isReturningUser);
                 return (
                   <button
@@ -164,20 +180,41 @@ export default function Onboarding() {
           </nav>
 
         {step === "welcome" && (
-          <WelcomeRoadmap onStartAutonomous={handleStartAutonomous} onStartConcierge={handleStartConcierge} />
+          isReturningUser ? (
+            <WelcomeRoadmap
+              onStartAutonomous={handleStartAutonomous}
+              onStartConcierge={handleStartConcierge}
+              viewOnly
+            />
+          ) : (
+            <WelcomeRoadmap
+              onStartAutonomous={handleStartAutonomous}
+              onStartConcierge={handleStartConcierge}
+            />
+          )
         )}
-        {step === "quiz" && profileId && <OnboardingQuiz profileId={profileId} onComplete={handleQuizComplete} />}
+        {step === "quiz" && profileId && (
+          <OnboardingQuiz
+            profileId={profileId}
+            onComplete={handleQuizComplete}
+            cooldown={isReturningUser ? cooldown : undefined}
+          />
+        )}
         {step === "media_upload" && profileId && (
           <OnboardingMedia profileId={profileId} onComplete={handleMediaComplete} />
         )}
         {step === "profile" && profileId && (
-          <OnboardingProfile profileId={profileId} onComplete={handleProfileComplete} readOnly={isViewMode} />
+          <OnboardingProfile
+            profileId={profileId}
+            onComplete={handleProfileComplete}
+            readOnly={isViewMode}
+            cooldown={isReturningUser ? cooldown : undefined}
+          />
         )}
         {step === "personality" && profileId && (
           <OnboardingPersonality profileId={profileId} onComplete={handlePersonalityComplete} />
         )}
 
-        {/* LA LIGNE MAGIQUE POUR LE PREVIEW DES RÉSULTATS */}
         {step === "personality-results" && profileId && (
           <OnboardingPersonality profileId={profileId} onComplete={handlePersonalityComplete} showResultDirectly />
         )}
