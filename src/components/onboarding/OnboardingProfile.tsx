@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Check, ArrowDown } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, ArrowDown, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PROFILE_QUESTIONS, CHAPTERS, getChapterQuestions, type ProfileQuestion } from "@/data/profileQuestions";
+import CriteriaEditWarningModal from "@/components/onboarding/CriteriaEditWarningModal";
 
 interface CooldownInfo {
   isCompleted: boolean;
