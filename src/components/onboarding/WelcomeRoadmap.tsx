@@ -242,9 +242,11 @@ function StepCard({
 export default function WelcomeRoadmap({
   onStartAutonomous,
   onStartConcierge,
+  viewOnly = false,
 }: {
   onStartAutonomous: () => void;
   onStartConcierge: () => void;
+  viewOnly?: boolean;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0); // 0 = hero, 1-4 = steps
@@ -470,8 +472,8 @@ export default function WelcomeRoadmap({
           </button>
         )}
 
-        {/* Affiché pour Etape 4 (Action Finale) */}
-        {activeStep === 4 && (
+        {/* Affiché pour Etape 4 (Action Finale) — hidden in viewOnly mode */}
+        {activeStep === 4 && !viewOnly && (
           <button
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-4 group bg-[hsl(var(--gold))] p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[hsl(var(--gold))] hover:brightness-110 transition-all"
@@ -484,12 +486,14 @@ export default function WelcomeRoadmap({
         )}
       </div>
 
-      <PricingModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        onStartAutonomous={onStartAutonomous}
-        onStartConcierge={onStartConcierge}
-      />
+      {!viewOnly && (
+        <PricingModal
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          onStartAutonomous={onStartAutonomous}
+          onStartConcierge={onStartConcierge}
+        />
+      )}
     </div>
   );
 }

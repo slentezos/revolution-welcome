@@ -2,13 +2,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import CriteriaEditWarningModal from "@/components/onboarding/CriteriaEditWarningModal";
+
+interface CooldownInfo {
+  isCompleted: boolean;
+  isLocked: boolean;
+  canEdit: boolean;
+  daysRemaining: number;
+  recordCriteriaUpdate: () => Promise<void>;
+}
 
 interface OnboardingQuizProps {
   profileId: string;
   onComplete: () => void;
+  cooldown?: CooldownInfo;
 }
 
 type PreferenceCategory = {
