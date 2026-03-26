@@ -171,8 +171,8 @@ export default function Onboarding() {
                           : "border-transparent text-muted-foreground"
                     }`}
                   >
-                    <Icon className="h-5 w-5" />
-                    <span className="hidden sm:inline">{tab.label}</span>
+                    <Icon className="h-5 w-5 text-[#bfc1c5]" />
+                    <span className="hidden sm:inline text-[#bfc1c5]">{tab.label}</span>
                   </button>
                 );
               })}
