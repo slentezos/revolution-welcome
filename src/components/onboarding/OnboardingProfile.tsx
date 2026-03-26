@@ -43,8 +43,14 @@ type ScrollNode = {
   index?: number; // Index absolu pour les questions uniquement
 };
 
-export default function OnboardingProfile({ profileId, onComplete, readOnly = false }: OnboardingProfileProps) {
+export default function OnboardingProfile({ profileId, onComplete, readOnly = false, cooldown }: OnboardingProfileProps) {
   const { toast } = useToast();
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  const [editUnlocked, setEditUnlocked] = useState(false);
+
+  // Cooldown logic for "son profil" fields
+  const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
+  const isSonEditable = !cooldown || !cooldown.isCompleted || cooldown.canEdit || editUnlocked;
 
   const [currentChapter, setCurrentChapter] = useState(0);
   const [answers, setAnswers] = useState<Answers>(() => {
