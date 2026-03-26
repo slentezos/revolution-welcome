@@ -363,7 +363,7 @@ export default function WelcomeRoadmap({
           number="01"
           title="Le Quiz des 3 Préférences"
           duration="3 minutes"
-          description="Un court questionnaire ludique pour mieux comprendre ce que vous recherchez. Trois questions simples, trois réponses sincères."
+          description="Un court questionnaire ludique de 10 questions pour mieux comprendre ce que vous recherchez. Trois questions simples, trois réponses sincères."
           highlights={[
             "Questions simples et bienveillantes",
             "Aucune mauvaise réponse possible",
