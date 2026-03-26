@@ -192,8 +192,9 @@ function StepCard({
             <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-foreground mb-4 leading-tight">
               {title}
             </h2>
-            <p className="text-[hsl(var(--gold))] font-medium text-xl sm:text-2xl mb-8 flex items-center gap-2">
-              <span className="text-2xl">⏱️</span> {duration}
+            <p className="text-[hsl(var(--gold))] font-medium text-xl sm:text-2xl mb-8 flex flex-col items-start gap-1">
+              <span className="text-2xl leading-none">⏱️</span>
+              <span>{duration}</span>
             </p>
 
             <div className="w-16 h-px bg-[hsl(var(--gold))] mb-8" />
@@ -362,7 +363,7 @@ export default function WelcomeRoadmap({
         <StepCard
           number="01"
           title="Le Quiz des 3 Préférences"
-          duration="⏱️ 3 minutes"
+          duration="3 minutes"
           description="Un court questionnaire ludique pour mieux comprendre ce que vous recherchez. Trois questions simples, trois réponses sincères."
           highlights={[
             "Questions simples et bienveillantes",
@@ -382,7 +383,7 @@ export default function WelcomeRoadmap({
         <StepCard
           number="02"
           title="Photos & Vidéo"
-          duration="⏱️ 5 à 10 min"
+          duration="5 à 10 min"
           description="Montrez qui vous êtes vraiment. Ajoutez vos plus belles photos, et enregistrez une courte vidéo de présentation."
           highlights={[
             "Jusqu'à 4 photos pour illustrer votre quotidien",
@@ -402,7 +403,7 @@ export default function WelcomeRoadmap({
         <StepCard
           number="03"
           title="Mon Profil & Le Profil Idéal"
-          duration="⏱️ 15 à 20 min"
+          duration="15 à 20 min"
           description="Décrivez-vous en détail et esquissez le portrait de la personne que vous aimeriez rencontrer."
           highlights={[
             "Votre description personnelle approfondie",
@@ -422,7 +423,7 @@ export default function WelcomeRoadmap({
         <StepCard
           number="04"
           title="Le Test de Personnalité"
-          duration="⏱️ 15 à 20 min"
+          duration="15 à 20 min"
           description="Un test psychologique simple pour affiner vos correspondances."
           highlights={[
             "Basé sur des méthodes éprouvées",
