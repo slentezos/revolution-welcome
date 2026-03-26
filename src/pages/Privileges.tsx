@@ -116,7 +116,7 @@ export default function Privileges() {
       {/* Bloc 2 — Les Adhésions */}
       <section ref={cardsRef} className="section-luxury bg-[#FCF9F5] py-24 md:py-32">
         <div className="container-main mx-auto px-4 md:px-8">
-          {/* Titre et Signature 3 mois (Plus grand, plus lisible, plus autoritaire) */}
+          {/* Titre et Signature 3 mois */}
           <div className="text-center max-w-4xl mx-auto mb-16 md:mb-20">
             <h2 data-reveal className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-8">
               Choisissez votre cercle
@@ -153,11 +153,10 @@ export default function Privileges() {
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground">Cercle Privé</h3>
               </div>
 
-              {/* Nouveau Pricing : Barré élégant + 0€ + Transparence absolue */}
+              {/* Nouveau Pricing : Barré élégant + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-slate-100">
-                <div className="flex items-baseline gap-3 mb-2">
-                  <span className="font-heading text-3xl text-slate-300 line-through decoration-slate-300">50€</span>
-                  <span className="font-heading text-6xl text-foreground">0€</span>
+                <div className="mb-4">
+                  <span className="font-heading text-5xl text-slate-300 line-through decoration-slate-300/80">50€</span>
                 </div>
                 <p className="text-[12px] text-foreground font-bold tracking-widest uppercase mb-1">
                   Pendant 3 mois, sans carte.
@@ -201,11 +200,10 @@ export default function Privileges() {
                 <h3 className="font-heading text-2xl md:text-3xl text-white">Discrétion Absolue</h3>
               </div>
 
-              {/* Nouveau Pricing VIP : Barré élégant + 0€ Or + Transparence absolue */}
+              {/* Nouveau Pricing VIP : Barré élégant + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-white/10">
-                <div className="flex items-baseline gap-3 mb-2">
-                  <span className="font-heading text-3xl text-white/30 line-through decoration-white/30">65€</span>
-                  <span className="font-heading text-6xl text-[hsl(var(--gold))]">0€</span>
+                <div className="mb-4">
+                  <span className="font-heading text-5xl text-white/30 line-through decoration-white/30">65€</span>
                 </div>
                 <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
                   Pendant 3 mois, sans carte.
