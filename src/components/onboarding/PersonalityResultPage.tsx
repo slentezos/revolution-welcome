@@ -96,14 +96,14 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
               key={dim.id}
               className="bg-[hsl(var(--cream))]/10 backdrop-blur-sm border border-[hsl(var(--cream))]/20 rounded-full px-5 md:px-7 py-2.5 md:py-3">
               
-                <span className="text-[hsl(var(--cream))] md:text-lg font-medium text-xl">{dim.dominant}</span>
+                <span className="text-[hsl(var(--cream))] md:text-lg font-medium text-2xl">{dim.dominant}</span>
                 <span className="text-[hsl(var(--gold))] md:text-lg font-bold ml-2 text-2xl">{dim.percent}%</span>
               </div>
             )}
           </div>
 
           <button onClick={scrollToIntro} className="flex flex-col items-center gap-4 group cursor-pointer mt-8">
-            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity text-xl">
+            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity text-2xl">
               Lire votre analyse
             </span>
             <div className="w-16 h-16 rounded-full border-2 border-[hsl(var(--gold))]/30 flex items-center justify-center animate-slow-float bg-[hsl(var(--gold))]/5 group-hover:bg-[hsl(var(--gold))]/20 transition-all">
