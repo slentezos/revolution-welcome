@@ -153,6 +153,18 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
   const handlePillSelect = useCallback(
     (questionId: string, column: "mon" | "son", value: string, max: number) => {
       if (readOnly) return;
+      // Block "son" column edits when cooldown is locked
+      if (column === "son" && cooldown?.isCompleted && !isSonEditable) {
+        if (isCooldownLocked) {
+          toast({
+            title: "🔒 Critères en cours d'analyse",
+            description: `Vous pourrez les ajuster à nouveau dans ${cooldown?.daysRemaining} jours.`,
+          });
+        } else if (cooldown?.canEdit) {
+          setShowWarningModal(true);
+        }
+        return;
+      }
       setAnswers((prev) => {
         const current = prev[questionId]?.[column] || [];
         let next: string[];
