@@ -478,7 +478,7 @@ export default function WelcomeRoadmap({
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-4 group bg-[hsl(var(--gold))] p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[hsl(var(--gold))] hover:brightness-110 transition-all bg-primary text-[#b37614]"
           >
-            <span className="hidden md:block font-heading text-xl font-bold mt-1 text-[#b37614]">Choisir mon mode</span>
+            <span className="hidden md:block font-heading text-xl font-bold mt-1 text-primary-foreground">Choisir mon mode</span>
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center shrink-0">
               <ArrowRight className="h-5 w-5 text-primary" />
             </div>
