@@ -178,13 +178,10 @@ function StepCard({
   nextSteps: string[];
 }) {
   return (
-    // min-h-[calc(100vh-80px)] garantit que l'étape prend exactement la hauteur de l'écran (moins la barre de navigation)
     <section className="relative w-full min-h-[calc(100vh-80px)] flex items-center py-16 md:py-0 border-b border-border/40">
       <div className="max-w-6xl mx-auto px-6 md:px-16 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* COLONNE GAUCHE : Storytelling (Titre et Description) */}
           <div className="relative z-10">
-            {/* Le grand numéro passe en arrière-plan (filigrane) pour ne pas casser la hauteur */}
             <span className="absolute -top-16 -left-10 font-heading text-[160px] leading-none text-muted-foreground/5 select-none -z-10">
               {number}
             </span>
@@ -199,12 +196,12 @@ function StepCard({
 
             <div className="w-16 h-px bg-[hsl(var(--gold))] mb-8" />
 
-            <p className="leading-relaxed text-xl max-w-lg text-secondary-foreground font-normal sm:text-2xl">{description}</p>
+            <p className="leading-relaxed text-xl max-w-lg text-secondary-foreground font-normal sm:text-2xl">
+              {description}
+            </p>
           </div>
 
-          {/* COLONNE DROITE : Action (Highlights et Next Steps) */}
           <div className="flex flex-col gap-8 z-10">
-            {/* Grille de réassurance (plus compacte et lisible) */}
             <div className="grid sm:grid-cols-2 gap-4">
               {highlights.map((h, i) => (
                 <div
@@ -217,7 +214,6 @@ function StepCard({
               ))}
             </div>
 
-            {/* Bloc Marron (Remonté, impossible à rater) */}
             <div className="border border-[hsl(var(--gold)/0.2)] p-8 sm:p-10 bg-[#b27615] rounded-sm shadow-md">
               <h3 className="font-heading mb-6 font-semibold text-white text-3xl">Que se passe-t-il ensuite ?</h3>
               <ul className="space-y-4">
@@ -252,6 +248,7 @@ export default function WelcomeRoadmap({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0); // 0 = hero, 1-4 = steps
 
+  const heroRef = useRef<HTMLDivElement>(null); // NOUVEAU: Référence pour la section Hero
   const step1Ref = useRef<HTMLDivElement>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
   const step3Ref = useRef<HTMLDivElement>(null);
@@ -260,17 +257,16 @@ export default function WelcomeRoadmap({
   const refs = [step1Ref, step2Ref, step3Ref, step4Ref];
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
-    // Petit décalage pour ne pas que la navbar couvre le titre
     const y = (ref.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 100;
     window.scrollTo({ top: y, behavior: "smooth" });
   };
 
-  // Le "Scroll Spy" pour détecter où est l'utilisateur
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            if (entry.target === heroRef.current) setActiveStep(0);
             if (entry.target === step1Ref.current) setActiveStep(1);
             if (entry.target === step2Ref.current) setActiveStep(2);
             if (entry.target === step3Ref.current) setActiveStep(3);
@@ -278,20 +274,23 @@ export default function WelcomeRoadmap({
           }
         });
       },
-      { threshold: 0.3 }, // Déclenche quand 30% du bloc est visible
+      { threshold: 0.4 }, // MODIFIÉ: Augmenté à 0.4 pour éviter les déclenchements précoces
     );
 
+    const rH = heroRef.current;
     const r1 = step1Ref.current;
     const r2 = step2Ref.current;
     const r3 = step3Ref.current;
     const r4 = step4Ref.current;
 
+    if (rH) observer.observe(rH);
     if (r1) observer.observe(r1);
     if (r2) observer.observe(r2);
     if (r3) observer.observe(r3);
     if (r4) observer.observe(r4);
 
     return () => {
+      if (rH) observer.unobserve(rH);
       if (r1) observer.unobserve(r1);
       if (r2) observer.unobserve(r2);
       if (r3) observer.unobserve(r3);
@@ -304,7 +303,7 @@ export default function WelcomeRoadmap({
       <style>{slowFloatAnimation}</style>
 
       {/* ─── HERO ─── */}
-      <section className="section-luxury text-center pb-0">
+      <section ref={heroRef} className="section-luxury text-center pb-0">
         <div className="max-w-3xl mx-auto px-6">
           <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-2xl font-medium">
             Bienvenue sur Kalimera
@@ -458,9 +457,9 @@ export default function WelcomeRoadmap({
 
       {/* Bouton Droite (Suivant ou Fin) */}
       <div
-        className={`fixed top-1/2 -translate-y-1/2 right-4 md:right-8 z-50 transition-all duration-500 ${activeStep > 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[20px]"}`}
+        className={`fixed top-1/2 -translate-y-1/2 right-4 md:right-8 z-50 transition-all duration-500 ${activeStep >= 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[20px]"}`}
       >
-        {/* Affiché pour Etape 1, 2, 3 */}
+        {/* Affiché pour Hero(0), Etape 1, 2, 3 */}
         {activeStep < 4 && (
           <button
             onClick={() => scrollTo(refs[activeStep])}
@@ -479,7 +478,9 @@ export default function WelcomeRoadmap({
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-4 group bg-[hsl(var(--gold))] p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[hsl(var(--gold))] hover:brightness-110 transition-all bg-primary text-[#b37614]"
           >
-            <span className="hidden md:block font-heading text-xl font-bold mt-1 text-primary-foreground">Choisir mon mode</span>
+            <span className="hidden md:block font-heading text-xl font-bold mt-1 text-primary-foreground">
+              Choisir mon mode
+            </span>
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center shrink-0">
               <ArrowRight className="h-5 w-5 text-primary" />
             </div>
