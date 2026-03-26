@@ -328,7 +328,7 @@ export default function ContactMemberContent() {
                   size="lg"
                   disabled={isFormLocked}
                   onClick={isListening ? stopDictation : startDictation}
-                  className={`gap-2 rounded-xl transition-all duration-300 ${
+                  className={`bg-[#181c25] text-primary-foreground gap-2 rounded-xl transition-all duration-300 ${
                     isFormLocked
                       ? "opacity-40 cursor-not-allowed"
                       : isListening
