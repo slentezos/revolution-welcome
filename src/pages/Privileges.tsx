@@ -150,7 +150,7 @@ export default function Privileges() {
                 <div className="w-12 h-12 border border-slate-200 flex items-center justify-center rounded-sm">
                   <Sparkles className="h-5 w-5 text-slate-400" />
                 </div>
-                <h3 className="font-heading text-2xl md:text-3xl text-foreground">Cercle Privé</h3>
+                <h3 className="font-heading text-2xl text-foreground md:text-4xl">Cercle Privé</h3>
               </div>
 
               {/* Nouveau Pricing : Barré élégant + Transparence absolue */}
@@ -197,7 +197,7 @@ export default function Privileges() {
                 <div className="w-12 h-12 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
                   <Crown className="h-5 w-5 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-2xl md:text-3xl text-white">Discrétion Absolue</h3>
+                <h3 className="font-heading text-2xl text-white md:text-4xl">Discrétion Absolue</h3>
               </div>
 
               {/* Nouveau Pricing VIP : Barré élégant + Transparence absolue */}
