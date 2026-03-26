@@ -285,7 +285,7 @@ export default function ContactMemberContent() {
       </section>
 
       {/* ─── Contact Form ─── */}
-      <section ref={formRef} className="section-padding bg-secondary/30">
+      <section ref={formRef} className="section-padding bg-secondary/30 py-[100px]">
         <div className="container-main mx-auto px-4 md:px-8 max-w-3xl">
           <div data-reveal className="text-center mb-10">
             <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
