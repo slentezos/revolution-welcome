@@ -42,16 +42,33 @@ const categories: PreferenceCategory[] = [
 
 const TOTAL_PAGES = categories.length + 1; // +1 for "why alone"
 
-export default function OnboardingQuiz({ profileId, onComplete }: OnboardingQuizProps) {
+export default function OnboardingQuiz({ profileId, onComplete, cooldown }: OnboardingQuizProps) {
   const [preferences, setPreferences] = useState<Record<string, string[]>>(
     Object.fromEntries(categories.map((cat) => [cat.id, ["", "", ""]]))
   );
   const [whyAlone, setWhyAlone] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  const [editUnlocked, setEditUnlocked] = useState(false);
   const { toast } = useToast();
 
+  // Cooldown: if locked, show toast and block editing
+  const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
+  const isCooldownEditable = !cooldown || !cooldown.isCompleted || cooldown.canEdit || editUnlocked;
+
   const handleInputChange = (categoryId: string, index: number, value: string) => {
+    if (!isCooldownEditable) {
+      if (isCooldownLocked) {
+        toast({
+          title: "🔒 Critères en cours d'analyse",
+          description: `Vous pourrez les ajuster à nouveau dans ${cooldown?.daysRemaining} jours.`,
+        });
+      } else if (cooldown?.canEdit) {
+        setShowWarningModal(true);
+      }
+      return;
+    }
     setPreferences((prev) => ({
       ...prev,
       [categoryId]: prev[categoryId].map((v, i) => i === index ? value.slice(0, 40) : v)
