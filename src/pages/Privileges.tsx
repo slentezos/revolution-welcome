@@ -156,12 +156,14 @@ export default function Privileges() {
               {/* Nouveau Pricing : Barré élégant + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-slate-100">
                 <div className="mb-4">
-                  <span className="font-heading text-5xl line-through decoration-slate-300/80 text-primary">50€</span>
+                  <span className="font-heading text-5xl text-foreground line-through decoration-foreground decoration-2">
+                    50€
+                  </span>
                 </div>
-                <p className="text-foreground font-bold tracking-widest uppercase mb-1 text-xl">
+                <p className="text-[12px] text-foreground font-bold tracking-widest uppercase mb-1">
                   Pendant 3 mois, sans carte.
                 </p>
-                <p className="text-muted-foreground tracking-widest uppercase text-lg">
+                <p className="text-[11px] text-muted-foreground tracking-widest uppercase">
                   Puis 50€/mois (ou 120€ / 3 mois)
                 </p>
               </div>
@@ -203,12 +205,14 @@ export default function Privileges() {
               {/* Nouveau Pricing VIP : Barré élégant + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-white/10">
                 <div className="mb-4">
-                  <span className="font-heading text-5xl line-through decoration-white/30 text-primary-foreground">65€</span>
+                  <span className="font-heading text-5xl text-white line-through decoration-white decoration-2">
+                    65€
+                  </span>
                 </div>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl">
+                <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
                   Pendant 3 mois, sans carte.
                 </p>
-                <p className="text-white/50 tracking-widest uppercase text-lg">Puis 65€/mois (ou 150€ / 3 mois)</p>
+                <p className="text-[11px] text-white/50 tracking-widest uppercase">Puis 65€/mois (ou 150€ / 3 mois)</p>
               </div>
 
               <ul className="space-y-5 mb-12 flex-1">
