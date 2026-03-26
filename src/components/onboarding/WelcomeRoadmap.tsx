@@ -9,8 +9,8 @@ import {
   ClipboardList,
   Brain,
   ArrowDown,
-  ArrowRight,
-  ArrowLeft,
+  ArrowUp,
+  Sparkles,
 } from "lucide-react";
 
 /* ─── ANIMATION DOUCE PERSONNALISÉE ─── */
@@ -248,7 +248,7 @@ export default function WelcomeRoadmap({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0); // 0 = hero, 1-4 = steps
 
-  const heroRef = useRef<HTMLDivElement>(null); // NOUVEAU: Référence pour la section Hero
+  const heroRef = useRef<HTMLDivElement>(null);
   const step1Ref = useRef<HTMLDivElement>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
   const step3Ref = useRef<HTMLDivElement>(null);
@@ -274,7 +274,7 @@ export default function WelcomeRoadmap({
           }
         });
       },
-      { threshold: 0.4 }, // MODIFIÉ: Augmenté à 0.4 pour éviter les déclenchements précoces
+      { threshold: 0.4 },
     );
 
     const rH = heroRef.current;
@@ -440,7 +440,7 @@ export default function WelcomeRoadmap({
 
       {/* ─── BOUTONS FLOTTANTS (NAVIGATION GLOBALE) ─── */}
 
-      {/* Bouton Gauche (Précédent) */}
+      {/* Bouton Gauche (Précédent : Flèche Haut) */}
       <div
         className={`fixed top-1/2 -translate-y-1/2 left-4 md:left-8 z-50 transition-all duration-500 ${activeStep > 1 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[-20px]"}`}
       >
@@ -449,7 +449,7 @@ export default function WelcomeRoadmap({
           className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pr-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
         >
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
-            <ArrowLeft className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+            <ArrowUp className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
           </div>
           <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep - 1}</span>
         </button>
@@ -459,26 +459,27 @@ export default function WelcomeRoadmap({
       <div
         className={`fixed top-1/2 -translate-y-1/2 right-4 md:right-8 z-50 transition-all duration-500 ${activeStep >= 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[20px]"}`}
       >
-        {/* Affiché pour Hero(0), Etape 1, 2, 3 */}
+        {/* Affiché pour Hero(0), Etape 1, 2, 3 (Flèche Bas) */}
         {activeStep < 4 && (
-       <button ... className="... bg-[#1B2333] text-white hover:brightness-110 shadow-xl">
-  <span className="...">Choisir mon mode</span>
-  <Sparkles className="h-5 w-5 text-[hsl(var(--gold))]" />
-</button>
+          <button
+            onClick={() => scrollTo(refs[activeStep])}
+            className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
+          >
+            <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep + 1}</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
+              <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
+            </div>
+          </button>
         )}
 
-        {/* Affiché pour Etape 4 (Action Finale) — hidden in viewOnly mode */}
+        {/* Affiché pour Etape 4 (Action Finale) — Version Elegante / Quiet Luxury */}
         {activeStep === 4 && !viewOnly && (
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-4 group bg-[hsl(var(--gold))] p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[hsl(var(--gold))] hover:brightness-110 transition-all bg-primary text-[#b37614]"
+            className="flex items-center gap-4 group bg-[#1B2333] p-4 pl-8 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.25)] border border-[#1B2333] hover:brightness-110 transition-all text-white"
           >
-            <span className="hidden md:block font-heading text-xl font-bold mt-1 text-primary-foreground">
-              Choisir mon mode
-            </span>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white flex items-center justify-center shrink-0">
-              <ArrowRight className="h-5 w-5 text-primary" />
-            </div>
+            <span className="hidden md:block font-heading text-xl font-bold mt-1 tracking-wide">Choisir mon mode</span>
+            <Sparkles className="h-5 w-5 text-[hsl(var(--gold))]" />
           </button>
         )}
       </div>
