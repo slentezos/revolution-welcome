@@ -152,6 +152,23 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] pb-40">
+      {/* Cooldown locked banner */}
+      {isCooldownLocked && (
+        <div className="bg-secondary border-b border-border px-6 py-4 text-center">
+          <p className="text-muted-foreground text-lg flex items-center justify-center gap-2">
+            <Lock className="h-5 w-5" />
+            🔒 Critères en cours d'analyse. Vous pourrez les ajuster à nouveau dans {cooldown?.daysRemaining} jours.
+          </p>
+        </div>
+      )}
+
+      {/* Cooldown warning modal */}
+      <CriteriaEditWarningModal
+        open={showWarningModal}
+        onOpenChange={setShowWarningModal}
+        onConfirm={() => setEditUnlocked(true)}
+      />
+
       {/* ══════ TOP BAR ══════ */}
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md pt-8 pb-4 shadow-sm border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">

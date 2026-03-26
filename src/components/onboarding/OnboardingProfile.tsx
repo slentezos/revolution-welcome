@@ -5,10 +5,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PROFILE_QUESTIONS, CHAPTERS, getChapterQuestions, type ProfileQuestion } from "@/data/profileQuestions";
 
+interface CooldownInfo {
+  isCompleted: boolean;
+  isLocked: boolean;
+  canEdit: boolean;
+  daysRemaining: number;
+  recordCriteriaUpdate: () => Promise<void>;
+}
+
 interface OnboardingProfileProps {
   profileId: string;
   onComplete: () => void;
   readOnly?: boolean;
+  cooldown?: CooldownInfo;
 }
 
 type Answers = Record<string, {mon: string[];son: string[];}>;
