@@ -188,6 +188,17 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
   const handleFreeInput = useCallback(
     (questionId: string, column: "mon" | "son", value: string, index?: number) => {
       if (readOnly) return;
+      if (column === "son" && cooldown?.isCompleted && !isSonEditable) {
+        if (isCooldownLocked) {
+          toast({
+            title: "🔒 Critères en cours d'analyse",
+            description: `Vous pourrez les ajuster à nouveau dans ${cooldown?.daysRemaining} jours.`,
+          });
+        } else if (cooldown?.canEdit) {
+          setShowWarningModal(true);
+        }
+        return;
+      }
       setAnswers((prev) => {
         const current = prev[questionId]?.[column] || [];
         let next: string[];
@@ -264,6 +275,23 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
   return (
     <div className={`min-h-screen bg-background ${readOnly ? "opacity-80" : ""}`}>
       <style>{slowFloatAnimation}</style>
+
+      {/* Cooldown locked banner */}
+      {isCooldownLocked && (
+        <div className="bg-secondary border-b border-border px-6 py-4 text-center">
+          <p className="text-muted-foreground text-lg flex items-center justify-center gap-2">
+            <Lock className="h-5 w-5" />
+            🔒 Les critères de recherche ("Son profil") sont en cours d'analyse. Vous pourrez les ajuster dans {cooldown?.daysRemaining} jours.
+          </p>
+        </div>
+      )}
+
+      {/* Cooldown warning modal */}
+      <CriteriaEditWarningModal
+        open={showWarningModal}
+        onOpenChange={setShowWarningModal}
+        onConfirm={() => setEditUnlocked(true)}
+      />
 
       {/* ── Sticky Progress Header ── */}
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md pt-8 pb-4 shadow-sm border-b border-gray-100">
