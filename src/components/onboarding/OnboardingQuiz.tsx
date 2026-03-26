@@ -2,13 +2,23 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import CriteriaEditWarningModal from "@/components/onboarding/CriteriaEditWarningModal";
+
+interface CooldownInfo {
+  isCompleted: boolean;
+  isLocked: boolean;
+  canEdit: boolean;
+  daysRemaining: number;
+  recordCriteriaUpdate: () => Promise<void>;
+}
 
 interface OnboardingQuizProps {
   profileId: string;
   onComplete: () => void;
+  cooldown?: CooldownInfo;
 }
 
 type PreferenceCategory = {
@@ -32,16 +42,33 @@ const categories: PreferenceCategory[] = [
 
 const TOTAL_PAGES = categories.length + 1; // +1 for "why alone"
 
-export default function OnboardingQuiz({ profileId, onComplete }: OnboardingQuizProps) {
+export default function OnboardingQuiz({ profileId, onComplete, cooldown }: OnboardingQuizProps) {
   const [preferences, setPreferences] = useState<Record<string, string[]>>(
     Object.fromEntries(categories.map((cat) => [cat.id, ["", "", ""]]))
   );
   const [whyAlone, setWhyAlone] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  const [editUnlocked, setEditUnlocked] = useState(false);
   const { toast } = useToast();
 
+  // Cooldown: if locked, show toast and block editing
+  const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
+  const isCooldownEditable = !cooldown || !cooldown.isCompleted || cooldown.canEdit || editUnlocked;
+
   const handleInputChange = (categoryId: string, index: number, value: string) => {
+    if (!isCooldownEditable) {
+      if (isCooldownLocked) {
+        toast({
+          title: "🔒 Critères en cours d'analyse",
+          description: `Vous pourrez les ajuster à nouveau dans ${cooldown?.daysRemaining} jours.`,
+        });
+      } else if (cooldown?.canEdit) {
+        setShowWarningModal(true);
+      }
+      return;
+    }
     setPreferences((prev) => ({
       ...prev,
       [categoryId]: prev[categoryId].map((v, i) => i === index ? value.slice(0, 40) : v)
@@ -125,6 +152,23 @@ export default function OnboardingQuiz({ profileId, onComplete }: OnboardingQuiz
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] pb-40">
+      {/* Cooldown locked banner */}
+      {isCooldownLocked && (
+        <div className="bg-secondary border-b border-border px-6 py-4 text-center">
+          <p className="text-muted-foreground text-lg flex items-center justify-center gap-2">
+            <Lock className="h-5 w-5" />
+            🔒 Critères en cours d'analyse. Vous pourrez les ajuster à nouveau dans {cooldown?.daysRemaining} jours.
+          </p>
+        </div>
+      )}
+
+      {/* Cooldown warning modal */}
+      <CriteriaEditWarningModal
+        open={showWarningModal}
+        onOpenChange={setShowWarningModal}
+        onConfirm={() => setEditUnlocked(true)}
+      />
+
       {/* ══════ TOP BAR ══════ */}
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md pt-8 pb-4 shadow-sm border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">

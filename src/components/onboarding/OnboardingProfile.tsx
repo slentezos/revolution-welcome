@@ -1,14 +1,24 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Check, ArrowDown } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, ArrowDown, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PROFILE_QUESTIONS, CHAPTERS, getChapterQuestions, type ProfileQuestion } from "@/data/profileQuestions";
+import CriteriaEditWarningModal from "@/components/onboarding/CriteriaEditWarningModal";
+
+interface CooldownInfo {
+  isCompleted: boolean;
+  isLocked: boolean;
+  canEdit: boolean;
+  daysRemaining: number;
+  recordCriteriaUpdate: () => Promise<void>;
+}
 
 interface OnboardingProfileProps {
   profileId: string;
   onComplete: () => void;
   readOnly?: boolean;
+  cooldown?: CooldownInfo;
 }
 
 type Answers = Record<string, {mon: string[];son: string[];}>;
@@ -33,8 +43,14 @@ type ScrollNode = {
   index?: number; // Index absolu pour les questions uniquement
 };
 
-export default function OnboardingProfile({ profileId, onComplete, readOnly = false }: OnboardingProfileProps) {
+export default function OnboardingProfile({ profileId, onComplete, readOnly = false, cooldown }: OnboardingProfileProps) {
   const { toast } = useToast();
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  const [editUnlocked, setEditUnlocked] = useState(false);
+
+  // Cooldown logic for "son profil" fields
+  const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
+  const isSonEditable = !cooldown || !cooldown.isCompleted || cooldown.canEdit || editUnlocked;
 
   const [currentChapter, setCurrentChapter] = useState(0);
   const [answers, setAnswers] = useState<Answers>(() => {
@@ -137,6 +153,18 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
   const handlePillSelect = useCallback(
     (questionId: string, column: "mon" | "son", value: string, max: number) => {
       if (readOnly) return;
+      // Block "son" column edits when cooldown is locked
+      if (column === "son" && cooldown?.isCompleted && !isSonEditable) {
+        if (isCooldownLocked) {
+          toast({
+            title: "🔒 Critères en cours d'analyse",
+            description: `Vous pourrez les ajuster à nouveau dans ${cooldown?.daysRemaining} jours.`,
+          });
+        } else if (cooldown?.canEdit) {
+          setShowWarningModal(true);
+        }
+        return;
+      }
       setAnswers((prev) => {
         const current = prev[questionId]?.[column] || [];
         let next: string[];
@@ -160,6 +188,17 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
   const handleFreeInput = useCallback(
     (questionId: string, column: "mon" | "son", value: string, index?: number) => {
       if (readOnly) return;
+      if (column === "son" && cooldown?.isCompleted && !isSonEditable) {
+        if (isCooldownLocked) {
+          toast({
+            title: "🔒 Critères en cours d'analyse",
+            description: `Vous pourrez les ajuster à nouveau dans ${cooldown?.daysRemaining} jours.`,
+          });
+        } else if (cooldown?.canEdit) {
+          setShowWarningModal(true);
+        }
+        return;
+      }
       setAnswers((prev) => {
         const current = prev[questionId]?.[column] || [];
         let next: string[];
@@ -236,6 +275,23 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
   return (
     <div className={`min-h-screen bg-background ${readOnly ? "opacity-80" : ""}`}>
       <style>{slowFloatAnimation}</style>
+
+      {/* Cooldown locked banner */}
+      {isCooldownLocked && (
+        <div className="bg-secondary border-b border-border px-6 py-4 text-center">
+          <p className="text-muted-foreground text-lg flex items-center justify-center gap-2">
+            <Lock className="h-5 w-5" />
+            🔒 Les critères de recherche ("Son profil") sont en cours d'analyse. Vous pourrez les ajuster dans {cooldown?.daysRemaining} jours.
+          </p>
+        </div>
+      )}
+
+      {/* Cooldown warning modal */}
+      <CriteriaEditWarningModal
+        open={showWarningModal}
+        onOpenChange={setShowWarningModal}
+        onConfirm={() => setEditUnlocked(true)}
+      />
 
       {/* ── Sticky Progress Header ── */}
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md pt-8 pb-4 shadow-sm border-b border-gray-100">
