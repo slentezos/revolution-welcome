@@ -31,7 +31,7 @@ export function useCriteriaCooldown(profileId: string | null) {
         .from("profiles")
         .select("onboarding_step, onboarding_completed_at, last_criteria_update_at")
         .eq("id", profileId)
-        .maybeSingle();
+        .maybeSingle() as { data: any };
 
       if (!profile) {
         setState((prev) => ({ ...prev, loading: false }));
