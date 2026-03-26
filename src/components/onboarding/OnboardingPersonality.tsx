@@ -324,7 +324,7 @@ export default function OnboardingPersonality({
                   scrollMarginTop: "180px",
                 }}
               >
-                <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-4 block text-lg">
+                <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-4 block text-xl">
                   Partie {chapterIdx + 1}
                 </span>
                 <h2 className="font-heading text-4xl md:text-6xl text-foreground mb-10 max-w-2xl leading-tight">
@@ -338,7 +338,7 @@ export default function OnboardingPersonality({
                   }}
                   className="flex flex-col items-center gap-4 group transition-all duration-500"
                 >
-                  <span className="text-base font-medium text-muted-foreground group-hover:text-[#D4AF37] transition-colors">
+                  <span className="font-medium text-muted-foreground group-hover:text-[#D4AF37] transition-colors text-2xl">
                     Cliquez pour continuer vers les questions
                   </span>
                   <div className="w-16 h-16 rounded-full border-2 border-[#D4AF37]/30 flex items-center justify-center animate-slow-float bg-[#D4AF37]/5 group-hover:bg-[#D4AF37]/20 transition-all">
