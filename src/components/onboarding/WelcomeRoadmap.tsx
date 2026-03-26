@@ -461,15 +461,10 @@ export default function WelcomeRoadmap({
       >
         {/* Affiché pour Hero(0), Etape 1, 2, 3 */}
         {activeStep < 4 && (
-          <button
-            onClick={() => scrollTo(refs[activeStep])}
-            className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
-          >
-            <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep + 1}</span>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
-              <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
-            </div>
-          </button>
+       <button ... className="... bg-[#1B2333] text-white hover:brightness-110 shadow-xl">
+  <span className="...">Choisir mon mode</span>
+  <Sparkles className="h-5 w-5 text-[hsl(var(--gold))]" />
+</button>
         )}
 
         {/* Affiché pour Etape 4 (Action Finale) — hidden in viewOnly mode */}
