@@ -156,12 +156,12 @@ export default function Privileges() {
               {/* Nouveau Pricing : Barré élégant + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-slate-100">
                 <div className="mb-4">
-                  <span className="font-heading text-5xl text-slate-300 line-through decoration-slate-300/80">50€</span>
+                  <span className="font-heading text-5xl line-through decoration-slate-300/80 text-primary">50€</span>
                 </div>
-                <p className="text-[12px] text-foreground font-bold tracking-widest uppercase mb-1">
+                <p className="text-foreground font-bold tracking-widest uppercase mb-1 text-xl">
                   Pendant 3 mois, sans carte.
                 </p>
-                <p className="text-[11px] text-muted-foreground tracking-widest uppercase">
+                <p className="text-muted-foreground tracking-widest uppercase text-lg">
                   Puis 50€/mois (ou 120€ / 3 mois)
                 </p>
               </div>
@@ -170,7 +170,7 @@ export default function Privileges() {
                 {cerclePriveFeatures.map((feature) => (
                   <li key={feature} className="flex items-start gap-4">
                     <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                    <span className="text-foreground/80 leading-relaxed">{feature}</span>
+                    <span className="text-foreground/80 leading-relaxed text-xl">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -203,19 +203,19 @@ export default function Privileges() {
               {/* Nouveau Pricing VIP : Barré élégant + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-white/10">
                 <div className="mb-4">
-                  <span className="font-heading text-5xl text-white/30 line-through decoration-white/30">65€</span>
+                  <span className="font-heading text-5xl line-through decoration-white/30 text-primary-foreground">65€</span>
                 </div>
-                <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
+                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl">
                   Pendant 3 mois, sans carte.
                 </p>
-                <p className="text-[11px] text-white/50 tracking-widest uppercase">Puis 65€/mois (ou 150€ / 3 mois)</p>
+                <p className="text-white/50 tracking-widest uppercase text-lg">Puis 65€/mois (ou 150€ / 3 mois)</p>
               </div>
 
               <ul className="space-y-5 mb-12 flex-1">
                 {discretionFeatures.map((feature) => (
                   <li key={feature} className="flex items-start gap-4">
                     <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                    <span className="text-white/90 leading-relaxed">{feature}</span>
+                    <span className="text-white/90 leading-relaxed text-xl">{feature}</span>
                   </li>
                 ))}
               </ul>
