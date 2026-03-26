@@ -198,7 +198,7 @@ function StepCard({
 
             <div className="w-16 h-px bg-[hsl(var(--gold))] mb-8" />
 
-            <p className="leading-relaxed text-[#232a39] text-xl sm:text-2xl font-light max-w-lg">{description}</p>
+            <p className="leading-relaxed text-xl max-w-lg text-secondary-foreground font-normal sm:text-2xl">{description}</p>
           </div>
 
           {/* COLONNE DROITE : Action (Highlights et Next Steps) */}
@@ -211,19 +211,19 @@ function StepCard({
                   className="flex items-start gap-3 p-5 bg-white border border-slate-200 shadow-sm rounded-sm"
                 >
                   <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                  <span className="leading-snug text-lg text-[#232a39] font-medium">{h}</span>
+                  <span className="leading-snug text-[#232a39] font-medium text-xl">{h}</span>
                 </div>
               ))}
             </div>
 
             {/* Bloc Marron (Remonté, impossible à rater) */}
             <div className="border border-[hsl(var(--gold)/0.2)] p-8 sm:p-10 bg-[#b27615] rounded-sm shadow-md">
-              <h3 className="font-heading mb-6 text-2xl font-semibold text-white">Que se passe-t-il ensuite ?</h3>
+              <h3 className="font-heading mb-6 font-semibold text-white text-3xl">Que se passe-t-il ensuite ?</h3>
               <ul className="space-y-4">
                 {nextSteps.map((s, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <span className="text-[hsl(var(--gold-light))] font-bold mt-1">→</span>
-                    <span className="leading-relaxed text-lg text-white/95">{s}</span>
+                    <span className="leading-relaxed text-white/95 text-xl">{s}</span>
                   </li>
                 ))}
               </ul>
