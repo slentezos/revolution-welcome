@@ -338,7 +338,7 @@ export default function OnboardingPersonality({
                   }}
                   className="flex flex-col items-center gap-4 group transition-all duration-500"
                 >
-                  <span className="font-medium text-muted-foreground group-hover:text-[#D4AF37] transition-colors text-2xl">
+                  <span className="font-medium transition-colors text-2xl text-[#1a2232]">
                     Cliquez pour continuer vers les questions
                   </span>
                   <div className="w-16 h-16 rounded-full border-2 border-[#D4AF37]/30 flex items-center justify-center animate-slow-float bg-[#D4AF37]/5 group-hover:bg-[#D4AF37]/20 transition-all">
