@@ -326,7 +326,11 @@ export default function ReservationPromesse() {
             >
               Tout est inclus pour 89 €
             </h2>
-            <p data-reveal data-reveal-delay="300" className="text-primary-foreground/60 max-w-xl mx-auto text-xl leading-relaxed">
+            <p
+              data-reveal
+              data-reveal-delay="300"
+              className="text-primary-foreground/60 max-w-xl mx-auto text-xl leading-relaxed"
+            >
               Un paiement unique, sans abonnement, sans surprise
             </p>
           </div>
@@ -348,9 +352,6 @@ export default function ReservationPromesse() {
           </div>
 
           <div data-reveal data-reveal-delay="400" className="text-center">
-            <span className="font-heading text-7xl md:text-8xl font-medium text-[hsl(var(--gold-light))] block mb-3">
-              89 €
-            </span>
             <p className="text-primary-foreground/45 mb-10 text-xl">Paiement unique</p>
             <button
               onClick={() => navigate("/reservation/calendrier")}
@@ -414,7 +415,11 @@ export default function ReservationPromesse() {
           <div data-reveal className="w-14 h-14 mx-auto mb-8 bg-primary/5 flex items-center justify-center rounded-2xl">
             <Headphones className="h-7 w-7 text-[hsl(var(--gold))]" />
           </div>
-          <span data-reveal data-reveal-delay="100" className="font-medium tracking-[0.2em] uppercase mb-6 block text-xl text-primary-foreground">
+          <span
+            data-reveal
+            data-reveal-delay="100"
+            className="font-medium tracking-[0.2em] uppercase mb-6 block text-xl text-primary-foreground"
+          >
             Zéro stress technique
           </span>
           <h2
@@ -425,7 +430,11 @@ export default function ReservationPromesse() {
             Prêt à vous lancer ?
           </h2>
           <div data-reveal data-reveal-delay="250" className="w-12 h-px bg-[hsl(var(--gold)/0.4)] mx-auto mb-8" />
-          <p data-reveal data-reveal-delay="350" className="mb-14 max-w-2xl mx-auto text-xl leading-relaxed text-primary-foreground">
+          <p
+            data-reveal
+            data-reveal-delay="350"
+            className="mb-14 max-w-2xl mx-auto text-xl leading-relaxed text-primary-foreground"
+          >
             Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre profil sera prêt à
             rencontrer l'amour.
           </p>
