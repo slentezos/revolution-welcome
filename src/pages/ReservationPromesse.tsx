@@ -29,7 +29,7 @@ const SERVICE_STEPS = [
     action:
       "Nous échangeons naturellement en vidéo autour de nos 50 questions pour comprendre votre parcours et la personne que vous recherchez.",
     result: "Votre conseiller rédige l'intégralité de votre description mot pour mot, avec justesse et élégance.",
-    image: conciergeQuestionnaire,
+    image: promiseStep1,
   },
   {
     number: "02",
@@ -40,7 +40,7 @@ const SERVICE_STEPS = [
     action:
       "Nous parcourons notre quiz ludique pour sélectionner ensemble vos centres d'intérêt, vos goûts culturels et vos loisirs favoris.",
     result: "Des éléments concrets et positifs ajoutés à votre profil pour briser la glace facilement.",
-    image: coupleBeach,
+    image: promiseStep2,
   },
   {
     number: "03",
@@ -51,7 +51,7 @@ const SERVICE_STEPS = [
     action: "Nous remplissons ensemble votre test de personnalité afin d'analyser votre dynamique relationnelle.",
     result:
       "Un portrait psychologique subtil qui permettra à notre algorithme de vous présenter les meilleures compatibilités.",
-    image: coupleCafe,
+    image: promiseStep3,
   },
   {
     number: "04",
@@ -62,7 +62,7 @@ const SERVICE_STEPS = [
     action:
       "Nous sélectionnons ensemble les meilleurs clichés et vous guidons pour enregistrer une courte présentation vidéo naturelle.",
     result: "Un profil visuel lumineux, rassurant et très attractif pour vos futurs contacts.",
-    image: conciergePhotos,
+    image: promiseStep4,
   },
 ];
 
