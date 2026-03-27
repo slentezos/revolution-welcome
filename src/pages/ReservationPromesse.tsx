@@ -14,10 +14,10 @@ import {
 import Layout from "@/components/layout/Layout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import conciergeHero from "@/assets/concierge-hero.jpg";
-import conciergePhotos from "@/assets/concierge-photos.jpg";
-import conciergeQuestionnaire from "@/assets/concierge-questionnaire.jpg";
-import coupleCafe from "@/assets/couple-cafe.jpg";
-import coupleBeach from "@/assets/couple-beach.jpg";
+import promiseStep1 from "@/assets/promise-step1.jpg";
+import promiseStep2 from "@/assets/promise-step2.jpg";
+import promiseStep3 from "@/assets/promise-step3.jpg";
+import promiseStep4 from "@/assets/promise-step4.jpg";
 
 const SERVICE_STEPS = [
   {
