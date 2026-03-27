@@ -400,7 +400,7 @@ export default function ReservationPromesse() {
                   <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center shrink-0">
                     <Check className="h-4 w-4 text-[hsl(var(--gold))]" />
                   </div>
-                  <span className="text-foreground text-base font-medium leading-snug">{g}</span>
+                  <span className="text-foreground font-medium leading-snug text-xl">{g}</span>
                 </div>
               ))}
             </div>
@@ -409,30 +409,30 @@ export default function ReservationPromesse() {
       </section>
 
       {/* Final CTA */}
-      <section ref={ctaRef} className="py-28 lg:py-36 bg-background">
+      <section ref={ctaRef} className="py-28 lg:py-36 bg-[#232a39]">
         <div className="container-main mx-auto px-6 md:px-12 text-center">
           <div data-reveal className="w-14 h-14 mx-auto mb-8 bg-primary/5 flex items-center justify-center rounded-2xl">
             <Headphones className="h-7 w-7 text-[hsl(var(--gold))]" />
           </div>
-          <span data-reveal data-reveal-delay="100" className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 block text-xl">
+          <span data-reveal data-reveal-delay="100" className="font-medium tracking-[0.2em] uppercase mb-6 block text-xl text-primary-foreground">
             Zéro stress technique
           </span>
           <h2
             data-reveal
             data-reveal-delay="200"
-            className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight"
+            className="font-heading text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight text-primary-foreground"
           >
             Prêt à vous lancer ?
           </h2>
           <div data-reveal data-reveal-delay="250" className="w-12 h-px bg-[hsl(var(--gold)/0.4)] mx-auto mb-8" />
-          <p data-reveal data-reveal-delay="350" className="text-muted-foreground mb-14 max-w-2xl mx-auto text-xl leading-relaxed">
+          <p data-reveal data-reveal-delay="350" className="mb-14 max-w-2xl mx-auto text-xl leading-relaxed text-primary-foreground">
             Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre profil sera prêt à
             rencontrer l'amour.
           </p>
           <div data-reveal data-reveal-delay="450">
             <button
               onClick={() => navigate("/reservation/calendrier")}
-              className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-14 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-xl rounded-full"
+              className="inline-flex items-center gap-3 px-14 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-xl rounded-full bg-[#e2a336] text-[#232a39]"
             >
               Réserver mon créneau
               <ArrowRight className="h-5 w-5" />
