@@ -161,6 +161,16 @@ export default function ReservationPromesse() {
           </div>
         </div>
 
+        {/* Floating Scroll Indicator */}
+        <button
+          onClick={scrollToContent}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors animate-bounce cursor-pointer z-20"
+        >
+          <span className="text-xs font-medium tracking-[0.2em] uppercase">Découvrir la méthode</span>
+          <ChevronDown className="w-6 h-6 text-[hsl(var(--gold-light))]" />
+        </button>
+      </section>
+
       {/* Overview — what's included */}
       <section ref={overviewRef} className="section-luxury bg-background text-center pt-24 pb-20">
         <div className="container-main mx-auto px-6 md:px-12">
