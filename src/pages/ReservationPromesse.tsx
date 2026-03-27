@@ -127,9 +127,9 @@ export default function ReservationPromesse() {
             data-reveal-delay="150"
             className="font-heading text-5xl md:text-7xl font-medium text-primary-foreground mb-6 leading-tight"
           >
-            Zéro effort,
+            Un profil sur-mesure,
             <br />
-            un profil parfait
+            sans le moindre effort technique.
           </h1>
 
           <p
@@ -138,7 +138,7 @@ export default function ReservationPromesse() {
             className="text-xl md:text-2xl text-primary-foreground/90 leading-relaxed mb-8 max-w-2xl mx-auto"
           >
             Confiez-nous la création de votre profil. En un seul appel vidéo, notre équipe s'occupe de tout pour que
-            vous puissiez vous concentrer sur l'essentiel : faire de belles rencontres.
+            vous puissiez vous concentrer sur l'essentiel : rencontrer la personne qui vous correspond vraiment.
           </p>
 
           <div
@@ -253,21 +253,21 @@ export default function ReservationPromesse() {
                 <div data-reveal data-reveal-delay="250" className="space-y-6">
                   <div className="bg-background/50 p-5 rounded-lg border border-border">
                     <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
-                      Ce qu'il vous faut préparer :
+                      VOTRE SEULE PRÉPARATION :
                     </span>
                     <p className="text-muted-foreground leading-relaxed text-xl">{step.preparation}</p>
                   </div>
 
                   <div className="bg-background/50 p-5 rounded-lg border border-border">
                     <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
-                      Ce que nous ferons ensemble :
+                      NOTRE ÉCHANGE :
                     </span>
                     <p className="text-muted-foreground leading-relaxed text-xl">{step.action}</p>
                   </div>
 
                   <div className="bg-primary/5 p-5 rounded-lg border border-[hsl(var(--gold)/0.2)]">
                     <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
-                      Le résultat :
+                      VOTRE PROFIL :
                     </span>
                     <p className="text-foreground font-medium leading-relaxed text-xl">{step.result}</p>
                   </div>
