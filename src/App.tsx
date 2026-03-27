@@ -31,6 +31,10 @@ import CGU from "./pages/CGU";
 import SignalerContenu from "./pages/SignalerContenu";
 import ContactMember from "./pages/ContactMember";
 import Privileges from "./pages/Privileges";
+import ReservationPromesse from "./pages/ReservationPromesse";
+import ReservationCalendrier from "./pages/ReservationCalendrier";
+import ReservationPaiement from "./pages/ReservationPaiement";
+import ReservationSucces from "./pages/ReservationSucces";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +72,10 @@ const App = () => (
           <Route path="/signaler-contenu" element={<SignalerContenu />} />
           <Route path="/contact-prive" element={<ContactMember />} />
           <Route path="/privileges" element={<Privileges />} />
+          <Route path="/reservation" element={<ReservationPromesse />} />
+          <Route path="/reservation/calendrier" element={<ReservationCalendrier />} />
+          <Route path="/reservation/paiement" element={<ReservationPaiement />} />
+          <Route path="/reservation/succes" element={<ReservationSucces />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
