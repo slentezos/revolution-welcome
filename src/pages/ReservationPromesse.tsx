@@ -1,5 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { Check, ShieldCheck, Phone, Camera, Brain, ClipboardList, Sparkles, Headphones, ArrowRight } from "lucide-react";
+import {
+  Check,
+  ShieldCheck,
+  Video,
+  Camera,
+  Brain,
+  ClipboardList,
+  Sparkles,
+  Headphones,
+  ArrowRight,
+} from "lucide-react";
 import Layout from "@/components/layout/Layout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import conciergeHero from "@/assets/concierge-hero.jpg";
@@ -11,48 +21,48 @@ import coupleBeach from "@/assets/couple-beach.jpg";
 const SERVICE_STEPS = [
   {
     number: "01",
-    icon: Phone,
-    title: "Entretien téléphonique privé",
-    subtitle: "45 minutes d'écoute",
+    icon: Video,
+    title: "L'appel vidéo privé",
+    subtitle: "Un moment d'échange privilégié",
     description:
-      "Un appel confidentiel avec notre équipe pour comprendre vos attentes, votre personnalité et ce que vous recherchez chez l'autre. Nous prenons le temps de vous connaître vraiment.",
+      "Votre conseiller vous appelle en vidéo sur votre smartphone. Installez-vous confortablement, nous faisons connaissance à votre rythme, sans aucune limite de temps préétablie.",
     image: conciergeHero,
   },
   {
     number: "02",
-    icon: Camera,
-    title: "Photos & Vidéo",
-    subtitle: "Votre image, sublimée",
+    icon: ClipboardList,
+    title: "Le questionnaire approfondi",
+    subtitle: "Nous rédigeons pour vous",
     description:
-      "Nous vous guidons pas à pas pour choisir vos meilleures photos et réaliser une courte vidéo de présentation authentique. Nos conseils personnalisés vous mettent en valeur naturellement.",
-    image: conciergePhotos,
+      "Pendant notre discussion, nous parcourons ensemble notre méthode des 50 questions. Vous parlez naturellement, et votre conseiller se charge de tout rédiger et structurer avec élégance.",
+    image: conciergeQuestionnaire,
   },
   {
     number: "03",
     icon: Brain,
-    title: "Quiz des 3 préférences",
-    subtitle: "Vos goûts, vos passions",
+    title: "Le Quiz & La Personnalité",
+    subtitle: "Vos valeurs, vos passions",
     description:
-      "Un quiz ludique pour partager vos centres d'intérêt, vos goûts culturels et quelques références qui vous définissent. Nous le remplissons ensemble pour que chaque réponse vous ressemble.",
+      "Toujours à l'oral, nous remplissons ensemble votre test de personnalité et le quiz de préférences. Une analyse fine pour comprendre votre fonctionnement et cibler vos futures compatibilités.",
     image: coupleBeach,
   },
   {
     number: "04",
-    icon: ClipboardList,
-    title: "Questionnaire approfondi",
-    subtitle: "50 questions essentielles",
+    icon: Camera,
+    title: "La sélection de vos photos",
+    subtitle: "Votre meilleure image",
     description:
-      "Le cœur de notre méthode : 50 questions pour déterminer votre profil de valeurs et les qualités que vous recherchez. Nous rédigeons vos réponses mot par mot, avec justesse.",
-    image: conciergeQuestionnaire,
+      "Nous regardons ensemble les photos de votre téléphone pour sélectionner celles qui vous mettent le plus en valeur, avec le regard bienveillant et objectif de notre expert.",
+    image: coupleCafe,
   },
   {
     number: "05",
     icon: Sparkles,
-    title: "Test de personnalité",
-    subtitle: "Mieux vous connaître",
+    title: "L'enregistrement vidéo",
+    subtitle: "Authentique et guidé",
     description:
-      "Une analyse en profondeur de votre manière de fonctionner, pour affiner vos compatibilités et vous offrir des conseils adaptés à votre tempérament.",
-    image: coupleCafe,
+      "Avant de raccrocher, nous vous guidons pas à pas pour enregistrer une courte présentation vidéo très naturelle directement depuis votre téléphone. Ne préparez rien, laissez-vous porter.",
+    image: conciergePhotos,
   },
 ];
 
@@ -64,11 +74,11 @@ const GUARANTEES = [
 ];
 
 const INCLUDED = [
-  "Entretien téléphonique de 45 minutes",
-  "Rédaction complète de votre profil",
-  "Accompagnement photo & vidéo",
-  "Quiz des 3 préférences rempli ensemble",
-  "Questionnaire de 50 questions rédigé pour vous",
+  "Appel vidéo privé avec votre conseiller",
+  "Rédaction intégrale de votre profil",
+  "Sélection de photos et guide vidéo",
+  "Quiz des préférences rempli ensemble",
+  "Questionnaire approfondi rédigé pour vous",
   "Test de personnalité guidé",
 ];
 
@@ -120,10 +130,8 @@ export default function ReservationPromesse() {
             data-reveal-delay="300"
             className="text-xl md:text-2xl text-primary-foreground/90 leading-relaxed mb-8 max-w-2xl mx-auto"
           >
-            Confiez-nous la création de votre profil. En un seul appel de
-            45&nbsp;minutes, notre équipe s'occupe de tout pour que vous
-            puissiez vous concentrer sur l'essentiel&nbsp;: faire de belles
-            rencontres.
+            Confiez-nous la création de votre profil. En un seul appel vidéo, notre équipe s'occupe de tout pour que
+            vous puissiez vous concentrer sur l'essentiel : faire de belles rencontres.
           </p>
 
           <div
@@ -131,12 +139,8 @@ export default function ReservationPromesse() {
             data-reveal-delay="450"
             className="inline-block bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 px-10 py-6 mb-12"
           >
-            <span className="font-heading text-6xl md:text-7xl font-medium text-[hsl(var(--gold-light))]">
-              89&nbsp;€
-            </span>
-            <p className="text-primary-foreground/70 text-base mt-2">
-              Paiement unique · Sans abonnement
-            </p>
+            <span className="font-heading text-6xl md:text-7xl font-medium text-[hsl(var(--gold-light))]">89 €</span>
+            <p className="text-primary-foreground/70 text-base mt-2">Paiement unique · Sans abonnement</p>
           </div>
 
           <div data-reveal data-reveal-delay="600">
@@ -154,10 +158,7 @@ export default function ReservationPromesse() {
       {/* Overview — what's included */}
       <section ref={overviewRef} className="section-luxury bg-background text-center">
         <div className="container-main mx-auto px-6 md:px-12">
-          <span
-            data-reveal
-            className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl"
-          >
+          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl">
             Ce qui est inclus
           </span>
           <h2
@@ -165,7 +166,7 @@ export default function ReservationPromesse() {
             data-reveal-delay="150"
             className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-8"
           >
-            Votre profil complet en 5&nbsp;étapes
+            Votre profil complet en 5 étapes
           </h2>
           <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto mb-16" />
 
@@ -182,27 +183,21 @@ export default function ReservationPromesse() {
                   {step.number}
                 </span>
                 <div className="w-8 h-px bg-[hsl(var(--gold)/0.4)] mx-auto mb-3 group-hover:w-12 transition-all duration-300" />
-                <h3 className="font-heading text-base text-foreground leading-tight px-px md:text-2xl">
-                  {step.title}
-                </h3>
+                <h3 className="font-heading text-base text-foreground leading-tight px-px md:text-2xl">{step.title}</h3>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Alternating step blocks — like NotreMethode */}
+      {/* Alternating step blocks */}
       {SERVICE_STEPS.map((step, index) => {
         const stepRef = useScrollReveal<HTMLElement>();
         const Icon = step.icon;
         return (
-          <section ref={stepRef} key={step.number} className="min-h-screen grid lg:grid-cols-2">
-            {/* Image */}
-            <div
-              className={`relative min-h-[50vh] lg:min-h-screen ${
-                index % 2 === 0 ? "order-1" : "order-1 lg:order-2"
-              }`}
-            >
+          <section ref={stepRef} key={step.number} className="grid lg:grid-cols-2">
+            {/* Image Container - Raccourci drastiquement ici */}
+            <div className={`relative min-h-[40vh] lg:h-[550px] ${index % 2 === 0 ? "order-1" : "order-1 lg:order-2"}`}>
               <img
                 data-reveal
                 src={step.image}
@@ -222,9 +217,7 @@ export default function ReservationPromesse() {
             {/* Content */}
             <div
               className={`flex items-center justify-center p-10 md:p-16 lg:p-20 ${
-                index % 2 === 0
-                  ? "bg-background order-2"
-                  : "bg-secondary order-2 lg:order-1"
+                index % 2 === 0 ? "bg-background order-2" : "bg-secondary order-2 lg:order-1"
               }`}
             >
               <div className="max-w-lg">
@@ -245,21 +238,13 @@ export default function ReservationPromesse() {
                   {step.title}
                 </h2>
 
-                <p
-                  data-reveal
-                  data-reveal-delay="200"
-                  className="text-[hsl(var(--gold))] font-medium text-lg mb-6"
-                >
+                <p data-reveal data-reveal-delay="200" className="text-[hsl(var(--gold))] font-medium text-lg mb-6">
                   {step.subtitle}
                 </p>
 
                 <div data-reveal data-reveal-delay="250" className="divider-gold mb-8" />
 
-                <p
-                  data-reveal
-                  data-reveal-delay="350"
-                  className="text-muted-foreground leading-relaxed text-xl"
-                >
+                <p data-reveal data-reveal-delay="350" className="text-muted-foreground leading-relaxed text-xl">
                   {step.description}
                 </p>
               </div>
@@ -289,13 +274,9 @@ export default function ReservationPromesse() {
               data-reveal-delay="150"
               className="font-heading text-4xl md:text-5xl lg:text-6xl text-primary-foreground mb-6"
             >
-              Tout est inclus pour 89&nbsp;€
+              Tout est inclus pour 89 €
             </h2>
-            <p
-              data-reveal
-              data-reveal-delay="300"
-              className="text-primary-foreground/60 text-xl max-w-xl mx-auto"
-            >
+            <p data-reveal data-reveal-delay="300" className="text-primary-foreground/60 text-xl max-w-xl mx-auto">
               Un paiement unique, sans abonnement, sans surprise
             </p>
           </div>
@@ -316,7 +297,7 @@ export default function ReservationPromesse() {
 
           <div data-reveal data-reveal-delay="400" className="text-center">
             <span className="font-heading text-7xl md:text-8xl font-medium text-[hsl(var(--gold-light))] block mb-4">
-              89&nbsp;€
+              89 €
             </span>
             <p className="text-primary-foreground/50 text-base mb-10">Paiement unique</p>
             <button
@@ -334,10 +315,7 @@ export default function ReservationPromesse() {
       <section ref={guaranteeRef} className="section-luxury bg-secondary">
         <div className="container-main mx-auto px-6 md:px-12">
           <div className="max-w-3xl mx-auto text-center">
-            <div
-              data-reveal
-              className="w-16 h-16 mx-auto mb-6 bg-background flex items-center justify-center"
-            >
+            <div data-reveal className="w-16 h-16 mx-auto mb-6 bg-background flex items-center justify-center">
               <ShieldCheck className="h-8 w-8 text-[hsl(var(--gold))]" />
             </div>
             <h2
@@ -352,8 +330,8 @@ export default function ReservationPromesse() {
               data-reveal-delay="300"
               className="text-muted-foreground text-lg leading-relaxed mb-12 max-w-xl mx-auto"
             >
-              Si notre service ne répond pas à vos attentes, nous vous
-              remboursons intégralement. Sans condition, sans délai.
+              Si notre service ne répond pas à vos attentes, nous vous remboursons intégralement. Sans condition, sans
+              délai.
             </p>
             <div className="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto">
               {GUARANTEES.map((g, i) => (
@@ -375,10 +353,7 @@ export default function ReservationPromesse() {
       {/* Final CTA */}
       <section ref={ctaRef} className="section-luxury bg-background">
         <div className="container-main mx-auto px-6 md:px-12 text-center">
-          <span
-            data-reveal
-            className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
-          >
+          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg">
             <Headphones className="h-6 w-6 inline-block mr-3 -mt-1" />
             Zéro stress technique
           </span>
@@ -387,16 +362,11 @@ export default function ReservationPromesse() {
             data-reveal-delay="150"
             className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6"
           >
-            Prêt à vous lancer&nbsp;?
+            Prêt à vous lancer ?
           </h2>
-          <p
-            data-reveal
-            data-reveal-delay="300"
-            className="text-muted-foreground mb-12 max-w-2xl mx-auto text-xl"
-          >
-            Nous nous occupons de tout. Vous n'avez qu'à répondre à nos
-            questions au téléphone, et votre profil sera prêt à rencontrer
-            l'amour.
+          <p data-reveal data-reveal-delay="300" className="text-muted-foreground mb-12 max-w-2xl mx-auto text-xl">
+            Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre profil sera prêt à
+            rencontrer l'amour.
           </p>
           <div data-reveal data-reveal-delay="450">
             <button
