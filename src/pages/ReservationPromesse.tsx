@@ -1,5 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { Check, ShieldCheck, Camera, Brain, ClipboardList, Sparkles, Headphones, ArrowRight, Mail } from "lucide-react";
+import {
+  Check,
+  ShieldCheck,
+  Camera,
+  Brain,
+  ClipboardList,
+  Sparkles,
+  Headphones,
+  ArrowRight,
+  Mail,
+  ChevronDown,
+} from "lucide-react";
 import Layout from "@/components/layout/Layout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import conciergeHero from "@/assets/concierge-hero.jpg";
@@ -78,6 +89,13 @@ export default function ReservationPromesse() {
   const guaranteeRef = useScrollReveal<HTMLElement>();
   const ctaRef = useScrollReveal<HTMLElement>();
 
+  const scrollToContent = () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <Layout>
       {/* Hero — full bleed with overlay */}
@@ -93,13 +111,13 @@ export default function ReservationPromesse() {
             width={1920}
             height={1080}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/95" />
         </div>
 
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-12">
           <span
             data-reveal
-            className="text-sm font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block md:text-2xl"
+            className="text-sm font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block md:text-xl"
           >
             Service Conciergerie
           </span>
@@ -129,7 +147,7 @@ export default function ReservationPromesse() {
             className="inline-block bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 px-10 py-6 mb-12"
           >
             <span className="font-heading text-6xl md:text-7xl font-medium text-[hsl(var(--gold-light))]">89 €</span>
-            <p className="text-primary-foreground/70 mt-2 text-xl">Paiement unique · Sans abonnement</p>
+            <p className="text-primary-foreground/70 text-base mt-2">Paiement unique · Sans abonnement</p>
           </div>
 
           <div data-reveal data-reveal-delay="600">
@@ -142,10 +160,19 @@ export default function ReservationPromesse() {
             </button>
           </div>
         </div>
+
+        {/* Floating Scroll Indicator */}
+        <button
+          onClick={scrollToContent}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors animate-bounce cursor-pointer z-20"
+        >
+          <span className="text-xs font-medium tracking-[0.2em] uppercase">Découvrir la méthode</span>
+          <ChevronDown className="w-6 h-6 text-[hsl(var(--gold-light))]" />
+        </button>
       </section>
 
       {/* Overview — what's included */}
-      <section ref={overviewRef} className="section-luxury bg-background text-center">
+      <section ref={overviewRef} className="section-luxury bg-background text-center pt-24 pb-20">
         <div className="container-main mx-auto px-6 md:px-12">
           <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl">
             Pendant notre appel vidéo
@@ -159,7 +186,7 @@ export default function ReservationPromesse() {
           </h2>
           <div data-reveal data-reveal-delay="250" className="divider-gold mx-auto mb-16" />
 
-          {/* Step numbers preview - Changed to 4 columns */}
+          {/* Step numbers preview */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 max-w-4xl mx-auto">
             {SERVICE_STEPS.map((step, i) => (
               <div
@@ -186,7 +213,7 @@ export default function ReservationPromesse() {
         return (
           <section ref={stepRef} key={step.number} className="grid lg:grid-cols-2 border-t border-border/50">
             {/* Image Container */}
-            <div className={`relative min-h-[40vh] lg:h-[600px] ${index % 2 === 0 ? "order-1" : "order-1 lg:order-2"}`}>
+            <div className={`relative min-h-[40vh] lg:h-[650px] ${index % 2 === 0 ? "order-1" : "order-1 lg:order-2"}`}>
               <img
                 data-reveal
                 src={step.image}
@@ -214,7 +241,7 @@ export default function ReservationPromesse() {
                   <div className="w-12 h-12 bg-primary flex items-center justify-center">
                     <Icon className="h-6 w-6 text-primary-foreground" />
                   </div>
-                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-xl">
+                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-base">
                     Étape {step.number}
                   </span>
                 </div>
@@ -227,31 +254,31 @@ export default function ReservationPromesse() {
                   {step.title}
                 </h2>
 
-                <p data-reveal data-reveal-delay="150" className="text-[hsl(var(--gold))] font-medium mb-8 text-2xl">
+                <p data-reveal data-reveal-delay="150" className="text-[hsl(var(--gold))] font-medium text-lg mb-8">
                   {step.subtitle}
                 </p>
 
                 {/* Structured details: Before, During, After */}
                 <div data-reveal data-reveal-delay="250" className="space-y-6">
                   <div className="bg-background/50 p-5 rounded-lg border border-border">
-                    <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
+                    <span className="text-xs font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block">
                       Ce qu'il vous faut préparer :
                     </span>
-                    <p className="text-muted-foreground leading-relaxed text-xl">{step.preparation}</p>
+                    <p className="text-muted-foreground leading-relaxed">{step.preparation}</p>
                   </div>
 
                   <div className="bg-background/50 p-5 rounded-lg border border-border">
-                    <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
+                    <span className="text-xs font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block">
                       Ce que nous ferons ensemble :
                     </span>
-                    <p className="text-muted-foreground leading-relaxed text-xl">{step.action}</p>
+                    <p className="text-muted-foreground leading-relaxed">{step.action}</p>
                   </div>
 
                   <div className="bg-primary/5 p-5 rounded-lg border border-[hsl(var(--gold)/0.2)]">
-                    <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
+                    <span className="text-xs font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block">
                       Le résultat :
                     </span>
-                    <p className="text-foreground font-medium leading-relaxed text-xl">{step.result}</p>
+                    <p className="text-foreground font-medium leading-relaxed">{step.result}</p>
                   </div>
                 </div>
               </div>
@@ -260,16 +287,16 @@ export default function ReservationPromesse() {
         );
       })}
 
-      {/* Post-Call Delivery Email Section */}
-      <section className="py-24 bg-primary text-primary-foreground text-center px-6">
+      {/* Post-Call Delivery Email Section (Changed to Soft Secondary for harmony) */}
+      <section className="py-24 bg-secondary text-foreground text-center px-6">
         <div className="max-w-3xl mx-auto">
-          <Mail className="w-16 h-16 text-[hsl(var(--gold-light))] mx-auto mb-8" />
+          <Mail className="w-16 h-16 text-[hsl(var(--gold))] mx-auto mb-8" />
           <h2 className="font-heading text-4xl md:text-5xl mb-6">Et après notre appel ?</h2>
-          <div className="w-12 h-px bg-[hsl(var(--gold-light)/0.5)] mx-auto mb-8" />
-          <p className="text-xl md:text-2xl text-primary-foreground/90 leading-relaxed mb-6">
+          <div className="w-12 h-px bg-[hsl(var(--gold)/0.5)] mx-auto mb-8" />
+          <p className="text-xl md:text-2xl text-foreground/90 leading-relaxed mb-6 font-medium">
             Le travail est terminé de votre côté. Nos experts prennent le relais en studio.
           </p>
-          <p className="text-primary-foreground/70 leading-relaxed text-xl">
+          <p className="text-lg text-muted-foreground leading-relaxed">
             D'ici <strong>24 à 48 heures</strong>, vous recevrez un email contenant le récapitulatif complet et un
             aperçu visuel de votre profil finalisé. Vous pourrez tout vérifier sereinement avant que votre profil ne
             devienne officiellement visible.
@@ -277,26 +304,29 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* Pricing recap */}
-      <section className="relative py-32 lg:py-40 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-background to-secondary" />
+      {/* Pricing recap (Changed to Rich Primary to anchor the price luxuriously) */}
+      <section className="relative py-32 lg:py-40 overflow-hidden bg-primary text-primary-foreground">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[hsl(var(--gold))] rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3" />
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[hsl(var(--gold-light))] rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3" />
+        </div>
 
         <div className="relative z-10 container-main mx-auto px-6 md:px-12">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <span
               data-reveal
-              className="inline-block px-6 py-2 bg-primary/5 backdrop-blur-sm border border-primary/10 font-medium tracking-[0.3em] uppercase text-primary/70 mb-8 text-lg"
+              className="inline-block px-6 py-2 bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 font-medium tracking-[0.3em] uppercase text-primary-foreground/70 mb-8 text-lg"
             >
               Récapitulatif
             </span>
             <h2
               data-reveal
               data-reveal-delay="150"
-              className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6"
+              className="font-heading text-4xl md:text-5xl lg:text-6xl text-primary-foreground mb-6"
             >
               Tout est inclus pour 89 €
             </h2>
-            <p data-reveal data-reveal-delay="300" className="text-muted-foreground max-w-xl mx-auto text-2xl">
+            <p data-reveal data-reveal-delay="300" className="text-primary-foreground/70 text-xl max-w-xl mx-auto">
               Un paiement unique, sans abonnement, sans surprise
             </p>
           </div>
@@ -307,22 +337,22 @@ export default function ReservationPromesse() {
                 key={i}
                 data-reveal
                 data-reveal-delay={String(100 + i * 100)}
-                className="flex items-start gap-4 bg-background border border-border p-6 shadow-sm"
+                className="flex items-start gap-4 bg-primary-foreground/5 border border-primary-foreground/10 p-6 shadow-sm backdrop-blur-sm rounded-lg"
               >
-                <Check className="h-5 w-5 text-[hsl(var(--gold))] mt-0.5 shrink-0" />
-                <span className="text-foreground text-xl">{item}</span>
+                <Check className="h-5 w-5 text-[hsl(var(--gold-light))] mt-0.5 shrink-0" />
+                <span className="text-primary-foreground/90 text-lg">{item}</span>
               </div>
             ))}
           </div>
 
           <div data-reveal data-reveal-delay="400" className="text-center">
-            <span className="font-heading text-7xl md:text-8xl font-medium text-[hsl(var(--gold))] block mb-4">
+            <span className="font-heading text-7xl md:text-8xl font-medium text-[hsl(var(--gold-light))] block mb-4">
               89 €
             </span>
-            <p className="text-muted-foreground mb-10 text-xl">Paiement unique</p>
+            <p className="text-primary-foreground/50 text-base mb-10">Paiement unique</p>
             <button
               onClick={() => navigate("/reservation/calendrier")}
-              className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-12 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-lg"
+              className="inline-flex items-center gap-3 bg-[hsl(var(--gold))] text-primary-foreground px-12 py-5 font-semibold tracking-wide transition-all duration-500 hover:shadow-elevated hover:scale-[1.02] text-lg rounded-full"
             >
               Réserver mon créneau
               <ArrowRight className="h-5 w-5" />
@@ -331,13 +361,13 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* Guarantee */}
-      <section ref={guaranteeRef} className="section-luxury bg-secondary border-t border-border">
+      {/* Guarantee (Clean White Background for pure trust) */}
+      <section ref={guaranteeRef} className="section-luxury bg-background border-b border-border">
         <div className="container-main mx-auto px-6 md:px-12">
           <div className="max-w-3xl mx-auto text-center">
             <div
               data-reveal
-              className="w-16 h-16 mx-auto mb-6 bg-background flex items-center justify-center shadow-sm"
+              className="w-16 h-16 mx-auto mb-6 bg-secondary flex items-center justify-center rounded-full"
             >
               <ShieldCheck className="h-8 w-8 text-[hsl(var(--gold))]" />
             </div>
@@ -351,7 +381,7 @@ export default function ReservationPromesse() {
             <p
               data-reveal
               data-reveal-delay="300"
-              className="text-muted-foreground leading-relaxed mb-12 max-w-xl mx-auto text-xl"
+              className="text-muted-foreground text-lg leading-relaxed mb-12 max-w-xl mx-auto"
             >
               Si à la réception de l'email de livraison, notre service ne répond pas à vos attentes, nous vous
               remboursons intégralement. Sans condition, sans délai.
@@ -364,8 +394,8 @@ export default function ReservationPromesse() {
                   data-reveal-delay={String(400 + i * 100)}
                   className="flex items-center gap-3 text-left"
                 >
-                  <Check className="h-4 w-4 text-[hsl(var(--gold))] shrink-0" />
-                  <span className="text-foreground font-medium text-xl">{g}</span>
+                  <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0" />
+                  <span className="text-foreground text-base font-medium">{g}</span>
                 </div>
               ))}
             </div>
@@ -373,10 +403,10 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section ref={ctaRef} className="section-luxury bg-background">
+      {/* Final CTA (Soft secondary to wrap up) */}
+      <section ref={ctaRef} className="section-luxury bg-secondary/50">
         <div className="container-main mx-auto px-6 md:px-12 text-center">
-          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-2xl">
+          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg">
             <Headphones className="h-6 w-6 inline-block mr-3 -mt-1" />
             Zéro stress technique
           </span>
@@ -394,7 +424,7 @@ export default function ReservationPromesse() {
           <div data-reveal data-reveal-delay="450">
             <button
               onClick={() => navigate("/reservation/calendrier")}
-              className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-12 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-xl"
+              className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-12 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-xl rounded-full"
             >
               Réserver mon créneau →
             </button>
