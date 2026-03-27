@@ -147,7 +147,7 @@ export default function ReservationPromesse() {
             className="inline-block bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 px-10 py-6 mb-12"
           >
             <span className="font-heading text-6xl md:text-7xl font-medium text-[hsl(var(--gold-light))]">89 €</span>
-            <p className="text-primary-foreground/70 text-base mt-2">Paiement unique · Sans abonnement</p>
+            <p className="text-primary-foreground/70 mt-2 text-xl">Paiement unique · Sans abonnement</p>
           </div>
 
           <div data-reveal data-reveal-delay="600">
@@ -315,7 +315,7 @@ export default function ReservationPromesse() {
           <div className="max-w-3xl mx-auto text-center mb-14">
             <span
               data-reveal
-              className="inline-block px-5 py-2 bg-primary-foreground/8 backdrop-blur-sm border border-primary-foreground/15 rounded-full font-medium tracking-[0.2em] uppercase text-primary-foreground/60 mb-8 text-base"
+              className="inline-block px-5 py-2 bg-primary-foreground/8 backdrop-blur-sm border border-primary-foreground/15 rounded-full font-medium tracking-[0.2em] uppercase text-primary-foreground/60 mb-8 text-lg"
             >
               Récapitulatif
             </span>
@@ -342,7 +342,7 @@ export default function ReservationPromesse() {
                 <div className="w-6 h-6 rounded-full bg-[hsl(var(--gold)/0.15)] flex items-center justify-center shrink-0 mt-0.5">
                   <Check className="h-3.5 w-3.5 text-[hsl(var(--gold-light))]" />
                 </div>
-                <span className="text-primary-foreground/85 text-lg leading-snug">{item}</span>
+                <span className="text-primary-foreground/85 leading-snug text-xl">{item}</span>
               </div>
             ))}
           </div>
@@ -351,7 +351,7 @@ export default function ReservationPromesse() {
             <span className="font-heading text-7xl md:text-8xl font-medium text-[hsl(var(--gold-light))] block mb-3">
               89 €
             </span>
-            <p className="text-primary-foreground/45 text-lg mb-10">Paiement unique</p>
+            <p className="text-primary-foreground/45 mb-10 text-xl">Paiement unique</p>
             <button
               onClick={() => navigate("/reservation/calendrier")}
               className="inline-flex items-center gap-3 bg-[hsl(var(--gold))] text-primary px-12 py-5 font-semibold tracking-wide transition-all duration-500 hover:shadow-elevated hover:brightness-110 text-lg rounded-full"
@@ -414,7 +414,7 @@ export default function ReservationPromesse() {
           <div data-reveal className="w-14 h-14 mx-auto mb-8 bg-primary/5 flex items-center justify-center rounded-2xl">
             <Headphones className="h-7 w-7 text-[hsl(var(--gold))]" />
           </div>
-          <span data-reveal data-reveal-delay="100" className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 block text-base">
+          <span data-reveal data-reveal-delay="100" className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 block text-xl">
             Zéro stress technique
           </span>
           <h2
