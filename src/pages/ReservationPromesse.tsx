@@ -352,7 +352,6 @@ export default function ReservationPromesse() {
           </div>
 
           <div data-reveal data-reveal-delay="400" className="text-center">
-            <p className="text-primary-foreground/45 mb-10 text-xl">Paiement unique</p>
             <button
               onClick={() => navigate("/reservation/calendrier")}
               className="inline-flex items-center gap-3 bg-[hsl(var(--gold))] text-primary px-12 py-5 font-semibold tracking-wide transition-all duration-500 hover:shadow-elevated hover:brightness-110 text-lg rounded-full"
