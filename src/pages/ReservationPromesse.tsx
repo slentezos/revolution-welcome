@@ -304,55 +304,57 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* Pricing recap (Changed to Rich Primary to anchor the price luxuriously) */}
-      <section className="relative py-32 lg:py-40 overflow-hidden bg-primary text-primary-foreground">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[hsl(var(--gold))] rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3" />
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[hsl(var(--gold-light))] rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3" />
+      {/* Pricing recap */}
+      <section className="relative py-28 lg:py-36 overflow-hidden bg-primary text-primary-foreground">
+        <div className="absolute inset-0 opacity-[0.07]">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[hsl(var(--gold))] rounded-full blur-[150px] translate-x-1/4 -translate-y-1/4" />
+          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[hsl(var(--gold-light))] rounded-full blur-[120px] -translate-x-1/4 translate-y-1/4" />
         </div>
 
         <div className="relative z-10 container-main mx-auto px-6 md:px-12">
-          <div className="max-w-3xl mx-auto text-center mb-16">
+          <div className="max-w-3xl mx-auto text-center mb-14">
             <span
               data-reveal
-              className="inline-block px-6 py-2 bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 font-medium tracking-[0.3em] uppercase text-primary-foreground/70 mb-8 text-lg"
+              className="inline-block px-5 py-2 bg-primary-foreground/8 backdrop-blur-sm border border-primary-foreground/15 rounded-full font-medium tracking-[0.2em] uppercase text-primary-foreground/60 mb-8 text-base"
             >
               Récapitulatif
             </span>
             <h2
               data-reveal
               data-reveal-delay="150"
-              className="font-heading text-4xl md:text-5xl lg:text-6xl text-primary-foreground mb-6"
+              className="font-heading text-4xl md:text-5xl lg:text-6xl text-primary-foreground mb-5 leading-tight"
             >
               Tout est inclus pour 89 €
             </h2>
-            <p data-reveal data-reveal-delay="300" className="text-primary-foreground/70 text-xl max-w-xl mx-auto">
+            <p data-reveal data-reveal-delay="300" className="text-primary-foreground/60 max-w-xl mx-auto text-xl leading-relaxed">
               Un paiement unique, sans abonnement, sans surprise
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto mb-14">
             {INCLUDED.map((item, i) => (
               <div
                 key={i}
                 data-reveal
-                data-reveal-delay={String(100 + i * 100)}
-                className="flex items-start gap-4 bg-primary-foreground/5 border border-primary-foreground/10 p-6 shadow-sm backdrop-blur-sm rounded-lg"
+                data-reveal-delay={String(100 + i * 80)}
+                className="flex items-start gap-4 bg-primary-foreground/[0.04] border border-primary-foreground/[0.08] p-5 backdrop-blur-sm rounded-xl transition-all duration-300 hover:bg-primary-foreground/[0.07]"
               >
-                <Check className="h-5 w-5 text-[hsl(var(--gold-light))] mt-0.5 shrink-0" />
-                <span className="text-primary-foreground/90 text-lg">{item}</span>
+                <div className="w-6 h-6 rounded-full bg-[hsl(var(--gold)/0.15)] flex items-center justify-center shrink-0 mt-0.5">
+                  <Check className="h-3.5 w-3.5 text-[hsl(var(--gold-light))]" />
+                </div>
+                <span className="text-primary-foreground/85 text-lg leading-snug">{item}</span>
               </div>
             ))}
           </div>
 
           <div data-reveal data-reveal-delay="400" className="text-center">
-            <span className="font-heading text-7xl md:text-8xl font-medium text-[hsl(var(--gold-light))] block mb-4">
+            <span className="font-heading text-7xl md:text-8xl font-medium text-[hsl(var(--gold-light))] block mb-3">
               89 €
             </span>
-            <p className="text-primary-foreground/50 text-base mb-10">Paiement unique</p>
+            <p className="text-primary-foreground/45 text-lg mb-10">Paiement unique</p>
             <button
               onClick={() => navigate("/reservation/calendrier")}
-              className="inline-flex items-center gap-3 bg-[hsl(var(--gold))] text-primary-foreground px-12 py-5 font-semibold tracking-wide transition-all duration-500 hover:shadow-elevated hover:scale-[1.02] text-lg rounded-full"
+              className="inline-flex items-center gap-3 bg-[hsl(var(--gold))] text-primary px-12 py-5 font-semibold tracking-wide transition-all duration-500 hover:shadow-elevated hover:brightness-110 text-lg rounded-full"
             >
               Réserver mon créneau
               <ArrowRight className="h-5 w-5" />
@@ -361,41 +363,44 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* Guarantee (Clean White Background for pure trust) */}
-      <section ref={guaranteeRef} className="section-luxury bg-background border-b border-border">
+      {/* Guarantee */}
+      <section ref={guaranteeRef} className="py-24 lg:py-32 bg-secondary/40">
         <div className="container-main mx-auto px-6 md:px-12">
           <div className="max-w-3xl mx-auto text-center">
             <div
               data-reveal
-              className="w-16 h-16 mx-auto mb-6 bg-secondary flex items-center justify-center rounded-full"
+              className="w-20 h-20 mx-auto mb-8 bg-[hsl(var(--gold)/0.1)] flex items-center justify-center rounded-2xl"
             >
-              <ShieldCheck className="h-8 w-8 text-[hsl(var(--gold))]" />
+              <ShieldCheck className="h-10 w-10 text-[hsl(var(--gold))]" />
             </div>
             <h2
               data-reveal
               data-reveal-delay="150"
-              className="font-heading text-3xl sm:text-4xl md:text-5xl text-foreground mb-4"
+              className="font-heading text-3xl sm:text-4xl md:text-5xl text-foreground mb-5 leading-tight"
             >
               Garantie 100% remboursé
             </h2>
+            <div data-reveal data-reveal-delay="200" className="w-12 h-px bg-[hsl(var(--gold)/0.4)] mx-auto mb-8" />
             <p
               data-reveal
               data-reveal-delay="300"
-              className="text-muted-foreground text-lg leading-relaxed mb-12 max-w-xl mx-auto"
+              className="text-muted-foreground text-xl leading-relaxed mb-12 max-w-xl mx-auto"
             >
               Si à la réception de l'email de livraison, notre service ne répond pas à vos attentes, nous vous
               remboursons intégralement. Sans condition, sans délai.
             </p>
-            <div className="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto">
+            <div className="grid sm:grid-cols-2 gap-5 max-w-lg mx-auto">
               {GUARANTEES.map((g, i) => (
                 <div
                   key={i}
                   data-reveal
                   data-reveal-delay={String(400 + i * 100)}
-                  className="flex items-center gap-3 text-left"
+                  className="flex items-center gap-4 text-left bg-background p-4 rounded-xl border border-border/60 shadow-sm"
                 >
-                  <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0" />
-                  <span className="text-foreground text-base font-medium">{g}</span>
+                  <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center shrink-0">
+                    <Check className="h-4 w-4 text-[hsl(var(--gold))]" />
+                  </div>
+                  <span className="text-foreground text-base font-medium leading-snug">{g}</span>
                 </div>
               ))}
             </div>
@@ -403,30 +408,34 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* Final CTA (Soft secondary to wrap up) */}
-      <section ref={ctaRef} className="section-luxury bg-secondary/50">
+      {/* Final CTA */}
+      <section ref={ctaRef} className="py-28 lg:py-36 bg-background">
         <div className="container-main mx-auto px-6 md:px-12 text-center">
-          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg">
-            <Headphones className="h-6 w-6 inline-block mr-3 -mt-1" />
+          <div data-reveal className="w-14 h-14 mx-auto mb-8 bg-primary/5 flex items-center justify-center rounded-2xl">
+            <Headphones className="h-7 w-7 text-[hsl(var(--gold))]" />
+          </div>
+          <span data-reveal data-reveal-delay="100" className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 block text-base">
             Zéro stress technique
           </span>
           <h2
             data-reveal
-            data-reveal-delay="150"
-            className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6"
+            data-reveal-delay="200"
+            className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight"
           >
             Prêt à vous lancer ?
           </h2>
-          <p data-reveal data-reveal-delay="300" className="text-muted-foreground mb-12 max-w-2xl mx-auto text-xl">
+          <div data-reveal data-reveal-delay="250" className="w-12 h-px bg-[hsl(var(--gold)/0.4)] mx-auto mb-8" />
+          <p data-reveal data-reveal-delay="350" className="text-muted-foreground mb-14 max-w-2xl mx-auto text-xl leading-relaxed">
             Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre profil sera prêt à
             rencontrer l'amour.
           </p>
           <div data-reveal data-reveal-delay="450">
             <button
               onClick={() => navigate("/reservation/calendrier")}
-              className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-12 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-xl rounded-full"
+              className="inline-flex items-center gap-3 bg-primary text-primary-foreground px-14 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-xl rounded-full"
             >
-              Réserver mon créneau →
+              Réserver mon créneau
+              <ArrowRight className="h-5 w-5" />
             </button>
           </div>
         </div>
