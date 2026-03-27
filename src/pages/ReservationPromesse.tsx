@@ -110,7 +110,7 @@ export default function ReservationPromesse() {
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <span
             data-reveal
-            className="text-sm font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block md:text-xl"
+            className="text-sm font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block md:text-2xl"
           >
             Service Conciergerie
           </span>
@@ -140,7 +140,7 @@ export default function ReservationPromesse() {
             className="inline-block bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 px-10 py-6 mb-12"
           >
             <span className="font-heading text-6xl md:text-7xl font-medium text-[hsl(var(--gold-light))]">89 €</span>
-            <p className="text-primary-foreground/70 text-base mt-2">Paiement unique · Sans abonnement</p>
+            <p className="text-primary-foreground/70 mt-2 text-2xl">Paiement unique · Sans abonnement</p>
           </div>
 
           <div data-reveal data-reveal-delay="600">
@@ -225,7 +225,7 @@ export default function ReservationPromesse() {
                   <div className="w-12 h-12 bg-primary flex items-center justify-center">
                     <Icon className="h-6 w-6 text-primary-foreground" />
                   </div>
-                  <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-lg">
+                  <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-xl">
                     Étape {step.number}
                   </span>
                 </div>
@@ -238,7 +238,7 @@ export default function ReservationPromesse() {
                   {step.title}
                 </h2>
 
-                <p data-reveal data-reveal-delay="200" className="text-[hsl(var(--gold))] font-medium text-lg mb-6">
+                <p data-reveal data-reveal-delay="200" className="text-[hsl(var(--gold))] font-medium mb-6 text-xl">
                   {step.subtitle}
                 </p>
 
@@ -290,7 +290,7 @@ export default function ReservationPromesse() {
                 className="flex items-start gap-4 bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 p-6"
               >
                 <Check className="h-5 w-5 text-[hsl(var(--gold-light))] mt-0.5 shrink-0" />
-                <span className="text-primary-foreground text-lg">{item}</span>
+                <span className="text-primary-foreground text-xl">{item}</span>
               </div>
             ))}
           </div>
@@ -299,7 +299,7 @@ export default function ReservationPromesse() {
             <span className="font-heading text-7xl md:text-8xl font-medium text-[hsl(var(--gold-light))] block mb-4">
               89 €
             </span>
-            <p className="text-primary-foreground/50 text-base mb-10">Paiement unique</p>
+            <p className="text-primary-foreground/50 mb-10 text-xl">Paiement unique</p>
             <button
               onClick={() => navigate("/reservation/calendrier")}
               className="inline-flex items-center gap-3 bg-primary-foreground text-primary px-12 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-lg"
@@ -328,7 +328,7 @@ export default function ReservationPromesse() {
             <p
               data-reveal
               data-reveal-delay="300"
-              className="text-muted-foreground text-lg leading-relaxed mb-12 max-w-xl mx-auto"
+              className="text-muted-foreground leading-relaxed mb-12 max-w-xl mx-auto text-2xl"
             >
               Si notre service ne répond pas à vos attentes, nous vous remboursons intégralement. Sans condition, sans
               délai.
@@ -342,7 +342,7 @@ export default function ReservationPromesse() {
                   className="flex items-center gap-3 text-left"
                 >
                   <Check className="h-4 w-4 text-[hsl(var(--gold))] shrink-0" />
-                  <span className="text-foreground text-sm font-medium">{g}</span>
+                  <span className="text-foreground font-medium text-xl">{g}</span>
                 </div>
               ))}
             </div>
@@ -353,7 +353,7 @@ export default function ReservationPromesse() {
       {/* Final CTA */}
       <section ref={ctaRef} className="section-luxury bg-background">
         <div className="container-main mx-auto px-6 md:px-12 text-center">
-          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg">
+          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl">
             <Headphones className="h-6 w-6 inline-block mr-3 -mt-1" />
             Zéro stress technique
           </span>
@@ -364,7 +364,7 @@ export default function ReservationPromesse() {
           >
             Prêt à vous lancer ?
           </h2>
-          <p data-reveal data-reveal-delay="300" className="text-muted-foreground mb-12 max-w-2xl mx-auto text-xl">
+          <p data-reveal data-reveal-delay="300" className="text-muted-foreground mb-12 max-w-2xl mx-auto text-2xl">
             Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre profil sera prêt à
             rencontrer l'amour.
           </p>
