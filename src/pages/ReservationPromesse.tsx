@@ -241,7 +241,7 @@ export default function ReservationPromesse() {
                   <div className="w-12 h-12 bg-primary flex items-center justify-center">
                     <Icon className="h-6 w-6 text-primary-foreground" />
                   </div>
-                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-base">
+                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-xl">
                     Étape {step.number}
                   </span>
                 </div>
@@ -254,31 +254,31 @@ export default function ReservationPromesse() {
                   {step.title}
                 </h2>
 
-                <p data-reveal data-reveal-delay="150" className="text-[hsl(var(--gold))] font-medium text-lg mb-8">
+                <p data-reveal data-reveal-delay="150" className="text-[hsl(var(--gold))] font-medium mb-8 text-2xl">
                   {step.subtitle}
                 </p>
 
                 {/* Structured details: Before, During, After */}
                 <div data-reveal data-reveal-delay="250" className="space-y-6">
                   <div className="bg-background/50 p-5 rounded-lg border border-border">
-                    <span className="text-xs font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block">
+                    <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
                       Ce qu'il vous faut préparer :
                     </span>
-                    <p className="text-muted-foreground leading-relaxed">{step.preparation}</p>
+                    <p className="text-muted-foreground leading-relaxed text-xl">{step.preparation}</p>
                   </div>
 
                   <div className="bg-background/50 p-5 rounded-lg border border-border">
-                    <span className="text-xs font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block">
+                    <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
                       Ce que nous ferons ensemble :
                     </span>
-                    <p className="text-muted-foreground leading-relaxed">{step.action}</p>
+                    <p className="text-muted-foreground leading-relaxed text-xl">{step.action}</p>
                   </div>
 
                   <div className="bg-primary/5 p-5 rounded-lg border border-[hsl(var(--gold)/0.2)]">
-                    <span className="text-xs font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block">
+                    <span className="font-bold tracking-wider uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
                       Le résultat :
                     </span>
-                    <p className="text-foreground font-medium leading-relaxed">{step.result}</p>
+                    <p className="text-foreground font-medium leading-relaxed text-xl">{step.result}</p>
                   </div>
                 </div>
               </div>
@@ -296,7 +296,7 @@ export default function ReservationPromesse() {
           <p className="text-xl md:text-2xl text-foreground/90 leading-relaxed mb-6 font-medium">
             Le travail est terminé de votre côté. Nos experts prennent le relais en studio.
           </p>
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <p className="text-muted-foreground leading-relaxed text-xl">
             D'ici <strong>24 à 48 heures</strong>, vous recevrez un email contenant le récapitulatif complet et un
             aperçu visuel de votre profil finalisé. Vous pourrez tout vérifier sereinement avant que votre profil ne
             devienne officiellement visible.
