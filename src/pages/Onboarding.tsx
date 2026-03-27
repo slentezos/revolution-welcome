@@ -82,10 +82,8 @@ export default function Onboarding() {
     setStep("quiz");
   };
 
-  const handleStartConcierge = async () => {
-    if (!profileId) return;
-    await supabase.from("profiles").update({ onboarding_step: "quiz" }).eq("id", profileId);
-    window.open("https://calendly.com/", "_blank");
+  const handleStartConcierge = () => {
+    navigate("/reservation");
   };
 
   const handleQuizComplete = async () => {
