@@ -308,7 +308,7 @@ export default function ReservationPromesse() {
               data-reveal
               className="inline-block px-5 py-2 bg-primary-foreground/8 backdrop-blur-sm border border-primary-foreground/15 rounded-full font-medium tracking-[0.2em] uppercase text-primary-foreground/60 mb-8 text-lg"
             >
-              Récapitulatif
+              VOTRE CONCIERGERIE.
             </span>
             <h2
               data-reveal
@@ -369,7 +369,7 @@ export default function ReservationPromesse() {
               data-reveal-delay="150"
               className="font-heading text-3xl sm:text-4xl md:text-5xl text-foreground mb-5 leading-tight"
             >
-              Garantie 100% remboursé
+              Garantie Sérénité Absolue
             </h2>
             <div data-reveal data-reveal-delay="200" className="w-12 h-px bg-[hsl(var(--gold)/0.4)] mx-auto mb-8" />
             <p
@@ -410,14 +410,14 @@ export default function ReservationPromesse() {
             data-reveal-delay="100"
             className="font-medium tracking-[0.2em] uppercase mb-6 block text-xl text-primary-foreground"
           >
-            Zéro stress technique
+            UN ACCOMPAGNEMENT SUR-MESURE
           </span>
           <h2
             data-reveal
             data-reveal-delay="200"
             className="font-heading text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight text-primary-foreground"
           >
-            Prêt à vous lancer ?
+            Prêt à écrire votre prochain chapitre ?
           </h2>
           <div data-reveal data-reveal-delay="250" className="w-12 h-px bg-[hsl(var(--gold)/0.4)] mx-auto mb-8" />
           <p
@@ -425,8 +425,7 @@ export default function ReservationPromesse() {
             data-reveal-delay="350"
             className="mb-14 max-w-2xl mx-auto text-xl leading-relaxed text-primary-foreground"
           >
-            Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre profil sera prêt à
-            rencontrer l'amour.
+            Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre portrait sera prêt à séduire les membres qui vous correspondent.
           </p>
           <div data-reveal data-reveal-delay="450">
             <button
