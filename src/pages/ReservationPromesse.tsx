@@ -1,150 +1,115 @@
 import { useNavigate } from "react-router-dom";
-import { Check, ShieldCheck, ArrowRight } from "lucide-react";
+import { Check, ShieldCheck, Phone, FileText, Video, Headphones } from "lucide-react";
+
+const SERVICE_STEPS = [
+  {
+    icon: Phone,
+    title: "Entretien téléphonique privé",
+    description: "45 minutes d'écoute attentive pour comprendre vos attentes et votre personnalité.",
+  },
+  {
+    icon: FileText,
+    title: "Création de votre profil",
+    description: "Nous remplissons ensemble l'intégralité de votre profil, mot par mot.",
+  },
+  {
+    icon: Video,
+    title: "Accompagnement vidéo",
+    description: "Nos conseils personnalisés pour réussir votre vidéo de présentation.",
+  },
+  {
+    icon: Headphones,
+    title: "Zéro stress technique",
+    description: "Nous nous occupons de tout. Vous n'avez rien à faire.",
+  },
+];
 
 const GUARANTEES = [
-  "Paiement 100% sécurisé",
-  "Rendez-vous humain et privé",
-  "Aucun effort technique requis",
+  "Paiement 100% sécurisé via Stripe",
   "Garantie satisfait ou remboursé",
+  "Aucun engagement supplémentaire",
+  "Vos données restent confidentielles",
 ];
 
 export default function ReservationPromesse() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background pb-24 font-sans text-foreground">
-      {/* 1. HERO SECTION (L'Accroche Premium) */}
-      <section className="pt-24 pb-16 px-6 text-center max-w-4xl mx-auto">
-        <span className="tracking-[0.2em] uppercase text-[hsl(var(--gold))] block mb-6 text-sm font-semibold">
-          Service Premium • 89 €
-        </span>
-        <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl leading-tight mb-8 text-foreground">
-          Un profil parfait, <br className="hidden sm:block" />
-          sans aucun effort technique.
-        </h1>
-        <p className="text-muted-foreground text-xl leading-relaxed max-w-2xl mx-auto mb-12">
-          Détendez-vous. Notre équipe s'occupe de créer votre profil de A à Z pour vous mettre en valeur avec élégance.
-          Le service tout compris pour démarrer vos rencontres sereinement.
-        </p>
-        <button
-          onClick={() => navigate("/reservation/calendrier")}
-          className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-[hsl(var(--gold))] text-primary-foreground font-semibold rounded-full text-lg shadow-xl hover:scale-[1.02] hover:shadow-2xl transition-all duration-300"
-        >
-          Choisir la date de mon appel <ArrowRight className="w-5 h-5" />
-        </button>
-      </section>
-
-      {/* 2. LES ÉTAPES EN ZIG-ZAG (Respiration et Pacing) */}
-      <section className="py-16 px-6 sm:px-12 max-w-7xl mx-auto space-y-24 sm:space-y-32">
-        {/* Étape 1 : Image à gauche, Texte à droite */}
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          <div className="w-full lg:w-1/2 aspect-square lg:aspect-[4/3] bg-secondary/50 rounded-2xl border border-border flex items-center justify-center relative overflow-hidden">
-            {/* TODO Image: Senior souriant avec un café devant son téléphone */}
-            <span className="text-muted-foreground font-mono text-sm opacity-50 absolute">
-              Image_Senior_Appel_Video.jpg
-            </span>
-          </div>
-          <div className="w-full lg:w-1/2 space-y-6">
-            <span className="text-[hsl(var(--gold))] font-heading text-6xl opacity-30 absolute -z-10 -ml-8 -mt-8">
-              01
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl leading-tight">
-              L'appel vidéo en <br /> toute simplicité
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              À la date et l'heure choisies, votre conseiller personnel vous appelle en vidéo sur votre téléphone
-              portable. Installez-vous confortablement, vous n'avez besoin d'aucune compétence informatique.
-            </p>
-          </div>
-        </div>
-
-        {/* Étape 2 : Texte à gauche, Image à droite */}
-        <div className="flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-20">
-          <div className="w-full lg:w-1/2 aspect-square lg:aspect-[4/3] bg-secondary/50 rounded-2xl border border-border flex items-center justify-center relative overflow-hidden">
-            {/* TODO Image: Un conseiller bienveillant au téléphone / clavier */}
-            <span className="text-muted-foreground font-mono text-sm opacity-50 absolute">
-              Image_Conseiller_Kalimera.jpg
-            </span>
-          </div>
-          <div className="w-full lg:w-1/2 space-y-6">
-            <span className="text-[hsl(var(--gold))] font-heading text-6xl opacity-30 absolute -z-10 -ml-8 -mt-8">
-              02
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl leading-tight">
-              Nous remplissons <br /> tout à votre place
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Fini les formulaires fastidieux. Vous nous répondez naturellement à l'oral, et le conseiller se charge de
-              tout rédiger et structurer dans notre système avec des mots qui vous mettent en valeur.
-            </p>
-          </div>
-        </div>
-
-        {/* Étape 3 : Image à gauche, Texte à droite */}
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-          <div className="w-full lg:w-1/2 aspect-square lg:aspect-[4/3] bg-secondary/50 rounded-2xl border border-border flex items-center justify-center relative overflow-hidden">
-            {/* TODO Image: Un beau profil sur un téléphone ou une jolie photo en train d'être prise */}
-            <span className="text-muted-foreground font-mono text-sm opacity-50 absolute">Image_Photos_Video.jpg</span>
-          </div>
-          <div className="w-full lg:w-1/2 space-y-6">
-            <span className="text-[hsl(var(--gold))] font-heading text-6xl opacity-30 absolute -z-10 -ml-8 -mt-8">
-              03
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl leading-tight">
-              Vos photos et vidéo <br /> sur-mesure
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Pendant l'appel, nous vous guidons pas à pas pour enregistrer une courte présentation vidéo très
-              naturelle. Ne préparez rien, laissez-vous guider.
-            </p>
-          </div>
-        </div>
-
-        {/* Étape 4 : Texte à gauche, Image à droite */}
-        <div className="flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-20">
-          <div className="w-full lg:w-1/2 aspect-square lg:aspect-[4/3] bg-secondary/50 rounded-2xl border border-border flex items-center justify-center relative overflow-hidden">
-            {/* TODO Image: Écran du profil Kalimera finalisé et élégant */}
-            <span className="text-muted-foreground font-mono text-sm opacity-50 absolute">Image_Profil_Livre.jpg</span>
-          </div>
-          <div className="w-full lg:w-1/2 space-y-6">
-            <span className="text-[hsl(var(--gold))] font-heading text-6xl opacity-30 absolute -z-10 -ml-8 -mt-8">
-              04
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl leading-tight">
-              Le montage <br /> et la livraison
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Nous réalisons le montage de votre vidéo, optimisons vos photos, et mettons votre profil en page avec
-              élégance. D'ici 24 à 48 heures, vous recevrez votre profil finalisé.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. LE BOUCLIER DE CONFIANCE (La Garantie) */}
-      <section className="mt-16 px-6">
-        <div className="max-w-4xl mx-auto bg-secondary/30 rounded-3xl p-8 sm:p-16 border border-border text-center">
-          <ShieldCheck className="w-16 h-16 text-[hsl(var(--gold))] mx-auto mb-6" />
-          <h2 className="font-heading text-3xl sm:text-4xl mb-6">Garantie Sérénité</h2>
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-12">
-            Si, lors de la découverte de votre profil final, le résultat ne vous donne pas entière satisfaction, vous
-            êtes intégralement remboursé, sans discussion.
+    <div className="min-h-screen bg-background">
+      {/* Hero */}
+      <section className="section-luxury text-center">
+        <div className="max-w-3xl mx-auto">
+          <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-lg font-medium">
+            Service Conciergerie
+          </span>
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
+            Zéro effort,
+            <br />
+            un profil parfait
+          </h1>
+          <div className="divider-gold mx-auto mb-8" />
+          <p className="text-muted-foreground text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto mb-4">
+            Confiez-nous la création de votre profil. En un seul appel de 45 minutes, notre équipe s'occupe de tout
+            pour que vous puissiez vous concentrer sur l'essentiel&nbsp;: faire de belles rencontres.
           </p>
+          <p className="text-[hsl(var(--gold))] font-heading text-3xl sm:text-4xl font-semibold mb-12">
+            89&nbsp;€
+          </p>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-12 text-left">
+      {/* Les 4 étapes du service */}
+      <section className="pb-24 px-6 md:px-12">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-heading text-3xl sm:text-4xl text-foreground text-center mb-16">
+            Comment ça se passe&nbsp;?
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {SERVICE_STEPS.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <div key={i} className="text-center group">
+                  <div className="w-16 h-16 mx-auto mb-6 bg-secondary flex items-center justify-center transition-colors group-hover:bg-[hsl(var(--gold)/0.1)]">
+                    <Icon className="h-7 w-7 text-[hsl(var(--gold))]" />
+                  </div>
+                  <span className="text-muted-foreground text-sm tracking-[0.2em] uppercase block mb-2">
+                    Étape {i + 1}
+                  </span>
+                  <h3 className="font-heading text-xl text-foreground mb-3">{step.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{step.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Garantie */}
+      <section className="py-20 px-6 md:px-12 bg-secondary">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="w-16 h-16 mx-auto mb-6 bg-background flex items-center justify-center">
+            <ShieldCheck className="h-8 w-8 text-[hsl(var(--gold))]" />
+          </div>
+          <h2 className="font-heading text-3xl sm:text-4xl text-foreground mb-4">
+            Garantie 100% remboursé
+          </h2>
+          <p className="text-muted-foreground text-lg leading-relaxed mb-10 max-w-xl mx-auto">
+            Si notre service ne répond pas à vos attentes, nous vous remboursons intégralement. Sans condition, sans
+            délai.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-4 max-w-lg mx-auto mb-12">
             {GUARANTEES.map((g, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <Check className="w-5 h-5 text-[hsl(var(--gold))] shrink-0" />
-                <span className="text-muted-foreground text-base">{g}</span>
+              <div key={i} className="flex items-center gap-3 text-left">
+                <Check className="h-4 w-4 text-[hsl(var(--gold))] shrink-0" />
+                <span className="text-foreground text-sm font-medium">{g}</span>
               </div>
             ))}
           </div>
-
           <button
             onClick={() => navigate("/reservation/calendrier")}
-            className="w-full sm:w-auto px-12 py-5 bg-[hsl(var(--gold))] text-primary-foreground font-semibold rounded-full text-lg shadow-xl hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 inline-flex items-center justify-center gap-3"
+            className="btn-primary px-12 py-5 text-lg shadow-xl hover:scale-[1.02] transition-transform"
           >
-            Réserver mon entretien (89 €) <ArrowRight className="w-5 h-5" />
+            Réserver mon créneau →
           </button>
         </div>
       </section>
