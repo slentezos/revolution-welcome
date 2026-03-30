@@ -421,13 +421,13 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <div className="grid grid-cols-1 gap-6 text-left mb-10">
               <div className="flex items-start gap-4 p-5 rounded-2xl bg-secondary/30">
                 <ShieldCheck className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-1" />
-                <p className="text-lg text-[#1B2333]">
+                <p className="text-[#1B2333] text-xl">
                   Un membre de notre équipe vous appelle en <span className="font-bold">visioconférence (15 min)</span>.
                 </p>
               </div>
               <div className="flex items-start gap-4 p-5 rounded-2xl bg-secondary/30">
                 <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-1" />
-                <p className="text-lg text-[#1B2333]">
+                <p className="text-[#1B2333] text-xl">
                   Il vous guide pour le cadrage, la lumière et{" "}
                   <span className="font-bold">enregistre votre plus beau profil</span>.
                 </p>
@@ -440,7 +440,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               </Button>
               <button
                 onClick={() => setShowStudioModal(false)}
-                className="text-muted-foreground hover:text-[#1B2333] font-medium text-lg transition-colors py-2"
+                className="text-muted-foreground hover:text-[#1B2333] font-medium transition-colors py-2 text-xl"
               >
                 Je vais essayer seul(e) d'abord
               </button>
