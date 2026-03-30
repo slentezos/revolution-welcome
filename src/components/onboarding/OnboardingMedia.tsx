@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { Camera, Video, X, Play } from "lucide-react";
+import { Camera, Video, X, Play, Lightbulb, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox"; // Assurez-vous d'avoir ce composant
+import { cn } from "@/lib/utils";
 import coupleGarden from "@/assets/couple-garden.jpg";
 import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
 import placeholderPhotoBg from "@/assets/placeholder-photo-bg.jpg";
@@ -25,17 +27,18 @@ type MediaSlot = {
 };
 
 const getInitialSlots = (): MediaSlot[] => [
-{ id: "video", type: "video", label: "Vidéo", hint: "Max 1 mn 30", required: false },
-{ id: "portrait", type: "portrait", label: "Portrait", hint: "Obligatoire", required: true },
-{ id: "silhouette", type: "silhouette", label: "Silhouette", hint: "En pied", required: false },
-{ id: "misc1", type: "misc", label: "Divers", hint: "Loisirs…", required: false },
-{ id: "misc2", type: "misc", label: "Divers", hint: "Passions…", required: false }];
-
+  { id: "video", type: "video", label: "Vidéo", hint: "Max 1 mn 30", required: false },
+  { id: "portrait", type: "portrait", label: "Portrait", hint: "Obligatoire", required: true },
+  { id: "silhouette", type: "silhouette", label: "Silhouette", hint: "En pied", required: false },
+  { id: "misc1", type: "misc", label: "Divers", hint: "Loisirs…", required: false },
+  { id: "misc2", type: "misc", label: "Divers", hint: "Passions…", required: false },
+];
 
 export default function OnboardingMedia({ profileId, onComplete }: OnboardingMediaProps) {
   const [slots, setSlots] = useState<MediaSlot[]>(getInitialSlots());
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [confirmedAge, setConfirmedAge] = useState(false); // État pour la checkbox
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -45,11 +48,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   useEffect(() => {
     const loadExistingMedia = async () => {
       try {
-        const { data: existingMedia, error } = await supabase.
-        from("profile_media").
-        select("*").
-        eq("profile_id", profileId).
-        order("display_order");
+        const { data: existingMedia, error } = await supabase
+          .from("profile_media")
+          .select("*")
+          .eq("profile_id", profileId)
+          .order("display_order");
 
         if (error) throw error;
 
@@ -58,16 +61,16 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             const updated = [...prev];
             for (const media of existingMedia) {
               let slotIndex = -1;
-              if (media.media_type === "video") slotIndex = 0;else
-              if (media.media_type === "portrait") slotIndex = 1;else
-              if (media.media_type === "silhouette") slotIndex = 2;else
-              if (media.media_type === "misc") {
-                if (!updated[3].uploaded && !updated[3].preview) slotIndex = 3;else
-                if (!updated[4].uploaded && !updated[4].preview) slotIndex = 4;
+              if (media.media_type === "video") slotIndex = 0;
+              else if (media.media_type === "portrait") slotIndex = 1;
+              else if (media.media_type === "silhouette") slotIndex = 2;
+              else if (media.media_type === "misc") {
+                if (!updated[3].uploaded && !updated[3].preview) slotIndex = 3;
+                else if (!updated[4].uploaded && !updated[4].preview) slotIndex = 4;
               }
               if (slotIndex >= 0) {
                 const {
-                  data: { publicUrl }
+                  data: { publicUrl },
                 } = supabase.storage.from("profile-media").getPublicUrl(media.file_path);
                 updated[slotIndex] = { ...updated[slotIndex], preview: publicUrl, uploaded: true };
               }
@@ -90,7 +93,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   };
 
   const handleRemoveSlot = (slotId: string) => {
-    setSlots((prev) => prev.map((s) => s.id === slotId ? { ...getInitialSlots().find((i) => i.id === slotId)! } : s));
+    setSlots((prev) => prev.map((s) => (s.id === slotId ? { ...getInitialSlots().find((i) => i.id === slotId)! } : s)));
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +111,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       toast({
         title: "Format non supporté",
         description: "Veuillez choisir une vidéo (MP4, MOV, WebM)",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -116,7 +119,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       toast({
         title: "Format non supporté",
         description: "Veuillez choisir une image (JPEG, PNG, WebP)",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -131,24 +134,31 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             toast({
               title: "Vidéo trop longue",
               description: "La durée maximale est de 1 minute 30 secondes",
-              variant: "destructive"
+              variant: "destructive",
             });
             resolve(false);
-          } else {
-            resolve(true);
-          }
+          } else resolve(true);
         };
       });
       if (!valid) return;
     }
 
     const preview = URL.createObjectURL(file);
-    setSlots((prev) => prev.map((s) => s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s));
+    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
     if (fileInputRef.current) fileInputRef.current.value = "";
     setActiveSlotId(null);
   };
 
   const handleSave = async () => {
+    if (!confirmedAge) {
+      toast({
+        title: "Action requise",
+        description: "Veuillez confirmer que vos photos ont moins de 18 mois.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const hasFiles = slots.some((s) => s.file && !s.uploaded);
     if (!hasFiles) {
       setShowSaveDialog(true);
@@ -158,7 +168,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     setUploading(true);
     try {
       const {
-        data: { session }
+        data: { session },
       } = await supabase.auth.getSession();
       if (!session) throw new Error("Non authentifié");
 
@@ -174,19 +184,18 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             profile_id: profileId,
             media_type: slot.type,
             file_path: fileName,
-            display_order: slots.indexOf(slot)
+            display_order: slots.indexOf(slot),
           });
           if (dbError) throw dbError;
         }
       }
-
       setShowSaveDialog(true);
     } catch (error: any) {
       console.error("Upload error:", error);
       toast({
         title: "Erreur de téléchargement",
         description: error.message || "Une erreur est survenue",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setUploading(false);
@@ -200,257 +209,241 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground text-lg">Chargement de vos médias...</div>
-      </div>);
-
+        <div className="animate-pulse text-muted-foreground text-lg text-xl">Chargement de vos médias...</div>
+      </div>
+    );
   }
 
   return (
-    <div className="h-[calc(100vh-64px-64px)] lg:h-[calc(100vh-80px-64px)] flex flex-col overflow-hidden">
+    <div className="h-[calc(100vh-64px-64px)] lg:h-[calc(100vh-80px-64px)] flex flex-col overflow-hidden bg-white">
       {/* Main content — single screen, no scroll */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-0 min-h-0">
         {/* Left: Video + Photos grid */}
         <div className="flex-1 min-h-0 p-4 lg:p-6 xl:p-8 flex flex-col gap-4 lg:gap-5">
           {/* Title row */}
           <div className="flex items-center justify-between flex-shrink-0">
-            <div className="flex items-center gap-3">
-              <h2 className="font-heading text-3xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg">
-              <span className="text-[#1B2333] font-semibold text-lg">{uploadedCount}</span>
-              <span className="text-gray-500 text-lg">/ 5</span>
+            <h2 className="font-heading text-3xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
+            <div className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-xl">
+              <span className="text-[#1B2333] font-bold text-xl">{uploadedCount}</span>
+              <span className="text-gray-500 text-xl">/ 5</span>
             </div>
           </div>
 
-          {/* Media grid: video left, 4 photos right */}
-          <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-4 lg:gap-5">
-            {/* Video slot — tall */}
-            <div className="min-h-0 flex flex-col gap-2">
+          {/* Media grid */}
+          <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-4 lg:gap-6">
+            {/* Video slot */}
+            <div className="min-h-0 flex flex-col gap-3">
               <div
-                className="relative flex-1 min-h-0 overflow-hidden cursor-pointer group border-2 border-dashed border-border hover:border-primary/40 transition-all duration-300"
-                onClick={() => !videoSlot.preview && handleSlotClick(videoSlot.id)}>
-                
-                {videoSlot.preview ?
-                <>
+                className="relative flex-1 min-h-0 overflow-hidden cursor-pointer group border-2 border-dashed border-[#E5E0D8] rounded-[2rem] hover:border-[hsl(var(--gold))] transition-all duration-300"
+                onClick={() => !videoSlot.preview && handleSlotClick(videoSlot.id)}
+              >
+                {videoSlot.preview ? (
+                  <>
                     <video src={videoSlot.preview} className="w-full h-full object-cover" muted />
-                    <div className="absolute inset-0 bg-foreground/10 group-hover:bg-foreground/20 transition-colors flex items-center justify-center">
-                      <Play className="h-14 w-14 text-primary-foreground drop-shadow-lg" />
+                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                      <Play className="h-16 w-16 text-white drop-shadow-xl" />
                     </div>
                     <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemoveSlot(videoSlot.id);
-                    }}
-                    className="absolute top-3 right-3 p-3 bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center">
-                    
-                      <X className="h-5 w-5" />
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveSlot(videoSlot.id);
+                      }}
+                      className="absolute top-4 right-4 p-3 bg-red-500 text-white rounded-full shadow-lg min-h-[48px] min-w-[48px] flex items-center justify-center"
+                    >
+                      <X className="h-6 w-6" />
                     </button>
-                    <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSlotClick(videoSlot.id);
-                    }}
-                    className="absolute bottom-3 right-3 px-5 py-3 bg-primary text-primary-foreground font-medium text-base hover:bg-primary/90 transition-colors min-h-[48px]">
-                    
-                      Remplacer
-                    </button>
-                  </> :
-
-                <div className="absolute inset-0">
-                    <img src={placeholderVideoBg} alt="" className="w-full h-full object-cover opacity-40" />
+                  </>
+                ) : (
+                  <div className="absolute inset-0 bg-[#FCF9F5]">
+                    <img src={placeholderVideoBg} alt="" className="w-full h-full object-cover opacity-20" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                        <Video className="h-8 w-8 lg:h-10 lg:w-10 text-primary/60" />
+                      <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center mb-4">
+                        <Video className="h-10 w-10 text-[hsl(var(--gold))]" />
                       </div>
-                      <span className="text-lg lg:text-xl text-foreground font-medium mb-1">+ Ajouter une vidéo</span>
-                      <span className="text-base text-muted-foreground">MP4, MOV ou WebM · Max 1 mn 30</span>
+                      <span className="text-xl text-foreground font-semibold">+ Ajouter une vidéo</span>
                     </div>
                   </div>
-                }
+                )}
               </div>
-              <div className="flex items-center justify-between flex-shrink-0">
-                <div>
-                  <p className="text-foreground font-medium text-lg">Vidéo de présentation</p>
-                </div>
+              <div className="flex items-center justify-between flex-shrink-0 px-2">
+                <p className="text-foreground font-semibold text-lg">Vidéo de présentation</p>
                 <button
                   onClick={() => setShowVideoTutorial(true)}
-                  className="hover:underline transition-colors whitespace-nowrap text-xl bg-[#e2a336] text-black font-normal">
-                  
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full hover:bg-[hsl(var(--gold))]/20 transition-all font-bold text-lg"
+                >
+                  <Lightbulb className="h-5 w-5" />
                   Conseils vidéo
                 </button>
               </div>
             </div>
 
             {/* Photos 2x2 grid */}
-            <div className="min-h-0 grid grid-cols-2 gap-3 lg:gap-4">
-              {photoSlots.map((slot, index) =>
-              <div key={slot.id} className="min-h-0 flex flex-col gap-1.5">
+            <div className="min-h-0 grid grid-cols-2 gap-4 lg:gap-5">
+              {photoSlots.map((slot, index) => (
+                <div key={slot.id} className="min-h-0 flex flex-col gap-2">
                   <div
-                  className={`relative flex-1 min-h-0 overflow-hidden cursor-pointer group border-2 border-dashed transition-all duration-300 ${
-                  slot.preview ?
-                  "border-transparent" :
-                  index === 0 ?
-                  "border-primary/40 hover:border-primary/60" :
-                  "border-border hover:border-primary/30"}`
-                  }
-                  onClick={() => handleSlotClick(slot.id)}>
-                  
-                    {slot.preview ?
-                  <>
+                    className={cn(
+                      "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border-2 border-dashed rounded-[1.5rem] transition-all duration-300",
+                      slot.preview
+                        ? "border-transparent"
+                        : "border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
+                    )}
+                    onClick={() => handleSlotClick(slot.id)}
+                  >
+                    {slot.preview ? (
+                      <>
                         <img src={slot.preview} alt={slot.label} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/10 transition-colors" />
                         <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveSlot(slot.id);
-                      }}
-                      className="absolute top-2 right-2 p-2.5 bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
-                      
-                          <X className="h-4 w-4" />
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveSlot(slot.id);
+                          }}
+                          className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full shadow-md min-h-[40px] min-w-[40px] flex items-center justify-center"
+                        >
+                          <X className="h-5 w-5" />
                         </button>
-                      </> :
-
-                  <div className="absolute inset-0">
-                        <img src={placeholderPhotoBg} alt="" className="w-full h-full object-cover opacity-30" />
-                        <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-                          <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${
-                        index === 0 ? "bg-primary/15" : "bg-primary/10"}`
-                        }>
-                        
-                            <Camera className={`h-5 w-5 ${index === 0 ? "text-primary" : "text-primary/50"}`} />
-                          </div>
-                          <span
-                        className={`text-base font-medium ${index === 0 ? "text-primary" : "text-muted-foreground"}`}>
-                        
-                            + Ajouter*
-                          </span>
-                          {index === 0}
+                      </>
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-2 shadow-sm">
+                          <Camera className="h-6 w-6 text-muted-foreground" />
                         </div>
+                        <span className="text-base font-bold">+ Photo*</span>
                       </div>
-                  }
+                    )}
                   </div>
-                  <p className="text-foreground font-medium text-base flex-shrink-0">
+                  <p className="text-foreground font-medium text-base px-1 truncate">
                     {slot.label} <span className="text-muted-foreground font-normal text-sm">— {slot.hint}</span>
                   </p>
                 </div>
-              )}
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom bar — always visible */}
-      <div
-        className="flex-shrink-0 bg-white border-t border-gray-200 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] py-3"
-        style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-[60px] flex items-center justify-between">
-          <p className="text-sm font-medium text-gray-500 hidden sm:block">{uploadedCount} / 5 médias ajoutés</p>
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-            <Button
-              variant="outline"
-              onClick={handleSave}
-              disabled={uploading}
-              className="h-11 px-5 rounded-lg border-gray-300 text-[#1B2333] hover:bg-gray-50 font-medium">
-              
-              Enregistrer
-            </Button>
-            <Button
-              onClick={handleSave}
-              disabled={uploading}
-              className="h-11 px-6 rounded-lg bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium">
-              
-              {uploading ? "Téléchargement..." : "Enregistrer et continuer"}
-            </Button>
+      {/* Bottom bar — with mandatory checkbox */}
+      <div className="flex-shrink-0 bg-white border-t border-gray-100 z-50 py-6 px-6 lg:px-20">
+        <div className="max-w-5xl mx-auto space-y-6">
+          {/* MANDATORY CHECKBOX FOR SENIORS */}
+          <div
+            className={cn(
+              "flex items-center gap-4 p-5 rounded-2xl border-2 transition-all cursor-pointer",
+              confirmedAge ? "bg-emerald-50/50 border-emerald-200" : "bg-red-50/30 border-red-100",
+            )}
+            onClick={() => setConfirmedAge(!confirmedAge)}
+          >
+            <div className="relative flex items-center">
+              <Checkbox
+                id="age-confirm"
+                checked={confirmedAge}
+                onCheckedChange={(val) => setConfirmedAge(val as boolean)}
+                className="h-7 w-7 rounded-lg border-2 border-gray-300 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+              />
+            </div>
+            <label
+              htmlFor="age-confirm"
+              className="text-lg md:text-xl font-medium text-[#1B2333] cursor-pointer select-none"
+            >
+              Je certifie sur l'honneur que mes photos ont été prises il y a{" "}
+              <span className="font-bold underline">moins de 18 mois</span>.
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <p className="text-lg font-medium text-gray-500 hidden md:block">{uploadedCount} / 5 médias ajoutés</p>
+            <div className="flex items-center gap-4 w-full md:w-auto">
+              <Button
+                variant="outline"
+                onClick={handleSave}
+                disabled={uploading}
+                className="flex-1 md:flex-none h-14 px-8 rounded-2xl border-gray-200 text-[#1B2333] hover:bg-gray-50 font-bold text-lg"
+              >
+                Enregistrer
+              </Button>
+              <Button
+                onClick={handleSave}
+                disabled={uploading || !confirmedAge}
+                className={cn(
+                  "flex-1 md:flex-none h-14 px-10 rounded-2xl font-bold text-lg shadow-lg transition-all",
+                  confirmedAge
+                    ? "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
+                    : "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none",
+                )}
+              >
+                {uploading ? "Téléchargement..." : "Valider et continuer"}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Video Tutorial Modal */}
+      {/* Modals are kept identical but with enhanced text visibility */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden">
-          <div className="flex">
-            <div className="flex-1 p-8 lg:p-10">
-              <DialogHeader className="mb-6">
-                <DialogTitle className="font-heading text-2xl lg:text-3xl font-semibold text-foreground">
-                  Tutoriel vidéo
+        <DialogContent className="max-w-4xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl">
+          <div className="flex flex-col lg:flex-row">
+            <div className="flex-1 p-10 lg:p-14">
+              <DialogHeader className="mb-8">
+                <DialogTitle className="font-heading text-3xl lg:text-4xl font-bold text-[#1B2333]">
+                  Conseils d'expert
                 </DialogTitle>
-                <DialogDescription className="text-muted-foreground text-lg italic mt-2">
-                  L'essentiel : c'est vous.
+                <DialogDescription className="text-xl italic mt-3 text-[hsl(var(--gold))] font-medium">
+                  Le secret : restez vous-même.
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-4 text-lg">
+              <div className="space-y-5 text-xl leading-relaxed text-[#1B2333]/80">
                 <p>
-                  <span className="font-semibold">Vous avant tout</span> : votre visage, voix, expression, attitude.
+                  <span className="font-bold text-[#1B2333]">✓ Regard caméra :</span> Adressez-vous directement à votre
+                  futur partenaire.
                 </p>
                 <p>
-                  <span className="font-semibold">Setup clean</span> : fond neutre, calme, lumière face à vous.
+                  <span className="font-bold text-[#1B2333]">✓ Bonne lumière :</span> Placez-vous face à une fenêtre
+                  (pas de dos).
                 </p>
                 <p>
-                  <span className="font-semibold">Regard caméra</span> : évitez les yeux baissés.
+                  <span className="font-bold text-[#1B2333]">✓ Authenticité :</span> Racontez un petit plaisir simple ou
+                  une passion.
                 </p>
                 <p>
-                  <span className="font-semibold">Tempo maîtrisé</span> : Respirez, articulez, variez le rythme.
-                </p>
-                <p>
-                  <span className="font-semibold">Soyez vivant</span> : ne lisez pas. Racontez une anecdote.
-                </p>
-                <p>
-                  <span className="font-semibold">Pas de clichés</span> : bannir les banalités.
+                  <span className="font-bold text-[#1B2333]">✓ Son :</span> Assurez-vous d'être dans un endroit calme.
                 </p>
               </div>
-              <p className="text-muted-foreground mt-8 text-lg">Refaites si besoin : plusieurs prises, c'est normal.</p>
+              <Button
+                onClick={() => setShowVideoTutorial(false)}
+                className="mt-10 h-14 px-10 rounded-xl bg-[#1B2333] text-white text-lg font-bold"
+              >
+                J'ai compris
+              </Button>
             </div>
-            <div className="hidden lg:block w-[280px] relative">
+            <div className="hidden lg:block w-[320px] relative">
               <img src={coupleGarden} alt="" className="absolute inset-0 w-full h-full object-cover" />
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Save confirmation dialog */}
+      {/* Confirmation Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="max-w-md p-10 text-center">
+        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem]">
           <div className="flex flex-col items-center gap-6">
             <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
-              <svg
-                className="h-10 w-10 text-emerald-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}>
-                
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
+              <Check className="h-10 w-10 text-emerald-600" />
             </div>
             <DialogHeader>
-              <DialogTitle className="font-heading text-3xl text-foreground">Enregistré !</DialogTitle>
-              <DialogDescription className="text-muted-foreground text-lg mt-2">
-                Vos photos et vidéo ont bien été sauvegardées.
+              <DialogTitle className="font-heading text-3xl text-[#1B2333] font-bold">C'est enregistré !</DialogTitle>
+              <DialogDescription className="text-xl mt-2">
+                Vos médias ont été sauvegardés avec succès.
               </DialogDescription>
             </DialogHeader>
-            <div className="flex flex-col gap-3 w-full mt-2">
-              <Button
-                onClick={() => {
-                  setShowSaveDialog(false);
-                  onComplete();
-                }}
-                className="btn-primary w-full py-5 text-lg h-auto min-h-[56px]">
-                
-                Continuer vers le Quiz
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowSaveDialog(false);
-                  window.location.href = "/profil";
-                }}
-                className="w-full py-5 text-lg h-auto min-h-[56px] border-2 border-border">
-                
-                Retour à Mon Profil
-              </Button>
-            </div>
+            <Button
+              onClick={() => {
+                setShowSaveDialog(false);
+                onComplete();
+              }}
+              className="w-full h-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold mt-4 shadow-xl"
+            >
+              Continuer vers le Quiz
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -460,8 +453,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         type="file"
         className="hidden"
         accept={activeSlotId === "video" ? "video/*" : "image/*"}
-        onChange={handleFileChange} />
-      
-    </div>);
-
+        onChange={handleFileChange}
+      />
+    </div>
+  );
 }
