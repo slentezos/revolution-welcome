@@ -21,9 +21,9 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
-// Assets
 import coupleGarden from "@/assets/couple-garden.jpg";
 import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
 import placeholderPhotoBg from "@/assets/placeholder-photo-bg.jpg";
@@ -109,12 +109,13 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
   const handleStudioPayment = async () => {
     setIsProcessingPayment(true);
+    // Simulation de l'appel vers Stripe/Checkout
     setTimeout(() => {
       setIsProcessingPayment(false);
       setShowStudioModal(false);
       toast({
         title: "Réservation confirmée !",
-        description: "Notre équipe vous appellera dans les prochaines 24h.",
+        description: "Notre équipe vous appellera dans les prochaines 24h pour votre vidéo.",
       });
     }, 2000);
   };
@@ -149,7 +150,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         };
       });
       if (!isValid) {
-        toast({ title: "Vidéo trop longue", description: "Max 1 mn 30.", variant: "destructive" });
+        toast({ title: "Vidéo trop longue", description: "Maximum 1 minute 30.", variant: "destructive" });
         return;
       }
     }
@@ -164,7 +165,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     if (!confirmedAge) {
       toast({
         title: "Action requise",
-        description: "Certifiez que vos photos ont moins de 18 mois.",
+        description: "Veuillez certifier l'ancienneté de vos photos.",
         variant: "destructive",
       });
       return;
@@ -197,16 +198,16 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     }
   };
 
-  const videoSlot = slots[0];
-  const photoSlots = slots.slice(1, 5);
-  const uploadedCount = slots.filter((s) => s.file || s.uploaded).length;
-
   if (loading)
     return (
-      <div className="h-screen flex items-center justify-center text-2xl font-medium text-muted-foreground animate-pulse">
+      <div className="h-screen flex items-center justify-center text-xl font-medium animate-pulse">
         Chargement de votre univers...
       </div>
     );
+
+  const videoSlot = slots[0];
+  const photoSlots = slots.slice(1, 5);
+  const uploadedCount = slots.filter((s) => s.file || s.uploaded).length;
 
   return (
     <div className="h-[calc(100vh-140px)] flex flex-col overflow-hidden bg-white">
@@ -220,8 +221,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             </div>
           </div>
 
-          <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8">
-            {/* SLOT VIDEO AVEC BOUTON 49€ */}
+          <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-8">
+            {/* VIDEO SLOT */}
             <div className="min-h-0 flex flex-col gap-4">
               <div
                 className="relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[2.5rem] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all duration-500"
@@ -261,8 +262,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold text-xl leading-tight">Intimidé(e) ?</p>
-                        <p className="text-lg opacity-80 underline">On vous filme en visio (49€)</p>
+                        <p className="font-bold text-xl leading-tight">Besoin d'aide ?</p>
+                        <p className="text-lg opacity-80">On vous filme en visio (49€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -280,7 +281,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               </div>
             </div>
 
-            {/* PHOTOS */}
+            {/* PHOTOS SLOTS */}
             <div className="min-h-0 grid grid-cols-2 gap-4">
               {photoSlots.map((slot) => (
                 <div key={slot.id} className="min-h-0 flex flex-col gap-2">
@@ -320,8 +321,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* FOOTER */}
-      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20 text-left">
+      {/* FOOTER & CHECKBOX */}
+      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20 text-left shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
         <div className="max-w-5xl mx-auto space-y-6">
           <div
             className={cn(
@@ -332,20 +333,22 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
           >
             <div
               className={cn(
-                "h-8 w-8 rounded-lg border-2 flex items-center justify-center",
+                "h-8 w-8 rounded-lg border-2 flex items-center justify-center transition-all",
                 confirmedAge ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300",
               )}
             >
               {confirmedAge && <Check className="text-white h-6 w-6" />}
             </div>
-            <p className="text-xl font-medium text-[#1B2333]">
+            <p className="text-xl font-medium text-[#1B2333] select-none">
               Je certifie sur l'honneur que mes photos ont été prises il y a{" "}
               <span className="font-bold underline text-[hsl(var(--gold))]">moins de 18 mois</span>.
             </p>
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="text-xl font-medium text-gray-400 hidden md:block">Votre sécurité est notre priorité.</p>
+            <p className="text-xl font-medium text-gray-400 hidden md:block">
+              Votre sécurité est notre priorité absolue.
+            </p>
             <div className="flex gap-4 w-full md:w-auto">
               <Button
                 variant="outline"
@@ -358,7 +361,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 onClick={handleSave}
                 disabled={!confirmedAge || uploading}
                 className={cn(
-                  "flex-1 md:flex-none h-16 px-12 rounded-2xl font-bold text-xl shadow-xl",
+                  "flex-1 md:flex-none h-16 px-12 rounded-2xl font-bold text-xl shadow-xl transition-all",
                   confirmedAge ? "bg-[#1B2333] text-white" : "bg-gray-100 text-gray-400",
                 )}
               >
@@ -369,37 +372,39 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* MODAL STUDIO 49€ */}
+      {/* STUDIO MODAL WITH PAYMENT OPTION */}
       <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
         <DialogContent className="max-w-2xl p-14 rounded-[3rem] border-0 shadow-3xl bg-white z-[9999]">
           <div className="text-center space-y-8">
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[hsl(var(--gold))]/10">
+            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))/0.2]">
               <Headphones className="h-12 w-12 text-[hsl(var(--gold))]" />
             </div>
             <DialogHeader>
               <DialogTitle className="font-heading text-4xl text-[#1B2333] font-bold leading-tight text-center">
-                Laissons parler votre charme.
+                Laissons parler votre charme, <br />
+                on s'occupe du reste.
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-6 text-left">
               <div className="flex items-start gap-4 p-6 rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
                 <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))] shrink-0" />
-                <p className="text-xl text-[#1B2333]">
+                <p className="text-xl">
                   Coaching de <span className="font-bold">15 min en visio</span> pour vous guider.
                 </p>
               </div>
               <div className="flex items-start gap-4 p-6 rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
                 <Check className="h-7 w-7 text-[hsl(var(--gold))] shrink-0" />
-                <p className="text-xl text-[#1B2333]">
+                <p className="text-xl">
                   Montage professionnel inclus pour un <span className="font-bold">profil parfait</span>.
                 </p>
               </div>
             </div>
+
             <div className="space-y-4">
               <Button
                 disabled={isProcessingPayment}
                 onClick={handleStudioPayment}
-                className="h-16 w-full rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-2xl flex items-center justify-center gap-3"
+                className="h-16 w-full rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-2xl hover:scale-[1.02] transition-transform flex items-center justify-center gap-3"
               >
                 {isProcessingPayment ? (
                   <Loader2 className="animate-spin h-6 w-6" />
@@ -408,7 +413,9 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 )}
                 Payer et réserver (49€)
               </Button>
-              <p className="text-sm text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
+              <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm">
+                <ShieldCheck className="h-4 w-4" /> Paiement 100% sécurisé
+              </div>
             </div>
             <button
               onClick={() => setShowStudioModal(false)}
@@ -420,19 +427,13 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
-      {/* TUTORIAL MODAL AVEC "X" ET BOUTONS EMPILÉS */}
+      {/* TUTORIAL MODAL */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
         <DialogContent className="max-w-5xl p-0 overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-[#FCF9F5] z-[9999]">
-          <button
-            onClick={() => setShowVideoTutorial(false)}
-            className="absolute right-6 top-6 z-[10000] p-3 rounded-full bg-white/80 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-sm group"
-          >
-            <X className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
-          </button>
           <div className="flex flex-col lg:flex-row">
-            <div className="flex-1 p-10 lg:p-16 bg-white relative overflow-hidden text-left">
+            <div className="flex-1 p-12 lg:p-20 bg-white relative overflow-hidden text-left">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
-              <div className="relative z-10">
+              <div className="relative z-10 text-left">
                 <header className="mb-14">
                   <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-6">
                     <Sparkles className="h-5 w-5 text-[hsl(var(--gold))]" />
@@ -440,11 +441,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       Guide Privé
                     </span>
                   </div>
-                  <DialogTitle className="font-heading text-5xl lg:text-7xl text-[#1B2333] leading-[1.1] mb-8">
-                    L'art de se <br /> <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
+                  <DialogTitle className="font-heading text-5xl lg:text-7xl text-[#1B2333] leading-[1.1] mb-8 text-left">
+                    L'art de se <br />{" "}
+                    <span className="italic font-serif text-[hsl(var(--gold))] text-left">présenter</span>
                   </DialogTitle>
                 </header>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
                   {[
                     {
                       icon: Eye,
@@ -463,42 +465,50 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       desc: "Le silence autour de vous permet à votre voix d'être écoutée.",
                     },
                   ].map((item, idx) => (
-                    <div key={idx} className="group flex flex-col gap-4">
+                    <div key={idx} className="group flex flex-col gap-4 text-left">
                       <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8] group-hover:border-[hsl(var(--gold))] transition-colors duration-500">
                         <item.icon className="h-7 w-7 text-[#1B2333]" />
                       </div>
-                      <div>
-                        <h4 className="font-bold text-[#1B2333] text-2xl mb-2">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 text-lg leading-snug">{item.desc}</p>
+                      <div className="text-left">
+                        <h4 className="font-bold text-[#1B2333] text-2xl mb-2 text-left">{item.title}</h4>
+                        <p className="text-[#1B2333]/60 text-lg leading-snug text-left">{item.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-                <div className="flex flex-col gap-4 max-w-sm">
+
+                <div className="mt-14 flex flex-col sm:flex-row items-center gap-5">
                   <Button
                     onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 px-12 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl hover:scale-[1.02] transition-transform"
+                    className="h-16 px-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold"
                   >
-                    J'ai compris, je commence
+                    J'ai compris
                   </Button>
+
                   <button
-                    onClick={() => setShowVideoTutorial(false)}
-                    className="py-4 text-[#1B2333]/50 hover:text-[#1B2333] font-medium text-lg underline underline-offset-8"
+                    onClick={() => {
+                      setShowVideoTutorial(false);
+                      setShowStudioModal(true);
+                    }}
+                    className="flex items-center gap-3 px-7 py-4 border border-[hsl(var(--gold))/0.4] bg-[hsl(var(--gold))/0.05] text-[hsl(var(--gold))] rounded-2xl hover:bg-[hsl(var(--gold))/0.1] transition-all group"
                   >
-                    Plus tard
+                    <Headphones className="h-6 w-6" />
+                    <div className="text-left">
+                      <p className="font-bold text-lg leading-tight">Intimidé(e) ?</p>
+                      <p className="text-base opacity-80">On vous filme en visio (49€)</p>
+                    </div>
+                    <ArrowRight className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
             </div>
             <div className="hidden lg:block w-[400px] relative">
               <img src={coupleGarden} className="absolute inset-0 w-full h-full object-cover" alt="Couple" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/40 via-transparent to-transparent" />
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* MODAL SUCCÈS */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem] z-[9999]">
           <div className="flex flex-col items-center gap-6">
