@@ -224,14 +224,14 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <h2 className="font-heading text-2xl md:text-3xl text-foreground leading-tight">
                 Partagez votre bonheur
               </h2>
-              <p className="text-muted-foreground text-sm md:text-base max-w-sm mx-auto">
+              <p className="text-muted-foreground text-sm max-w-sm mx-auto md:text-lg">
                 Célébrez votre belle histoire en offrant 3 mois d'abonnement à vos proches. C'est offert par Kalimera.
               </p>
             </div>
 
             {/* Message Preview */}
             <div className="bg-secondary/30 p-4 rounded-2xl border border-secondary text-left relative overflow-hidden">
-              <p className="italic text-foreground/80 leading-relaxed relative z-10 text-sm md:text-base">
+              <p className="italic text-foreground/80 leading-relaxed relative z-10 text-sm md:text-lg">
                 « J'ai fait une merveilleuse rencontre sur Kalimera et je quitte le cercle. Je te transfère mon
                 privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. Voici mon invitation :{" "}
                 {inviteLink} »
@@ -242,7 +242,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             <div className="space-y-2 pt-1">
               <div className="flex justify-between items-center mb-2">
                 <Label className="text-foreground text-sm md:text-base font-medium">Partager via votre appareil</Label>
-                <span className="text-xs font-bold text-[hsl(var(--gold))] px-2 py-0.5 rounded bg-[hsl(var(--gold))/0.1]">
+                <span className="font-bold text-[hsl(var(--gold))] px-2 py-0.5 rounded bg-[hsl(var(--gold))/0.1] text-lg">
                   {invitesLeft} restante(s)
                 </span>
               </div>
@@ -255,7 +255,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                     if (invitesLeft <= 0) e.preventDefault();
                     else decrementInvites();
                   }}
-                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-xs sm:text-sm font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
+                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-lg font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
                 >
                   <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp
                 </a>
@@ -269,7 +269,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                     if (invitesLeft <= 0) e.preventDefault();
                     else decrementInvites();
                   }}
-                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-xs sm:text-sm font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
+                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-lg font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
                 >
                   <Mail className="w-4 h-4 text-muted-foreground" /> E-mail
                 </a>
@@ -277,7 +277,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   type="button"
                   onClick={handleCopy}
                   disabled={invitesLeft <= 0}
-                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-xs sm:text-sm font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
+                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-lg font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
                 >
                   {copied ? (
                     <CheckCircle2 className="w-4 h-4 text-green-500" />
@@ -295,7 +295,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 <div className="w-full border-t border-secondary"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-white px-4 text-[10px] md:text-xs font-medium uppercase tracking-widest text-muted-foreground">
+                <span className="bg-white px-4 text-[10px] font-medium uppercase tracking-widest text-muted-foreground md:text-base">
                   Ou confiez-nous l'envoi
                 </span>
               </div>
@@ -339,7 +339,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                     description: "Votre compte sera clôturé sous 48h.",
                   });
                 }}
-                className="w-full h-10 rounded-xl text-muted-foreground hover:text-red-500 font-medium text-sm transition-colors"
+                className="w-full h-10 rounded-xl text-muted-foreground hover:text-red-500 font-medium transition-colors text-lg"
               >
                 Passer cette étape et clôturer mon compte
               </button>
