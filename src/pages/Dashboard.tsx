@@ -20,6 +20,10 @@ const mockMatches = [
   { id: 3, name: "Catherine", age: 71, location: "92430 - Marnes-la-Coquette", affinity: 80, matchedAt: "2026-03-28", avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Lecture", "Jardinage", "Opéra"], commonPoint: "Vous adorez tous les deux le jardinage et l'opéra italien." },
 ];
 
+export type MockMatch = typeof mockMatches[0];
+export type SavedMatch = MockMatch & {savedAt: string;};
+export type PendingMatch = MockMatch & {acceptedAt: string;};
+
 // Mock data — En attente de sa réponse
 const mockPendingMatches: PendingMatch[] = [
   { id: 10, name: "Isabelle", age: 63, location: "69006 - Lyon", affinity: 88, matchedAt: "2026-03-20", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Peinture", "Yoga", "Cinéma"], commonPoint: "Vous partagez un amour pour le cinéma d'auteur et les expositions d'art contemporain.", acceptedAt: "25 mars 2026" },
@@ -33,10 +37,6 @@ const mockSavedMatches: SavedMatch[] = [
   { id: 21, name: "Dominique", age: 69, location: "31000 - Toulouse", affinity: 77, matchedAt: "2026-03-21", avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face", verified: false, online: false, tags: ["Histoire", "Bridge", "Gastronomie"], commonPoint: "Vous êtes tous les deux amateurs de gastronomie du Sud-Ouest et de jeux de société.", savedAt: "25 mars 2026" },
   { id: 22, name: "Béatrice", age: 62, location: "06000 - Nice", affinity: 82, matchedAt: "2026-03-20", avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Aquarelle", "Méditation", "Théâtre"], commonPoint: "Vous partagez la passion de l'aquarelle et des balades sur la Promenade des Anglais.", savedAt: "24 mars 2026" },
 ];
-
-export type MockMatch = typeof mockMatches[0];
-export type SavedMatch = MockMatch & {savedAt: string;};
-export type PendingMatch = MockMatch & {acceptedAt: string;};
 
 const SAVED_MATCHES_STORAGE_KEY = "kalimera_saved_matches";
 const ACCEPTED_MATCHES_STORAGE_KEY = "kalimera_accepted_matches";
