@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import coupleGarden from "@/assets/couple-garden.jpg";
+
 import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
 import placeholderPhotoBg from "@/assets/placeholder-photo-bg.jpg";
 
@@ -451,95 +451,83 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
       {/* TUTORIAL MODAL - LUXE EDITION 2026 */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        <DialogContent className="max-w-5xl p-0 overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-[#FCF9F5]">
-          <div className="flex flex-col lg:flex-row">
-            {/* Colonne de Gauche : Contenu */}
-            <div className="flex-1 p-10 lg:p-16 bg-white relative overflow-hidden">
-              {/* Motif de fond subtil (Optionnel) */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
+        <DialogContent className="max-w-3xl p-0 overflow-hidden rounded-[24px] border border-border/40 shadow-luxury bg-background">
+          {/* Close button */}
+          <button
+            onClick={() => setShowVideoTutorial(false)}
+            className="absolute top-5 right-5 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Fermer"
+          >
+            <X className="h-5 w-5" />
+          </button>
 
-              <div className="relative z-10">
-                <header className="mb-12">
-                  <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-6">
-                    <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="text-xs font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))]">
-                      Guide Privé
-                    </span>
-                  </div>
-
-                  <DialogTitle className="font-heading text-4xl lg:text-6xl text-[#1B2333] leading-[1.1] mb-6">
-                    L'art de se <br /> <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
-                  </DialogTitle>
-
-                  <p className="text-xl text-muted-foreground leading-relaxed max-w-md">
-                    Quelques secrets pour capturer votre essence et charmer votre futur partenaire dès les premières
-                    secondes.
-                  </p>
-                </header>
-
-                {/* Grille de Conseils - Style "Boutique" */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                  {[
-                    {
-                      icon: Eye,
-                      title: "Le Regard",
-                      desc: "Plongez vos yeux dans l'objectif, c'est là que la connexion commence.",
-                    },
-                    {
-                      icon: Sun,
-                      title: "La Lumière",
-                      desc: "La clarté d'une fenêtre face à vous est votre meilleur atout beauté.",
-                    },
-                    {
-                      icon: Heart,
-                      title: "L'Émotion",
-                      desc: "Parlez d'une passion. Votre visage s'illumine quand vous aimez.",
-                    },
-                    {
-                      icon: Volume2,
-                      title: "La Sérénité",
-                      desc: "Le silence autour de vous permet à votre voix d'être écoutée.",
-                    },
-                  ].map((item, idx) => (
-                    <div key={idx} className="group flex flex-col gap-4">
-                      <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8] group-hover:border-[hsl(var(--gold))] transition-colors duration-500">
-                        <item.icon className="h-6 w-6 text-[#1B2333]" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-[#1B2333] text-xl mb-2">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 text-lg leading-snug">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-16 flex items-center gap-6">
-                  <Button
-                    onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 px-12 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl hover:bg-[#1B2333]/90 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    J'ai compris
-                  </Button>
-                  <p className="hidden md:block text-sm text-muted-foreground font-medium italic">
-                    "L'authenticité est la clé."
-                  </p>
-                </div>
+          <div className="p-8 sm:p-12 max-h-[85vh] overflow-y-auto">
+            {/* Header */}
+            <header className="text-center mb-10">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-gold/30 bg-gold/5 mb-5">
+                <Sparkles className="h-4 w-4 text-gold" />
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-gold">
+                  Guide Privé
+                </span>
               </div>
+
+              <DialogTitle className="font-heading text-3xl sm:text-5xl text-foreground leading-[1.1] mb-4">
+                L'art de se{" "}
+                <span className="italic text-gold">présenter</span>
+              </DialogTitle>
+
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-lg mx-auto">
+                Quelques secrets pour capturer votre essence et charmer votre futur partenaire.
+              </p>
+            </header>
+
+            {/* Tips grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+              {[
+                {
+                  icon: Eye,
+                  title: "Le Regard",
+                  desc: "Plongez vos yeux dans l'objectif, c'est là que la connexion commence.",
+                },
+                {
+                  icon: Sun,
+                  title: "La Lumière",
+                  desc: "La clarté d'une fenêtre face à vous est votre meilleur atout beauté.",
+                },
+                {
+                  icon: Heart,
+                  title: "L'Émotion",
+                  desc: "Parlez d'une passion. Votre visage s'illumine quand vous aimez.",
+                },
+                {
+                  icon: Volume2,
+                  title: "La Sérénité",
+                  desc: "Le silence autour de vous permet à votre voix d'être écoutée.",
+                },
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-start gap-4 p-5 rounded-2xl bg-secondary/50 border border-border/30 hover:border-gold/30 transition-colors duration-300">
+                  <div className="w-11 h-11 flex items-center justify-center rounded-xl bg-gold/10 shrink-0">
+                    <item.icon className="h-5 w-5 text-gold" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-foreground text-lg mb-1">{item.title}</h4>
+                    <p className="text-muted-foreground text-base leading-snug">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* Colonne de Droite : Image Visuelle */}
-            <div className="hidden lg:block w-[380px] relative group">
-              <img
-                src={coupleGarden}
-                alt="Couple Kalimera"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-              />
-              {/* Overlay élégant */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/40 via-transparent to-transparent" />
-              <div className="absolute bottom-10 left-10 right-10">
-                <div className="w-12 h-1 bg-[hsl(var(--gold))] mb-4" />
-                <p className="text-white font-heading text-2xl leading-tight">Le bonheur commence par un sourire.</p>
-              </div>
+            {/* Footer */}
+            <div className="flex flex-col items-center gap-3">
+              <Button
+                onClick={() => setShowVideoTutorial(false)}
+                className="h-14 px-10 rounded-2xl bg-foreground text-background text-lg font-bold shadow-elevated hover:opacity-90 transition-all"
+              >
+                J'ai compris
+              </Button>
+              <p className="text-sm text-muted-foreground font-medium italic">
+                "L'authenticité est la clé."
+              </p>
             </div>
           </div>
         </DialogContent>
