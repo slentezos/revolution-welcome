@@ -103,7 +103,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
               onClick={() => setStep("reason")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
@@ -120,9 +120,9 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
 
             {/* Testimonial */}
             <div className="space-y-2 bg-secondary/30 p-5 rounded-2xl">
-              <Label className="text-foreground text-base font-medium block">
+              <Label className="text-xl text-foreground text-base font-medium block">
                 Racontez-nous votre belle histoire
-                <span className="text-muted-foreground font-normal ml-2 text-sm">(facultatif)</span>
+                <span className="text-muted-foreground font-normal ml-2 text-lg">(facultatif)</span>
               </Label>
               <Textarea
                 value={testimony}
@@ -137,9 +137,9 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             <div className="p-5 rounded-2xl bg-primary/5 border border-primary/10 text-left">
               <div className="flex items-center gap-2 mb-2">
                 <Gift className="h-5 w-5 text-[hsl(var(--gold))] flex-shrink-0" />
-                <p className="font-heading text-xl text-primary">Partagez votre bonheur</p>
+                <p className="font-heading text-primary text-3xl">Partagez votre bonheur</p>
               </div>
-              <p className="leading-relaxed text-sm text-foreground mb-4">
+              <p className="leading-relaxed text-foreground mb-4 text-xl">
                 Offrez 3 mois d'abonnement au cercle à 3 de vos proches. C'est entièrement offert par Kalimera.
               </p>
 
