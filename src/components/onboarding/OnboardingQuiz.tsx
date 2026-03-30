@@ -202,7 +202,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] pb-40">
+    <div className="h-[calc(100vh-140px)] bg-[#FAFAFA] overflow-hidden flex flex-col">
       {/* Cooldown locked banner */}
       {isCooldownLocked && (
         <div className="bg-secondary border-b border-border px-6 py-4 text-center">
