@@ -262,7 +262,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
                         <p className="font-bold text-xl leading-tight">Intimidé(e) ?</p>
-                        <p className="text-lg opacity-80 underline">On vous filme en visio (40€)</p>
+                        <p className="text-lg opacity-80 underline">On vous filme en visio (49€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -406,7 +406,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 ) : (
                   <CreditCard className="h-6 w-6" />
                 )}
-                Payer et réserver (40€)
+                Payer et réserver (49€)
               </Button>
               <p className="text-sm text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
             </div>
@@ -439,7 +439,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <header className="mb-6">
                   <div className="inline-flex items-center gap-3 px-3 py-1 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-4">
                     <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))]">
+                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-lg">
                       Guide Privé
                     </span>
                   </div>
@@ -466,8 +466,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <item.icon className="h-5 w-5 text-[#1B2333]" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-[#1B2333] text-lg mb-0.5">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 text-sm leading-tight">{item.desc}</p>
+                        <h4 className="font-bold text-[#1B2333] mb-0.5 text-2xl">{item.title}</h4>
+                        <p className="text-[#1B2333]/60 leading-tight text-lg">{item.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -498,7 +498,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     </div>
                     <div>
                       <p className="font-bold text-[hsl(var(--gold))] text-lg leading-tight">Intimidé(e) ?</p>
-                      <p className="text-sm text-[hsl(var(--gold))] opacity-80">On vous filme en visio (40€)</p>
+                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (49€)</p>
                     </div>
                   </div>
                   <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
