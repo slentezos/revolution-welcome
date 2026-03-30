@@ -224,135 +224,141 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2B: Success Gift (Light Theme, 2 Columns layout) ───
+  // ─── Step 2B: Success Gift (Light Theme, Premium 2-Column) ───
   if (step === "success_gift") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl md:max-w-3xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white max-h-[95vh] overflow-y-auto">
-          <div className="px-6 sm:px-10 py-8 space-y-6">
+        <DialogContent className="sm:max-w-xl md:max-w-4xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white max-h-[95vh] overflow-y-auto">
+          <div className="px-6 sm:px-12 py-10 space-y-8">
             <button
               onClick={() => setStep("success_story")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
 
-            <div className="text-center space-y-2 max-w-lg mx-auto">
-              <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
-                <Gift className="h-5 w-5 text-[hsl(var(--gold))]" />
+            {/* Header */}
+            <div className="text-center space-y-3 max-w-2xl mx-auto">
+              <div className="mx-auto w-14 h-14 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
+                <Gift className="h-6 w-6 text-[hsl(var(--gold))]" />
               </div>
-              <h2 className="font-heading text-2xl text-foreground leading-tight md:text-4xl">
+              <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">
                 Partagez votre bonheur
               </h2>
-              <p className="text-muted-foreground text-lg">
-                Célébrez votre histoire en offrant 3 mois d'abonnement au Cercle à vos proches. C'est offert par
-                Kalimera.
+              <p className="text-muted-foreground text-base md:text-lg">
+                Célébrez votre histoire en offrant 3 mois d'abonnement au Cercle à vos proches. C'est entièrement offert
+                par Kalimera.
               </p>
             </div>
 
-            {/* 2-Column Grid to prevent scrolling */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
-              {/* Left Column: Direct Sharing & Link */}
-              <div className="space-y-5">
-                <div className="bg-secondary/30 p-4 rounded-2xl border border-secondary text-left relative overflow-hidden">
-                  <p className="italic text-foreground/80 leading-relaxed relative z-10 text-lg">
+            {/* 2-Column Grid with Vertical Divider */}
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-8 pt-4">
+              {/* Left Column: Direct Sharing */}
+              <div className="space-y-6">
+                <div className="flex justify-between items-center border-b border-secondary pb-3">
+                  <Label className="text-foreground text-base font-semibold uppercase tracking-wide">
+                    Partager vous-même
+                  </Label>
+                  <span className="text-[11px] font-bold text-[hsl(var(--gold))] px-2.5 py-1 rounded bg-[hsl(var(--gold))/0.1] uppercase tracking-wider">
+                    {invitesLeft} restante(s)
+                  </span>
+                </div>
+
+                <div className="bg-secondary/20 p-5 rounded-2xl border border-secondary text-left relative overflow-hidden">
+                  <p className="italic text-foreground/80 leading-relaxed text-sm md:text-base relative z-10 mb-4">
                     « J'ai fait une merveilleuse rencontre sur Kalimera et je quitte le cercle. Je te transfère mon
                     privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. »
                   </p>
 
-                  {/* Copy Link Box */}
-                  <div className="mt-4 flex items-center gap-2 bg-white border border-secondary rounded-xl p-1.5 pl-3 relative z-10">
-                    <span className="truncate text-muted-foreground flex-1 font-medium select-all text-lg">
-                      {inviteLink}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleCopy}
-                      disabled={invitesLeft <= 0}
-                      className={`p-2 rounded-lg transition-colors flex-shrink-0 flex items-center justify-center ${invitesLeft > 0 ? "bg-secondary hover:bg-[hsl(var(--gold))/0.1] hover:text-[hsl(var(--gold))] text-muted-foreground" : "opacity-50 cursor-not-allowed"}`}
-                      title="Copier le lien"
-                    >
-                      {copied ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                    </button>
-                    {shareSupported && (
-                      <button
-                        type="button"
-                        onClick={handleNativeShare}
-                        disabled={invitesLeft <= 0}
-                        className={`p-2 rounded-lg transition-colors flex-shrink-0 flex items-center justify-center ${invitesLeft > 0 ? "bg-secondary hover:bg-[hsl(var(--gold))/0.1] hover:text-[hsl(var(--gold))] text-muted-foreground" : "opacity-50 cursor-not-allowed"}`}
-                        title="Partager via l'appareil"
-                      >
-                        <Share2 className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
+                  {/* Big, accessible Copy Link Button */}
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    disabled={invitesLeft <= 0}
+                    className={`w-full flex items-center justify-between gap-3 bg-white border border-secondary rounded-xl p-3 transition-all ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:shadow-sm" : "opacity-50 cursor-not-allowed"}`}
+                  >
+                    <span className="truncate text-xs text-muted-foreground font-medium">{inviteLink}</span>
+                    <div className="flex items-center gap-1.5 text-[hsl(var(--gold))] text-sm font-semibold bg-[hsl(var(--gold))]/5 px-3 py-1.5 rounded-lg">
+                      {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copied ? "Copié" : "Copier"}
+                    </div>
+                  </button>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <Label className="text-foreground text-sm font-medium">Partager directement</Label>
-                    <span className="text-[10px] font-bold text-[hsl(var(--gold))] px-2 py-0.5 rounded bg-[hsl(var(--gold))/0.1] uppercase tracking-wider">
-                      {invitesLeft} restante(s)
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <a
-                      href={invitesLeft > 0 ? `https://wa.me/?text=${encodeURIComponent(fullMessage)}` : "#"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => {
-                        if (invitesLeft <= 0) e.preventDefault();
-                        else decrementInvites();
-                      }}
-                      className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-11 transition-all text-lg font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
-                    >
-                      <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp
-                    </a>
-                    <a
-                      href={
-                        invitesLeft > 0
-                          ? `mailto:?subject=${encodeURIComponent("Mon cadeau pour toi : Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`
-                          : "#"
-                      }
-                      onClick={(e) => {
-                        if (invitesLeft <= 0) e.preventDefault();
-                        else decrementInvites();
-                      }}
-                      className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-11 transition-all text-xl font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
-                    >
-                      <Mail className="w-4 h-4 text-muted-foreground" /> E-mail
-                    </a>
-                  </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <a
+                    href={invitesLeft > 0 ? `https://wa.me/?text=${encodeURIComponent(fullMessage)}` : "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      if (invitesLeft <= 0) e.preventDefault();
+                      else decrementInvites();
+                    }}
+                    className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-12 transition-all text-sm font-medium ${invitesLeft > 0 ? "hover:border-[#25D366] hover:bg-[#25D366]/5" : "opacity-50 cursor-not-allowed"}`}
+                  >
+                    <MessageCircle className="w-5 h-5 text-[#25D366]" /> WhatsApp
+                  </a>
+                  <a
+                    href={
+                      invitesLeft > 0
+                        ? `mailto:?subject=${encodeURIComponent("Mon cadeau pour toi : Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`
+                        : "#"
+                    }
+                    onClick={(e) => {
+                      if (invitesLeft <= 0) e.preventDefault();
+                      else decrementInvites();
+                    }}
+                    className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-12 transition-all text-sm font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
+                  >
+                    <Mail className="w-5 h-5 text-muted-foreground" /> E-mail
+                  </a>
                 </div>
               </div>
 
-              {/* Right Column: Kalimera Send */}
-              <div className="space-y-4 md:border-l md:border-secondary md:pl-8 flex flex-col justify-center">
-                <div className="space-y-1">
-                  <Label className="text-foreground text-sm font-medium">Ou confiez-nous l'envoi</Label>
-                  <p className="text-muted-foreground text-lg">
-                    Saisissez leurs adresses e-mail, nous nous en chargeons.
-                  </p>
+              {/* Vertical Divider (Hidden on Mobile) */}
+              <div className="hidden md:flex flex-col items-center">
+                <div className="w-px h-full bg-secondary"></div>
+                <div className="absolute bg-white px-2 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-32">
+                  OU
                 </div>
-                <div className="space-y-3 pt-1">
-                  {giftEmails.map((email, i) => (
-                    <Input
-                      key={i}
-                      type="email"
-                      placeholder={`Adresse e-mail du proche n°${i + 1}`}
-                      value={email}
-                      onChange={(e) => updateEmail(i, e.target.value)}
-                      className="h-11 text-sm bg-secondary/30 rounded-xl border-secondary focus:border-[hsl(var(--gold))] focus:ring-[hsl(var(--gold))] shadow-none"
-                    />
-                  ))}
+              </div>
+
+              {/* Right Column: Concierge Send */}
+              <div className="space-y-6">
+                <div className="border-b border-secondary pb-3">
+                  <Label className="text-foreground text-base font-semibold uppercase tracking-wide">
+                    Confiez-nous l'envoi
+                  </Label>
+                </div>
+
+                <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Saisissez leurs adresses e-mail, notre conciergerie se chargera de leur envoyer cette invitation en
+                    votre nom.
+                  </p>
+
+                  <div className="space-y-3 bg-secondary/10 p-5 rounded-2xl border border-secondary">
+                    {giftEmails.map((email, i) => (
+                      <div key={i} className="relative">
+                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40" />
+                        <Input
+                          type="email"
+                          placeholder={`E-mail de l'invité ${i + 1}`}
+                          value={email}
+                          onChange={(e) => updateEmail(i, e.target.value)}
+                          className="h-12 text-base bg-white rounded-xl border-secondary pl-10 focus:border-[hsl(var(--gold))] focus:ring-[hsl(var(--gold))] shadow-sm placeholder:text-muted-foreground/60"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Final Actions */}
-            <div className="flex flex-col gap-3 pt-6 border-t border-secondary mt-6 max-w-xl mx-auto">
+            <div className="flex flex-col gap-3 pt-6 border-t border-secondary mt-8 max-w-2xl mx-auto">
               <Button
-                className="w-full h-12 rounded-xl text-primary-foreground text-base font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
+                className="w-full h-14 rounded-xl text-primary-foreground text-lg font-medium bg-primary hover:bg-primary/90 transition-all shadow-md"
                 onClick={() => {
                   handleClose();
                   toast({
@@ -361,7 +367,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   });
                 }}
               >
-                <Send className="h-4 w-4 mr-2" />
+                <Send className="h-5 w-5 mr-2" />
                 Valider & clôturer mon compte
               </Button>
               <button
@@ -371,7 +377,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                     description: "Votre compte sera clôturé sous 48h.",
                   });
                 }}
-                className="w-full h-10 rounded-xl text-muted-foreground hover:text-red-500 font-medium transition-colors text-lg"
+                className="w-full h-10 rounded-xl text-muted-foreground hover:text-red-500 font-medium text-sm transition-colors"
               >
                 Passer cette étape et clôturer mon compte
               </button>
