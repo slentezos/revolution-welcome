@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Save, ExternalLink } from "lucide-react";
+import DateInput from "@/components/profile/DateInput";
 import profileInfoImg from "@/assets/profile-info.jpg";
 
 interface ProfileInfoTabProps {
@@ -65,16 +66,10 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
                   className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none" />
                 
               </div>
-              <div className="space-y-3">
-                <Label htmlFor="birth_date" className="text-lg font-medium text-foreground">Date de naissance</Label>
-                <Input
-                  id="birth_date"
-                  type="date"
-                  value={formData.birth_date}
-                  onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
-                  className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none" />
-                
-              </div>
+              <DateInput
+                value={formData.birth_date}
+                onChange={(val) => setFormData({ ...formData, birth_date: val })}
+              />
             </div>
 
             <div className="space-y-8">
