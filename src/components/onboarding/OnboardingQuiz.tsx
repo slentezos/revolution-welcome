@@ -202,7 +202,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] pb-40">
+    <div className="h-[calc(100vh-140px)] bg-[#FAFAFA] overflow-hidden flex flex-col">
       {/* Cooldown locked banner */}
       {isCooldownLocked && (
         <div className="bg-secondary border-b border-border px-6 py-4 text-center">
@@ -245,7 +245,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
       </div>
 
       {/* ══════ QUESTION CARDS ══════ */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 pb-40">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 flex-1 overflow-hidden">
         {!isWhyAlonePage && currentCategory ? (
           <div className="rounded-[24px] border p-6 md:p-10 transition-all duration-500 ease-out relative opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card">
             {/* Question header */}
@@ -319,8 +319,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
       {/* ══════ BOTTOM BAR ══════ */}
       <div
-        className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] py-3"
-        style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+        className="bg-white border-t border-gray-200 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] py-3 flex-shrink-0"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-[60px] flex items-center justify-between">
           <div className="text-lg font-medium text-gray-500 hidden lg:block">
