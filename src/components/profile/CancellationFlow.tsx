@@ -202,7 +202,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 stopRecording();
                 setStep("reason");
               }}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -284,7 +284,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
             <button
               onClick={() => setStep("success_story")}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -307,7 +307,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. »
               </p>
               <div className="mt-4 inline-flex items-center justify-center bg-white border border-secondary rounded-xl px-4 py-2 text-muted-foreground font-medium text-base w-full overflow-hidden">
-                <span className="truncate">{inviteLink}</span>
+                <span className="truncate text-xl">{inviteLink}</span>
               </div>
             </div>
 
@@ -328,7 +328,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[#25D366] hover:bg-[#25D366]/5 text-foreground" : "opacity-50 cursor-not-allowed text-muted-foreground"}`}
                 >
                   <MessageCircle className={`w-8 h-8 ${invitesLeft > 0 ? "text-[#25D366]" : ""}`} />
-                  <span className="text-base font-semibold">WhatsApp</span>
+                  <span className="font-semibold text-xl">WhatsApp</span>
                 </a>
 
                 <button
@@ -342,7 +342,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   ) : (
                     <Copy className="w-8 h-8 text-muted-foreground" />
                   )}
-                  <span className="text-base font-semibold">{copied ? "Copié !" : "Copier"}</span>
+                  <span className="font-semibold text-xl">{copied ? "Copié !" : "Copier"}</span>
                 </button>
 
                 <button
@@ -351,7 +351,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   className="flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] text-foreground"
                 >
                   <Mail className="w-8 h-8 text-muted-foreground" />
-                  <span className="text-base font-semibold">Par E-mail</span>
+                  <span className="font-semibold text-xl">Par E-mail</span>
                 </button>
               </div>
             </div>
@@ -362,7 +362,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   handleClose();
                   toast({ description: "Votre compte sera clôturé sous 48h." });
                 }}
-                className="w-full h-14 rounded-2xl text-muted-foreground hover:text-red-500 font-medium text-lg transition-colors"
+                className="w-full h-14 rounded-2xl text-muted-foreground hover:text-red-500 font-medium transition-colors text-xl"
               >
                 J'ai terminé, clôturer mon compte
               </button>
@@ -381,7 +381,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
             <button
               onClick={() => setStep("success_gift")}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -440,7 +440,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
             <button
               onClick={() => setStep("reason")}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -493,7 +493,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
         <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
           <button
             onClick={() => setStep("reason")}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
           >
             <ArrowLeft className="h-5 w-5" /> Retour
           </button>
