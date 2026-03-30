@@ -85,7 +85,7 @@ export default function DateInput({ value, onChange, className }: DateInputProps
 
         {/* --- ANNÉE --- */}
         <div className="space-y-2">
-          <Label className="text-sm text-muted-foreground ml-1">Année</Label>
+          <Label className="text-lg text-muted-foreground ml-1">Année</Label>
           <Select value={year} onValueChange={(v) => update(day, month, v)}>
             <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
               <SelectValue placeholder="AAAA" />
