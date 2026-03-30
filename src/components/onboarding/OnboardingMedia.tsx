@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import coupleGarden from "@/assets/couple-garden.jpg";
+
 import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
 import placeholderPhotoBg from "@/assets/placeholder-photo-bg.jpg";
 
