@@ -13,16 +13,26 @@ import DashboardGreeting from "@/components/dashboard/DashboardGreeting";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import EmptyMatchState from "@/components/dashboard/EmptyMatchState";
 
-// Mock data for matches
+// Mock data for matches — Nouvelles propositions
 const mockMatches = [
-{ id: 1, name: "Marie", age: 67, location: "75014 - Paris", affinity: 85, matchedAt: "2026-03-12", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Jazz", "Voyages", "Théâtre"], commonPoint: "Vous adorez tous les deux le Jazz et les voyages en Italie." },
-{ id: 2, name: "Sophie", age: 59, location: "93000 - Boulogne-Billancourt", affinity: 81, matchedAt: "2026-03-10", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", verified: true, online: false, tags: ["Cuisine", "Randonnée"], commonPoint: "Vous partagez la passion de la randonnée en montagne et des marchés provençaux." },
-{ id: 3, name: "Catherine", age: 71, location: "92430 - Marnes-la-Coquette", affinity: 80, matchedAt: "2026-03-08", avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Lecture", "Jardinage", "Opéra"], commonPoint: "Vous adorez tous les deux le jardinage et l'opéra italien." },
-{ id: 4, name: "Isabelle", age: 63, location: "69006 - Lyon", affinity: 88, matchedAt: "2026-03-14", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Peinture", "Yoga", "Cinéma"], commonPoint: "Vous partagez un amour pour le cinéma d'auteur et les expositions d'art contemporain." },
-{ id: 5, name: "Françoise", age: 65, location: "33000 - Bordeaux", affinity: 79, matchedAt: "2026-03-13", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face", verified: true, online: false, tags: ["Vin", "Littérature", "Danse"], commonPoint: "Vous êtes tous les deux passionnés de littérature française et de dégustation de vins." },
-{ id: 6, name: "Hélène", age: 58, location: "13008 - Marseille", affinity: 83, matchedAt: "2026-03-11", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Voile", "Photographie"], commonPoint: "Vous adorez tous les deux la mer Méditerranée et la photographie de paysages." },
-{ id: 7, name: "Nathalie", age: 61, location: "44000 - Nantes", affinity: 86, matchedAt: "2026-03-15", avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Musique classique", "Bénévolat", "Marche"], commonPoint: "Vous partagez l'engagement associatif et l'amour de la musique classique." },
-{ id: 8, name: "Dominique", age: 69, location: "31000 - Toulouse", affinity: 77, matchedAt: "2026-03-09", avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face", verified: false, online: false, tags: ["Histoire", "Bridge", "Gastronomie"], commonPoint: "Vous êtes tous les deux amateurs de gastronomie du Sud-Ouest et de jeux de société." }];
+  { id: 1, name: "Marie", age: 67, location: "75014 - Paris", affinity: 85, matchedAt: "2026-03-26", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Jazz", "Voyages", "Théâtre"], commonPoint: "Vous adorez tous les deux le Jazz et les voyages en Italie." },
+  { id: 2, name: "Sophie", age: 59, location: "93000 - Boulogne-Billancourt", affinity: 81, matchedAt: "2026-03-27", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", verified: true, online: false, tags: ["Cuisine", "Randonnée"], commonPoint: "Vous partagez la passion de la randonnée en montagne et des marchés provençaux." },
+  { id: 3, name: "Catherine", age: 71, location: "92430 - Marnes-la-Coquette", affinity: 80, matchedAt: "2026-03-28", avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Lecture", "Jardinage", "Opéra"], commonPoint: "Vous adorez tous les deux le jardinage et l'opéra italien." },
+];
+
+// Mock data — En attente de sa réponse
+const mockPendingMatches: PendingMatch[] = [
+  { id: 10, name: "Isabelle", age: 63, location: "69006 - Lyon", affinity: 88, matchedAt: "2026-03-20", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Peinture", "Yoga", "Cinéma"], commonPoint: "Vous partagez un amour pour le cinéma d'auteur et les expositions d'art contemporain.", acceptedAt: "25 mars 2026" },
+  { id: 11, name: "Nathalie", age: 61, location: "44000 - Nantes", affinity: 86, matchedAt: "2026-03-19", avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Musique classique", "Bénévolat", "Marche"], commonPoint: "Vous partagez l'engagement associatif et l'amour de la musique classique.", acceptedAt: "24 mars 2026" },
+  { id: 12, name: "Hélène", age: 58, location: "13008 - Marseille", affinity: 83, matchedAt: "2026-03-18", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Voile", "Photographie"], commonPoint: "Vous adorez tous les deux la mer Méditerranée et la photographie de paysages.", acceptedAt: "23 mars 2026" },
+];
+
+// Mock data — À finaliser de ma part
+const mockSavedMatches: SavedMatch[] = [
+  { id: 20, name: "Françoise", age: 65, location: "33000 - Bordeaux", affinity: 79, matchedAt: "2026-03-22", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face", verified: true, online: false, tags: ["Vin", "Littérature", "Danse"], commonPoint: "Vous êtes tous les deux passionnés de littérature française et de dégustation de vins.", savedAt: "26 mars 2026" },
+  { id: 21, name: "Dominique", age: 69, location: "31000 - Toulouse", affinity: 77, matchedAt: "2026-03-21", avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face", verified: false, online: false, tags: ["Histoire", "Bridge", "Gastronomie"], commonPoint: "Vous êtes tous les deux amateurs de gastronomie du Sud-Ouest et de jeux de société.", savedAt: "25 mars 2026" },
+  { id: 22, name: "Béatrice", age: 62, location: "06000 - Nice", affinity: 82, matchedAt: "2026-03-20", avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Aquarelle", "Méditation", "Théâtre"], commonPoint: "Vous partagez la passion de l'aquarelle et des balades sur la Promenade des Anglais.", savedAt: "24 mars 2026" },
+];
 
 export type MockMatch = typeof mockMatches[0];
 export type SavedMatch = MockMatch & {savedAt: string;};
