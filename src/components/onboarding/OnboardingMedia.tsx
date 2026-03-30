@@ -340,8 +340,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       </div>
                     )}
                   </div>
-                  <p className="text-foreground font-medium text-base px-1 truncate">
-                    {slot.label} <span className="text-muted-foreground font-normal text-sm">— {slot.hint}</span>
+                  <p className="text-foreground font-medium px-1 truncate text-xl">
+                    {slot.label} <span className="text-muted-foreground font-normal text-lg">— {slot.hint}</span>
                   </p>
                 </div>
               ))}
