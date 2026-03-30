@@ -121,7 +121,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 <Pause className="h-6 w-6 text-[hsl(var(--gold))]" />
               </div>
               <h2 className="font-heading font-medium text-foreground text-3xl">Prenez le temps de souffler.</h2>
-              <p className="text-muted-foreground text-lg max-w-sm mx-auto">
+              <p className="text-muted-foreground max-w-sm mx-auto text-xl">
                 Mettez votre compte en veille pendant 1 mois. Voici comment cela fonctionne :
               </p>
             </div>
@@ -151,8 +151,8 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 >
                   <item.icon className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-foreground font-semibold text-lg">{item.title}</p>
-                    <p className="leading-relaxed text-muted-foreground text-base mt-0.5">{item.desc}</p>
+                    <p className="text-foreground font-semibold text-xl">{item.title}</p>
+                    <p className="leading-relaxed text-muted-foreground mt-0.5 text-xl">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -161,7 +161,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
             {/* Actions - Plus aérées */}
             <div className="flex flex-col gap-3 pt-4">
               <Button
-                className="w-full h-14 rounded-xl text-primary-foreground text-lg font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
+                className="w-full h-14 rounded-xl text-primary-foreground text-xl font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
                 onClick={() => {
                   setPauseOpen(false);
                   toast({
@@ -175,7 +175,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               </Button>
               <button
                 onClick={() => setPauseOpen(false)}
-                className="w-full h-12 rounded-xl text-muted-foreground hover:text-foreground font-medium text-lg transition-colors"
+                className="w-full h-12 rounded-xl text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
               >
                 Annuler
               </button>
