@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Heart, Sparkles, Gift, ArrowLeft, Send, Pause, EyeOff, ShieldCheck, PartyPopper } from "lucide-react";
+import { Heart, Sparkles, Gift, ArrowLeft, Send, Pause, EyeOff, ShieldCheck, PartyPopper, Mic, MicOff } from "lucide-react";
 
-type Step = "reason" | "success" | "retention" | "pause";
+type Step = "reason" | "success_story" | "success_gift" | "retention" | "pause";
 
 interface CancellationFlowProps {
   open: boolean;
@@ -24,7 +24,89 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     { name: "", email: "" },
   ]);
 
+  // === Dictation state ===
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  const manualStopRef = useRef(false);
+  const baseTextRef = useRef("");
+  const sessionFinalRef = useRef("");
+
+  const startDictation = useCallback(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      toast({ title: "La dictée vocale n'est pas supportée par votre navigateur.", variant: "destructive" });
+      return;
+    }
+
+    manualStopRef.current = false;
+    baseTextRef.current = testimony;
+    sessionFinalRef.current = "";
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "fr-FR";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event: any) => {
+      let interim = "";
+      let finalStr = "";
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalStr += transcript + " ";
+        } else {
+          interim += transcript;
+        }
+      }
+
+      if (finalStr) {
+        sessionFinalRef.current += finalStr;
+      }
+
+      const fullText = (baseTextRef.current + " " + sessionFinalRef.current + interim).replace(/\s+/g, " ").trimStart();
+      setTestimony(fullText);
+    };
+
+    recognition.onerror = (event: any) => {
+      if (event.error === "not-allowed") forceStopDictation();
+    };
+
+    recognition.onend = () => {
+      if (!manualStopRef.current) {
+        baseTextRef.current = (baseTextRef.current + " " + sessionFinalRef.current).replace(/\s+/g, " ").trimStart();
+        sessionFinalRef.current = "";
+        try {
+          recognition.start();
+        } catch (e) {
+          setIsListening(false);
+        }
+      } else {
+        setIsListening(false);
+      }
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
+  }, [testimony]);
+
+  const forceStopDictation = useCallback(() => {
+    manualStopRef.current = true;
+    if (recognitionRef.current) recognitionRef.current.stop();
+    setIsListening(false);
+  }, []);
+
+  const toggleListening = useCallback(() => {
+    if (isListening) {
+      forceStopDictation();
+    } else {
+      startDictation();
+    }
+  }, [isListening, forceStopDictation, startDictation]);
+
   const handleClose = () => {
+    if (isListening) forceStopDictation();
     onOpenChange(false);
     setTimeout(() => setStep("reason"), 300);
   };
@@ -44,7 +126,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
                 <Heart className="h-6 w-6 text-[hsl(var(--gold))]" />
               </div>
-              <p className="text-muted-foreground uppercase tracking-widest font-medium text-sm md:text-base">
+              <p className="text-muted-foreground uppercase tracking-widest font-medium text-xl">
                 {firstName ? `${firstName}, ` : ""}nous sommes tristes de vous voir partir
               </p>
               <h2 className="font-heading text-2xl md:text-3xl text-foreground leading-tight">
@@ -55,13 +137,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             {/* Options */}
             <div className="space-y-3 pt-2">
               <button
-                onClick={() => setStep("success")}
+                onClick={() => setStep("success_story")}
                 className="w-full flex items-center gap-4 p-4 rounded-2xl bg-secondary/50 border border-secondary text-left hover:border-[hsl(var(--gold)/0.5)] hover:bg-secondary transition-all group"
               >
                 <span className="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform">💖</span>
                 <div>
-                  <p className="font-semibold text-foreground text-lg">J'ai fait une belle rencontre sur Kalimera</p>
-                  <p className="text-muted-foreground mt-0.5 text-base">Partagez votre bonheur avec nous</p>
+                  <p className="font-semibold text-foreground text-xl">J'ai fait une belle rencontre sur Kalimera</p>
+                  <p className="text-muted-foreground mt-0.5 text-xl">Partagez votre bonheur avec nous</p>
                 </div>
               </button>
 
@@ -71,8 +153,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform">🕊️</span>
                 <div>
-                  <p className="font-semibold text-foreground text-lg">Je n'ai pas fait la rencontre espérée</p>
-                  <p className="text-muted-foreground mt-0.5 text-base">Nous aimerions vous proposer quelque chose</p>
+                  <p className="font-semibold text-foreground text-xl">Je n'ai pas fait la rencontre espérée</p>
+                  <p className="text-muted-foreground mt-0.5 text-xl">Nous aimerions vous proposer quelque chose</p>
                 </div>
               </button>
 
@@ -82,8 +164,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform">💬</span>
                 <div>
-                  <p className="font-semibold text-foreground text-lg">Autre raison / Je souhaite faire une pause</p>
-                  <p className="text-muted-foreground mt-0.5 text-base">
+                  <p className="font-semibold text-foreground text-xl">Autre raison / Je souhaite faire une pause</p>
+                  <p className="text-muted-foreground mt-0.5 text-xl">
                     Mettez votre profil en veille sans tout effacer
                   </p>
                 </div>
@@ -95,14 +177,14 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2A: Success Story ───
-  if (step === "success") {
+  // ─── Step 2A: Success Story (Testimony) ───
+  if (step === "success_story") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white max-h-[95vh] overflow-y-auto">
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
-              onClick={() => setStep("reason")}
+              onClick={() => { if (isListening) forceStopDictation(); setStep("reason"); }}
               className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
@@ -119,8 +201,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             </div>
 
             {/* Testimonial */}
-            <div className="space-y-2 bg-secondary/30 p-5 rounded-2xl">
-              <Label className="text-xl text-foreground text-base font-medium block">
+            <div className="space-y-3 bg-secondary/30 p-5 rounded-2xl">
+              <Label className="text-xl text-foreground font-medium block">
                 Racontez-nous votre belle histoire
                 <span className="text-muted-foreground font-normal ml-2 text-lg">(facultatif)</span>
               </Label>
@@ -128,62 +210,141 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 value={testimony}
                 onChange={(e) => setTestimony(e.target.value)}
                 placeholder="Nous nous sommes rencontrés le..."
-                className="min-h-[80px] text-base resize-none rounded-xl border-secondary bg-white focus:ring-[hsl(var(--gold))]"
+                className="min-h-[100px] text-base resize-none rounded-xl border-secondary bg-white focus:ring-[hsl(var(--gold))]"
                 maxLength={500}
               />
+              {/* Dictate button */}
+              <button
+                onClick={toggleListening}
+                className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 text-sm font-semibold ${
+                  isListening
+                    ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
+                    : "bg-primary text-primary-foreground hover:bg-primary/90"
+                }`}
+                aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
+              >
+                {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                {isListening ? "Arrêter de dicter" : "Dicter"}
+              </button>
+              {isListening && (
+                <p className="text-sm font-bold text-[hsl(var(--gold))] animate-pulse">
+                  🎙️ Dictée en cours…
+                </p>
+              )}
             </div>
 
-            {/* Gift Legacy Card */}
-            <div className="p-5 rounded-2xl bg-primary/5 border border-primary/10 text-left">
-              <div className="flex items-center gap-2 mb-2">
-                <Gift className="h-5 w-5 text-[hsl(var(--gold))] flex-shrink-0" />
-                <p className="font-heading text-primary text-3xl">Partagez votre bonheur</p>
-              </div>
-              <p className="leading-relaxed text-foreground mb-4 text-xl">
-                Offrez 3 mois d'abonnement au cercle à 3 de vos proches. C'est entièrement offert par Kalimera.
-              </p>
-
-              <div className="space-y-2.5">
-                {giftRows.map((row, i) => (
-                  <div key={i} className="grid grid-cols-2 gap-3">
-                    <Input
-                      placeholder="Prénom"
-                      value={row.name}
-                      onChange={(e) => updateGiftRow(i, "name", e.target.value)}
-                      className="h-11 text-base bg-white rounded-xl border-secondary"
-                    />
-                    <Input
-                      placeholder="E-mail"
-                      type="email"
-                      value={row.email}
-                      onChange={(e) => updateGiftRow(i, "email", e.target.value)}
-                      className="h-11 text-base bg-white rounded-xl border-secondary"
-                    />
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-col gap-3 pt-2">
+              <Button
+                className="w-full h-12 rounded-xl text-primary-foreground text-base font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
+                onClick={() => { if (isListening) forceStopDictation(); setStep("success_gift"); }}
+              >
+                Continuer vers la clôture →
+              </Button>
+              <button
+                onClick={() => { if (isListening) forceStopDictation(); setStep("success_gift"); }}
+                className="w-full h-11 rounded-xl text-muted-foreground hover:text-foreground font-medium text-base transition-colors"
+              >
+                Passer cette étape
+              </button>
             </div>
-
-            <Button
-              className="w-full h-12 rounded-xl text-primary-foreground text-base font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
-              onClick={() => {
-                handleClose();
-                toast({
-                  title: "Merci pour votre témoignage 💛",
-                  description: "Les invitations ont été envoyées. Votre compte sera clôturé sous 48h.",
-                });
-              }}
-            >
-              <Send className="h-4 w-4 mr-2" />
-              Envoyer & clôturer mon compte
-            </Button>
           </div>
         </DialogContent>
       </Dialog>
     );
   }
 
-  // ─── Step 2B: Retention ───
+  // ─── Step 2B: Success Gift ───
+  if (step === "success_gift") {
+    return (
+      <Dialog open={open} onOpenChange={handleClose}>
+        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white max-h-[95vh] overflow-y-auto">
+          <div className="px-6 sm:px-10 py-8 space-y-6">
+            <button
+              onClick={() => setStep("success_story")}
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+            >
+              <ArrowLeft className="h-4 w-4" /> Retour
+            </button>
+
+            {/* Header */}
+            <div className="text-center space-y-2">
+              <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
+                <Gift className="h-5 w-5 text-[hsl(var(--gold))]" />
+              </div>
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground leading-tight">
+                Partagez votre bonheur
+              </h2>
+              <p className="text-muted-foreground text-xl leading-relaxed">
+                Offrez 3 mois d'abonnement au cercle à 3 de vos proches. C'est entièrement offert par Kalimera.
+              </p>
+            </div>
+
+            {/* Gift inputs — same system as ProfileGiftTab */}
+            <div className="space-y-6">
+              {giftRows.map((row, i) => (
+                <div key={i} className="space-y-3">
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+                    Proche {i + 1}
+                  </p>
+                  <div className="space-y-3">
+                    <div className="space-y-1.5">
+                      <Label className="text-lg font-medium text-foreground">Prénom</Label>
+                      <Input
+                        placeholder="Ex : Marie"
+                        value={row.name}
+                        onChange={(e) => updateGiftRow(i, "name", e.target.value)}
+                        className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-lg font-medium text-foreground">E-mail</Label>
+                      <Input
+                        type="email"
+                        placeholder="marie@exemple.fr"
+                        value={row.email}
+                        onChange={(e) => updateGiftRow(i, "email", e.target.value)}
+                        className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-3 pt-2">
+              <Button
+                className="w-full h-12 rounded-xl text-primary-foreground text-base font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
+                onClick={() => {
+                  handleClose();
+                  toast({
+                    title: "Merci pour votre témoignage 💛",
+                    description: "Les invitations ont été envoyées. Votre compte sera clôturé sous 48h.",
+                  });
+                }}
+              >
+                <Send className="h-4 w-4 mr-2" />
+                Envoyer & clôturer mon compte
+              </Button>
+              <button
+                onClick={() => {
+                  handleClose();
+                  toast({
+                    title: "Compte clôturé",
+                    description: "Votre compte sera clôturé sous 48h.",
+                  });
+                }}
+                className="w-full h-11 rounded-xl text-muted-foreground hover:text-destructive font-medium text-base transition-colors"
+              >
+                Clôturer mon compte sans envoyer d'invitations
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // ─── Step 3: Retention ───
   if (step === "retention") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
@@ -242,7 +403,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2C: Pause Offer ───
+  // ─── Step 4: Pause Offer ───
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
