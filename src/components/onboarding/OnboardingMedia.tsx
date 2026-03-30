@@ -476,12 +476,30 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     </div>
                   ))}
                 </div>
-                <Button
-                  onClick={() => setShowVideoTutorial(false)}
-                  className="mt-16 h-16 px-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold"
-                >
-                  J'ai compris
-                </Button>
+
+                <div className="mt-14 flex flex-col sm:flex-row items-center gap-5">
+                  <Button
+                    onClick={() => setShowVideoTutorial(false)}
+                    className="h-16 px-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold"
+                  >
+                    J'ai compris
+                  </Button>
+
+                  <button
+                    onClick={() => {
+                      setShowVideoTutorial(false);
+                      setShowStudioModal(true);
+                    }}
+                    className="flex items-center gap-3 px-7 py-4 border border-[hsl(var(--gold))/0.4] bg-[hsl(var(--gold))/0.05] text-[hsl(var(--gold))] rounded-2xl hover:bg-[hsl(var(--gold))/0.1] transition-all group"
+                  >
+                    <Headphones className="h-6 w-6" />
+                    <div className="text-left">
+                      <p className="font-bold text-lg leading-tight">Intimidé(e) ?</p>
+                      <p className="text-base opacity-80">On vous filme en visio (49€)</p>
+                    </div>
+                    <ArrowRight className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
               </div>
             </div>
             <div className="hidden lg:block w-[400px] relative">
