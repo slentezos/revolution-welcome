@@ -109,10 +109,10 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               <Pause className="h-6 w-6" />
             </div>
 
-            <h2 className="text-center font-heading text-2xl font-bold text-[#1B2333]">
+            <h2 className="text-center font-heading font-bold text-[#1B2333] text-3xl">
               Prenez le temps de souffler.
             </h2>
-            <p className="text-center text-foreground text-base mb-6">
+            <p className="text-center text-foreground mb-6 text-2xl">
               Mettez votre compte en veille pendant 1 mois. Voici comment cela fonctionne :
             </p>
 
@@ -125,8 +125,8 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               <div key={item.title} className="flex items-start gap-3 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 text-left">
                   <item.icon className="h-5 w-5 text-[#1B2333] shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-[#1B2333] text-base font-semibold">{item.title}</p>
-                    <p className="leading-relaxed text-sm text-foreground">{item.desc}</p>
+                    <p className="text-[#1B2333] font-semibold text-xl">{item.title}</p>
+                    <p className="leading-relaxed text-foreground text-xl">{item.desc}</p>
                   </div>
                 </div>
               )}
@@ -144,7 +144,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               </Button>
               <button
                 onClick={() => setPauseOpen(false)}
-                className="w-full h-12 rounded-xl text-gray-500 hover:text-[#1B2333] hover:bg-gray-50 font-medium">
+                className="w-full h-12 rounded-xl text-gray-500 hover:text-[#1B2333] hover:bg-gray-50 font-medium text-xl">
                 Annuler
               </button>
             </div>
