@@ -272,7 +272,7 @@ export default function ContactMemberContent() {
                       <AccordionTrigger className="text-left text-base md:text-xl font-medium text-foreground hover:no-underline py-3">
                         {faq.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground text-base leading-relaxed">
+                      <AccordionContent className="text-muted-foreground text-xl leading-relaxed">
                         {faq.a}
                       </AccordionContent>
                     </AccordionItem>
