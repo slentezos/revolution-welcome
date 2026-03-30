@@ -285,8 +285,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       >
                         <Headphones className="h-6 w-6 animate-pulse" />
                         <div className="text-left">
-                          <p className="font-bold text-base leading-tight">Intimidé(e) ?</p>
-                          <p className="text-sm opacity-80">On vous filme en visio (49€)</p>
+                          <p className="font-bold leading-tight text-xl">Intimidé(e) ?</p>
+                          <p className="opacity-80 text-xl">Nous vous filmons en visio (49€)</p>
                         </div>
                         <ArrowRight className="h-5 w-5 ml-2 group-hover/studio:translate-x-1 transition-transform" />
                       </button>
@@ -295,10 +295,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 )}
               </div>
               <div className="flex items-center justify-between flex-shrink-0 px-2">
-                <p className="text-foreground font-semibold text-lg">Vidéo de présentation</p>
+                <p className="text-foreground font-semibold text-xl">Vidéo de présentation</p>
                 <button
                   onClick={() => setShowVideoTutorial(true)}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full hover:bg-[hsl(var(--gold))]/20 transition-all font-bold text-lg"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full hover:bg-[hsl(var(--gold))]/20 transition-all font-bold text-xl"
                 >
                   <Lightbulb className="h-5 w-5" />
                   Conseils vidéo
@@ -340,8 +340,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       </div>
                     )}
                   </div>
-                  <p className="text-foreground font-medium text-base px-1 truncate">
-                    {slot.label} <span className="text-muted-foreground font-normal text-sm">— {slot.hint}</span>
+                  <p className="text-foreground font-medium px-1 truncate text-xl">
+                    {slot.label} <span className="text-muted-foreground font-normal text-lg">— {slot.hint}</span>
                   </p>
                 </div>
               ))}
@@ -375,7 +375,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="text-lg font-medium text-gray-500 hidden md:block">{uploadedCount} / 5 médias ajoutés</p>
+            <p className="font-medium text-gray-500 hidden md:block text-xl">{uploadedCount} / 5 médias ajoutés</p>
             <div className="flex items-center gap-4 w-full md:w-auto">
               <Button
                 variant="outline"
