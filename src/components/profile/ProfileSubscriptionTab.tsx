@@ -38,42 +38,39 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
       {/* Subscription details */}
       <section className="bg-background py-16 md:py-24">
         <div className="px-6 md:px-16 lg:px-20 xl:px-28">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            {/* Current plan */}
-            {/* Current plan - DESIGN LUXE BLANC */}
-            <div>
-              <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-8">Offre actuelle</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+            {/* Current plan - DESIGN LUXE BLANC COHÉRENT */}
+            <div className="flex flex-col h-full">
+              <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-6">Offre actuelle</h3>
 
-              <div className="group bg-white border border-slate-200/60 shadow-sm p-8 md:p-12 transition-all duration-500 hover:shadow-lg flex flex-col h-full relative rounded-[2rem]">
-                {/* Badge Statut */}
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[hsl(var(--gold))] text-white px-6 py-1.5 text-sm font-bold tracking-[0.2em] uppercase rounded-full shadow-md whitespace-nowrap">
-                  Offre Active
+              <div className="bg-white border border-secondary shadow-sm p-8 md:p-10 transition-all duration-500 hover:shadow-md flex flex-col flex-1 rounded-[2rem]">
+                {/* En-tête avec Badge Intégré */}
+                <div className="flex justify-between items-start mb-8">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 border border-secondary flex items-center justify-center rounded-2xl bg-secondary/20">
+                      <Sparkles className="h-6 w-6 text-[hsl(var(--gold))]" />
+                    </div>
+                    <h3 className="font-heading text-3xl text-foreground md:text-4xl">Offre Découverte</h3>
+                  </div>
                 </div>
 
-                {/* En-tête de l'offre */}
-                <div className="flex items-center gap-4 mb-8 mt-2">
-                  <div className="w-14 h-14 border border-slate-200 flex items-center justify-center rounded-2xl bg-slate-50/50">
-                    <Sparkles className="h-6 w-6 text-[hsl(var(--gold))]" />
+                {/* Badge Statut & Prix */}
+                <div className="mb-8 pb-8 border-b border-secondary">
+                  <div className="inline-flex items-center justify-center bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] px-4 py-1.5 text-sm font-bold tracking-[0.15em] uppercase rounded-lg mb-6">
+                    Offre Active
                   </div>
-                  <h3 className="font-heading text-3xl text-foreground md:text-4xl">Offre Découverte</h3>
-                </div>
-
-                {/* Prix et Expiration */}
-                <div className="mb-10 pb-8 border-b border-slate-100">
-                  <div className="mb-2">
-                    <span className="font-heading text-5xl text-foreground">60€</span>
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="font-heading text-5xl md:text-6xl text-foreground">60€</span>
+                    <span className="text-xl text-muted-foreground font-medium">/ 3 mois</span>
                   </div>
-                  <p className="text-sm text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
-                    Abonnement 3 mois
-                  </p>
-                  <p className="text-muted-foreground tracking-widest uppercase text-xs md:text-sm font-medium">
+                  <p className="text-muted-foreground tracking-widest uppercase text-sm font-medium mt-3">
                     Expire le 12 juin 2026
                   </p>
                 </div>
 
                 {/* Fonctionnalités */}
-                <h4 className="font-medium text-foreground mb-6 text-xl">Inclus dans votre offre :</h4>
-                <ul className="space-y-5 mb-12 flex-1">
+                <h4 className="font-medium text-foreground mb-5 text-xl">Inclus dans votre offre :</h4>
+                <ul className="space-y-4 mb-10 flex-1">
                   {[
                     "Espace personnel",
                     "Compte vérifié",
@@ -83,46 +80,46 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-4">
                       <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                      <span className="text-foreground/80 leading-relaxed text-lg md:text-xl">{item}</span>
+                      <span className="text-foreground/80 leading-relaxed text-lg">{item}</span>
                     </li>
                   ))}
                 </ul>
 
                 {/* Bouton d'action */}
-                <button className="w-full bg-foreground text-white py-5 text-sm md:text-base uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-3 shadow-md rounded-xl">
+                <button className="w-full bg-[#1B2333] text-white py-5 text-base uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-3 shadow-md rounded-2xl">
                   Changer d'offre <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
-            {/* Pause / Cancel */}
-            <div className="space-y-10">
-              <div className="bg-secondary p-8 md:p-10 rounded-lg">
-                <h3 className="font-heading text-2xl text-foreground mb-3 font-medium">Besoin d'une pause ?</h3>
-                <p className="mb-6 leading-relaxed text-lg md:text-xl text-secondary-foreground">
-                  Mettez votre compte en veille sans perdre vos données ni vos conversations.
+            {/* Pause / Cancel - HARMONISÉ AVEC LE MÊME BORDER-RADIUS */}
+            <div className="flex flex-col h-full pt-14 lg:pt-0 space-y-8">
+              <div className="bg-secondary/30 p-8 md:p-10 rounded-[2rem] border border-secondary flex flex-col justify-center">
+                <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-3">Besoin d'une pause ?</h3>
+                <p className="mb-6 leading-relaxed text-lg text-muted-foreground">
+                  Mettez votre compte en veille pendant 1 mois sans perdre vos données ni vos conversations.
                 </p>
                 <Button
                   onClick={() => setPauseOpen(true)}
                   variant="outline"
-                  className="py-5 px-10 text-lg h-auto min-h-[56px] w-full border-primary/20 hover:bg-primary hover:text-white transition-colors"
+                  className="py-6 px-8 text-lg h-auto w-full border-secondary hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] hover:text-[hsl(var(--gold))] transition-colors rounded-2xl bg-white"
                 >
                   <Pause className="h-5 w-5 mr-3" />
                   Mettre mon profil en pause
                 </Button>
               </div>
 
-              <div className="bg-secondary p-8 md:p-10 rounded-lg">
-                <h3 className="font-heading text-2xl text-foreground mb-3 font-medium">
+              <div className="bg-secondary/30 p-8 md:p-10 rounded-[2rem] border border-secondary flex flex-col justify-center">
+                <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-3">
                   Vous souhaitez nous quitter ?
                 </h3>
-                <p className="mb-6 leading-relaxed text-lg md:text-xl text-secondary-foreground">
+                <p className="mb-6 leading-relaxed text-lg text-muted-foreground">
                   Cette action est irréversible. Votre profil et toutes vos données seront définitivement supprimés.
                 </p>
                 <Button
                   onClick={() => setCancelOpen(true)}
                   variant="outline"
-                  className="py-5 px-10 text-lg h-auto min-h-[56px] border-2 border-destructive text-destructive hover:bg-destructive hover:text-white w-full transition-colors"
+                  className="py-6 px-8 text-lg h-auto w-full border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-colors rounded-2xl bg-white"
                 >
                   Demander la résiliation
                 </Button>
@@ -132,17 +129,19 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
         </div>
       </section>
 
-      {/* Pause Modal - REDESIGNED FOR SQUARE & ELEGANCE */}
+      {/* Pause Modal - SQUARE & ELEGANCE */}
       <Dialog open={pauseOpen} onOpenChange={setPauseOpen}>
-        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
-          <div className="px-8 sm:px-12 py-10 space-y-6">
+        <DialogContent className="sm:max-w-xl md:max-w-2xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl bg-white">
+          <div className="px-8 sm:px-12 py-10 space-y-8">
             {/* Header / Titre */}
             <div className="text-center space-y-3">
-              <div className="mx-auto w-14 h-14 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
-                <Pause className="h-6 w-6 text-[hsl(var(--gold))]" />
+              <div className="mx-auto w-16 h-16 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
+                <Pause className="h-8 w-8 text-[hsl(var(--gold))]" />
               </div>
-              <h2 className="font-heading font-medium text-foreground text-3xl">Prenez le temps de souffler.</h2>
-              <p className="text-muted-foreground max-w-sm mx-auto text-xl">
+              <h2 className="font-heading text-foreground text-3xl md:text-4xl leading-tight">
+                Prenez le temps de souffler.
+              </h2>
+              <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto">
                 Mettez votre compte en veille pendant 1 mois. Voici comment cela fonctionne :
               </p>
             </div>
@@ -168,21 +167,21 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               ].map((item) => (
                 <div
                   key={item.title}
-                  className="flex items-start gap-4 p-4 rounded-2xl bg-secondary/50 border border-secondary text-left"
+                  className="flex items-start gap-5 p-5 rounded-3xl bg-secondary/40 border border-secondary text-left"
                 >
-                  <item.icon className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                  <item.icon className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
                   <div>
                     <p className="text-foreground font-semibold text-xl">{item.title}</p>
-                    <p className="leading-relaxed text-muted-foreground mt-0.5 text-xl">{item.desc}</p>
+                    <p className="leading-relaxed text-muted-foreground mt-1 text-lg">{item.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Actions - Plus aérées */}
-            <div className="flex flex-col gap-3 pt-4">
+            {/* Actions */}
+            <div className="flex flex-col gap-4 pt-4 text-center">
               <Button
-                className="w-full h-14 rounded-xl text-primary-foreground text-xl font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
+                className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
                 onClick={() => {
                   setPauseOpen(false);
                   toast({
@@ -191,12 +190,12 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                   });
                 }}
               >
-                <Check className="h-5 w-5 mr-2" />
+                <Check className="h-6 w-6 mr-3" />
                 Confirmer ma pause d'un mois
               </Button>
               <button
                 onClick={() => setPauseOpen(false)}
-                className="w-full h-12 rounded-xl text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
+                className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium transition-colors text-lg"
               >
                 Annuler
               </button>
