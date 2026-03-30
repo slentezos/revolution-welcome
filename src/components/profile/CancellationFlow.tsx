@@ -478,7 +478,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <Sparkles className="h-8 w-8 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
               <p className="text-foreground leading-relaxed text-lg md:text-xl">
                 Nous aimerions vous offrir{" "}
-                <span className="font-semibold text-primary">un mois supplémentaire totalement offert</span> pour vous
+                <span className="font-semibold text-primary">un mois supplémentaire offert</span> pour vous
                 permettre de découvrir de nouveaux profils.
               </p>
             </div>
@@ -497,7 +497,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </Button>
               <button
                 onClick={() => setStep("pause")}
-                className="w-full text-muted-foreground hover:text-foreground font-medium text-lg transition-colors"
+                className="w-full text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
               >
                 Non merci, je préfère partir
               </button>
