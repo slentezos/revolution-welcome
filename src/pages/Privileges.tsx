@@ -167,7 +167,7 @@ export default function Privileges() {
                 <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
                   Pendant 3 mois, sans carte.
                 </p>
-                <p className="text-[11px] text-muted-foreground tracking-widest uppercase">
+                <p className="text-muted-foreground tracking-widest uppercase text-lg">
                   Puis 50€/mois (ou 120€ / 3 mois)
                 </p>
               </div>
