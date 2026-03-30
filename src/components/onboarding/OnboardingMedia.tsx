@@ -221,7 +221,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
 
         {/* GRILLE MÉDIA : S'étire pour remplir l'espace sans dépasser */}
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 min-h-0">
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-0">
           {/* SLOT VIDEO */}
           <div className="flex flex-col gap-4 min-h-0">
             <div
