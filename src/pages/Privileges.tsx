@@ -140,27 +140,31 @@ export default function Privileges() {
 
           {/* Les Cartes */}
           <div className="grid md:grid-cols-2 gap-6 lg:gap-10 max-w-5xl mx-auto items-center">
-            {/* Carte Cercle Privé */}
+            {/* Carte Cercle Privé (OFFRE ACTIVE) */}
             <div
               data-reveal
               data-reveal-delay="200"
-              className="group bg-white border border-slate-200/60 shadow-sm p-10 md:p-12 transition-all duration-500 hover:shadow-lg flex flex-col h-full"
+              className="group bg-white border border-slate-200/60 shadow-sm p-10 md:p-12 transition-all duration-500 hover:shadow-lg flex flex-col h-full z-20 relative"
             >
-              <div className="flex items-center gap-4 mb-8">
+              {/* Badge Membre Fondateur */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 text-xs font-bold tracking-[0.2em] uppercase rounded-full shadow-md">
+                Invitation Privilège
+              </div>
+
+              <div className="flex items-center gap-4 mb-8 mt-2">
                 <div className="w-12 h-12 border border-slate-200 flex items-center justify-center rounded-sm">
-                  <Sparkles className="h-5 w-5 text-slate-400" />
+                  <Sparkles className="h-5 w-5 text-[hsl(var(--gold))]" />
                 </div>
                 <h3 className="font-heading text-2xl text-foreground md:text-4xl">Cercle Privé</h3>
               </div>
 
-              {/* Nouveau Pricing : Barré élégant + Transparence absolue */}
               <div className="mb-10 pb-8 border-b border-slate-100">
                 <div className="mb-4">
-                  <span className="font-heading text-5xl text-foreground line-through decoration-foreground decoration-2">
+                  <span className="font-heading text-5xl text-foreground line-through decoration-foreground/30 decoration-2">
                     50€
                   </span>
                 </div>
-                <p className="text-[12px] text-foreground font-bold tracking-widest uppercase mb-1">
+                <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
                   Pendant 3 mois, sans carte.
                 </p>
                 <p className="text-[11px] text-muted-foreground tracking-widest uppercase">
@@ -179,57 +183,79 @@ export default function Privileges() {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full border border-primary text-primary py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-primary hover:text-white"
+                className="w-full bg-foreground text-white py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
               >
-                Demander mon admission
+                Accepter mon invitation <ArrowRight className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Carte Discrétion Absolue (VIP) */}
+            {/* Carte Discrétion Absolue (VIP) - FLOUTÉE / TEASING */}
             <div
               data-reveal
               data-reveal-delay="300"
-              className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 transition-all duration-500 hover:border-[hsl(var(--gold)/0.6)] flex flex-col h-full md:scale-105 z-10"
+              className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 flex flex-col h-full md:scale-105 z-10 overflow-hidden"
             >
-              <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 font-bold tracking-[0.2em] uppercase rounded-b-sm text-base">
-                Privilège
-              </div>
-
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
-                  <Crown className="h-5 w-5 text-[hsl(var(--gold))]" />
+              {/* LE MESSAGE D'ATTENTE NET (Par-dessus le flou) */}
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-8 bg-primary/20 backdrop-blur-[1px]">
+                <div className="w-16 h-16 bg-primary/80 border border-[hsl(var(--gold)/0.5)] flex items-center justify-center rounded-full mb-6 shadow-xl">
+                  <Crown className="h-8 w-8 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-2xl text-white md:text-4xl">Discrétion Absolue</h3>
-              </div>
-
-              {/* Nouveau Pricing VIP : Barré élégant + Transparence absolue */}
-              <div className="mb-10 pb-8 border-b border-white/10">
-                <div className="mb-4">
-                  <span className="font-heading text-5xl text-white line-through decoration-white decoration-2">
-                    65€
-                  </span>
-                </div>
-                <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
-                  Pendant 3 mois, sans carte.
+                <h3 className="font-heading text-3xl md:text-4xl text-white mb-4">Le Carré VIP</h3>
+                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-sm mb-6 border-b border-[hsl(var(--gold)/0.3)] pb-2">
+                  Bientôt ouvert
                 </p>
-                <p className="text-[11px] text-white/50 tracking-widest uppercase">Puis 65€/mois (ou 150€ / 3 mois)</p>
+                <p className="text-white/90 leading-relaxed text-lg max-w-[280px]">
+                  Afin de garantir l'excellence absolue de nos mises en relation, ce service d'exception ouvrira ses
+                  portes très prochainement.
+                </p>
               </div>
 
-              <ul className="space-y-5 mb-12 flex-1">
-                {discretionFeatures.map((feature) => (
-                  <li key={feature} className="flex items-start gap-4">
-                    <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                    <span className="text-white/90 leading-relaxed text-xl">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                onClick={() => setModalOpen(true)}
-                className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold transition-all duration-300 hover:bg-white hover:text-primary"
+              {/* LE CONTENU INITIAL FLOUTÉ ET INCLIQUABLE */}
+              <div
+                className="flex-1 flex flex-col blur-[6px] opacity-30 select-none pointer-events-none"
+                aria-hidden="true"
               >
-                Demander mon admission VIP
-              </button>
+                <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 font-bold tracking-[0.2em] uppercase rounded-b-sm text-base">
+                  Privilège
+                </div>
+
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                    <Crown className="h-5 w-5 text-[hsl(var(--gold))]" />
+                  </div>
+                  <h3 className="font-heading text-2xl text-white md:text-4xl">Discrétion Absolue</h3>
+                </div>
+
+                <div className="mb-10 pb-8 border-b border-white/10">
+                  <div className="mb-4">
+                    <span className="font-heading text-5xl text-white line-through decoration-white decoration-2">
+                      65€
+                    </span>
+                  </div>
+                  <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
+                    Pendant 3 mois, sans carte.
+                  </p>
+                  <p className="text-[11px] text-white/50 tracking-widest uppercase">
+                    Puis 65€/mois (ou 150€ / 3 mois)
+                  </p>
+                </div>
+
+                <ul className="space-y-5 mb-12 flex-1">
+                  {discretionFeatures.map((feature) => (
+                    <li key={feature} className="flex items-start gap-4">
+                      <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                      <span className="text-white/90 leading-relaxed text-xl">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  tabIndex={-1}
+                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold"
+                >
+                  Demander mon admission VIP
+                </button>
+              </div>
             </div>
           </div>
         </div>
