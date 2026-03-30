@@ -35,6 +35,7 @@ interface CancellationFlowProps {
 export default function CancellationFlow({ open, onOpenChange, firstName }: CancellationFlowProps) {
   const [step, setStep] = useState<Step>("reason");
   const [testimony, setTestimony] = useState("");
+  const [interimText, setInterimText] = useState(""); // NOUVEAU: Le texte en temps réel
   const [giftEmails, setGiftEmails] = useState(["", "", ""]);
   const [invitesLeft, setInvitesLeft] = useState(3);
   const [copied, setCopied] = useState(false);
@@ -55,6 +56,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
       setStep("reason");
       setGiftEmails(["", "", ""]);
       setTestimony("");
+      setInterimText("");
       setInvitesLeft(3);
       setCopied(false);
     }, 300);
@@ -83,29 +85,45 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     }
   };
 
-  // ─── Native Dictation Setup ───
+  // ─── Native Dictation Setup (AVEC TEMPS RÉEL) ───
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
-      recognition.interimResults = true;
+      recognition.interimResults = true; // Crucial pour le temps réel
       recognition.lang = "fr-FR";
 
       recognition.onresult = (event: any) => {
-        let currentTranscript = "";
+        let finalSegment = "";
+        let interimSegment = "";
+
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const transcript = event.results[i][0].transcript;
           if (event.results[i].isFinal) {
-            setTestimony((prev) => prev + transcript + " ");
+            finalSegment += transcript + " ";
           } else {
-            currentTranscript += transcript;
+            interimSegment += transcript; // Capture les mots à la volée
           }
         }
+
+        if (finalSegment) {
+          setTestimony((prev) => prev + finalSegment);
+        }
+        // Met à jour l'écran instantanément avec les mots en cours de prononciation
+        setInterimText(interimSegment);
       };
 
-      recognition.onerror = () => setIsRecording(false);
-      recognition.onend = () => setIsRecording(false);
+      recognition.onerror = () => {
+        setIsRecording(false);
+        setInterimText("");
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+        setInterimText(""); // Nettoie le texte temporaire quand ça coupe
+      };
+
       recognitionRef.current = recognition;
     }
   }, []);
@@ -115,6 +133,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
       stopRecording();
     } else {
       if (recognitionRef.current) {
+        // Ajoute un espace propre avant de commencer à dicter si on reprend
         setTestimony((prev) => prev + (prev.endsWith(" ") || prev === "" ? "" : " "));
         recognitionRef.current.start();
         setIsRecording(true);
@@ -132,6 +151,11 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     if (recognitionRef.current && isRecording) {
       recognitionRef.current.stop();
       setIsRecording(false);
+      // S'il restait des mots non finalisés, on les pousse dans le texte principal
+      if (interimText) {
+        setTestimony((prev) => prev + interimText + " ");
+      }
+      setInterimText("");
     }
   };
 
@@ -191,7 +215,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2A: Success Story (With System Dictation Format) ───
+  // ─── Step 2A: Success Story (With Real-Time Dictation) ───
   if (step === "success_story") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
@@ -223,15 +247,18 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </Label>
 
               <div className="flex flex-col gap-4">
+                {/* La valeur affichée est maintenant la combinaison du texte final ET du texte dicté en temps réel */}
                 <Textarea
-                  value={testimony}
-                  onChange={(e) => setTestimony(e.target.value)}
+                  value={testimony + interimText}
+                  onChange={(e) => {
+                    setTestimony(e.target.value);
+                    setInterimText(""); // Nettoie l'interim si l'utilisateur tape au clavier
+                  }}
                   placeholder="Nous nous sommes rencontrés le..."
                   className="min-h-[160px] text-xl resize-none rounded-2xl border-secondary bg-white focus:ring-[hsl(var(--gold))] p-5 shadow-inner"
                   maxLength={500}
                 />
 
-                {/* L'INTÉGRATION DU SYSTÈME DE DICTÉE EXACT */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-2">
                   <button
                     type="button"
@@ -412,7 +439,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2C: Success Gift Email Form (Dynamic Input Count) ───
+  // ─── Step 2C: Success Gift Email Form ───
   if (step === "success_gift_email") {
     const activeEmails = giftEmails.slice(0, invitesLeft);
 
@@ -455,14 +482,16 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             <div className="pt-4 flex flex-col gap-5 text-center">
               <Button
                 onClick={() => {
-                  setInvitesLeft(0);
-                  toast({ title: "Félicitations 💛", description: "Invitations envoyées. Redirection..." });
-                  setTimeout(() => setStep("success_gift"), 2000);
+                  handleClose();
+                  toast({
+                    title: "Félicitations 💛",
+                    description: "Vos invitations sont envoyées. Votre compte sera clôturé sous 48h.",
+                  });
                 }}
-                className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
+                className="w-full h-14 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
               >
                 <Send className="h-6 w-6 mr-3" />
-                Envoyer ces {invitesLeft} invitations
+                Valider & clôturer mon compte
               </Button>
               <button
                 onClick={() => {
