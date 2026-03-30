@@ -232,7 +232,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
               onClick={() => setStep("success_story")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
@@ -241,10 +241,10 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
                 <Gift className="h-5 w-5 text-[hsl(var(--gold))]" />
               </div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground leading-tight">
+              <h2 className="font-heading text-2xl text-foreground leading-tight md:text-4xl">
                 Partagez votre bonheur
               </h2>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-lg">
                 Célébrez votre histoire en offrant 3 mois d'abonnement au Cercle à vos proches. C'est offert par
                 Kalimera.
               </p>
@@ -255,14 +255,14 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               {/* Left Column: Direct Sharing & Link */}
               <div className="space-y-5">
                 <div className="bg-secondary/30 p-4 rounded-2xl border border-secondary text-left relative overflow-hidden">
-                  <p className="italic text-foreground/80 leading-relaxed text-sm relative z-10">
+                  <p className="italic text-foreground/80 leading-relaxed relative z-10 text-lg">
                     « J'ai fait une merveilleuse rencontre sur Kalimera et je quitte le cercle. Je te transfère mon
                     privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. »
                   </p>
 
                   {/* Copy Link Box */}
                   <div className="mt-4 flex items-center gap-2 bg-white border border-secondary rounded-xl p-1.5 pl-3 relative z-10">
-                    <span className="truncate text-xs text-muted-foreground flex-1 font-medium select-all">
+                    <span className="truncate text-muted-foreground flex-1 font-medium select-all text-lg">
                       {inviteLink}
                     </span>
                     <button
@@ -304,7 +304,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                         if (invitesLeft <= 0) e.preventDefault();
                         else decrementInvites();
                       }}
-                      className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-11 transition-all text-sm font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
+                      className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-11 transition-all text-lg font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
                     >
                       <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp
                     </a>
@@ -318,7 +318,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                         if (invitesLeft <= 0) e.preventDefault();
                         else decrementInvites();
                       }}
-                      className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-11 transition-all text-sm font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
+                      className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-11 transition-all text-xl font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
                     >
                       <Mail className="w-4 h-4 text-muted-foreground" /> E-mail
                     </a>
@@ -330,7 +330,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <div className="space-y-4 md:border-l md:border-secondary md:pl-8 flex flex-col justify-center">
                 <div className="space-y-1">
                   <Label className="text-foreground text-sm font-medium">Ou confiez-nous l'envoi</Label>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-lg">
                     Saisissez leurs adresses e-mail, nous nous en chargeons.
                   </p>
                 </div>
@@ -371,7 +371,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                     description: "Votre compte sera clôturé sous 48h.",
                   });
                 }}
-                className="w-full h-10 rounded-xl text-muted-foreground hover:text-red-500 font-medium text-sm transition-colors"
+                className="w-full h-10 rounded-xl text-muted-foreground hover:text-red-500 font-medium transition-colors text-lg"
               >
                 Passer cette étape et clôturer mon compte
               </button>
