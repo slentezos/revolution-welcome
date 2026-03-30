@@ -71,11 +71,11 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
           autoFocus
         />
 
-        {errors.firstName && <p className="text-destructive text-sm mt-2">{errors.firstName}</p>}
+        {errors.firstName && <p className="text-destructive text-xl mt-2">{errors.firstName}</p>}
       </div>
 
-      <div className="text-lg">
-        <label className="block font-medium text-foreground mb-3 text-lg">Date de naissance *</label>
+      <div>
+        <label className="block font-medium text-foreground mb-3 text-xl">Date de naissance *</label>
         <div className="grid grid-cols-3 gap-3">
           <Select value={formData.birthDay} onValueChange={(v) => update("birthDay", v)}>
             <SelectTrigger className="h-14 text-base rounded-xl">
@@ -114,7 +114,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
             </SelectContent>
           </Select>
         </div>
-        {errors.birthDate && <p className="text-destructive text-sm mt-2">{errors.birthDate}</p>}
+        {errors.birthDate && <p className="text-destructive text-lg mt-2">{errors.birthDate}</p>}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -139,11 +139,11 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
               </button>
             ))}
           </div>
-          {errors.gender && <p className="text-destructive text-sm mt-2">{errors.gender}</p>}
+          {errors.gender && <p className="text-destructive text-lg mt-2">{errors.gender}</p>}
         </div>
 
         <div>
-          <label className="block font-medium text-foreground mb-3 text-lg">Je recherche *</label>
+          <label className="block font-medium text-foreground mb-3 text-xl">Je recherche *</label>
           <div className="grid grid-cols-2 gap-3">
             {[
               { value: "Un compagnon", label: "Un compagnon" },
@@ -163,11 +163,11 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
               </button>
             ))}
           </div>
-          {errors.lookingFor && <p className="text-destructive text-sm mt-2">{errors.lookingFor}</p>}
+          {errors.lookingFor && <p className="text-destructive text-lg mt-2">{errors.lookingFor}</p>}
         </div>
       </div>
 
-      <Button type="button" onClick={onNext} className="btn-primary w-full h-14 text-lg rounded-xl mt-4">
+      <Button type="button" onClick={onNext} className="btn-primary w-full h-14 text-xl rounded-xl mt-4">
         Continuer
         <ArrowRight className="ml-2 h-5 w-5" />
       </Button>
