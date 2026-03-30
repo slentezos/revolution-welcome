@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Save, ExternalLink } from "lucide-react";
+import DateInput from "@/components/profile/DateInput";
 import profileInfoImg from "@/assets/profile-info.jpg";
 
 interface ProfileInfoTabProps {
