@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import {
   MessageCircle,
   Copy,
   CheckCircle2,
+  Share2,
 } from "lucide-react";
 
 type Step = "reason" | "success_story" | "success_gift" | "retention" | "pause";
@@ -36,11 +37,18 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
   const [giftEmails, setGiftEmails] = useState(["", "", ""]);
   const [invitesLeft, setInvitesLeft] = useState(3);
   const [copied, setCopied] = useState(false);
+  const [shareSupported, setShareSupported] = useState(false);
 
   const inviteText =
     "J'ai fait une merveilleuse rencontre sur Kalimera et je quitte le cercle. Je te transfère mon privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. Voici mon invitation personnelle :";
   const inviteLink = "https://kalimera.fr/cercle/invitation-privee";
   const fullMessage = `${inviteText} ${inviteLink}`;
+
+  useEffect(() => {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      setShareSupported(true);
+    }
+  }, []);
 
   const handleClose = () => {
     onOpenChange(false);
@@ -76,12 +84,25 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     }
   };
 
+  const handleNativeShare = async () => {
+    try {
+      await navigator.share({
+        title: "Invitation Kalimera",
+        text: inviteText,
+        url: inviteLink,
+      });
+      decrementInvites();
+    } catch (err) {
+      console.log("Partage annulé ou non supporté", err);
+    }
+  };
+
   // ─── Step 1: Reason Selection ───
   if (step === "reason") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
-          <div className="px-6 sm:px-10 py-8 space-y-6">
+        <DialogContent className="sm:max-w-xl md:max-w-2xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
+          <div className="px-6 sm:px-10 py-8 space-y-6 max-w-xl mx-auto">
             <div className="text-center space-y-2">
               <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
                 <Heart className="h-6 w-6 text-[hsl(var(--gold))]" />
@@ -140,11 +161,11 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
   if (step === "success_story") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
-          <div className="px-6 sm:px-10 py-8 space-y-6">
+        <DialogContent className="sm:max-w-xl md:max-w-2xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
+          <div className="px-6 sm:px-10 py-8 space-y-6 max-w-xl mx-auto">
             <button
               onClick={() => setStep("reason")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-base"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
@@ -203,122 +224,133 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2B: Success Gift (Direct Share & Email Inputs) ───
+  // ─── Step 2B: Success Gift (Light Theme, 2 Columns layout) ───
   if (step === "success_gift") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white max-h-[95vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-xl md:max-w-3xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white max-h-[95vh] overflow-y-auto">
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
               onClick={() => setStep("success_story")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-base"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
 
-            {/* Header */}
-            <div className="text-center space-y-2">
+            <div className="text-center space-y-2 max-w-lg mx-auto">
               <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
                 <Gift className="h-5 w-5 text-[hsl(var(--gold))]" />
               </div>
               <h2 className="font-heading text-2xl md:text-3xl text-foreground leading-tight">
                 Partagez votre bonheur
               </h2>
-              <p className="text-muted-foreground text-sm max-w-sm mx-auto md:text-lg">
-                Célébrez votre belle histoire en offrant 3 mois d'abonnement à vos proches. C'est offert par Kalimera.
+              <p className="text-muted-foreground text-sm">
+                Célébrez votre histoire en offrant 3 mois d'abonnement au Cercle à vos proches. C'est offert par
+                Kalimera.
               </p>
             </div>
 
-            {/* Message Preview */}
-            <div className="bg-secondary/30 p-4 rounded-2xl border border-secondary text-left relative overflow-hidden">
-              <p className="italic text-foreground/80 leading-relaxed relative z-10 text-sm md:text-lg">
-                « J'ai fait une merveilleuse rencontre sur Kalimera et je quitte le cercle. Je te transfère mon
-                privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. Voici mon invitation :{" "}
-                {inviteLink} »
-              </p>
-            </div>
+            {/* 2-Column Grid to prevent scrolling */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
+              {/* Left Column: Direct Sharing & Link */}
+              <div className="space-y-5">
+                <div className="bg-secondary/30 p-4 rounded-2xl border border-secondary text-left relative overflow-hidden">
+                  <p className="italic text-foreground/80 leading-relaxed text-sm relative z-10">
+                    « J'ai fait une merveilleuse rencontre sur Kalimera et je quitte le cercle. Je te transfère mon
+                    privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. »
+                  </p>
 
-            {/* Native Sharing Row */}
-            <div className="space-y-2 pt-1">
-              <div className="flex justify-between items-center mb-2">
-                <Label className="text-foreground text-sm md:text-base font-medium">Partager via votre appareil</Label>
-                <span className="font-bold text-[hsl(var(--gold))] px-2 py-0.5 rounded bg-[hsl(var(--gold))/0.1] text-lg">
-                  {invitesLeft} restante(s)
-                </span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <a
-                  href={invitesLeft > 0 ? `https://wa.me/?text=${encodeURIComponent(fullMessage)}` : "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    if (invitesLeft <= 0) e.preventDefault();
-                    else decrementInvites();
-                  }}
-                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-lg font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
-                >
-                  <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp
-                </a>
-                <a
-                  href={
-                    invitesLeft > 0
-                      ? `mailto:?subject=${encodeURIComponent("Mon cadeau pour toi : Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`
-                      : "#"
-                  }
-                  onClick={(e) => {
-                    if (invitesLeft <= 0) e.preventDefault();
-                    else decrementInvites();
-                  }}
-                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-lg font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
-                >
-                  <Mail className="w-4 h-4 text-muted-foreground" /> E-mail
-                </a>
-                <button
-                  type="button"
-                  onClick={handleCopy}
-                  disabled={invitesLeft <= 0}
-                  className={`flex items-center justify-center gap-1.5 border border-secondary text-foreground rounded-xl h-11 transition-all text-lg font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
-                >
-                  {copied ? (
-                    <CheckCircle2 className="w-4 h-4 text-green-500" />
-                  ) : (
-                    <Copy className="w-4 h-4 text-muted-foreground" />
-                  )}
-                  {copied ? "Copié" : "Copier"}
-                </button>
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="relative py-3">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-secondary"></div>
-              </div>
-              <div className="relative flex justify-center">
-                <span className="bg-white px-4 text-[10px] font-medium uppercase tracking-widest text-muted-foreground md:text-base">
-                  Ou confiez-nous l'envoi
-                </span>
-              </div>
-            </div>
-
-            {/* Email Inputs */}
-            <div className="space-y-3">
-              {giftEmails.map((email, i) => (
-                <div key={i} className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
-                  <Input
-                    type="email"
-                    placeholder={`Adresse e-mail du proche n°${i + 1}`}
-                    value={email}
-                    onChange={(e) => updateEmail(i, e.target.value)}
-                    className="h-11 text-sm md:text-base bg-secondary/30 rounded-xl border-secondary pl-10 focus:border-[hsl(var(--gold))] focus:ring-[hsl(var(--gold))]"
-                  />
+                  {/* Copy Link Box */}
+                  <div className="mt-4 flex items-center gap-2 bg-white border border-secondary rounded-xl p-1.5 pl-3 relative z-10">
+                    <span className="truncate text-xs text-muted-foreground flex-1 font-medium select-all">
+                      {inviteLink}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopy}
+                      disabled={invitesLeft <= 0}
+                      className={`p-2 rounded-lg transition-colors flex-shrink-0 flex items-center justify-center ${invitesLeft > 0 ? "bg-secondary hover:bg-[hsl(var(--gold))/0.1] hover:text-[hsl(var(--gold))] text-muted-foreground" : "opacity-50 cursor-not-allowed"}`}
+                      title="Copier le lien"
+                    >
+                      {copied ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                    {shareSupported && (
+                      <button
+                        type="button"
+                        onClick={handleNativeShare}
+                        disabled={invitesLeft <= 0}
+                        className={`p-2 rounded-lg transition-colors flex-shrink-0 flex items-center justify-center ${invitesLeft > 0 ? "bg-secondary hover:bg-[hsl(var(--gold))/0.1] hover:text-[hsl(var(--gold))] text-muted-foreground" : "opacity-50 cursor-not-allowed"}`}
+                        title="Partager via l'appareil"
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
                 </div>
-              ))}
+
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <Label className="text-foreground text-sm font-medium">Partager directement</Label>
+                    <span className="text-[10px] font-bold text-[hsl(var(--gold))] px-2 py-0.5 rounded bg-[hsl(var(--gold))/0.1] uppercase tracking-wider">
+                      {invitesLeft} restante(s)
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <a
+                      href={invitesLeft > 0 ? `https://wa.me/?text=${encodeURIComponent(fullMessage)}` : "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        if (invitesLeft <= 0) e.preventDefault();
+                        else decrementInvites();
+                      }}
+                      className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-11 transition-all text-sm font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
+                    >
+                      <MessageCircle className="w-4 h-4 text-[#25D366]" /> WhatsApp
+                    </a>
+                    <a
+                      href={
+                        invitesLeft > 0
+                          ? `mailto:?subject=${encodeURIComponent("Mon cadeau pour toi : Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`
+                          : "#"
+                      }
+                      onClick={(e) => {
+                        if (invitesLeft <= 0) e.preventDefault();
+                        else decrementInvites();
+                      }}
+                      className={`flex items-center justify-center gap-2 border border-secondary text-foreground rounded-xl h-11 transition-all text-sm font-medium ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05]" : "opacity-50 cursor-not-allowed"}`}
+                    >
+                      <Mail className="w-4 h-4 text-muted-foreground" /> E-mail
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Kalimera Send */}
+              <div className="space-y-4 md:border-l md:border-secondary md:pl-8 flex flex-col justify-center">
+                <div className="space-y-1">
+                  <Label className="text-foreground text-sm font-medium">Ou confiez-nous l'envoi</Label>
+                  <p className="text-xs text-muted-foreground">
+                    Saisissez leurs adresses e-mail, nous nous en chargeons.
+                  </p>
+                </div>
+                <div className="space-y-3 pt-1">
+                  {giftEmails.map((email, i) => (
+                    <Input
+                      key={i}
+                      type="email"
+                      placeholder={`Adresse e-mail du proche n°${i + 1}`}
+                      value={email}
+                      onChange={(e) => updateEmail(i, e.target.value)}
+                      className="h-11 text-sm bg-secondary/30 rounded-xl border-secondary focus:border-[hsl(var(--gold))] focus:ring-[hsl(var(--gold))] shadow-none"
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Final Actions */}
-            <div className="flex flex-col gap-3 pt-4 border-t border-secondary">
+            <div className="flex flex-col gap-3 pt-6 border-t border-secondary mt-6 max-w-xl mx-auto">
               <Button
                 className="w-full h-12 rounded-xl text-primary-foreground text-base font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
                 onClick={() => {
@@ -339,7 +371,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                     description: "Votre compte sera clôturé sous 48h.",
                   });
                 }}
-                className="w-full h-10 rounded-xl text-muted-foreground hover:text-red-500 font-medium transition-colors text-lg"
+                className="w-full h-10 rounded-xl text-muted-foreground hover:text-red-500 font-medium text-sm transition-colors"
               >
                 Passer cette étape et clôturer mon compte
               </button>
@@ -354,11 +386,11 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
   if (step === "retention") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
-          <div className="px-6 sm:px-10 py-8 space-y-6">
+        <DialogContent className="sm:max-w-xl md:max-w-2xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
+          <div className="px-6 sm:px-10 py-8 space-y-6 max-w-xl mx-auto">
             <button
               onClick={() => setStep("reason")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-base"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
@@ -411,11 +443,11 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
   // ─── Step 4: Pause Offer ───
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
-        <div className="px-6 sm:px-10 py-8 space-y-6">
+      <DialogContent className="sm:max-w-xl md:max-w-2xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
+        <div className="px-6 sm:px-10 py-8 space-y-6 max-w-xl mx-auto">
           <button
             onClick={() => setStep("reason")}
-            className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-base"
+            className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
           >
             <ArrowLeft className="h-4 w-4" /> Retour
           </button>
