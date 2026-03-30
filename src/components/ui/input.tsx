@@ -2,9 +2,9 @@ import * as React from "react";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // Assurez-vous que le chemin vers votre composant Select est correct
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// ─── COMPOSANT 1: INPUT CLASSIQUE ───
+// ─── 1. COMPOSANT INPUT CLASSIQUE (Texte, Email, etc.) ───
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, onChange, ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +20,6 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
           input.setSelectionRange(start, end);
         }
       }
-
       if (onChange) {
         onChange(e);
       }
@@ -43,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 );
 Input.displayName = "Input";
 
-// ─── COMPOSANT 2: INPUT MOT DE PASSE ───
+// ─── 2. COMPOSANT MOT DE PASSE (Avec œil de visibilité) ───
 const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -58,14 +57,13 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
           ref={ref}
           {...props}
         />
-
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
           title={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
         >
-          {showPassword ? <EyeOff className="h-5 w-5 md:h-6 md:w-6" /> : <Eye className="h-5 w-5 md:h-6 md:w-6" />}
+          {showPassword ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
         </button>
       </div>
     );
@@ -73,16 +71,16 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
 );
 PasswordInput.displayName = "PasswordInput";
 
-// ─── COMPOSANT 3: DATE DE NAISSANCE (Nouveau) ───
+// ─── 3. COMPOSANT DATE DE NAISSANCE (Le design à 3 blocs) ───
 interface DateInputProps {
   value: { day: string; month: string; year: string };
   onChange: (field: "day" | "month" | "year", val: string) => void;
   error?: string;
   className?: string;
+  label?: string;
 }
 
-const DateInput = ({ value, onChange, error, className }: DateInputProps) => {
-  // Génération des données pour les menus déroulants
+const DateInput = ({ value, onChange, error, className, label = "Date de naissance *" }: DateInputProps) => {
   const days = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0"));
   const months = [
     { value: "01", label: "Janvier" },
@@ -98,15 +96,14 @@ const DateInput = ({ value, onChange, error, className }: DateInputProps) => {
     { value: "11", label: "Novembre" },
     { value: "12", label: "Décembre" },
   ];
-  // De l'année en cours jusqu'à il y a 100 ans
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => String(currentYear - i));
 
   return (
-    <div className={cn("w-full", className)}>
-      <label className="block font-medium text-[#1B2333] mb-3 text-xl">Date de naissance *</label>
+    <div className={cn("w-full text-left", className)}>
+      <label className="block font-medium text-[#1B2333] mb-3 text-xl">{label}</label>
       <div className="grid grid-cols-3 gap-3 md:gap-4">
-        {/* SÉLECTEUR: JOUR */}
+        {/* JOUR */}
         <Select value={value.day} onValueChange={(v) => onChange("day", v)}>
           <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Jour" />
@@ -120,7 +117,7 @@ const DateInput = ({ value, onChange, error, className }: DateInputProps) => {
           </SelectContent>
         </Select>
 
-        {/* SÉLECTEUR: MOIS */}
+        {/* MOIS */}
         <Select value={value.month} onValueChange={(v) => onChange("month", v)}>
           <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Mois" />
@@ -134,7 +131,7 @@ const DateInput = ({ value, onChange, error, className }: DateInputProps) => {
           </SelectContent>
         </Select>
 
-        {/* SÉLECTEUR: ANNÉE */}
+        {/* ANNÉE */}
         <Select value={value.year} onValueChange={(v) => onChange("year", v)}>
           <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Année" />
@@ -148,8 +145,6 @@ const DateInput = ({ value, onChange, error, className }: DateInputProps) => {
           </SelectContent>
         </Select>
       </div>
-
-      {/* MESSAGE D'ERREUR */}
       {error && <p className="text-destructive text-lg mt-2">{error}</p>}
     </div>
   );
