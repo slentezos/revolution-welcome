@@ -315,7 +315,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. »
               </p>
               <div className="mt-4 inline-flex items-center justify-center bg-white border border-secondary rounded-xl px-4 py-2 text-muted-foreground font-medium text-base w-full overflow-hidden">
-                <span className="truncate">{inviteLink}</span>
+                <span className="truncate text-xl">{inviteLink}</span>
               </div>
             </div>
 
@@ -338,7 +338,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[#25D366] hover:bg-[#25D366]/5 text-foreground" : "opacity-40 cursor-not-allowed text-muted-foreground"}`}
                 >
                   <MessageCircle className={`w-8 h-8 ${invitesLeft > 0 ? "text-[#25D366]" : ""}`} />
-                  <span className="text-base font-semibold">WhatsApp</span>
+                  <span className="font-semibold text-xl">WhatsApp</span>
                 </a>
 
                 <button
@@ -352,7 +352,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   ) : (
                     <Copy className="w-8 h-8 text-muted-foreground" />
                   )}
-                  <span className="text-base font-semibold">{copied ? "Copié !" : "Copier"}</span>
+                  <span className="font-semibold text-xl">{copied ? "Copié !" : "Copier"}</span>
                 </button>
 
                 <button
@@ -362,7 +362,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] text-foreground" : "opacity-40 cursor-not-allowed text-muted-foreground"}`}
                 >
                   <Mail className="w-8 h-8 text-muted-foreground" />
-                  <span className="text-base font-semibold">Par E-mail</span>
+                  <span className="font-semibold text-xl">Par E-mail</span>
                 </button>
               </div>
             </div>
