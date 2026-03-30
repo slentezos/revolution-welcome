@@ -420,110 +420,96 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
-      {/* TUTORIAL MODAL - VERSION CORRIGÉE 2026 */}
+      {/* TUTORIAL MODAL - VERSION ANTI-CRASH & ANTI-SCROLL */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        {/* On force un z-index massif pour passer devant les tabs du menu */}
-        <DialogContent className="max-w-5xl p-0 overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-[#FCF9F5] z-[100]">
-          {/* BOUTON FERMER (X) - RECENTRÉ POUR NE PLUS ÊTRE COUPÉ */}
+        {/* On s'assure que le contenu et l'overlay passent devant TOUT le reste du site */}
+        <DialogContent className="max-w-5xl p-0 overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-white z-[9999] outline-none">
+          {/* BOUTON FERMER (X) - POSITIONNÉ PLUS À L'INTÉRIEUR POUR ÉVITER LA COUPE */}
           <button
             onClick={() => setShowVideoTutorial(false)}
-            className="absolute right-8 top-8 z-[110] p-3 rounded-full bg-white border border-[#E5E0D8] text-[#1B2333] hover:bg-gray-50 transition-all shadow-md group"
+            className="absolute right-12 top-12 z-[10000] p-3 rounded-full bg-white/90 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-md group"
           >
             <X className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
           </button>
 
-          <div className="flex flex-col lg:flex-row h-full max-h-[90vh]">
-            {/* Colonne de Gauche : Contenu (Scrollable si l'écran est petit) */}
-            <div className="flex-1 p-10 lg:p-16 bg-white relative overflow-y-auto custom-scrollbar">
-              {/* Motif de fond subtil */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
-
+          <div className="flex flex-col lg:flex-row h-full">
+            {/* Colonne de Gauche : Contenu - ESPACEMENTS RÉDUITS POUR ÉVITER LE SCROLL */}
+            <div className="flex-1 p-8 lg:p-12 bg-white relative flex flex-col justify-between min-h-0">
               <div className="relative z-10">
-                <header className="mb-10">
-                  <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-6">
+                <header className="mb-6">
+                  <div className="inline-flex items-center gap-3 px-3 py-1 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-4">
                     <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="text-xs font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))]">
+                    <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))]">
                       Guide Privé
                     </span>
                   </div>
 
-                  <DialogTitle className="font-heading text-4xl lg:text-6xl text-[#1B2333] leading-[1.1] mb-6">
+                  <DialogTitle className="font-heading text-4xl lg:text-6xl text-[#1B2333] leading-[1.1] mb-4">
                     L'art de se <br /> <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
                   </DialogTitle>
 
-                  <p className="text-xl text-muted-foreground leading-relaxed max-w-md">
-                    Quelques secrets pour capturer votre essence et charmer votre futur partenaire.
+                  <p className="text-lg text-muted-foreground leading-snug max-w-sm">
+                    Capturer votre essence et charmer votre futur partenaire.
                   </p>
                 </header>
 
-                {/* Grille de Conseils */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8 mb-12">
+                {/* Grille de Conseils - COMPACTE */}
+                <div className="grid grid-cols-2 gap-x-8 gap-y-6 mb-8">
                   {[
-                    {
-                      icon: Eye,
-                      title: "Le Regard",
-                      desc: "Plongez vos yeux dans l'objectif, la connexion commence ici.",
-                    },
-                    { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est votre meilleur atout beauté." },
-                    {
-                      icon: Heart,
-                      title: "L'Émotion",
-                      desc: "Parlez d'une passion. Votre visage s'illumine quand vous aimez.",
-                    },
-                    {
-                      icon: Volume2,
-                      title: "La Sérénité",
-                      desc: "Le silence autour de vous permet à votre voix d'être écoutée.",
-                    },
+                    { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
+                    { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
+                    { icon: Heart, title: "L'Émotion", desc: "Parlez de vos vraies passions." },
+                    { icon: Volume2, title: "La Sérénité", desc: "Le silence pour être écouté(e)." },
                   ].map((item, idx) => (
-                    <div key={idx} className="flex flex-col gap-3">
-                      <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                        <item.icon className="h-6 w-6 text-[#1B2333]" />
+                    <div key={idx} className="flex flex-col gap-2">
+                      <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#FCF9F5] border border-[#E5E0D8]">
+                        <item.icon className="h-5 w-5 text-[#1B2333]" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-[#1B2333] text-xl mb-1">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 text-base leading-snug">{item.desc}</p>
+                        <h4 className="font-bold text-[#1B2333] text-lg mb-0.5">{item.title}</h4>
+                        <p className="text-[#1B2333]/60 text-sm leading-tight">{item.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
+              </div>
 
-                {/* SECTION ACTIONS - EMPILÉES POUR LES SENIORS */}
-                <div className="flex flex-col gap-6 max-w-md">
-                  <Button
-                    onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl hover:scale-[1.02] transition-transform"
-                  >
-                    J'ai compris, je commence seul(e)
-                  </Button>
+              {/* SECTION ACTIONS - EMPILÉES PROPREMENT */}
+              <div className="flex flex-col gap-4 max-w-md relative z-10">
+                <Button
+                  onClick={() => setShowVideoTutorial(false)}
+                  className="h-16 w-full rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-lg hover:scale-[1.02] transition-transform"
+                >
+                  J'ai compris, je commence seul(e)
+                </Button>
 
-                  {/* BOUTON 40 EUROS - DESIGN SCREENSHOT OK */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowStudioModal(true);
-                    }}
-                    className="w-full flex items-center justify-between gap-6 p-6 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)]"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
-                        <Headphones className="h-5 w-5 text-[hsl(var(--gold))] animate-pulse" />
-                      </div>
-                      <div className="text-left">
-                        <p className="font-bold text-[hsl(var(--gold))] text-lg leading-tight">Intimidé(e) ?</p>
-                        <p className="text-base text-[hsl(var(--gold))] opacity-80">On vous filme en visio (40€)</p>
-                      </div>
+                {/* BOUTON 40 EUROS - DESIGN EXACT */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowVideoTutorial(false);
+                    setShowStudioModal(true);
+                  }}
+                  className="w-full flex items-center justify-between gap-6 p-5 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)]"
+                >
+                  <div className="flex items-center gap-4 text-left">
+                    <div className="w-10 h-10 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
+                      <Headphones className="h-5 w-5 text-[hsl(var(--gold))] animate-pulse" />
                     </div>
-                    <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
-                  </button>
-                </div>
+                    <div>
+                      <p className="font-bold text-[hsl(var(--gold))] text-lg leading-tight">Intimidé(e) ?</p>
+                      <p className="text-sm text-[hsl(var(--gold))] opacity-80">On vous filme en visio (40€)</p>
+                    </div>
+                  </div>
+                  <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
+                </button>
               </div>
             </div>
 
-            {/* Colonne de Droite : Image Visuelle (Fixe) */}
-            <div className="hidden lg:block w-[380px] relative">
+            {/* Colonne de Droite : Image Visuelle - S'ADAPTE SANS SCROLL */}
+            <div className="hidden lg:block w-[420px] relative">
               <img src={coupleGarden} className="absolute inset-0 w-full h-full object-cover" alt="Couple Kalimera" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/40 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/30 via-transparent to-transparent" />
             </div>
           </div>
         </DialogContent>
