@@ -20,42 +20,60 @@ export default function DateInput({ value, onChange }: DateInputProps) {
   };
 
   return (
-    <div className="space-y-3">
-      <Label className="text-lg font-medium text-foreground">Date de naissance</Label>
-      <div className="grid grid-cols-3 gap-4">
-        <div className="space-y-1.5">
-          <Label className="text-sm text-muted-foreground">Jour</Label>
-          <Input
-            placeholder="JJ"
-            value={day}
-            onChange={(e) => update(e.target.value, month, year)}
-            maxLength={2}
-            inputMode="numeric"
-            className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none text-center"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label className="text-sm text-muted-foreground">Mois</Label>
-          <Input
-            placeholder="MM"
-            value={month}
-            onChange={(e) => update(day, e.target.value, year)}
-            maxLength={2}
-            inputMode="numeric"
-            className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none text-center"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label className="text-sm text-muted-foreground">Année</Label>
-          <Input
-            placeholder="AAAA"
-            value={year}
-            onChange={(e) => update(day, month, e.target.value)}
-            maxLength={4}
-            inputMode="numeric"
-            className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none text-center"
-          />
-        </div>
+  <div className="space-y-3">
+  <Label className="text-xl font-medium text-[#1B2333]">Date de naissance</Label>
+  
+  <div className="grid grid-cols-3 gap-4">
+    {/* --- JOUR --- */}
+    <div className="space-y-1.5">
+      <Label className="text-sm text-muted-foreground ml-1">Jour</Label>
+      <Select value={day} onValueChange={(v) => update(v, month, year)}>
+        <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+          <SelectValue placeholder="JJ" />
+        </SelectTrigger>
+        <SelectContent className="max-h-[250px]">
+          {Array.from({ length: 31 }, (_, i) => {
+            const d = String(i + 1).padStart(2, "0");
+            return <SelectItem key={d} value={d}>{d}</SelectItem>;
+          })}
+        </SelectContent>
+      </Select>
+    </div>
+
+    {/* --- MOIS --- */}
+    <div className="space-y-1.5">
+      <Label className="text-sm text-muted-foreground ml-1">Mois</Label>
+      <Select value={month} onValueChange={(v) => update(day, v, year)}>
+        <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+          <SelectValue placeholder="MM" />
+        </SelectTrigger>
+        <SelectContent className="max-h-[250px]">
+          {Array.from({ length: 12 }, (_, i) => {
+            const m = String(i + 1).padStart(2, "0");
+            return <SelectItem key={m} value={m}>{m}</SelectItem>;
+          })}
+        </SelectContent>
+      </Select>
+    </div>
+
+    {/* --- ANNÉE --- */}
+    <div className="space-y-1.5">
+      <Label className="text-sm text-muted-foreground ml-1">Année</Label>
+      <Select value={year} onValueChange={(v) => update(day, month, v)}>
+        <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+          <SelectValue placeholder="AAAA" />
+        </SelectTrigger>
+        <SelectContent className="max-h-[250px]">
+          {/* Génère les années de 1966 vers 1940 (ordre décroissant pour plus de rapidité) */}
+          {Array.from({ length: 1966 - 1940 + 1 }, (_, i) => {
+            const y = String(1966 - i);
+            return <SelectItem key={y} value={y}>{y}</SelectItem>;
+          })}
+        </SelectContent>
+      </Select>
+    </div>
+  </div>
+</div>
       </div>
     </div>
   );
