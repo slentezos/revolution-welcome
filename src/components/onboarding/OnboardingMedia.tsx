@@ -427,12 +427,22 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
-      {/* TUTORIAL MODAL */}
+      {/* TUTORIAL MODAL - LUXE EDITION 2026 FIXED */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
         <DialogContent className="max-w-5xl p-0 overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-[#FCF9F5] z-[9999]">
+          {/* BOUTON FERMER (X) - ACCESSIBLE ET ÉLÉGANT */}
+          <button
+            onClick={() => setShowVideoTutorial(false)}
+            className="absolute right-6 top-6 z-[10000] p-3 rounded-full bg-white/80 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-sm group"
+          >
+            <X className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
+          </button>
+
           <div className="flex flex-col lg:flex-row">
-            <div className="flex-1 p-12 lg:p-20 bg-white relative overflow-hidden text-left">
+            {/* Colonne de Gauche : Contenu */}
+            <div className="flex-1 p-10 lg:p-16 bg-white relative overflow-hidden text-left">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
+
               <div className="relative z-10 text-left">
                 <header className="mb-14">
                   <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-6">
@@ -441,12 +451,14 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       Guide Privé
                     </span>
                   </div>
+
                   <DialogTitle className="font-heading text-5xl lg:text-7xl text-[#1B2333] leading-[1.1] mb-8 text-left">
                     L'art de se <br />{" "}
                     <span className="italic font-serif text-[hsl(var(--gold))] text-left">présenter</span>
                   </DialogTitle>
                 </header>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-left mb-16">
                   {[
                     {
                       icon: Eye,
@@ -477,33 +489,34 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   ))}
                 </div>
 
-                <div className="mt-14 flex flex-col sm:flex-row items-center gap-5">
+                {/* BOUTONS EMPILÉS (STACKED) */}
+                <div className="flex flex-col gap-4 max-w-sm">
                   <Button
                     onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 px-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold"
+                    className="h-16 px-12 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl hover:bg-[#1B2333]/90 transition-all hover:scale-[1.02]"
                   >
-                    J'ai compris
+                    J'ai compris, je commence
                   </Button>
 
                   <button
-                    onClick={() => {
-                      setShowVideoTutorial(false);
-                      setShowStudioModal(true);
-                    }}
-                    className="flex items-center gap-3 px-7 py-4 border border-[hsl(var(--gold))/0.4] bg-[hsl(var(--gold))/0.05] text-[hsl(var(--gold))] rounded-2xl hover:bg-[hsl(var(--gold))/0.1] transition-all group"
+                    onClick={() => setShowVideoTutorial(false)}
+                    className="py-4 text-[#1B2333]/50 hover:text-[#1B2333] font-medium text-lg transition-colors underline underline-offset-8"
                   >
-                    <Headphones className="h-6 w-6" />
-                    <div className="text-left">
-                      <p className="font-bold text-lg leading-tight">Intimidé(e) ?</p>
-                      <p className="text-base opacity-80">On vous filme en visio (49€)</p>
-                    </div>
-                    <ArrowRight className="h-5 w-5 ml-1 group-hover:translate-x-1 transition-transform" />
+                    Plus tard
                   </button>
                 </div>
               </div>
             </div>
+
+            {/* Colonne de Droite : Image Visuelle */}
             <div className="hidden lg:block w-[400px] relative">
-              <img src={coupleGarden} className="absolute inset-0 w-full h-full object-cover" alt="Couple" />
+              <img src={coupleGarden} className="absolute inset-0 w-full h-full object-cover" alt="Couple Kalimera" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/40 via-transparent to-transparent" />
+              <div className="absolute bottom-12 left-10 right-10">
+                <p className="text-white font-heading text-2xl leading-tight">
+                  "L'authenticité est votre plus beau filtre."
+                </p>
+              </div>
             </div>
           </div>
         </DialogContent>
