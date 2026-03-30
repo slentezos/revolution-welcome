@@ -525,7 +525,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               >
                 J'ai compris
               </Button>
-              <p className="text-sm text-muted-foreground font-medium italic">
+              <p className="text-muted-foreground font-medium italic text-lg">
                 "L'authenticité est la clé."
               </p>
             </div>
