@@ -50,18 +50,18 @@ export default function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
   const [savedForLater, setSavedForLater] = useState<SavedMatch[]>(() => {
     const raw = localStorage.getItem(SAVED_MATCHES_STORAGE_KEY);
-    if (!raw) return [];
-    try {return JSON.parse(raw) as SavedMatch[];} catch {return [];}
+    if (!raw) return mockSavedMatches;
+    try {const parsed = JSON.parse(raw) as SavedMatch[]; return parsed.length > 0 ? parsed : mockSavedMatches;} catch {return mockSavedMatches;}
   });
   const [acceptedMatchIds, setAcceptedMatchIds] = useState<number[]>(() => {
     const raw = localStorage.getItem(ACCEPTED_MATCHES_STORAGE_KEY);
-    if (!raw) return [];
-    try {return JSON.parse(raw);} catch {return [];}
+    if (!raw) return mockPendingMatches.map(m => m.id);
+    try {return JSON.parse(raw);} catch {return mockPendingMatches.map(m => m.id);}
   });
   const [pendingMatches, setPendingMatches] = useState<PendingMatch[]>(() => {
     const raw = localStorage.getItem(PENDING_MATCHES_STORAGE_KEY);
-    if (!raw) return [];
-    try {return JSON.parse(raw) as PendingMatch[];} catch {return [];}
+    if (!raw) return mockPendingMatches;
+    try {const parsed = JSON.parse(raw) as PendingMatch[]; return parsed.length > 0 ? parsed : mockPendingMatches;} catch {return mockPendingMatches;}
   });
 
   const [viewingPending, setViewingPending] = useState(false);
