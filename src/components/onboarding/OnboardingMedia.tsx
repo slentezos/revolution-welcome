@@ -25,7 +25,6 @@ import { cn } from "@/lib/utils";
 
 // Assets
 import coupleGarden from "@/assets/couple-garden.jpg";
-import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
 
 interface OnboardingMediaProps {
   profileId: string;
@@ -203,93 +202,93 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
   if (loading)
     return (
-      <div className="h-screen flex items-center justify-center text-xl font-medium animate-pulse">Chargement...</div>
+      <div className="h-full flex items-center justify-center text-xl font-medium animate-pulse">Chargement...</div>
     );
 
   return (
-    // ICI : h-[calc(100vh-140px)] garantit que la page ne scrollera jamais si le header et le layout global sont bien configurés.
-    <div className="flex flex-col h-[calc(100vh-140px)] bg-white overflow-hidden">
-      {/* CORPS PRINCIPAL : Prend tout l'espace disponible moins le footer */}
-      <div className="flex-1 flex flex-col p-4 lg:p-8 min-h-0">
-        {/* EN-TÊTE DE LA SECTION */}
-        <div className="flex items-center justify-between mb-4 flex-shrink-0">
-          <h2 className="font-heading text-4xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
-          <div className="px-5 py-2 bg-secondary/50 rounded-xl border border-[#E5E0D8]">
-            <span className="text-[#1B2333] font-bold text-2xl">{uploadedCount}</span>
-            <span className="text-gray-500 text-2xl"> / 5</span>
+    // ICI ON TUE LE SCROLL : absolute inset-0 ou h-full absolu avec overflow-hidden global
+    <div className="absolute inset-0 flex flex-col bg-white overflow-hidden">
+      {/* HEADER FIXE */}
+      <div className="flex-shrink-0 p-4 lg:p-6 lg:pb-2">
+        <div className="flex items-center justify-between">
+          <h2 className="font-heading text-3xl lg:text-4xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
+          <div className="px-4 py-1.5 bg-secondary/50 rounded-xl border border-[#E5E0D8]">
+            <span className="text-[#1B2333] font-bold text-xl">{uploadedCount}</span>
+            <span className="text-gray-500 text-xl"> / 5</span>
           </div>
         </div>
+      </div>
 
-        {/* GRILLE MÉDIA : S'étire pour remplir l'espace sans dépasser */}
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 min-h-0">
-          {/* SLOT VIDEO */}
-          <div className="flex flex-col gap-4 min-h-0">
+      {/* ZONE FLUIDE MÉDIAS (S'écrase automatiquement sans déborder) */}
+      <div className="flex-1 min-h-0 px-4 lg:px-6 pb-2">
+        <div className="h-full grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-4 lg:gap-6">
+          {/* COLONNE VIDÉO */}
+          <div className="flex flex-col h-full gap-3">
             <div
-              className="relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[2.5rem] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all duration-500"
+              className="flex-1 min-h-0 relative overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[2rem] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all duration-300"
               onClick={() => !videoSlot?.preview && handleSlotClick(videoSlot?.id)}
             >
               {videoSlot?.preview ? (
                 <>
                   <video src={videoSlot.preview} className="w-full h-full object-cover" muted />
                   <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                    <Play className="h-20 w-20 text-white drop-shadow-2xl" />
+                    <Play className="h-16 w-16 text-white drop-shadow-xl" />
                   </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemoveSlot(videoSlot.id);
                     }}
-                    className="absolute top-6 right-6 p-4 bg-red-500 text-white rounded-full"
+                    className="absolute top-4 right-4 p-3 bg-red-500 text-white rounded-full"
                   >
-                    <X className="h-6 w-6" />
+                    <X className="h-5 w-5" />
                   </button>
                 </>
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center space-y-6 p-6 text-center">
-                  <div className="flex flex-col items-center">
-                    <div className="w-16 h-16 rounded-full bg-white shadow-sm border border-[#E5E0D8] flex items-center justify-center mb-3">
-                      <Video className="h-8 w-8 text-[hsl(var(--gold))]" />
-                    </div>
-                    <span className="text-xl text-[#1B2333] font-semibold">Ajouter ma vidéo</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                  <div className="w-16 h-16 rounded-full bg-white shadow-sm border border-[#E5E0D8] flex items-center justify-center mb-3">
+                    <Video className="h-8 w-8 text-[hsl(var(--gold))]" />
                   </div>
+                  <span className="text-xl text-[#1B2333] font-semibold mb-6">Ajouter ma vidéo</span>
 
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowStudioModal(true);
                     }}
-                    className="flex items-center gap-4 px-6 py-4 bg-white border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold))] rounded-2xl shadow-sm hover:shadow-lg transition-all group"
+                    className="flex items-center gap-3 px-5 py-3 bg-white border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold))] rounded-2xl shadow-sm hover:shadow-md transition-all group"
                   >
-                    <Headphones className="h-6 w-6 animate-pulse" />
+                    <Headphones className="h-5 w-5 animate-pulse" />
                     <div className="text-left">
-                      <p className="font-bold text-lg leading-tight">Intimidé(e) ?</p>
-                      <p className="text-sm opacity-80 underline">Nous vous filmons en visio (49€)</p>
+                      <p className="font-bold text-sm leading-tight">Intimidé(e) ?</p>
+                      <p className="text-xs opacity-80">On vous filme en visio (40€)</p>
                     </div>
-                    <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
               )}
             </div>
-            <div className="flex items-center justify-between px-2 flex-shrink-0">
-              <p className="text-[#1B2333]/60 text-base italic hidden lg:block">
+
+            <div className="flex-shrink-0 flex items-center justify-between px-2">
+              <p className="text-[#1B2333]/60 text-sm italic hidden lg:block">
                 Votre sourire est votre plus belle signature.
               </p>
               <button
                 onClick={() => setShowVideoTutorial(true)}
-                className="flex items-center gap-2 px-5 py-2.5 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold text-base hover:bg-[hsl(var(--gold))]/20 transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold text-sm hover:bg-[hsl(var(--gold))]/20 transition-all"
               >
                 <Lightbulb className="h-4 w-4" /> Conseils vidéo
               </button>
             </div>
           </div>
 
-          {/* PHOTOS */}
-          <div className="grid grid-cols-2 gap-4 min-h-0">
+          {/* COLONNE PHOTOS (Grille compacte) */}
+          <div className="h-full grid grid-cols-2 grid-rows-2 gap-3 lg:gap-4">
             {photoSlots.map((slot) => (
-              <div key={slot.id} className="flex flex-col gap-2 min-h-0">
+              <div key={slot.id} className="min-h-0 flex flex-col">
                 <div
                   className={cn(
-                    "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
+                    "flex-1 min-h-0 relative overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-2xl transition-all duration-300",
                     slot.preview ? "border-transparent" : "bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
                   )}
                   onClick={() => handleSlotClick(slot.id)}
@@ -302,17 +301,17 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                           e.stopPropagation();
                           handleRemoveSlot(slot.id);
                         }}
-                        className="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-full shadow-md"
+                        className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full"
                       >
                         <X className="h-4 w-4" />
                       </button>
                     </>
                   ) : (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                      <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
-                        <Camera className="h-5 w-5 text-muted-foreground" />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
+                      <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center mb-1 border border-[#E5E0D8]">
+                        <Camera className="h-4 w-4 text-muted-foreground" />
                       </div>
-                      <span className="text-base font-bold text-[#1B2333]">+ {slot.label}</span>
+                      <span className="text-sm font-bold text-[#1B2333]">+ {slot.label}</span>
                     </div>
                   )}
                 </div>
@@ -322,35 +321,35 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* FOOTER : Fixe en bas, ne scroll jamais */}
-      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-5 px-4 lg:px-10 text-left">
-        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+      {/* FOOTER FIXE : Ne participe pas au scroll */}
+      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] p-4 lg:p-5 text-left z-50">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div
             className={cn(
-              "flex items-center gap-4 p-4 rounded-2xl border transition-all cursor-pointer w-full lg:w-auto",
+              "flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer w-full sm:w-auto",
               confirmedAge ? "bg-emerald-50/50 border-emerald-200" : "bg-white border-[#E5E0D8]",
             )}
             onClick={() => setConfirmedAge(!confirmedAge)}
           >
             <div
               className={cn(
-                "h-7 w-7 rounded-lg border-2 flex items-center justify-center flex-shrink-0",
+                "h-6 w-6 rounded-md border-2 flex items-center justify-center flex-shrink-0",
                 confirmedAge ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300",
               )}
             >
-              {confirmedAge && <Check className="text-white h-5 w-5" />}
+              {confirmedAge && <Check className="text-white h-4 w-4" />}
             </div>
-            <p className="text-base font-medium text-[#1B2333]">
-              Photos prises il y a <span className="font-bold underline text-[hsl(var(--gold))]">moins de 18 mois</span>
-              .
+            <p className="text-sm lg:text-base font-medium text-[#1B2333]">
+              Je certifie sur l'honneur que mes photos ont été prises il y a{" "}
+              <span className="font-bold underline text-[hsl(var(--gold))]">moins de 18 mois</span>.
             </p>
           </div>
 
-          <div className="flex items-center gap-4 w-full lg:w-auto">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             <Button
               variant="outline"
               onClick={handleSave}
-              className="flex-1 lg:flex-none h-14 px-8 rounded-2xl border-[#E5E0D8] font-bold text-lg hidden sm:flex"
+              className="flex-1 sm:flex-none h-12 px-6 rounded-xl border-[#E5E0D8] font-bold text-base hidden md:flex"
             >
               Enregistrer
             </Button>
@@ -358,7 +357,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               onClick={handleSave}
               disabled={!confirmedAge || uploading}
               className={cn(
-                "flex-1 lg:flex-none h-14 px-10 rounded-2xl font-bold text-lg shadow-xl transition-all",
+                "flex-1 sm:flex-none h-12 px-8 rounded-xl font-bold text-base shadow-lg",
                 confirmedAge ? "bg-[#1B2333] text-white" : "bg-gray-100 text-gray-400",
               )}
             >
@@ -370,83 +369,77 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
       {/* MODAL STUDIO 40€ */}
       <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
-        <DialogContent className="max-w-2xl p-14 rounded-[3rem] border-0 shadow-3xl bg-white z-[9999] outline-none">
-          <div className="text-center space-y-8">
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))/0.2]">
-              <Headphones className="h-12 w-12 text-[hsl(var(--gold))]" />
+        <DialogContent className="max-w-xl p-10 rounded-[2.5rem] border-0 shadow-3xl bg-white z-[9999] outline-none">
+          <div className="text-center space-y-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))/0.2]">
+              <Headphones className="h-10 w-10 text-[hsl(var(--gold))]" />
             </div>
             <DialogHeader>
-              <DialogTitle className="font-heading text-4xl text-[#1B2333] font-bold leading-tight text-center">
+              <DialogTitle className="font-heading text-3xl text-[#1B2333] font-bold leading-tight text-center">
                 Laissons parler votre charme.
               </DialogTitle>
             </DialogHeader>
-            <div className="space-y-6 text-left">
-              <div className="flex items-start gap-4 p-6 rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))] shrink-0" />
-                <p className="text-xl text-[#1B2333]">
+            <div className="space-y-4 text-left">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-[#FCF9F5] border border-[#E5E0D8]">
+                <ShieldCheck className="h-6 w-6 text-[hsl(var(--gold))] shrink-0" />
+                <p className="text-lg text-[#1B2333]">
                   Coaching de <span className="font-bold">15 min en visio</span> pour vous guider.
                 </p>
               </div>
-              <div className="flex items-start gap-4 p-6 rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                <Check className="h-7 w-7 text-[hsl(var(--gold))] shrink-0" />
-                <p className="text-xl text-[#1B2333]">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-[#FCF9F5] border border-[#E5E0D8]">
+                <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0" />
+                <p className="text-lg text-[#1B2333]">
                   Montage professionnel inclus pour un <span className="font-bold">profil parfait</span>.
                 </p>
               </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 pt-2">
               <Button
                 disabled={isProcessingPayment}
                 onClick={handleStudioPayment}
-                className="h-16 w-full rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-2xl flex items-center justify-center gap-3"
+                className="h-14 w-full rounded-xl bg-[#1B2333] text-white text-lg font-bold shadow-xl flex items-center justify-center gap-3"
               >
                 {isProcessingPayment ? (
-                  <Loader2 className="animate-spin h-6 w-6" />
+                  <Loader2 className="animate-spin h-5 w-5" />
                 ) : (
-                  <CreditCard className="h-6 w-6" />
+                  <CreditCard className="h-5 w-5" />
                 )}
                 Payer et réserver (40€)
               </Button>
-              <p className="text-sm text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
+              <p className="text-xs text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
             </div>
-            <button
-              onClick={() => setShowStudioModal(false)}
-              className="text-muted-foreground hover:text-[#1B2333] font-medium transition-colors text-lg"
-            >
-              Je vais essayer seul(e) d'abord
-            </button>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* TUTORIAL MODAL - 100% SANS SCROLL */}
+      {/* TUTORIAL MODAL - COMPACT SANS SCROLL */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        <DialogContent className="max-w-5xl p-0 h-[80vh] overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-white z-[9999] outline-none">
+        <DialogContent className="max-w-4xl p-0 h-[75vh] overflow-hidden rounded-[2.5rem] border border-[#E5E0D8] shadow-2xl bg-white z-[9999] outline-none">
           <button
             onClick={() => setShowVideoTutorial(false)}
-            className="absolute right-8 top-8 z-[10000] p-3 rounded-full bg-white/90 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-md group"
+            className="absolute right-6 top-6 z-[10000] p-2.5 rounded-full bg-white/90 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-sm"
           >
-            <X className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
+            <X className="h-5 w-5" />
           </button>
 
           <div className="flex flex-col lg:flex-row h-full">
-            <div className="flex-1 p-8 lg:p-12 bg-white relative flex flex-col justify-center min-h-0 h-full">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
+            <div className="flex-1 p-8 lg:p-10 bg-white relative flex flex-col justify-center h-full">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-[#FCF9F5] rounded-full -mr-24 -mt-24 opacity-50" />
 
-              <div className="relative z-10 flex flex-col gap-8 h-full justify-center">
+              <div className="relative z-10 flex flex-col gap-6 h-full justify-between">
                 <header>
-                  <div className="inline-flex items-center gap-3 px-3 py-1 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-4">
-                    <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-sm">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-3">
+                    <Sparkles className="h-3 w-3 text-[hsl(var(--gold))]" />
+                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] text-xs">
                       Guide Privé
                     </span>
                   </div>
-                  <DialogTitle className="font-heading text-4xl lg:text-5xl text-[#1B2333] leading-[1.1] mb-2">
+                  <DialogTitle className="font-heading text-3xl lg:text-4xl text-[#1B2333] leading-tight">
                     L'art de se <br /> <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
                   </DialogTitle>
                 </header>
 
-                <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-4">
                   {[
                     { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
                     { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
@@ -454,23 +447,23 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     { icon: Volume2, title: "La Sérénité", desc: "Le silence pour être écouté(e)." },
                   ].map((item, idx) => (
                     <div key={idx} className="flex flex-col gap-1">
-                      <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                        <item.icon className="h-5 w-5 text-[#1B2333]" />
+                      <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#FCF9F5] border border-[#E5E0D8]">
+                        <item.icon className="h-4 w-4 text-[#1B2333]" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-[#1B2333] text-lg">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 leading-tight text-sm">{item.desc}</p>
+                        <h4 className="font-bold text-[#1B2333] text-base">{item.title}</h4>
+                        <p className="text-[#1B2333]/60 leading-tight text-xs">{item.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="flex flex-col gap-3 max-w-sm relative z-10 mt-auto">
+                <div className="flex flex-col gap-3 max-w-sm mt-auto">
                   <Button
                     onClick={() => setShowVideoTutorial(false)}
-                    className="h-14 w-full rounded-2xl bg-[#1B2333] text-white text-lg font-bold shadow-lg hover:scale-[1.02] transition-transform"
+                    className="h-12 w-full rounded-xl bg-[#1B2333] text-white text-base font-bold shadow-md"
                   >
-                    J'ai compris, je commence seul(e)
+                    J'ai compris, je commence
                   </Button>
 
                   <button
@@ -479,24 +472,24 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       setShowVideoTutorial(false);
                       setShowStudioModal(true);
                     }}
-                    className="w-full flex items-center justify-between gap-4 p-4 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)]"
+                    className="w-full flex items-center justify-between gap-3 p-3 border border-[hsl(var(--gold))] rounded-xl bg-white transition-all hover:bg-[hsl(var(--gold)/0.03)]"
                   >
                     <div className="flex items-center gap-3 text-left">
-                      <div className="w-10 h-10 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
-                        <Headphones className="h-5 w-5 text-[hsl(var(--gold))] animate-pulse" />
+                      <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
+                        <Headphones className="h-4 w-4 text-[hsl(var(--gold))] animate-pulse" />
                       </div>
                       <div>
-                        <p className="font-bold text-[hsl(var(--gold))] text-base leading-tight">Intimidé(e) ?</p>
-                        <p className="text-[hsl(var(--gold))] opacity-80 text-sm">On vous filme en visio (40€)</p>
+                        <p className="font-bold text-[hsl(var(--gold))] text-sm leading-tight">Intimidé(e) ?</p>
+                        <p className="text-[hsl(var(--gold))] opacity-80 text-xs">Nous vous filmons en visio (49€)</p>
                       </div>
                     </div>
-                    <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
+                    <ArrowRight className="h-4 w-4 text-[hsl(var(--gold))]" />
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="hidden lg:block w-[400px] relative h-full">
+            <div className="hidden lg:block w-[350px] relative h-full">
               <img src={coupleGarden} className="absolute inset-0 w-full h-full object-cover" alt="Couple Kalimera" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/30 via-transparent to-transparent" />
             </div>
@@ -505,18 +498,18 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       </Dialog>
 
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem] z-[9999] outline-none">
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
-              <Check className="h-10 w-10 text-emerald-600" />
+        <DialogContent className="max-w-sm p-8 text-center rounded-[2rem] z-[9999] outline-none">
+          <div className="flex flex-col items-center gap-5">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center">
+              <Check className="h-8 w-8 text-emerald-600" />
             </div>
-            <DialogTitle className="font-heading text-3xl text-[#1B2333] font-bold">C'est enregistré !</DialogTitle>
+            <DialogTitle className="font-heading text-2xl text-[#1B2333] font-bold">C'est enregistré !</DialogTitle>
             <Button
               onClick={() => {
                 setShowSaveDialog(false);
                 onComplete();
               }}
-              className="w-full h-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl"
+              className="w-full h-14 rounded-xl bg-[#1B2333] text-white text-lg font-bold shadow-lg"
             >
               Continuer
             </Button>
