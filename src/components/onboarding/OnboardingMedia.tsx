@@ -385,7 +385,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <div className="flex items-start gap-4 p-6 rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
                 <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))] shrink-0" />
                 <p className="text-xl text-[#1B2333]">
-                  Coaching de <span className="font-bold">15 min en visio</span> pour vous guider.
+                  Coaching de <span className="font-bold">25 min en visio</span> pour vous guider.
                 </p>
               </div>
               <div className="flex items-start gap-4 p-6 rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
