@@ -51,7 +51,7 @@ export default function DateInput({ value, onChange, className }: DateInputProps
       <div className="grid grid-cols-3 gap-3 md:gap-4">
         {/* --- JOUR --- */}
         <div className="space-y-2">
-          <Label className="text-sm text-muted-foreground ml-1">Jour</Label>
+          <Label className="text-lg text-muted-foreground ml-1">Jour</Label>
           <Select value={day} onValueChange={(v) => update(v, month, year)}>
             <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
               <SelectValue placeholder="JJ" />
