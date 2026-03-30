@@ -150,7 +150,7 @@ export default function Onboarding() {
   return (
     <Layout>
       <div className="min-h-screen bg-background">
-          <nav className="bg-secondary border-b border-border/30 sticky top-0 z-[100]">
+          <nav className="bg-secondary border-b border-border/30 sticky top-0 z-40">
             <div className="flex overflow-x-auto scrollbar-none">
               {tabs.map((tab, index) => {
                 const Icon = tab.icon;
