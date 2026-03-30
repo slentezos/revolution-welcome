@@ -430,7 +430,7 @@ export default function Messages() {
                       <TooltipTrigger asChild>
                         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50/50 border border-amber-100/40 cursor-help">
                           <Lock className="h-3 w-3 text-[hsl(var(--gold))]" />
-                          <span className="font-medium text-[hsl(var(--gold))] text-lg">Cercle privé</span>
+                          <span className="font-medium text-[hsl(var(--gold))] text-xl">Cercle privé</span>
                           <Info className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
                         </div>
                       </TooltipTrigger>
@@ -489,7 +489,7 @@ export default function Messages() {
                         <h4 className="font-heading font-semibold text-[#1B2333] text-2xl">
                           {conv.name}, {conv.age}
                         </h4>
-                        <span className="text-muted-foreground font-medium text-lg">{conv.time}</span>
+                        <span className="text-muted-foreground font-medium text-xl">{conv.time}</span>
                       </div>
                       <p className="text-muted-foreground truncate text-xl">{conv.lastMessage}</p>
                       {conv.myTurn && (
@@ -807,7 +807,7 @@ export default function Messages() {
                   <div className="w-16 h-16 rounded-full bg-amber-50/60 flex items-center justify-center">
                     <Send className="h-7 w-7 text-[hsl(var(--gold))]/40" />
                   </div>
-                  <p className="font-heading text-xl text-[#1B2333] font-semibold text-center">
+                  <p className="font-heading text-[#1B2333] font-semibold text-center text-2xl">
                     Reprenez le fil de vos belles rencontres
                   </p>
                   <p className="text-muted-foreground text-xl">Cliquez sur un profil à gauche pour lui écrire.</p>
