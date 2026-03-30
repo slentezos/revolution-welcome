@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
@@ -15,11 +16,6 @@ import {
   ShieldCheck,
   PartyPopper,
   Mic,
-  Ticket,
-  Share2,
-  Copy,
-  CheckCircle2,
-  MessageCircle,
   Mail,
 } from "lucide-react";
 
@@ -34,50 +30,21 @@ interface CancellationFlowProps {
 export default function CancellationFlow({ open, onOpenChange, firstName }: CancellationFlowProps) {
   const [step, setStep] = useState<Step>("reason");
   const [testimony, setTestimony] = useState("");
-  const [copied, setCopied] = useState(false);
-  const [shareSupported, setShareSupported] = useState(false);
-
-  const invitesLeft = 3;
-  const inviteText =
-    "Bonjour, je te partage ce nouveau site de rencontres, Kalimera. C'est très sérieux et élégant. J'ai une invitation qui t'offre les 3 premiers mois si tu veux regarder. Voici mon lien :";
-  const inviteLink = "https://kalimera.fr/cercle/invitation-privee";
-  const fullMessage = `${inviteText} ${inviteLink}`;
-
-  useEffect(() => {
-    if (typeof navigator !== "undefined" && navigator.share) {
-      setShareSupported(true);
-    }
-  }, []);
+  const [giftEmails, setGiftEmails] = useState(["", "", ""]);
 
   const handleClose = () => {
     onOpenChange(false);
     setTimeout(() => {
       setStep("reason");
-      setCopied(false);
+      setGiftEmails(["", "", ""]);
+      setTestimony("");
     }, 300);
   };
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(fullMessage);
-      setCopied(true);
-      toast({ description: "Message copié dans le presse-papier." });
-      setTimeout(() => setCopied(false), 3000);
-    } catch (err) {
-      toast({ title: "Erreur", description: "Impossible de copier le lien.", variant: "destructive" });
-    }
-  };
-
-  const handleNativeShare = async () => {
-    try {
-      await navigator.share({
-        title: "Invitation Kalimera",
-        text: inviteText,
-        url: inviteLink,
-      });
-    } catch (err) {
-      console.log("Partage annulé ou non supporté", err);
-    }
+  const updateEmail = (index: number, value: string) => {
+    const newEmails = [...giftEmails];
+    newEmails[index] = value;
+    setGiftEmails(newEmails);
   };
 
   // ─── Step 1: Reason Selection ───
@@ -162,7 +129,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </h2>
             </div>
 
-            <div className="space-y-3 bg-secondary/30 p-5 rounded-2xl">
+            <div className="space-y-3 bg-secondary/30 p-5 rounded-2xl border border-secondary">
               <Label className="text-foreground text-base font-medium block">
                 Racontez-nous votre belle histoire
                 <span className="text-muted-foreground font-normal ml-2 text-sm">(facultatif)</span>
@@ -207,94 +174,85 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2B: Success Gift (Dark Mode Native Share UI) ───
+  // ─── Step 2B: Success Gift (Light Theme, 3 Emails) ───
   if (step === "success_gift") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-[#1B2333]">
+        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
               onClick={() => setStep("success_story")}
-              className="flex items-center gap-1.5 text-white/50 hover:text-white font-medium transition-colors text-sm uppercase tracking-wider"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
 
-            <div className="text-center space-y-4">
-              <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.1)]">
-                <Ticket className="w-4 h-4 text-[hsl(var(--gold))] mr-2" />
-                <span className="text-[hsl(var(--gold))] font-medium uppercase tracking-widest text-xs">
-                  Votre allocation : {invitesLeft} invitations
-                </span>
+            <div className="text-center space-y-2">
+              <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
+                <Gift className="h-5 w-5 text-[hsl(var(--gold))]" />
               </div>
-              <h2 className="font-heading text-2xl md:text-3xl text-white leading-tight">Transmettez vos privilèges</h2>
+              <h2 className="font-heading text-2xl md:text-3xl text-foreground leading-tight">
+                Partagez votre bonheur
+              </h2>
+              <p className="text-muted-foreground text-base max-w-sm mx-auto">
+                Célébrez votre belle histoire en offrant 3 mois d'abonnement au Cercle à trois de vos proches. C'est
+                offert par Kalimera.
+              </p>
             </div>
 
-            <div className="border border-[hsl(var(--gold)/0.2)] bg-white/5 rounded-xl p-6 relative overflow-hidden">
-              <Gift className="w-24 h-24 text-[hsl(var(--gold)/0.05)] absolute -top-4 -right-4" />
-              <p className="italic text-white/90 text-base leading-relaxed relative z-10 mb-5">« {inviteText} »</p>
-              <div className="inline-block border border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold))] px-4 py-2 rounded font-medium text-sm relative z-10 w-full truncate">
-                {inviteLink}
-              </div>
+            {/* Custom tailored message preview */}
+            <div className="bg-secondary/30 p-5 rounded-2xl border border-secondary text-left relative overflow-hidden">
+              <Gift className="w-24 h-24 text-[hsl(var(--gold))/0.08] absolute -top-4 -right-4" />
+              <p className="italic text-foreground/80 leading-relaxed relative z-10 text-base">
+                « J'ai fait une merveilleuse rencontre sur Kalimera et je quitte le cercle. Je te transfère mon
+                privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. Voici mon invitation
+                personnelle. »
+              </p>
             </div>
 
+            {/* Email Inputs */}
             <div className="space-y-3 pt-2">
-              {shareSupported ? (
-                <button
-                  onClick={handleNativeShare}
-                  className="w-full bg-white text-[#1B2333] py-4 rounded-xl text-base font-medium tracking-wide transition-all hover:bg-gray-100 flex items-center justify-center gap-2"
-                >
-                  <Share2 className="w-5 h-5" /> Transmettre cette invitation
-                </button>
-              ) : (
-                <button
-                  onClick={handleCopy}
-                  className="w-full bg-white text-[#1B2333] py-4 rounded-xl text-base font-medium tracking-wide transition-all hover:bg-gray-100 flex items-center justify-center gap-2"
-                >
-                  {copied ? (
-                    <>
-                      <CheckCircle2 className="w-5 h-5" /> Copié avec succès !
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-5 h-5" /> Copier l'invitation
-                    </>
-                  )}
-                </button>
-              )}
-
-              <div className="grid grid-cols-2 gap-3">
-                <a
-                  href={`https://wa.me/?text=${encodeURIComponent(fullMessage)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 border border-white/20 text-white rounded-xl py-3 transition-all hover:border-[hsl(var(--gold)/0.4)] hover:bg-white/5 text-sm font-medium"
-                >
-                  <MessageCircle className="w-4 h-4 text-[hsl(var(--gold))]" /> WhatsApp
-                </a>
-                <a
-                  href={`mailto:?subject=${encodeURIComponent("Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`}
-                  className="flex items-center justify-center gap-2 border border-white/20 text-white rounded-xl py-3 transition-all hover:border-[hsl(var(--gold)/0.4)] hover:bg-white/5 text-sm font-medium"
-                >
-                  <Mail className="w-4 h-4 text-[hsl(var(--gold))]" /> E-mail
-                </a>
+              <Label className="text-foreground text-base font-medium">À qui souhaitez-vous envoyer ce cadeau ?</Label>
+              <div className="space-y-3">
+                {giftEmails.map((email, i) => (
+                  <div key={i} className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/50" />
+                    <Input
+                      type="email"
+                      placeholder={`Adresse e-mail du proche n°${i + 1}`}
+                      value={email}
+                      onChange={(e) => updateEmail(i, e.target.value)}
+                      className="h-12 text-base bg-secondary/30 rounded-xl border-secondary pl-11 focus:border-[hsl(var(--gold))] focus:ring-[hsl(var(--gold))]"
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Final Cancellation Action */}
-            <div className="pt-4 border-t border-white/10 text-center">
+            <div className="flex flex-col gap-3 pt-4 border-t border-secondary">
+              <Button
+                className="w-full h-12 rounded-xl text-primary-foreground text-base font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
+                onClick={() => {
+                  handleClose();
+                  toast({
+                    title: "Félicitations 💛",
+                    description: "Les invitations ont été envoyées. Votre compte sera clôturé sous 48h.",
+                  });
+                }}
+              >
+                <Send className="h-4 w-4 mr-2" />
+                Envoyer les invitations & clôturer mon compte
+              </Button>
               <button
                 onClick={() => {
                   handleClose();
                   toast({
-                    title: "Demande envoyée",
                     description: "Votre compte sera clôturé sous 48h.",
-                    variant: "destructive",
                   });
                 }}
-                className="text-white/40 hover:text-red-400 text-sm font-medium transition-colors"
+                className="w-full h-11 rounded-xl text-muted-foreground hover:text-red-500 font-medium text-sm transition-colors"
               >
-                J'ai terminé. Clôturer définitivement mon compte.
+                Passer cette étape et clôturer mon compte
               </button>
             </div>
           </div>
