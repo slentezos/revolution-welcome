@@ -306,7 +306,7 @@ function FormSection() {
         <div className="text-center mb-16">
           <div data-reveal className="inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.1)] mb-8">
             <Ticket className="w-5 h-5 text-[hsl(var(--gold))] mr-3" />
-            <span className="text-[hsl(var(--gold))] text-sm font-medium uppercase tracking-widest">
+            <span className="text-[hsl(var(--gold))] font-medium uppercase tracking-widest text-lg">
               {invitesLeft > 0
                 ? `Votre allocation : ${invitesLeft} invitation${invitesLeft > 1 ? "s" : ""} privée${invitesLeft > 1 ? "s" : ""}`
                 : "Votre allocation est épuisée"}
@@ -388,7 +388,7 @@ function FormSection() {
                 <CheckCircle2 className="w-9 h-9 text-[hsl(var(--gold))]" />
               </div>
               <h3 className="font-heading text-3xl text-primary-foreground mb-4">Vos invitations ont été distribuées</h3>
-              <p className="text-lg text-primary-foreground/70 max-w-lg mx-auto leading-relaxed">
+              <p className="text-primary-foreground/70 max-w-lg mx-auto leading-relaxed text-xl">
                 Merci de faire grandir le Cercle Kalimera. Vos proches vont pouvoir découvrir l'élégance de nos rencontres.
               </p>
             </div>
