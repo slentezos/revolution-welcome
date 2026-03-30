@@ -139,7 +139,7 @@ function PricingModal({
                   onClick={onStartConcierge}
                   className="w-full bg-[hsl(var(--gold))] text-white py-4 font-bold hover:brightness-110 transition-all shadow-lg text-xl"
                 >
-                  Réserver mon entretien (89 €)
+                  Découvrir l'accompagnement Privé (89 €)
                 </button>
               </div>
             </div>
