@@ -1,29 +1,40 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
 import { Button } from "@/components/ui/button";
 import { Input, PasswordInput } from "@/components/ui/input";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import heroCouple from "@/assets/hero-couple.jpg";
+
+type LoginMethod = "email" | "phone";
+
 export default function Connexion() {
+  const [method, setMethod] = useState<LoginMethod>("email");
+
+  // Email state
   const [email, setEmail] = useState(() => localStorage.getItem("kalimera_remembered_email") || "");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem("kalimera_remembered_email"));
+  const [rememberEmail, setRememberEmail] = useState(() => !!localStorage.getItem("kalimera_remembered_email"));
+
+  // Phone state
+  const [phone, setPhone] = useState(() => localStorage.getItem("kalimera_remembered_phone") || "");
+  const [rememberPhone, setRememberPhone] = useState(true);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [sendingOtp, setSendingOtp] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if already logged in
     const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        // Check onboarding status
         const { data: profile } = await supabase
           .from("profiles")
           .select("onboarding_step")
@@ -40,68 +51,125 @@ export default function Connexion() {
     checkSession();
   }, [navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const formatPhoneDigits = (value: string) => {
+    return value.replace(/\D/g, "").slice(0, 10);
+  };
 
+  const handleRedirectAfterLogin = async (userId: string) => {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarding_step")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    toast({ title: "Connexion réussie", description: "Bienvenue sur Kalimera" });
+
+    if (profile?.onboarding_step === "completed") {
+      navigate("/dashboard");
+    } else {
+      navigate("/onboarding");
+    }
+  };
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!email || !password) {
-      toast({
-        title: "Champs requis",
-        description: "Veuillez remplir tous les champs",
-        variant: "destructive",
-      });
+      toast({ title: "Champs requis", description: "Veuillez remplir tous les champs", variant: "destructive" });
       return;
     }
 
     setLoading(true);
-
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
 
       if (data.session) {
-        // Save or clear remembered email
-        if (rememberMe) {
+        if (rememberEmail) {
           localStorage.setItem("kalimera_remembered_email", email);
         } else {
           localStorage.removeItem("kalimera_remembered_email");
         }
-
-        // Check onboarding status
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("onboarding_step")
-          .eq("user_id", data.session.user.id)
-          .maybeSingle();
-
-        toast({
-          title: "Connexion réussie",
-          description: "Bienvenue sur Kalimera",
-        });
-
-        if (profile?.onboarding_step === "completed") {
-          navigate("/dashboard");
-        } else {
-          navigate("/onboarding");
-        }
+        await handleRedirectAfterLogin(data.session.user.id);
       }
     } catch (error: any) {
       console.error("Login error:", error);
       toast({
         title: "Erreur de connexion",
-        description:
-          error.message === "Invalid login credentials"
-            ? "Email ou mot de passe incorrect"
-            : error.message || "Une erreur est survenue",
+        description: error.message === "Invalid login credentials"
+          ? "Email ou mot de passe incorrect"
+          : error.message || "Une erreur est survenue",
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
   };
+
+  const handleSendOtp = async () => {
+    if (phone.length < 9) return;
+    setSendingOtp(true);
+
+    try {
+      const fullPhone = `+33${phone.replace(/^0/, "")}`;
+      const { error } = await supabase.auth.signInWithOtp({ phone: fullPhone });
+      if (error) throw error;
+
+      if (rememberPhone) {
+        localStorage.setItem("kalimera_remembered_phone", phone);
+      } else {
+        localStorage.removeItem("kalimera_remembered_phone");
+      }
+
+      setOtpSent(true);
+      toast({ title: "Code envoyé", description: `Un code a été envoyé au ${fullPhone}` });
+    } catch (error: any) {
+      console.error("OTP error:", error);
+      toast({
+        title: "Erreur d'envoi",
+        description: error.message || "Impossible d'envoyer le code SMS",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (otp.length !== 6) return;
+    setLoading(true);
+
+    try {
+      const fullPhone = `+33${phone.replace(/^0/, "")}`;
+      const { data, error } = await supabase.auth.verifyOtp({ phone: fullPhone, token: otp, type: "sms" });
+      if (error) throw error;
+
+      if (data.session) {
+        await handleRedirectAfterLogin(data.session.user.id);
+      }
+    } catch (error: any) {
+      console.error("Verify OTP error:", error);
+      toast({
+        title: "Code incorrect",
+        description: "Le code saisi est invalide ou expiré. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const RememberMeToggle = ({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) => (
+    <label className="flex items-center gap-4 cursor-pointer group">
+      <div className="relative flex items-center">
+        <input type="checkbox" className="sr-only peer" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+        <div className="w-14 h-8 bg-muted rounded-full peer-checked:bg-[hsl(var(--gold))] transition-colors duration-300 shadow-inner border border-border peer-checked:border-[hsl(var(--gold))]" />
+        <div className="absolute left-1 w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 peer-checked:translate-x-6" />
+      </div>
+      <span className="text-muted-foreground text-lg select-none group-hover:text-foreground transition-colors">
+        {label}
+      </span>
+    </label>
+  );
 
   return (
     <>
@@ -118,58 +186,165 @@ export default function Connexion() {
               Accédez à votre espace membre pour retrouver vos affinités.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label className="block font-medium text-foreground mb-2 text-lg">Adresse email</label>
-                <Input
-                  type="email"
-                  placeholder="votre@email.com"
-                  className="h-12"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block font-medium text-foreground mb-2 text-lg">Mot de passe</label>
-                <PasswordInput
-                  placeholder="••••••••"
-                  className="h-12"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-4 cursor-pointer group">
-                  <div className="relative flex items-center">
-                    {/* La vraie case à cocher, cachée mais fonctionnelle */}
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
+            {/* Method Tabs */}
+            <div className="flex rounded-2xl bg-muted p-1.5 mb-8 gap-1">
+              <button
+                type="button"
+                onClick={() => { setMethod("email"); setOtpSent(false); setOtp(""); }}
+                className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-xl text-lg font-medium transition-all duration-300 ${
+                  method === "email"
+                    ? "bg-background text-foreground shadow-md"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Mail className="h-5 w-5" />
+                Par email
+              </button>
+              <button
+                type="button"
+                onClick={() => setMethod("phone")}
+                className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-xl text-lg font-medium transition-all duration-300 ${
+                  method === "phone"
+                    ? "bg-background text-foreground shadow-md"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Phone className="h-5 w-5" />
+                Par téléphone
+              </button>
+            </div>
+
+            {/* Email Form */}
+            {method === "email" && (
+              <form onSubmit={handleEmailSubmit} className="space-y-5 animate-in fade-in duration-300">
+                <div>
+                  <label className="block font-medium text-foreground mb-2 text-lg">Adresse email</label>
+                  <Input
+                    type="email"
+                    placeholder="votre@email.com"
+                    className="h-14 text-lg"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block font-medium text-foreground mb-2 text-lg">Mot de passe</label>
+                  <PasswordInput
+                    placeholder="••••••••"
+                    className="h-14 text-lg"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <RememberMeToggle checked={rememberEmail} onChange={setRememberEmail} label="Se souvenir de moi" />
+                  <Link to="/mot-de-passe-oublie" className="text-primary hover:underline text-lg">
+                    Mot de passe oublié ?
+                  </Link>
+                </div>
+                <Button type="submit" className="btn-primary w-full h-14 text-lg" disabled={loading}>
+                  {loading ? "Connexion..." : "Se connecter"}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </form>
+            )}
+
+            {/* Phone Form */}
+            {method === "phone" && (
+              <div className="space-y-5 animate-in fade-in duration-300">
+                {!otpSent ? (
+                  <>
+                    <div>
+                      <label className="block font-medium text-foreground mb-2 text-lg">
+                        <Phone className="inline h-5 w-5 mr-1.5 -mt-0.5 text-primary" />
+                        Numéro de téléphone
+                      </label>
+                      <div className="flex gap-3">
+                        <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-lg font-medium text-foreground shrink-0 border border-border">
+                          🇫🇷 +33
+                        </div>
+                        <Input
+                          placeholder="6 12 34 56 78"
+                          className="h-14 text-lg rounded-xl flex-1"
+                          value={phone}
+                          onChange={(e) => setPhone(formatPhoneDigits(e.target.value))}
+                          inputMode="tel"
+                          autoComplete="tel-national"
+                        />
+                      </div>
+                    </div>
+
+                    <RememberMeToggle
+                      checked={rememberPhone}
+                      onChange={setRememberPhone}
+                      label="Se souvenir de mon numéro"
                     />
 
-                    {/* Le fond du Switch (Gris quand inactif, Or quand actif) */}
-                    <div className="w-14 h-8 bg-slate-200 rounded-full peer-checked:bg-[hsl(var(--gold))] transition-colors duration-300 shadow-inner border border-slate-300 peer-checked:border-[hsl(var(--gold))]"></div>
-                    {/* Le bouton rond (Thumb) qui se déplace */}
-                    <div className="absolute left-1 w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 peer-checked:translate-x-6"></div>
-                  </div>
-                  <span className="text-muted-foreground text-lg select-none group-hover:text-foreground transition-colors">
-                    Se souvenir de moi
-                  </span>
-                </label>
-                <Link to="/mot-de-passe-oublie" className="text-primary hover:underline text-lg">
-                  Mot de passe oublié ?
-                </Link>
-              </div>
+                    <Button
+                      type="button"
+                      onClick={handleSendOtp}
+                      className="btn-primary w-full h-14 text-lg"
+                      disabled={phone.length < 9 || sendingOtp}
+                    >
+                      {sendingOtp ? "Envoi en cours..." : "Recevoir un code par SMS"}
+                      {!sendingOtp && <ArrowRight className="ml-2 h-5 w-5" />}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-center mb-2">
+                      <p className="text-muted-foreground text-lg">
+                        Un code à 6 chiffres a été envoyé au{" "}
+                        <span className="font-semibold text-foreground">+33 {phone}</span>
+                      </p>
+                    </div>
 
-              <Button type="submit" className="btn-primary w-full h-12 text-base" disabled={loading}>
-                {loading ? "Connexion..." : "Se connecter"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </form>
+                    <div className="flex justify-center py-2">
+                      <InputOTP maxLength={6} value={otp} onChange={setOtp}>
+                        <InputOTPGroup>
+                          <InputOTPSlot index={0} className="w-14 h-16 text-2xl rounded-lg" />
+                          <InputOTPSlot index={1} className="w-14 h-16 text-2xl rounded-lg" />
+                          <InputOTPSlot index={2} className="w-14 h-16 text-2xl rounded-lg" />
+                          <InputOTPSlot index={3} className="w-14 h-16 text-2xl rounded-lg" />
+                          <InputOTPSlot index={4} className="w-14 h-16 text-2xl rounded-lg" />
+                          <InputOTPSlot index={5} className="w-14 h-16 text-2xl rounded-lg" />
+                        </InputOTPGroup>
+                      </InputOTP>
+                    </div>
+
+                    <Button
+                      type="button"
+                      onClick={handleVerifyOtp}
+                      className="btn-primary w-full h-14 text-lg"
+                      disabled={otp.length !== 6 || loading}
+                    >
+                      {loading ? "Vérification..." : "Vérifier le code"}
+                      {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
+                    </Button>
+
+                    <div className="flex justify-center gap-8 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => { setOtp(""); handleSendOtp(); }}
+                        className="text-primary font-medium hover:underline text-lg"
+                        disabled={sendingOtp}
+                      >
+                        Renvoyer le code
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setOtpSent(false); setOtp(""); }}
+                        className="text-primary font-medium hover:underline text-lg"
+                      >
+                        Modifier le numéro
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
 
             <p className="mt-8 text-center text-muted-foreground text-lg">
               Vous n'avez pas de compte ?{" "}
@@ -183,7 +358,6 @@ export default function Connexion() {
         {/* Right - Image with overlay */}
         <div className="hidden lg:block flex-1 relative overflow-hidden">
           <img src={heroCouple} alt="Couple heureux" className="absolute inset-0 w-full h-full object-cover" />
-
           <div className="absolute inset-0 bg-primary/70" />
           <div className="absolute inset-0 flex items-center justify-center p-16">
             <div className="text-center text-primary-foreground relative z-10">
