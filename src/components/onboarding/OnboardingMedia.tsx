@@ -375,7 +375,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="text-lg font-medium text-gray-500 hidden md:block">{uploadedCount} / 5 médias ajoutés</p>
+            <p className="font-medium text-gray-500 hidden md:block text-xl">{uploadedCount} / 5 médias ajoutés</p>
             <div className="flex items-center gap-4 w-full md:w-auto">
               <Button
                 variant="outline"
