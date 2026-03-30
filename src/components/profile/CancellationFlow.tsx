@@ -21,6 +21,7 @@ import {
   Copy,
   CheckCircle2,
   Square,
+  Ticket,
 } from "lucide-react";
 
 type Step = "reason" | "success_story" | "success_gift" | "success_gift_email" | "retention" | "pause";
@@ -202,7 +203,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 stopRecording();
                 setStep("reason");
               }}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -230,7 +231,6 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   maxLength={500}
                 />
 
-                {/* The Working Dictate Button */}
                 <div className="absolute bottom-4 right-4">
                   <button
                     type="button"
@@ -276,7 +276,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2B: Success Gift (1 Column, No Scroll) ───
+  // ─── Step 2B: Success Gift (No Scroll, Dynamic Counter) ───
   if (step === "success_gift") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
@@ -284,7 +284,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
             <button
               onClick={() => setStep("success_story")}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -293,6 +293,15 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <div className="mx-auto w-14 h-14 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
                 <Gift className="h-6 w-6 text-[hsl(var(--gold))]" />
               </div>
+
+              {/* Le Badge Compteur Ultra-Visible */}
+              <div className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.05)] text-[hsl(var(--gold))] mb-2">
+                <Ticket className="w-5 h-5" />
+                <span className="font-semibold text-lg tracking-widest uppercase">
+                  {invitesLeft} invitation{invitesLeft > 1 ? "s" : ""} restante{invitesLeft > 1 ? "s" : ""}
+                </span>
+              </div>
+
               <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">
                 Partagez votre bonheur
               </h2>
@@ -307,13 +316,15 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. »
               </p>
               <div className="mt-4 inline-flex items-center justify-center bg-white border border-secondary rounded-xl px-4 py-2 text-muted-foreground font-medium text-base w-full overflow-hidden">
-                <span className="truncate text-xl">{inviteLink}</span>
+                <span className="truncate">{inviteLink}</span>
               </div>
             </div>
 
             <div className="space-y-4 pt-2">
               <Label className="text-foreground text-xl font-medium block text-center mb-4">
-                Comment souhaitez-vous envoyer vos {invitesLeft} invitations ?
+                {invitesLeft > 0
+                  ? `Comment souhaitez-vous envoyer vos ${invitesLeft} invitation${invitesLeft > 1 ? "s" : ""} ?`
+                  : "Toutes vos invitations ont été envoyées. Merci !"}
               </Label>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -325,44 +336,46 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                     if (invitesLeft <= 0) e.preventDefault();
                     else decrementInvites();
                   }}
-                  className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[#25D366] hover:bg-[#25D366]/5 text-foreground" : "opacity-50 cursor-not-allowed text-muted-foreground"}`}
+                  className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[#25D366] hover:bg-[#25D366]/5 text-foreground" : "opacity-40 cursor-not-allowed text-muted-foreground"}`}
                 >
                   <MessageCircle className={`w-8 h-8 ${invitesLeft > 0 ? "text-[#25D366]" : ""}`} />
-                  <span className="font-semibold text-xl">WhatsApp</span>
+                  <span className="text-base font-semibold">WhatsApp</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={handleCopy}
                   disabled={invitesLeft <= 0}
-                  className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] text-foreground" : "opacity-50 cursor-not-allowed text-muted-foreground"}`}
+                  className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] text-foreground" : "opacity-40 cursor-not-allowed text-muted-foreground"}`}
                 >
                   {copied ? (
                     <CheckCircle2 className="w-8 h-8 text-green-500" />
                   ) : (
                     <Copy className="w-8 h-8 text-muted-foreground" />
                   )}
-                  <span className="font-semibold text-xl">{copied ? "Copié !" : "Copier"}</span>
+                  <span className="text-base font-semibold">{copied ? "Copié !" : "Copier"}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setStep("success_gift_email")}
-                  className="flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] text-foreground"
+                  disabled={invitesLeft <= 0}
+                  className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] text-foreground" : "opacity-40 cursor-not-allowed text-muted-foreground"}`}
                 >
                   <Mail className="w-8 h-8 text-muted-foreground" />
-                  <span className="font-semibold text-xl">Par E-mail</span>
+                  <span className="text-base font-semibold">Par E-mail</span>
                 </button>
               </div>
             </div>
 
             <div className="pt-4 border-t border-secondary mt-6">
+              {/* Le fameux bouton rouge de la maquette */}
               <button
                 onClick={() => {
                   handleClose();
                   toast({ description: "Votre compte sera clôturé sous 48h." });
                 }}
-                className="w-full h-14 rounded-2xl text-muted-foreground hover:text-red-500 font-medium transition-colors text-xl"
+                className="w-full h-14 rounded-2xl text-[#E53935] hover:bg-red-50 font-medium text-xl transition-colors"
               >
                 J'ai terminé, clôturer mon compte
               </button>
@@ -373,15 +386,18 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2C: Success Gift Email Form (No Scroll) ───
+  // ─── Step 2C: Success Gift Email Form (Dynamic Input Count) ───
   if (step === "success_gift_email") {
+    // Only show as many inputs as there are invites left!
+    const activeEmails = giftEmails.slice(0, invitesLeft);
+
     return (
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-xl md:max-w-2xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl bg-white">
           <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
             <button
               onClick={() => setStep("success_gift")}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -392,13 +408,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </div>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">Confiez-nous l'envoi</h2>
               <p className="text-muted-foreground text-lg md:text-xl">
-                Saisissez les adresses e-mail de vos proches, nous nous chargeons de leur envoyer votre invitation
-                privée.
+                Saisissez l'adresse e-mail de vos {invitesLeft} proches, nous nous chargeons de leur envoyer
+                l'invitation.
               </p>
             </div>
 
             <div className="space-y-4 pt-2 bg-secondary/20 p-6 rounded-[1.5rem] border border-secondary">
-              {giftEmails.map((email, i) => (
+              {activeEmails.map((email, i) => (
                 <div key={i} className="relative">
                   <Input
                     type="email"
@@ -414,16 +430,15 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             <div className="pt-4">
               <Button
                 onClick={() => {
-                  handleClose();
-                  toast({
-                    title: "Félicitations 💛",
-                    description: "Invitations envoyées. Votre compte sera clôturé sous 48h.",
-                  });
+                  // Decrease invites by the number of emails filled out (simplification UX)
+                  setInvitesLeft(0);
+                  toast({ title: "Félicitations 💛", description: "Invitations envoyées. Redirection..." });
+                  setTimeout(() => setStep("success_gift"), 2000); // Go back to the main gift screen to show 0 left
                 }}
                 className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-primary hover:bg-primary/90 transition-all shadow-md"
               >
                 <Send className="h-6 w-6 mr-3" />
-                Envoyer & clôturer mon compte
+                Envoyer ces {invitesLeft} invitations
               </Button>
             </div>
           </div>
@@ -440,7 +455,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
             <button
               onClick={() => setStep("reason")}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -493,7 +508,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
         <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
           <button
             onClick={() => setStep("reason")}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
           >
             <ArrowLeft className="h-5 w-5" /> Retour
           </button>
