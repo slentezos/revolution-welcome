@@ -380,43 +380,83 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
       {/* Modals are kept identical but with enhanced text visibility */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl">
+        <DialogContent className="max-w-4xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-3xl bg-white">
           <div className="flex flex-col lg:flex-row">
-            <div className="flex-1 p-10 lg:p-14">
-              <DialogHeader className="mb-8">
-                <DialogTitle className="font-heading text-3xl lg:text-4xl font-bold text-[#1B2333]">
-                  Conseils d'expert
+            {/* Partie Texte & Conseils */}
+            <div className="flex-1 p-10 lg:p-14 bg-white">
+              <DialogHeader className="mb-10">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 mb-4">
+                  <Sparkles className="h-6 w-6 text-[hsl(var(--gold))]" />
+                </div>
+                <DialogTitle className="font-heading text-3xl lg:text-5xl text-[#1B2333] leading-tight">
+                  Réussir votre vidéo
                 </DialogTitle>
-                <DialogDescription className="text-xl italic mt-3 text-[hsl(var(--gold))] font-medium">
-                  Le secret : restez vous-même.
+                <DialogDescription className="text-xl italic text-[hsl(var(--gold))] font-medium mt-2">
+                  « Soyez simplement vous-même, c'est ce qui charme. »
                 </DialogDescription>
               </DialogHeader>
-              <div className="space-y-5 text-xl leading-relaxed text-[#1B2333]/80">
-                <p>
-                  <span className="font-bold text-[#1B2333]">✓ Regard caméra :</span> Adressez-vous directement à votre
-                  futur partenaire.
-                </p>
-                <p>
-                  <span className="font-bold text-[#1B2333]">✓ Bonne lumière :</span> Placez-vous face à une fenêtre
-                  (pas de dos).
-                </p>
-                <p>
-                  <span className="font-bold text-[#1B2333]">✓ Authenticité :</span> Racontez un petit plaisir simple ou
-                  une passion.
-                </p>
-                <p>
-                  <span className="font-bold text-[#1B2333]">✓ Son :</span> Assurez-vous d'être dans un endroit calme.
-                </p>
+
+              {/* Grille de conseils modernisée */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 bg-secondary/50 p-2 rounded-lg">
+                    <Eye className="h-6 w-6 text-[#1B2333]" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#1B2333] text-lg">Regard sincère</p>
+                    <p className="text-[#1B2333]/70 text-lg leading-snug">
+                      Regardez l'objectif, comme si c'était lui ou elle.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 bg-secondary/50 p-2 rounded-lg">
+                    <Sun className="h-6 w-6 text-[#1B2333]" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#1B2333] text-lg">Lumière douce</p>
+                    <p className="text-[#1B2333]/70 text-lg leading-snug">Face à une fenêtre pour un teint éclatant.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 bg-secondary/50 p-2 rounded-lg">
+                    <Heart className="h-6 w-6 text-[#1B2333]" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#1B2333] text-lg">Authenticité</p>
+                    <p className="text-[#1B2333]/70 text-lg leading-snug">
+                      Parlez d'une passion ou d'un petit bonheur.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 bg-secondary/50 p-2 rounded-lg">
+                    <Volume2 className="h-6 w-6 text-[#1B2333]" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-[#1B2333] text-lg">Calme absolu</p>
+                    <p className="text-[#1B2333]/70 text-lg leading-snug">
+                      Évitez les bruits de fond pour bien vous entendre.
+                    </p>
+                  </div>
+                </div>
               </div>
+
               <Button
                 onClick={() => setShowVideoTutorial(false)}
-                className="mt-10 h-14 px-10 rounded-xl bg-[#1B2333] text-white text-lg font-bold"
+                className="mt-12 w-full md:w-auto h-16 px-12 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-lg hover:bg-[#1B2333]/90 transition-all"
               >
-                J'ai compris
+                C'est compris
               </Button>
             </div>
-            <div className="hidden lg:block w-[320px] relative">
-              <img src={coupleGarden} alt="" className="absolute inset-0 w-full h-full object-cover" />
+
+            {/* Partie Image Latérale avec dégradé subtil */}
+            <div className="hidden lg:block w-[340px] relative">
+              <img src={coupleGarden} alt="Couple Kalimera" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/20 to-transparent" />
             </div>
           </div>
         </DialogContent>
