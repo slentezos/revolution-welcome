@@ -144,7 +144,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
               onClick={() => setStep("reason")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-base"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
@@ -358,7 +358,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
               onClick={() => setStep("reason")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-base"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
@@ -415,7 +415,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
         <div className="px-6 sm:px-10 py-8 space-y-6">
           <button
             onClick={() => setStep("reason")}
-            className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
+            className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-base"
           >
             <ArrowLeft className="h-4 w-4" /> Retour
           </button>
