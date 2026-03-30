@@ -466,7 +466,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <header className="text-center mb-10">
               <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-gold/30 bg-gold/5 mb-5">
                 <Sparkles className="h-4 w-4 text-gold" />
-                <span className="text-xs font-bold tracking-[0.2em] uppercase text-gold">
+                <span className="font-bold tracking-[0.2em] uppercase text-gold text-lg">
                   Guide Privé
                 </span>
               </div>
