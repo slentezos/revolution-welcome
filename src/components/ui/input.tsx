@@ -4,7 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// ─── 1. COMPOSANT INPUT CLASSIQUE ───
+// ─── 1. COMPOSANT INPUT CLASSIQUE (Texte, Email, etc.) ───
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, onChange, ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 );
 Input.displayName = "Input";
 
-// ─── 2. COMPOSANT MOT DE PASSE ───
+// ─── 2. COMPOSANT MOT DE PASSE (Avec œil de visibilité) ───
 const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +61,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
           type="button"
           onClick={() => setShowPassword(!showPassword)}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
+          title={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
         >
           {showPassword ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
         </button>
@@ -70,24 +71,16 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
 );
 PasswordInput.displayName = "PasswordInput";
 
-// ─── 3. COMPOSANT DATE DE NAISSANCE (3 BLOCS SELECT) ───
+// ─── 3. COMPOSANT DATE DE NAISSANCE (Le design à 3 blocs) ───
 interface DateInputProps {
-  dayValue: string;
-  monthValue: string;
-  yearValue: string;
-  onUpdate: (field: string, value: string) => void;
+  value: { day: string; month: string; year: string };
+  onChange: (field: "day" | "month" | "year", val: string) => void;
   error?: string;
+  className?: string;
   label?: string;
 }
 
-const DateInput = ({
-  dayValue,
-  monthValue,
-  yearValue,
-  onUpdate,
-  error,
-  label = "Date de naissance *",
-}: DateInputProps) => {
+const DateInput = ({ value, onChange, error, className, label = "Date de naissance *" }: DateInputProps) => {
   const days = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, "0"));
   const months = [
     { value: "01", label: "Janvier" },
@@ -107,15 +100,15 @@ const DateInput = ({
   const years = Array.from({ length: 100 }, (_, i) => String(currentYear - i));
 
   return (
-    <div className="w-full text-left">
+    <div className={cn("w-full text-left", className)}>
       <label className="block font-medium text-[#1B2333] mb-3 text-xl">{label}</label>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-3 md:gap-4">
         {/* JOUR */}
-        <Select value={dayValue} onValueChange={(v) => onUpdate("birthDay", v)}>
-          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+        <Select value={value.day} onValueChange={(v) => onChange("day", v)}>
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Jour" />
           </SelectTrigger>
-          <SelectContent className="max-h-[200px]">
+          <SelectContent className="max-h-[250px]">
             {days.map((d) => (
               <SelectItem key={d} value={d}>
                 {d}
@@ -125,11 +118,11 @@ const DateInput = ({
         </Select>
 
         {/* MOIS */}
-        <Select value={monthValue} onValueChange={(v) => onUpdate("birthMonth", v)}>
-          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+        <Select value={value.month} onValueChange={(v) => onChange("month", v)}>
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Mois" />
           </SelectTrigger>
-          <SelectContent className="max-h-[200px]">
+          <SelectContent className="max-h-[250px]">
             {months.map((m) => (
               <SelectItem key={m.value} value={m.value}>
                 {m.label}
@@ -139,11 +132,11 @@ const DateInput = ({
         </Select>
 
         {/* ANNÉE */}
-        <Select value={yearValue} onValueChange={(v) => onUpdate("birthYear", v)}>
-          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+        <Select value={value.year} onValueChange={(v) => onChange("year", v)}>
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Année" />
           </SelectTrigger>
-          <SelectContent className="max-h-[200px]">
+          <SelectContent className="max-h-[250px]">
             {years.map((y) => (
               <SelectItem key={y} value={y}>
                 {y}
@@ -156,5 +149,6 @@ const DateInput = ({
     </div>
   );
 };
+DateInput.displayName = "DateInput";
 
 export { Input, PasswordInput, DateInput };
