@@ -250,13 +250,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </div>
             </div>
 
-            <div className="flex flex-col gap-3 pt-2">
+            <div className="flex flex-col gap-4 pt-4 text-center">
               <Button
                 onClick={() => {
                   stopRecording();
                   setStep("success_gift");
                 }}
-                className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
+                className="w-full h-14 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
               >
                 Continuer vers la clôture
               </Button>
@@ -265,7 +265,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   stopRecording();
                   setStep("success_gift");
                 }}
-                className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium text-lg transition-colors"
+                className="w-full text-muted-foreground hover:text-foreground font-medium text-lg transition-colors"
               >
                 Passer cette étape
               </button>
@@ -294,7 +294,6 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 <Gift className="h-6 w-6 text-[hsl(var(--gold))]" />
               </div>
 
-              {/* Le Badge Compteur Ultra-Visible */}
               <div className="inline-flex items-center justify-center gap-2 px-5 py-2 rounded-full border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.05)] text-[hsl(var(--gold))] mb-2">
                 <Ticket className="w-5 h-5" />
                 <span className="font-semibold text-lg tracking-widest uppercase">
@@ -368,14 +367,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </div>
             </div>
 
-            <div className="pt-4 border-t border-secondary mt-6">
-              {/* Le fameux bouton rouge de la maquette */}
+            <div className="pt-4 mt-6 text-center">
               <button
                 onClick={() => {
                   handleClose();
                   toast({ description: "Votre compte sera clôturé sous 48h." });
                 }}
-                className="w-full h-14 rounded-2xl text-[#E53935] hover:bg-red-50 font-medium text-xl transition-colors"
+                className="w-full text-[#E53935] hover:text-[#C62828] font-medium text-xl transition-colors"
               >
                 J'ai terminé, clôturer mon compte
               </button>
@@ -386,9 +384,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2C: Success Gift Email Form (Dynamic Input Count) ───
+  // ─── Step 2C: Success Gift Email Form ───
   if (step === "success_gift_email") {
-    // Only show as many inputs as there are invites left!
     const activeEmails = giftEmails.slice(0, invitesLeft);
 
     return (
@@ -427,19 +424,29 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               ))}
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4 flex flex-col gap-5 text-center">
               <Button
                 onClick={() => {
-                  // Decrease invites by the number of emails filled out (simplification UX)
-                  setInvitesLeft(0);
-                  toast({ title: "Félicitations 💛", description: "Invitations envoyées. Redirection..." });
-                  setTimeout(() => setStep("success_gift"), 2000); // Go back to the main gift screen to show 0 left
+                  handleClose();
+                  toast({
+                    title: "Félicitations 💛",
+                    description: "Vos invitations sont envoyées. Votre compte sera clôturé sous 48h.",
+                  });
                 }}
-                className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-primary hover:bg-primary/90 transition-all shadow-md"
+                className="w-full h-14 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
               >
                 <Send className="h-6 w-6 mr-3" />
-                Envoyer ces {invitesLeft} invitations
+                Valider & clôturer mon compte
               </Button>
+              <button
+                onClick={() => {
+                  handleClose();
+                  toast({ description: "Votre compte sera clôturé sous 48h." });
+                }}
+                className="w-full text-[#E53935] hover:text-[#C62828] font-medium text-lg transition-colors"
+              >
+                Passer cette étape et clôturer mon compte
+              </button>
             </div>
           </div>
         </DialogContent>
@@ -475,7 +482,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 permettre de découvrir de nouveaux profils.
               </p>
             </div>
-            <div className="flex flex-col gap-4 pt-4">
+            <div className="flex flex-col gap-4 pt-4 text-center">
               <Button
                 onClick={() => {
                   handleClose();
@@ -484,13 +491,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                     description: "Votre abonnement a été prolongé d'un mois gratuitement.",
                   });
                 }}
-                className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-primary hover:bg-primary/90 transition-all shadow-md"
+                className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
               >
                 <Sparkles className="h-6 w-6 mr-3" /> Accepter mon mois offert
               </Button>
               <button
                 onClick={() => setStep("pause")}
-                className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium text-lg transition-colors"
+                className="w-full text-muted-foreground hover:text-foreground font-medium text-lg transition-colors"
               >
                 Non merci, je préfère partir
               </button>
@@ -536,13 +543,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </p>
             </div>
           </div>
-          <div className="flex flex-col gap-4 pt-4">
+          <div className="flex flex-col gap-5 pt-4 text-center">
             <Button
               onClick={() => {
                 handleClose();
                 toast({ title: "Compte mis en pause", description: "Votre profil est en veille." });
               }}
-              className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-primary hover:bg-primary/90 transition-all shadow-md"
+              className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
             >
               <Pause className="h-6 w-6 mr-3" /> Faire une pause d'un mois
             </Button>
@@ -555,7 +562,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   variant: "destructive",
                 });
               }}
-              className="w-full h-12 rounded-2xl text-destructive hover:text-destructive/80 font-medium text-lg transition-colors"
+              className="w-full text-[#E53935] hover:text-[#C62828] font-medium text-lg transition-colors"
             >
               Confirmer la suppression définitive
             </button>
