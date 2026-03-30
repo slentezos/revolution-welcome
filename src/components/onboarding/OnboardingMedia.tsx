@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { Camera, Video, X, Play, Lightbulb, Check } from "lucide-react";
+import { Camera, Video, X, Play, Lightbulb, Check, Sparkles, Eye, Sun, Heart, Volume2 } from "lucide-react"; // Toutes les icônes sont là !
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Checkbox } from "@/components/ui/checkbox"; // Assurez-vous d'avoir ce composant
+import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import coupleGarden from "@/assets/couple-garden.jpg";
 import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
@@ -38,7 +38,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [slots, setSlots] = useState<MediaSlot[]>(getInitialSlots());
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [confirmedAge, setConfirmedAge] = useState(false); // État pour la checkbox
+  const [confirmedAge, setConfirmedAge] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -153,7 +153,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     if (!confirmedAge) {
       toast({
         title: "Action requise",
-        description: "Veuillez confirmer que vos photos ont moins de 18 mois.",
+        description: "Veuillez certifier que vos photos ont moins de 18 mois.",
         variant: "destructive",
       });
       return;
@@ -209,18 +209,15 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground text-lg text-xl">Chargement de vos médias...</div>
+        <div className="animate-pulse text-muted-foreground text-xl font-medium">Chargement de vos médias...</div>
       </div>
     );
   }
 
   return (
     <div className="h-[calc(100vh-64px-64px)] lg:h-[calc(100vh-80px-64px)] flex flex-col overflow-hidden bg-white">
-      {/* Main content — single screen, no scroll */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-0 min-h-0">
-        {/* Left: Video + Photos grid */}
-        <div className="flex-1 min-h-0 p-4 lg:p-6 xl:p-8 flex flex-col gap-4 lg:gap-5">
-          {/* Title row */}
+        <div className="flex-1 min-h-0 p-4 lg:p-6 xl:p-8 flex flex-col gap-4 lg:gap-5 text-left">
           <div className="flex items-center justify-between flex-shrink-0">
             <h2 className="font-heading text-3xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
             <div className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-xl">
@@ -229,9 +226,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             </div>
           </div>
 
-          {/* Media grid */}
           <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-4 lg:gap-6">
-            {/* Video slot */}
             <div className="min-h-0 flex flex-col gap-3">
               <div
                 className="relative flex-1 min-h-0 overflow-hidden cursor-pointer group border-2 border-dashed border-[#E5E0D8] rounded-[2rem] hover:border-[hsl(var(--gold))] transition-all duration-300"
@@ -277,7 +272,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               </div>
             </div>
 
-            {/* Photos 2x2 grid */}
             <div className="min-h-0 grid grid-cols-2 gap-4 lg:gap-5">
               {photoSlots.map((slot, index) => (
                 <div key={slot.id} className="min-h-0 flex flex-col gap-2">
@@ -322,10 +316,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* Bottom bar — with mandatory checkbox */}
-      <div className="flex-shrink-0 bg-white border-t border-gray-100 z-50 py-6 px-6 lg:px-20">
+      <div className="flex-shrink-0 bg-white border-t border-gray-100 z-50 py-6 px-6 lg:px-20 text-left">
         <div className="max-w-5xl mx-auto space-y-6">
-          {/* MANDATORY CHECKBOX FOR SENIORS */}
           <div
             className={cn(
               "flex items-center gap-4 p-5 rounded-2xl border-2 transition-all cursor-pointer",
@@ -333,14 +325,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             )}
             onClick={() => setConfirmedAge(!confirmedAge)}
           >
-            <div className="relative flex items-center">
-              <Checkbox
-                id="age-confirm"
-                checked={confirmedAge}
-                onCheckedChange={(val) => setConfirmedAge(val as boolean)}
-                className="h-7 w-7 rounded-lg border-2 border-gray-300 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
-              />
-            </div>
+            <Checkbox
+              id="age-confirm"
+              checked={confirmedAge}
+              onCheckedChange={(val) => setConfirmedAge(val as boolean)}
+              className="h-7 w-7 rounded-lg border-2 border-gray-300 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+            />
             <label
               htmlFor="age-confirm"
               className="text-lg md:text-xl font-medium text-[#1B2333] cursor-pointer select-none"
@@ -378,17 +368,15 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* Modals are kept identical but with enhanced text visibility */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
         <DialogContent className="max-w-4xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-3xl bg-white">
-          <div className="flex flex-col lg:flex-row">
-            {/* Partie Texte & Conseils */}
+          <div className="flex flex-col lg:flex-row text-left">
             <div className="flex-1 p-10 lg:p-14 bg-white">
               <DialogHeader className="mb-10">
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 mb-4">
                   <Sparkles className="h-6 w-6 text-[hsl(var(--gold))]" />
                 </div>
-                <DialogTitle className="font-heading text-3xl lg:text-5xl text-[#1B2333] leading-tight">
+                <DialogTitle className="font-heading text-3xl lg:text-5xl text-[#1B2333] leading-tight font-bold">
                   Réussir votre vidéo
                 </DialogTitle>
                 <DialogDescription className="text-xl italic text-[hsl(var(--gold))] font-medium mt-2">
@@ -396,7 +384,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 </DialogDescription>
               </DialogHeader>
 
-              {/* Grille de conseils modernisée */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="flex items-start gap-4">
                   <div className="mt-1 bg-secondary/50 p-2 rounded-lg">
@@ -409,7 +396,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-4">
                   <div className="mt-1 bg-secondary/50 p-2 rounded-lg">
                     <Sun className="h-6 w-6 text-[#1B2333]" />
@@ -419,7 +405,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     <p className="text-[#1B2333]/70 text-lg leading-snug">Face à une fenêtre pour un teint éclatant.</p>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-4">
                   <div className="mt-1 bg-secondary/50 p-2 rounded-lg">
                     <Heart className="h-6 w-6 text-[#1B2333]" />
@@ -431,7 +416,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-start gap-4">
                   <div className="mt-1 bg-secondary/50 p-2 rounded-lg">
                     <Volume2 className="h-6 w-6 text-[#1B2333]" />
@@ -447,13 +431,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
               <Button
                 onClick={() => setShowVideoTutorial(false)}
-                className="mt-12 w-full md:w-auto h-16 px-12 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-lg hover:bg-[#1B2333]/90 transition-all"
+                className="mt-12 w-full md:w-auto h-16 px-12 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-lg"
               >
                 C'est compris
               </Button>
             </div>
-
-            {/* Partie Image Latérale avec dégradé subtil */}
             <div className="hidden lg:block w-[340px] relative">
               <img src={coupleGarden} alt="Couple Kalimera" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/20 to-transparent" />
@@ -462,7 +444,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
-      {/* Confirmation Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem]">
           <div className="flex flex-col items-center gap-6">
@@ -471,7 +452,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             </div>
             <DialogHeader>
               <DialogTitle className="font-heading text-3xl text-[#1B2333] font-bold">C'est enregistré !</DialogTitle>
-              <DialogDescription className="text-xl mt-2">
+              <DialogDescription className="text-xl mt-2 text-muted-foreground">
                 Vos médias ont été sauvegardés avec succès.
               </DialogDescription>
             </DialogHeader>
