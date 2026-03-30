@@ -16,11 +16,11 @@ import {
   ShieldCheck,
   PartyPopper,
   Mic,
+  MicOff,
   Mail,
   MessageCircle,
   Copy,
   CheckCircle2,
-  Square,
   Ticket,
 } from "lucide-react";
 
@@ -118,7 +118,6 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
         setTestimony((prev) => prev + (prev.endsWith(" ") || prev === "" ? "" : " "));
         recognitionRef.current.start();
         setIsRecording(true);
-        toast({ description: "Le microphone est activé. Parlez..." });
       } else {
         toast({
           title: "Non supporté",
@@ -146,7 +145,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <div className="mx-auto w-16 h-16 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-3">
                 <Heart className="h-8 w-8 text-[hsl(var(--gold))]" />
               </div>
-              <p className="text-muted-foreground uppercase tracking-widest font-medium text-xl">
+              <p className="text-muted-foreground uppercase tracking-widest font-medium text-base">
                 {firstName ? `${firstName}, ` : ""}nous sommes tristes de vous voir partir
               </p>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">
@@ -161,8 +160,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">💖</span>
                 <div>
-                  <p className="font-semibold text-foreground text-2xl">J'ai fait une belle rencontre sur Kalimera</p>
-                  <p className="text-muted-foreground mt-1 text-xl">Partagez votre bonheur avec nous</p>
+                  <p className="font-semibold text-foreground text-xl">J'ai fait une belle rencontre sur Kalimera</p>
+                  <p className="text-muted-foreground mt-1 text-lg">Partagez votre bonheur avec nous</p>
                 </div>
               </button>
               <button
@@ -171,8 +170,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">🕊️</span>
                 <div>
-                  <p className="font-semibold text-foreground text-2xl">Je n'ai pas fait la rencontre espérée</p>
-                  <p className="text-muted-foreground mt-1 text-xl">Nous aimerions vous proposer quelque chose</p>
+                  <p className="font-semibold text-foreground text-xl">Je n'ai pas fait la rencontre espérée</p>
+                  <p className="text-muted-foreground mt-1 text-lg">Nous aimerions vous proposer quelque chose</p>
                 </div>
               </button>
               <button
@@ -181,8 +180,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">💬</span>
                 <div>
-                  <p className="font-semibold text-foreground text-2xl">Autre raison / Je souhaite faire une pause</p>
-                  <p className="text-muted-foreground mt-1 text-xl">Mettez votre profil en veille sans tout effacer</p>
+                  <p className="font-semibold text-foreground text-xl">Autre raison / Je souhaite faire une pause</p>
+                  <p className="text-muted-foreground mt-1 text-lg">Mettez votre profil en veille sans tout effacer</p>
                 </div>
               </button>
             </div>
@@ -192,12 +191,12 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2A: Success Story (Functional Dictation) ───
+  // ─── Step 2A: Success Story (With System Dictation Format) ───
   if (step === "success_story") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl md:max-w-2xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl bg-white">
-          <div className="px-6 sm:px-12 py-10 space-y-6 max-w-2xl mx-auto">
+        <DialogContent className="sm:max-w-xl md:max-w-3xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl bg-white">
+          <div className="px-6 sm:px-12 py-10 space-y-6 max-w-3xl mx-auto w-full">
             <button
               onClick={() => {
                 stopRecording();
@@ -217,40 +216,69 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </h2>
             </div>
 
-            <div className="space-y-4 bg-secondary/30 p-6 rounded-[1.5rem] border border-secondary">
+            <div className="space-y-4 bg-secondary/30 p-6 md:p-8 rounded-[1.5rem] border border-secondary">
               <Label className="text-foreground text-xl font-medium block">
                 Racontez-nous votre belle histoire
                 <span className="text-muted-foreground font-normal ml-2 text-lg">(facultatif)</span>
               </Label>
-              <div className="relative">
+
+              <div className="flex flex-col gap-4">
                 <Textarea
                   value={testimony}
                   onChange={(e) => setTestimony(e.target.value)}
                   placeholder="Nous nous sommes rencontrés le..."
-                  className="min-h-[160px] pb-16 text-xl resize-none rounded-2xl border-secondary bg-white focus:ring-[hsl(var(--gold))] p-5 shadow-inner"
+                  className="min-h-[160px] text-xl resize-none rounded-2xl border-secondary bg-white focus:ring-[hsl(var(--gold))] p-5 shadow-inner"
                   maxLength={500}
                 />
 
-                <div className="absolute bottom-4 right-4">
+                {/* L'INTÉGRATION DU SYSTÈME DE DICTÉE EXACT */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-2">
                   <button
                     type="button"
                     onClick={toggleDictation}
-                    className={`flex items-center justify-center gap-2 px-4 h-12 rounded-full transition-all duration-300 font-medium text-lg shadow-sm
-                      ${
-                        isRecording
-                          ? "bg-red-50 text-red-600 border border-red-200 animate-pulse"
-                          : "bg-secondary text-muted-foreground hover:text-primary hover:bg-[hsl(var(--gold)/0.1)] border border-transparent"
-                      }
-                    `}
+                    className={`min-h-[48px] px-6 w-full md:w-auto min-w-[200px] flex items-center justify-center gap-3 rounded-xl transition-all duration-300 text-lg font-semibold shrink-0 ${
+                      isRecording
+                        ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
+                        : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
+                    }`}
+                    aria-label={isRecording ? "Arrêter de dicter" : "Dictée vocale"}
                   >
-                    {isRecording ? <Square className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-                    {isRecording ? "Écoute en cours..." : "Dicter"}
+                    {isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                    {isRecording ? "Arrêter de dicter" : "Dicter mon histoire"}
                   </button>
+
+                  <div className="min-h-[1.5rem] flex items-center justify-center md:justify-end">
+                    {isRecording ? (
+                      <div className="flex items-center gap-3">
+                        <p className="font-bold text-xl md:text-2xl" style={{ color: "hsl(var(--gold))" }}>
+                          Je vous écoute...
+                        </p>
+                        <div className="flex items-end gap-1 h-5">
+                          <span
+                            className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
+                            style={{ height: "60%", animationDelay: "0ms" }}
+                          />
+                          <span
+                            className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
+                            style={{ height: "100%", animationDelay: "150ms" }}
+                          />
+                          <span
+                            className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
+                            style={{ height: "40%", animationDelay: "300ms" }}
+                          />
+                        </div>
+                      </div>
+                    ) : testimony.length > 0 ? (
+                      <p className="italic text-lg" style={{ color: "hsl(var(--gold))" }}>
+                        ✍️ Votre brouillon est sauvegardé
+                      </p>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col gap-4 pt-4 text-center">
+            <div className="flex flex-col gap-4 pt-2 text-center max-w-md mx-auto">
               <Button
                 onClick={() => {
                   stopRecording();
@@ -315,7 +343,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 privilège : 3 mois offerts pour que tu trouves, toi aussi, la bonne personne. »
               </p>
               <div className="mt-4 inline-flex items-center justify-center bg-white border border-secondary rounded-xl px-4 py-2 text-muted-foreground font-medium text-base w-full overflow-hidden">
-                <span className="truncate text-xl">{inviteLink}</span>
+                <span className="truncate">{inviteLink}</span>
               </div>
             </div>
 
@@ -338,7 +366,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[#25D366] hover:bg-[#25D366]/5 text-foreground" : "opacity-40 cursor-not-allowed text-muted-foreground"}`}
                 >
                   <MessageCircle className={`w-8 h-8 ${invitesLeft > 0 ? "text-[#25D366]" : ""}`} />
-                  <span className="font-semibold text-xl">WhatsApp</span>
+                  <span className="text-base font-semibold">WhatsApp</span>
                 </a>
 
                 <button
@@ -352,7 +380,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   ) : (
                     <Copy className="w-8 h-8 text-muted-foreground" />
                   )}
-                  <span className="font-semibold text-xl">{copied ? "Copié !" : "Copier"}</span>
+                  <span className="text-base font-semibold">{copied ? "Copié !" : "Copier"}</span>
                 </button>
 
                 <button
@@ -362,18 +390,18 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   className={`flex flex-col items-center justify-center gap-2 border border-secondary rounded-2xl h-24 transition-all ${invitesLeft > 0 ? "hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] text-foreground" : "opacity-40 cursor-not-allowed text-muted-foreground"}`}
                 >
                   <Mail className="w-8 h-8 text-muted-foreground" />
-                  <span className="font-semibold text-xl">Par E-mail</span>
+                  <span className="text-base font-semibold">Par E-mail</span>
                 </button>
               </div>
             </div>
 
-            <div className="pt-4 mt-6 text-center">
+            <div className="pt-4 border-t border-secondary mt-6 text-center">
               <button
                 onClick={() => {
                   handleClose();
                   toast({ description: "Votre compte sera clôturé sous 48h." });
                 }}
-                className="w-full text-[#E53935] hover:text-[#C62828] font-medium text-xl transition-colors"
+                className="w-full h-14 rounded-2xl text-[#E53935] hover:bg-red-50 font-medium text-xl transition-colors"
               >
                 J'ai terminé, clôturer mon compte
               </button>
@@ -384,7 +412,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2C: Success Gift Email Form ───
+  // ─── Step 2C: Success Gift Email Form (Dynamic Input Count) ───
   if (step === "success_gift_email") {
     const activeEmails = giftEmails.slice(0, invitesLeft);
 
@@ -427,16 +455,14 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             <div className="pt-4 flex flex-col gap-5 text-center">
               <Button
                 onClick={() => {
-                  handleClose();
-                  toast({
-                    title: "Félicitations 💛",
-                    description: "Vos invitations sont envoyées. Votre compte sera clôturé sous 48h.",
-                  });
+                  setInvitesLeft(0);
+                  toast({ title: "Félicitations 💛", description: "Invitations envoyées. Redirection..." });
+                  setTimeout(() => setStep("success_gift"), 2000);
                 }}
-                className="w-full h-14 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
+                className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
               >
                 <Send className="h-6 w-6 mr-3" />
-                Valider & clôturer mon compte
+                Envoyer ces {invitesLeft} invitations
               </Button>
               <button
                 onClick={() => {
@@ -478,7 +504,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <Sparkles className="h-8 w-8 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
               <p className="text-foreground leading-relaxed text-lg md:text-xl">
                 Nous aimerions vous offrir{" "}
-                <span className="font-semibold text-primary">un mois supplémentaire offert</span> pour vous
+                <span className="font-semibold text-primary">un mois supplémentaire totalement offert</span> pour vous
                 permettre de découvrir de nouveaux profils.
               </p>
             </div>
@@ -497,7 +523,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </Button>
               <button
                 onClick={() => setStep("pause")}
-                className="w-full text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
+                className="w-full text-muted-foreground hover:text-foreground font-medium text-lg transition-colors"
               >
                 Non merci, je préfère partir
               </button>
@@ -532,13 +558,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="space-y-4">
             <div className="flex items-start gap-5 p-5 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <EyeOff className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-xl">
+              <p className="text-foreground leading-relaxed text-lg">
                 Votre profil devient <span className="font-medium">totalement invisible</span> pour les autres membres.
               </p>
             </div>
             <div className="flex items-start gap-5 p-5 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-xl">
+              <p className="text-foreground leading-relaxed text-lg">
                 Vos <span className="font-medium">messages sont sauvegardés</span> et votre facturation suspendue.
               </p>
             </div>
@@ -562,7 +588,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   variant: "destructive",
                 });
               }}
-              className="w-full text-[#E53935] hover:text-[#C62828] font-medium transition-colors text-xl"
+              className="w-full text-[#E53935] hover:text-[#C62828] font-medium text-lg transition-colors"
             >
               Confirmer la suppression définitive
             </button>
