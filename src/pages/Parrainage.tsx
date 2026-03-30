@@ -312,7 +312,7 @@ function FormSection() {
             <Ticket className="w-8 h-8 text-[hsl(var(--gold))]" />
           </div>
           <h2 className="font-heading text-3xl md:text-5xl mb-6">Transmettez vos privilèges</h2>
-          <p className="text-xl opacity-80 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="opacity-80 mb-12 max-w-2xl mx-auto leading-relaxed text-2xl">
             Partagez votre bonheur en offrant 3 mois d'abonnement à vos proches. C'est offert par Kalimera.
           </p>
 
@@ -320,14 +320,14 @@ function FormSection() {
             <div className="absolute top-0 right-0 p-3 opacity-20 group-hover:opacity-40 transition-opacity">
               <MessageCircle className="w-12 h-12" />
             </div>
-            <p className="italic text-lg leading-relaxed relative z-10">« {inviteText} »</p>
+            <p className="italic leading-relaxed relative z-10 text-xl">« {inviteText} »</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             <Button
               onClick={handleNativeShare}
               disabled={invitesLeft <= 0}
-              className="h-16 rounded-xl bg-white text-primary hover:bg-white/90 text-lg font-medium"
+              className="h-16 rounded-xl bg-white text-primary hover:bg-white/90 font-medium text-xl"
             >
               <Share2 className="w-5 h-5 mr-3" />
               {shareSupported ? "Partager" : "Copier le lien"}
@@ -341,7 +341,7 @@ function FormSection() {
                 if (invitesLeft <= 0) e.preventDefault();
                 else decrementInvites();
               }}
-              className={`flex items-center justify-center h-16 rounded-xl border border-white/20 hover:bg-white/5 transition-all text-lg font-medium ${invitesLeft <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`flex items-center justify-center h-16 rounded-xl border border-white/20 hover:bg-white/5 transition-all font-medium ${invitesLeft <= 0 ? "opacity-50 cursor-not-allowed" : ""} text-xl`}
             >
               <MessageCircle className="w-5 h-5 mr-3 text-[#25D366]" />
               WhatsApp
@@ -350,7 +350,7 @@ function FormSection() {
             <button
               onClick={handleCopy}
               disabled={invitesLeft <= 0}
-              className={`flex items-center justify-center h-16 rounded-xl border border-white/20 hover:bg-white/5 transition-all text-lg font-medium ${invitesLeft <= 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`flex items-center justify-center h-16 rounded-xl border border-white/20 hover:bg-white/5 transition-all font-medium ${invitesLeft <= 0 ? "opacity-50 cursor-not-allowed" : ""} text-xl`}
             >
               {copied ? <CheckCircle2 className="w-5 h-5 mr-3 text-green-400" /> : <Copy className="w-5 h-5 mr-3 text-[hsl(var(--gold))]" />}
               {copied ? "Copié !" : "Copier le message"}
@@ -359,7 +359,7 @@ function FormSection() {
 
           <div className="flex items-center justify-center gap-2 text-sm font-medium">
             <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))] animate-pulse" />
-            <span className="opacity-60 uppercase tracking-widest">
+            <span className="opacity-60 uppercase tracking-widest text-lg">
               {invitesLeft} invitation{invitesLeft > 1 ? "s" : ""} restante{invitesLeft > 1 ? "s" : ""}
             </span>
           </div>
