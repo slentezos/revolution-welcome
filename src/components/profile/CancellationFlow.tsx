@@ -1,11 +1,27 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Heart, Sparkles, Gift, ArrowLeft, Send, Pause, EyeOff, ShieldCheck, PartyPopper, Mic, MicOff } from "lucide-react";
+import {
+  Heart,
+  Sparkles,
+  Gift,
+  ArrowLeft,
+  Send,
+  Pause,
+  EyeOff,
+  ShieldCheck,
+  PartyPopper,
+  Mic,
+  Ticket,
+  Share2,
+  Copy,
+  CheckCircle2,
+  MessageCircle,
+  Mail,
+} from "lucide-react";
 
 type Step = "reason" | "success_story" | "success_gift" | "retention" | "pause";
 
@@ -18,101 +34,50 @@ interface CancellationFlowProps {
 export default function CancellationFlow({ open, onOpenChange, firstName }: CancellationFlowProps) {
   const [step, setStep] = useState<Step>("reason");
   const [testimony, setTestimony] = useState("");
-  const [giftRows, setGiftRows] = useState([
-    { name: "", email: "" },
-    { name: "", email: "" },
-    { name: "", email: "" },
-  ]);
+  const [copied, setCopied] = useState(false);
+  const [shareSupported, setShareSupported] = useState(false);
 
-  // === Dictation state ===
-  const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
-  const manualStopRef = useRef(false);
-  const baseTextRef = useRef("");
-  const sessionFinalRef = useRef("");
+  const invitesLeft = 3;
+  const inviteText =
+    "Bonjour, je te partage ce nouveau site de rencontres, Kalimera. C'est très sérieux et élégant. J'ai une invitation qui t'offre les 3 premiers mois si tu veux regarder. Voici mon lien :";
+  const inviteLink = "https://kalimera.fr/cercle/invitation-privee";
+  const fullMessage = `${inviteText} ${inviteLink}`;
 
-  const startDictation = useCallback(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      toast({ title: "La dictée vocale n'est pas supportée par votre navigateur.", variant: "destructive" });
-      return;
+  useEffect(() => {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      setShareSupported(true);
     }
-
-    manualStopRef.current = false;
-    baseTextRef.current = testimony;
-    sessionFinalRef.current = "";
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = "fr-FR";
-    recognition.continuous = true;
-    recognition.interimResults = true;
-
-    recognition.onresult = (event: any) => {
-      let interim = "";
-      let finalStr = "";
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalStr += transcript + " ";
-        } else {
-          interim += transcript;
-        }
-      }
-
-      if (finalStr) {
-        sessionFinalRef.current += finalStr;
-      }
-
-      const fullText = (baseTextRef.current + " " + sessionFinalRef.current + interim).replace(/\s+/g, " ").trimStart();
-      setTestimony(fullText);
-    };
-
-    recognition.onerror = (event: any) => {
-      if (event.error === "not-allowed") forceStopDictation();
-    };
-
-    recognition.onend = () => {
-      if (!manualStopRef.current) {
-        baseTextRef.current = (baseTextRef.current + " " + sessionFinalRef.current).replace(/\s+/g, " ").trimStart();
-        sessionFinalRef.current = "";
-        try {
-          recognition.start();
-        } catch (e) {
-          setIsListening(false);
-        }
-      } else {
-        setIsListening(false);
-      }
-    };
-
-    recognitionRef.current = recognition;
-    recognition.start();
-    setIsListening(true);
-  }, [testimony]);
-
-  const forceStopDictation = useCallback(() => {
-    manualStopRef.current = true;
-    if (recognitionRef.current) recognitionRef.current.stop();
-    setIsListening(false);
   }, []);
 
-  const toggleListening = useCallback(() => {
-    if (isListening) {
-      forceStopDictation();
-    } else {
-      startDictation();
-    }
-  }, [isListening, forceStopDictation, startDictation]);
-
   const handleClose = () => {
-    if (isListening) forceStopDictation();
     onOpenChange(false);
-    setTimeout(() => setStep("reason"), 300);
+    setTimeout(() => {
+      setStep("reason");
+      setCopied(false);
+    }, 300);
   };
 
-  const updateGiftRow = (index: number, field: "name" | "email", value: string) => {
-    setGiftRows((prev) => prev.map((r, i) => (i === index ? { ...r, [field]: value } : r)));
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(fullMessage);
+      setCopied(true);
+      toast({ description: "Message copié dans le presse-papier." });
+      setTimeout(() => setCopied(false), 3000);
+    } catch (err) {
+      toast({ title: "Erreur", description: "Impossible de copier le lien.", variant: "destructive" });
+    }
+  };
+
+  const handleNativeShare = async () => {
+    try {
+      await navigator.share({
+        title: "Invitation Kalimera",
+        text: inviteText,
+        url: inviteLink,
+      });
+    } catch (err) {
+      console.log("Partage annulé ou non supporté", err);
+    }
   };
 
   // ─── Step 1: Reason Selection ───
@@ -121,12 +86,11 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
           <div className="px-6 sm:px-10 py-8 space-y-6">
-            {/* Header */}
             <div className="text-center space-y-2">
               <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
                 <Heart className="h-6 w-6 text-[hsl(var(--gold))]" />
               </div>
-              <p className="text-muted-foreground uppercase tracking-widest font-medium text-xl">
+              <p className="text-muted-foreground uppercase tracking-widest font-medium text-sm md:text-base">
                 {firstName ? `${firstName}, ` : ""}nous sommes tristes de vous voir partir
               </p>
               <h2 className="font-heading text-2xl md:text-3xl text-foreground leading-tight">
@@ -134,7 +98,6 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </h2>
             </div>
 
-            {/* Options */}
             <div className="space-y-3 pt-2">
               <button
                 onClick={() => setStep("success_story")}
@@ -142,8 +105,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform">💖</span>
                 <div>
-                  <p className="font-semibold text-foreground text-xl">J'ai fait une belle rencontre sur Kalimera</p>
-                  <p className="text-muted-foreground mt-0.5 text-xl">Partagez votre bonheur avec nous</p>
+                  <p className="font-semibold text-foreground text-lg">J'ai fait une belle rencontre sur Kalimera</p>
+                  <p className="text-muted-foreground mt-0.5 text-base">Partagez votre bonheur avec nous</p>
                 </div>
               </button>
 
@@ -153,8 +116,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform">🕊️</span>
                 <div>
-                  <p className="font-semibold text-foreground text-xl">Je n'ai pas fait la rencontre espérée</p>
-                  <p className="text-muted-foreground mt-0.5 text-xl">Nous aimerions vous proposer quelque chose</p>
+                  <p className="font-semibold text-foreground text-lg">Je n'ai pas fait la rencontre espérée</p>
+                  <p className="text-muted-foreground mt-0.5 text-base">Nous aimerions vous proposer quelque chose</p>
                 </div>
               </button>
 
@@ -164,8 +127,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-3xl flex-shrink-0 group-hover:scale-110 transition-transform">💬</span>
                 <div>
-                  <p className="font-semibold text-foreground text-xl">Autre raison / Je souhaite faire une pause</p>
-                  <p className="text-muted-foreground mt-0.5 text-xl">
+                  <p className="font-semibold text-foreground text-lg">Autre raison / Je souhaite faire une pause</p>
+                  <p className="text-muted-foreground mt-0.5 text-base">
                     Mettez votre profil en veille sans tout effacer
                   </p>
                 </div>
@@ -177,20 +140,19 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2A: Success Story (Testimony) ───
+  // ─── Step 2A: Success Story (with Dictation) ───
   if (step === "success_story") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white max-h-[95vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white">
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
-              onClick={() => { if (isListening) forceStopDictation(); setStep("reason"); }}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+              onClick={() => setStep("reason")}
+              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors text-sm uppercase tracking-wider"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
 
-            {/* Header */}
             <div className="text-center space-y-2">
               <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
                 <PartyPopper className="h-5 w-5 text-[hsl(var(--gold))]" />
@@ -200,48 +162,40 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               </h2>
             </div>
 
-            {/* Testimonial */}
             <div className="space-y-3 bg-secondary/30 p-5 rounded-2xl">
-              <Label className="text-xl text-foreground font-medium block">
+              <Label className="text-foreground text-base font-medium block">
                 Racontez-nous votre belle histoire
-                <span className="text-muted-foreground font-normal ml-2 text-lg">(facultatif)</span>
+                <span className="text-muted-foreground font-normal ml-2 text-sm">(facultatif)</span>
               </Label>
-              <Textarea
-                value={testimony}
-                onChange={(e) => setTestimony(e.target.value)}
-                placeholder="Nous nous sommes rencontrés le..."
-                className="min-h-[100px] text-base resize-none rounded-xl border-secondary bg-white focus:ring-[hsl(var(--gold))]"
-                maxLength={500}
-              />
-              {/* Dictate button */}
-              <button
-                onClick={toggleListening}
-                className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 text-sm font-semibold ${
-                  isListening
-                    ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
-                    : "bg-primary text-primary-foreground hover:bg-primary/90"
-                }`}
-                aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
-              >
-                {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                {isListening ? "Arrêter de dicter" : "Dicter"}
-              </button>
-              {isListening && (
-                <p className="text-sm font-bold text-[hsl(var(--gold))] animate-pulse">
-                  🎙️ Dictée en cours…
-                </p>
-              )}
+              <div className="relative">
+                <Textarea
+                  value={testimony}
+                  onChange={(e) => setTestimony(e.target.value)}
+                  placeholder="Nous nous sommes rencontrés le..."
+                  className="min-h-[120px] pb-14 text-base resize-none rounded-xl border-secondary bg-white focus:ring-[hsl(var(--gold))]"
+                  maxLength={500}
+                />
+                <div className="absolute bottom-3 right-3">
+                  <button
+                    type="button"
+                    className="flex items-center justify-center h-10 w-10 rounded-full bg-secondary text-muted-foreground hover:text-primary hover:bg-[hsl(var(--gold)/0.15)] transition-colors"
+                    title="Dicter mon message"
+                  >
+                    <Mic className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col gap-3 pt-2">
               <Button
                 className="w-full h-12 rounded-xl text-primary-foreground text-base font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
-                onClick={() => { if (isListening) forceStopDictation(); setStep("success_gift"); }}
+                onClick={() => setStep("success_gift")}
               >
-                Continuer vers la clôture →
+                Continuer vers la clôture
               </Button>
               <button
-                onClick={() => { if (isListening) forceStopDictation(); setStep("success_gift"); }}
+                onClick={() => setStep("success_gift")}
                 className="w-full h-11 rounded-xl text-muted-foreground hover:text-foreground font-medium text-base transition-colors"
               >
                 Passer cette étape
@@ -253,89 +207,94 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2B: Success Gift ───
+  // ─── Step 2B: Success Gift (Dark Mode Native Share UI) ───
   if (step === "success_gift") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-white max-h-[95vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-xl p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl bg-[#1B2333]">
           <div className="px-6 sm:px-10 py-8 space-y-6">
             <button
               onClick={() => setStep("success_story")}
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
+              className="flex items-center gap-1.5 text-white/50 hover:text-white font-medium transition-colors text-sm uppercase tracking-wider"
             >
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
 
-            {/* Header */}
-            <div className="text-center space-y-2">
-              <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
-                <Gift className="h-5 w-5 text-[hsl(var(--gold))]" />
+            <div className="text-center space-y-4">
+              <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.1)]">
+                <Ticket className="w-4 h-4 text-[hsl(var(--gold))] mr-2" />
+                <span className="text-[hsl(var(--gold))] font-medium uppercase tracking-widest text-xs">
+                  Votre allocation : {invitesLeft} invitations
+                </span>
               </div>
-              <h2 className="font-heading text-2xl md:text-3xl text-foreground leading-tight">
-                Partagez votre bonheur
-              </h2>
-              <p className="text-muted-foreground text-xl leading-relaxed">
-                Offrez 3 mois d'abonnement au cercle à 3 de vos proches. C'est entièrement offert par Kalimera.
-              </p>
+              <h2 className="font-heading text-2xl md:text-3xl text-white leading-tight">Transmettez vos privilèges</h2>
             </div>
 
-            {/* Gift inputs — same system as ProfileGiftTab */}
-            <div className="space-y-6">
-              {giftRows.map((row, i) => (
-                <div key={i} className="space-y-3">
-                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                    Proche {i + 1}
-                  </p>
-                  <div className="space-y-3">
-                    <div className="space-y-1.5">
-                      <Label className="text-lg font-medium text-foreground">Prénom</Label>
-                      <Input
-                        placeholder="Ex : Marie"
-                        value={row.name}
-                        onChange={(e) => updateGiftRow(i, "name", e.target.value)}
-                        className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-lg font-medium text-foreground">E-mail</Label>
-                      <Input
-                        type="email"
-                        placeholder="marie@exemple.fr"
-                        value={row.email}
-                        onChange={(e) => updateGiftRow(i, "email", e.target.value)}
-                        className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="border border-[hsl(var(--gold)/0.2)] bg-white/5 rounded-xl p-6 relative overflow-hidden">
+              <Gift className="w-24 h-24 text-[hsl(var(--gold)/0.05)] absolute -top-4 -right-4" />
+              <p className="italic text-white/90 text-base leading-relaxed relative z-10 mb-5">« {inviteText} »</p>
+              <div className="inline-block border border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.08)] text-[hsl(var(--gold))] px-4 py-2 rounded font-medium text-sm relative z-10 w-full truncate">
+                {inviteLink}
+              </div>
             </div>
 
-            <div className="flex flex-col gap-3 pt-2">
-              <Button
-                className="w-full h-12 rounded-xl text-primary-foreground text-base font-medium bg-primary hover:bg-primary/90 transition-all shadow-sm"
-                onClick={() => {
-                  handleClose();
-                  toast({
-                    title: "Merci pour votre témoignage 💛",
-                    description: "Les invitations ont été envoyées. Votre compte sera clôturé sous 48h.",
-                  });
-                }}
-              >
-                <Send className="h-4 w-4 mr-2" />
-                Envoyer & clôturer mon compte
-              </Button>
+            <div className="space-y-3 pt-2">
+              {shareSupported ? (
+                <button
+                  onClick={handleNativeShare}
+                  className="w-full bg-white text-[#1B2333] py-4 rounded-xl text-base font-medium tracking-wide transition-all hover:bg-gray-100 flex items-center justify-center gap-2"
+                >
+                  <Share2 className="w-5 h-5" /> Transmettre cette invitation
+                </button>
+              ) : (
+                <button
+                  onClick={handleCopy}
+                  className="w-full bg-white text-[#1B2333] py-4 rounded-xl text-base font-medium tracking-wide transition-all hover:bg-gray-100 flex items-center justify-center gap-2"
+                >
+                  {copied ? (
+                    <>
+                      <CheckCircle2 className="w-5 h-5" /> Copié avec succès !
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-5 h-5" /> Copier l'invitation
+                    </>
+                  )}
+                </button>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(fullMessage)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 border border-white/20 text-white rounded-xl py-3 transition-all hover:border-[hsl(var(--gold)/0.4)] hover:bg-white/5 text-sm font-medium"
+                >
+                  <MessageCircle className="w-4 h-4 text-[hsl(var(--gold))]" /> WhatsApp
+                </a>
+                <a
+                  href={`mailto:?subject=${encodeURIComponent("Une invitation privée Kalimera")}&body=${encodeURIComponent(fullMessage)}`}
+                  className="flex items-center justify-center gap-2 border border-white/20 text-white rounded-xl py-3 transition-all hover:border-[hsl(var(--gold)/0.4)] hover:bg-white/5 text-sm font-medium"
+                >
+                  <Mail className="w-4 h-4 text-[hsl(var(--gold))]" /> E-mail
+                </a>
+              </div>
+            </div>
+
+            {/* Final Cancellation Action */}
+            <div className="pt-4 border-t border-white/10 text-center">
               <button
                 onClick={() => {
                   handleClose();
                   toast({
-                    title: "Compte clôturé",
+                    title: "Demande envoyée",
                     description: "Votre compte sera clôturé sous 48h.",
+                    variant: "destructive",
                   });
                 }}
-                className="w-full h-11 rounded-xl text-muted-foreground hover:text-destructive font-medium text-base transition-colors"
+                className="text-white/40 hover:text-red-400 text-sm font-medium transition-colors"
               >
-                Clôturer mon compte sans envoyer d'invitations
+                J'ai terminé. Clôturer définitivement mon compte.
               </button>
             </div>
           </div>
@@ -357,7 +316,6 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <ArrowLeft className="h-4 w-4" /> Retour
             </button>
 
-            {/* Header */}
             <div className="text-center space-y-3">
               <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
                 <Heart className="h-6 w-6 text-[hsl(var(--gold))]" />
@@ -415,7 +373,6 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             <ArrowLeft className="h-4 w-4" /> Retour
           </button>
 
-          {/* Header */}
           <div className="text-center space-y-2">
             <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-1">
               <Pause className="h-5 w-5 text-[hsl(var(--gold))]" />
