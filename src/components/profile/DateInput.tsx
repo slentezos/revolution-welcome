@@ -68,7 +68,7 @@ export default function DateInput({ value, onChange, className }: DateInputProps
 
         {/* --- MOIS (NOMS EN FRANÇAIS) --- */}
         <div className="space-y-2">
-          <Label className="text-sm text-muted-foreground ml-1">Mois</Label>
+          <Label className="text-lg text-muted-foreground ml-1">Mois</Label>
           <Select value={month} onValueChange={(v) => update(day, v, year)}>
             <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
               <SelectValue placeholder="Mois" />
