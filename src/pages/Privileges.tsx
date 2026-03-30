@@ -201,10 +201,10 @@ export default function Privileges() {
                   <Crown className="h-8 w-8 text-[hsl(var(--gold))]" />
                 </div>
                 <h3 className="font-heading text-3xl md:text-4xl text-white mb-4">Le Carré VIP</h3>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-sm mb-6 border-b border-[hsl(var(--gold)/0.3)] pb-2">
+                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-6 border-b border-[hsl(var(--gold)/0.3)] pb-2 text-lg">
                   Bientôt ouvert
                 </p>
-                <p className="text-white/90 leading-relaxed text-lg max-w-[280px]">
+                <p className="text-white/90 leading-relaxed max-w-[280px] text-xl">
                   Afin de garantir l'excellence absolue de nos mises en relation, ce service d'exception ouvrira ses
                   portes très prochainement.
                 </p>
