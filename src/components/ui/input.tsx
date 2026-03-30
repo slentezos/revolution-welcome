@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, onChange, ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (type !== "email" && type !== "password" && e.target.value.length > 0) {
+      if (type !== "email" && type !== "password" && e.target.value?.length > 0) {
         const input = e.target;
         const start = input.selectionStart;
         const end = input.selectionEnd;
@@ -30,7 +30,8 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         onChange={handleChange}
         autoCapitalize="sentences"
         className={cn(
-          "flex h-14 w-full rounded-xl border border-input bg-background px-4 py-2 ring-offset-background file:border-0 file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-base md:text-lg",
+          // On remplace les styles par défaut par votre design exact : h-14, rounded-xl, bordure douce, ombre légère, et hover doré
+          "flex h-14 w-full rounded-xl border border-slate-200/60 bg-background px-4 py-2 text-base md:text-lg shadow-sm transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-1 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground",
           className,
         )}
         ref={ref}
@@ -49,7 +50,8 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
         <input
           type={showPassword ? "text" : "password"}
           className={cn(
-            "flex h-14 w-full rounded-xl border border-input bg-background px-4 py-2 text-base md:text-lg ring-offset-background file:border-0 file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-12",
+            // Mêmes styles appliqués ici pour le mot de passe, avec le pr-12 pour l'icône de l'œil
+            "flex h-14 w-full rounded-xl border border-slate-200/60 bg-background px-4 py-2 text-base md:text-lg shadow-sm transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-1 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground pr-12",
             className,
           )}
           ref={ref}
