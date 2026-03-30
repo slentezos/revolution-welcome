@@ -378,7 +378,7 @@ export default function OnboardingPersonality({
                         >
                           {question.id.toString().padStart(2, "0")}
                         </span>
-                        <h3 className="font-bold text-[#1B2333] leading-snug text-2xl">{question.text}</h3>
+                        <h3 className="font-bold text-[#1B2333] leading-snug text-3xl">{question.text}</h3>
                       </div>
 
                       <div
