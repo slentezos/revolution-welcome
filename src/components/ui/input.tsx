@@ -30,8 +30,8 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         onChange={handleChange}
         autoCapitalize="sentences"
         className={cn(
-          // On remplace les styles par défaut par votre design exact : h-14, rounded-xl, bordure douce, ombre légère, et hover doré
-          "flex h-14 w-full rounded-xl border border-slate-200/60 bg-background px-4 py-2 text-base md:text-lg shadow-sm transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-1 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground",
+          // Design plat et épuré : bordure beige, fond blanc, texte large, pas d'ombre, pas de halo bleu au clic (ring-0)
+          "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-lg shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground",
           className,
         )}
         ref={ref}
@@ -50,8 +50,8 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
         <input
           type={showPassword ? "text" : "password"}
           className={cn(
-            // Mêmes styles appliqués ici pour le mot de passe, avec le pr-12 pour l'icône de l'œil
-            "flex h-14 w-full rounded-xl border border-slate-200/60 bg-background px-4 py-2 text-base md:text-lg shadow-sm transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-1 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground pr-12",
+            // Mêmes styles appliqués ici pour le mot de passe, avec le pr-12 pour laisser la place à l'icône de l'œil
+            "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-lg shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground pr-12",
             className,
           )}
           ref={ref}
