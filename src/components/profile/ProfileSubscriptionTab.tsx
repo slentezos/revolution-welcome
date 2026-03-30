@@ -40,38 +40,59 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
         <div className="px-6 md:px-16 lg:px-20 xl:px-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             {/* Current plan */}
+            {/* Current plan - DESIGN LUXE BLANC */}
             <div>
               <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-8">Offre actuelle</h3>
-              <div className="bg-primary/5 p-8 border border-primary/20 mb-8 rounded-lg">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-heading text-2xl font-semibold text-foreground">Offre Découverte</span>
-                  <span className="bg-primary text-primary-foreground px-4 py-2 text-sm font-medium tracking-wide rounded-sm">
-                    Actif
-                  </span>
+
+              <div className="group bg-white border border-slate-200/60 shadow-sm p-8 md:p-12 transition-all duration-500 hover:shadow-lg flex flex-col h-full relative rounded-[2rem]">
+                {/* Badge Statut */}
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[hsl(var(--gold))] text-white px-6 py-1.5 text-sm font-bold tracking-[0.2em] uppercase rounded-full shadow-md whitespace-nowrap">
+                  Offre Active
                 </div>
-                <p className="text-muted-foreground text-lg md:text-xl mb-2">3 mois — 60 €</p>
-                <p className="text-muted-foreground text-base md:text-lg">Expire le 12 juin 2026</p>
+
+                {/* En-tête de l'offre */}
+                <div className="flex items-center gap-4 mb-8 mt-2">
+                  <div className="w-14 h-14 border border-slate-200 flex items-center justify-center rounded-2xl bg-slate-50/50">
+                    <Sparkles className="h-6 w-6 text-[hsl(var(--gold))]" />
+                  </div>
+                  <h3 className="font-heading text-3xl text-foreground md:text-4xl">Offre Découverte</h3>
+                </div>
+
+                {/* Prix et Expiration */}
+                <div className="mb-10 pb-8 border-b border-slate-100">
+                  <div className="mb-2">
+                    <span className="font-heading text-5xl text-foreground">60€</span>
+                  </div>
+                  <p className="text-sm text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
+                    Abonnement 3 mois
+                  </p>
+                  <p className="text-muted-foreground tracking-widest uppercase text-xs md:text-sm font-medium">
+                    Expire le 12 juin 2026
+                  </p>
+                </div>
+
+                {/* Fonctionnalités */}
+                <h4 className="font-medium text-foreground mb-6 text-xl">Inclus dans votre offre :</h4>
+                <ul className="space-y-5 mb-12 flex-1">
+                  {[
+                    "Espace personnel",
+                    "Compte vérifié",
+                    "Messagerie illimitée",
+                    "Test de personnalité",
+                    "Quiz de vos préférences",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-4">
+                      <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                      <span className="text-foreground/80 leading-relaxed text-lg md:text-xl">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Bouton d'action */}
+                <button className="w-full bg-foreground text-white py-5 text-sm md:text-base uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-3 shadow-md rounded-xl">
+                  Changer d'offre <ArrowRight className="w-5 h-5" />
+                </button>
               </div>
-
-              <h4 className="font-medium text-foreground mb-4 text-xl md:text-2xl">Inclus dans votre offre :</h4>
-              <ul className="space-y-3 text-muted-foreground text-lg">
-                {[
-                  "Espace personnel",
-                  "Compte vérifié",
-                  "Messagerie illimitée",
-                  "Test de personnalité",
-                  "Quiz de vos préférences",
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-lg md:text-xl">
-                    <Check className="h-5 w-5 text-[hsl(var(--gold))]" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 py-5 px-10 text-lg h-auto min-h-[56px] mt-10 rounded-sm">
-                Changer d'offre
-              </Button>
             </div>
 
             {/* Pause / Cancel */}
