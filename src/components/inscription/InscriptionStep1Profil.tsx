@@ -74,7 +74,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
         {errors.firstName && <p className="text-destructive text-sm mt-2">{errors.firstName}</p>}
       </div>
 
-      <div>
+      <div className="text-lg">
         <label className="block font-medium text-foreground mb-3 text-lg">Date de naissance *</label>
         <div className="grid grid-cols-3 gap-3">
           <Select value={formData.birthDay} onValueChange={(v) => update("birthDay", v)}>
