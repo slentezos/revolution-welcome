@@ -466,8 +466,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <item.icon className="h-5 w-5 text-[#1B2333]" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-[#1B2333] text-lg mb-0.5">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 text-sm leading-tight">{item.desc}</p>
+                        <h4 className="font-bold text-[#1B2333] mb-0.5 text-2xl">{item.title}</h4>
+                        <p className="text-[#1B2333]/60 leading-tight text-lg">{item.desc}</p>
                       </div>
                     </div>
                   ))}
