@@ -319,8 +319,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
       {/* ══════ BOTTOM BAR ══════ */}
       <div
-        className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] py-3"
-        style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+        className="bg-white border-t border-gray-200 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] py-3 flex-shrink-0"
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-[60px] flex items-center justify-between">
           <div className="text-lg font-medium text-gray-500 hidden lg:block">
