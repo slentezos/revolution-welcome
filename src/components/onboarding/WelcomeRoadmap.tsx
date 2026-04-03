@@ -197,7 +197,7 @@ const STEPS = [
       "Améliore la qualité des correspondances",
       "Résultats personnalisés et détaillés",
     ],
-    nextLabel: "​",
+    nextLabel: "",
   },
 ];
 
@@ -305,8 +305,13 @@ function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: num
         </div>
 
         {/* Next step preview */}
-          {isLast ? <Sparkles className="h-5 w-5" /> : <ArrowRight className="h-5 w-5" />}
-          <span className="text-2xl">{step.nextLabel}</span>
+        <div className="flex items-center gap-4 text-muted-foreground group-hover:text-gold transition-colors duration-500">
+          {!isLast && (
+            <>
+              <ArrowRight className="h-5 w-5" />
+              <span className="text-2xl">{step.nextLabel}</span>
+            </>
+          )}
         </div>
       </div>
     </section>
