@@ -131,7 +131,9 @@ export default function Privileges() {
               <div className="flex items-center gap-3">
                 <Gift className="w-6 h-6 text-[hsl(var(--gold))]" />
                 <p className="text-xl text-foreground font-heading tracking-wide md:text-3xl">
-                  Vos 3 premiers mois offerts, sans carte bancaire.
+                  Vos 3 premiers mois offerts.
+                  <br />
+                  Pour toute adhésion validée d'ici le 30 septembre 2026
                 </p>
               </div>
               <div className="h-px w-16 bg-gradient-to-l from-transparent to-[hsl(var(--gold))] hidden md:block" />
