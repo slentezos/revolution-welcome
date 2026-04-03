@@ -48,7 +48,7 @@ export default function Footer() {
                 La plateforme d'élégance des rencontres après 60 ans. Déjà disponible en Île-de-France, bientôt chez
                 vous.
               </p>
-              <div className="text-lg text-neutral-400">75% d'affinités réciproques</div>
+              <div className="text-neutral-400 text-xl">75% d'affinités réciproques</div>
             </div>
 
             {/* Découvrir */}
@@ -56,7 +56,7 @@ export default function Footer() {
               <h4 className="font-medium tracking-[0.2em] uppercase mb-6 text-xl text-neutral-400">Découvrir</h4>
               <ul className="space-y-4">
                 {footerLinks.discover.map((link) => (
-                  <li key={link.href} className="text-lg">
+                  <li key={link.href} className="text-xl">
                     <Link
                       to={link.href}
                       className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-300"
@@ -73,7 +73,7 @@ export default function Footer() {
               <h4 className="font-medium tracking-[0.2em] uppercase mb-6 text-xl text-neutral-400">Légal</h4>
               <ul className="space-y-4">
                 {footerLinks.legal.map((link) => (
-                  <li key={link.href}>
+                  <li key={link.href} className="text-xl">
                     <Link
                       to={link.href}
                       className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-300"
@@ -88,7 +88,7 @@ export default function Footer() {
             {/* Membre */}
             <div className="text-lg">
               <h4 className="font-medium tracking-[0.2em] uppercase mb-6 text-xl text-neutral-400">Espace membre</h4>
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-4 mb-8 text-xl">
                 {footerLinks.member.map((link) => (
                   <li key={link.href}>
                     <Link

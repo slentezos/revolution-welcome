@@ -35,7 +35,7 @@ export default function ApproachSection() {
       {/* Content */}
       <div className="flex items-center justify-center p-10 md:p-16 lg:p-20 bg-secondary order-1 lg:order-2">
         <div className="max-w-lg w-full">
-          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-lg">
+          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-xl">
             03 — Notre approche
           </span>
 
@@ -61,10 +61,10 @@ export default function ApproachSection() {
               >
                 <span className="font-medium text-muted-foreground/50 pt-1 text-base">{feature.number}</span>
                 <div>
-                  <h3 className="font-heading text-xl text-foreground mb-1 group-hover:text-primary transition-colors">
+                  <h3 className="font-heading text-foreground mb-1 group-hover:text-primary transition-colors text-2xl">
                     {feature.title}
                   </h3>
-                  <p className="text-muted-foreground text-lg">{feature.description}</p>
+                  <p className="text-muted-foreground text-xl">{feature.description}</p>
                 </div>
               </div>
             ))}

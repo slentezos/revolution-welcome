@@ -14,7 +14,7 @@ export default function NoTimeToLoseSection() {
         {/* Content */}
         <div className="flex items-center justify-center p-10 md:p-16 lg:p-20 bg-primary text-primary-foreground">
           <div className="max-w-lg">
-            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-lg">
+            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl">
               02 — Le constat
             </span>
 
@@ -27,10 +27,10 @@ export default function NoTimeToLoseSection() {
             <div data-reveal data-reveal-delay="250" className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-10" />
 
             <div data-reveal data-reveal-delay="350" className="space-y-4 text-primary-foreground/80 text-lg mb-12">
-              <p className="text-lg">Tous ces profils sans intérêt</p>
-              <p>Tous ces « likes » impersonnels</p>
-              <p>Tous ces messages sans suite</p>
-              <p>Toutes ces annonces fictives</p>
+              <p className="text-xl">Tous ces profils sans intérêt</p>
+              <p className="text-xl">Tous ces "likes" impersonnels</p>
+              <p className="text-xl">Tous ces messages sans suite</p>
+              <p className="text-xl">Toutes ces annonces fictives</p>
             </div>
 
             <div data-reveal data-reveal-delay="450" className="flex items-center gap-3 mb-8">
@@ -38,7 +38,7 @@ export default function NoTimeToLoseSection() {
               <span className="font-heading text-2xl">Kalimera</span>
             </div>
 
-            <p data-reveal data-reveal-delay="500" className="text-lg text-primary-foreground/90 mb-10">
+            <p data-reveal data-reveal-delay="500" className="text-primary-foreground/90 mb-10 text-xl">
               Une plateforme simple et sérieuse pour des rencontres respectueuses et durables.
             </p>
 

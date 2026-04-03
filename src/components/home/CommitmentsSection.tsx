@@ -21,7 +21,7 @@ export default function CommitmentsSection() {
         <div className="container-main mx-auto px-6 md:px-12">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg">
+            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl">
               04 — Nos engagements
             </span>
             <h2 data-reveal data-reveal-delay="150" className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
@@ -42,8 +42,8 @@ export default function CommitmentsSection() {
                 className="group p-10 bg-secondary border border-border hover:border-primary/20 transition-all duration-500 hover:shadow-card"
               >
                 <commitment.icon className="h-8 w-8 text-primary mb-6 transition-transform group-hover:scale-110" />
-                <h3 className="font-heading text-2xl text-foreground mb-4">{commitment.title}</h3>
-                <p className="text-muted-foreground leading-relaxed text-lg">{commitment.description}</p>
+                <h3 className="font-heading text-foreground mb-4 text-3xl">{commitment.title}</h3>
+                <p className="text-muted-foreground leading-relaxed text-xl">{commitment.description}</p>
               </div>
             ))}
           </div>
@@ -57,7 +57,7 @@ export default function CommitmentsSection() {
               Rejoindre Kalimera
             </button>
             <p className="mt-6 text-muted-foreground">
-              <Link to="/connexion" className="link-underline hover:text-primary transition-colors text-xl">
+              <Link to="/connexion" className="link-underline hover:text-primary transition-colors text-2xl">
                 Déjà membre ? Connectez-vous
               </Link>
             </p>
