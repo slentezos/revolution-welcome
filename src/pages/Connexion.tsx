@@ -243,7 +243,7 @@ export default function Connexion() {
                   <Input
                     type="email"
                     placeholder="votre@email.com"
-                    className="h-14 text-lg"
+                    className="h-14 text-xl"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -253,7 +253,7 @@ export default function Connexion() {
                   <label className="block font-medium text-foreground mb-2 text-xl">Mot de passe</label>
                   <PasswordInput
                     placeholder="••••••••"
-                    className="h-14 text-lg"
+                    className="h-14 text-xl"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -271,7 +271,7 @@ export default function Connexion() {
                   </Link>
                 </div>
 
-                <Button type="submit" className="btn-primary w-full h-14 text-lg mt-2" disabled={loading}>
+                <Button type="submit" className="btn-primary w-full h-14 text-xl mt-2" disabled={loading}>
                   {loading ? "Connexion..." : "Se connecter"}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -294,7 +294,7 @@ export default function Connexion() {
                         </div>
                         <Input
                           placeholder="6 12 34 56 78"
-                          className="h-14 text-lg rounded-xl flex-1"
+                          className="h-14 text-xl rounded-xl flex-1"
                           value={phone}
                           onChange={(e) => setPhone(formatPhoneDigits(e.target.value))}
                           inputMode="tel"
@@ -314,7 +314,7 @@ export default function Connexion() {
                     <Button
                       type="button"
                       onClick={handleSendOtp}
-                      className="btn-primary w-full h-14 text-lg"
+                      className="btn-primary w-full h-14 text-xl"
                       disabled={phone.length < 9 || sendingOtp}
                     >
                       {sendingOtp ? "Envoi en cours..." : "Recevoir un code par SMS"}
@@ -346,7 +346,7 @@ export default function Connexion() {
                     <Button
                       type="button"
                       onClick={handleVerifyOtp}
-                      className="btn-primary w-full h-14 text-lg mt-4"
+                      className="btn-primary w-full h-14 text-xl mt-4"
                       disabled={otp.length !== 6 || loading}
                     >
                       {loading ? "Vérification..." : "Vérifier le code"}
@@ -384,9 +384,9 @@ export default function Connexion() {
               </div>
             )}
 
-            <p className="mt-10 text-center text-muted-foreground text-xl">
+            <p className="mt-10 text-center text-muted-foreground text-2xl">
               Vous n'avez pas de compte ?{" "}
-              <button onClick={() => setModalOpen(true)} className="text-[#1B2333] font-bold hover:underline">
+              <button onClick={() => setModalOpen(true)} className="text-[#1B2333] font-bold hover:underline text-xl">
                 Rejoindre le Cercle
               </button>
             </p>
