@@ -252,9 +252,21 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
   );
 }
 
-/* ─── STEP CARD (Redesigned for seniors) ─── */
+/* ─── STEP CARD (Redesigned with built-in buttons) ─── */
 
-function StepCard({ step, isLast }: { step: (typeof STEPS)[0]; isLast: boolean }) {
+function StepCard({
+  step,
+  isLast,
+  onNextClick,
+  onStartClick,
+  viewOnly,
+}: {
+  step: (typeof STEPS)[0];
+  isLast: boolean;
+  onNextClick?: () => void;
+  onStartClick?: () => void;
+  viewOnly?: boolean;
+}) {
   const Icon = step.icon;
 
   return (
@@ -295,12 +307,33 @@ function StepCard({ step, isLast }: { step: (typeof STEPS)[0]; isLast: boolean }
           ))}
         </div>
 
-        {/* Next step preview (Uniquement si ce n'est pas la dernière étape) */}
-        {!isLast && (
-          <div className="flex items-center gap-4 text-muted-foreground transition-colors duration-500">
-            <ArrowRight className="h-5 w-5" />
-            <span className="text-2xl">{step.nextLabel}</span>
+        {/* BOUTONS INTÉGRÉS DIRECTEMENT DANS LA CARTE (Remplace le bug des boutons flottants) */}
+        {!isLast ? (
+          <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-6">
+            <button
+              onClick={onNextClick}
+              className="flex items-center justify-center gap-3 bg-white border border-[#E5E0D8] px-8 py-4 rounded-full shadow-sm hover:shadow-md hover:border-[hsl(var(--gold))] transition-all group w-full sm:w-auto"
+            >
+              <span className="font-heading text-xl text-[#1B2333] font-semibold">Étape suivante</span>
+              <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:translate-y-1 transition-transform" />
+            </button>
+            <div className="flex items-center gap-3 text-muted-foreground">
+              <span className="text-xl opacity-80 italic">{step.nextLabel}</span>
+            </div>
           </div>
+        ) : (
+          !viewOnly &&
+          onStartClick && (
+            <div className="mt-14">
+              <button
+                onClick={onStartClick}
+                className="flex items-center justify-center gap-4 bg-[#1B2333] text-white px-12 py-5 rounded-full shadow-xl hover:bg-[#1B2333]/90 transition-all group w-full md:w-auto"
+              >
+                <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
+                <ChevronRight className="h-6 w-6 text-[hsl(var(--gold))] group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          )
         )}
       </div>
     </section>
@@ -322,8 +355,6 @@ export default function WelcomeRoadmap({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(showPricingInitially);
   const [activeStep, setActiveStep] = useState(0);
-
-  // État pour savoir quels blocs ont été scrollés pour déclencher le fade-in
   const [revealedSteps, setRevealedSteps] = useState<Set<number>>(new Set([0]));
 
   const heroRef = useRef<HTMLDivElement>(null);
@@ -340,34 +371,51 @@ export default function WelcomeRoadmap({
   };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    // 1. Observer pour l'animation d'apparition (Déclenche tôt pour un bel effet)
+    const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            if (entry.target === heroRef.current) {
-              setActiveStep(0);
-            }
             stepRefs.forEach((ref, i) => {
               if (entry.target === ref.current) {
-                setActiveStep(i + 1);
-                // Ajoute l'étape à la liste des éléments révélés pour jouer l'animation de fondu
                 setRevealedSteps((prev) => new Set(prev).add(i + 1));
               }
             });
           }
         });
       },
-      { threshold: 0.2 }, // Déclenche un peu plus tôt pour que l'animation commence bien
+      { rootMargin: "0px 0px -10% 0px", threshold: 0 },
+    );
+
+    // 2. Observer strict pour la barre de progression (L'élément doit être au milieu de l'écran)
+    const spyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === heroRef.current) setActiveStep(0);
+            stepRefs.forEach((ref, i) => {
+              if (entry.target === ref.current) setActiveStep(i + 1);
+            });
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -40% 0px", threshold: 0 },
     );
 
     const allRefs = [heroRef, ...stepRefs];
     allRefs.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
+      if (ref.current) {
+        revealObserver.observe(ref.current);
+        spyObserver.observe(ref.current);
+      }
     });
 
     return () => {
       allRefs.forEach((ref) => {
-        if (ref.current) observer.unobserve(ref.current);
+        if (ref.current) {
+          revealObserver.unobserve(ref.current);
+          spyObserver.unobserve(ref.current);
+        }
       });
     };
   }, []);
@@ -440,9 +488,7 @@ export default function WelcomeRoadmap({
       <ProgressBar activeStep={activeStep} onStepClick={(i) => scrollTo(stepRefs[i])} />
 
       {/* ─── STEPS ─── */}
-      <div className="pb-32">
-        {" "}
-        {/* Espacement sécurisé pour le bouton flottant */}
+      <div className="pb-16">
         {STEPS.map((step, i) => (
           <div
             key={i}
@@ -451,36 +497,16 @@ export default function WelcomeRoadmap({
               revealedSteps.has(i + 1) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
             } ${i === STEPS.length - 1 ? "" : "border-b border-border/40"}`}
           >
-            <StepCard step={step} isLast={i === STEPS.length - 1} />
+            <StepCard
+              step={step}
+              isLast={i === STEPS.length - 1}
+              onNextClick={() => scrollTo(stepRefs[i + 1])}
+              onStartClick={() => setIsModalOpen(true)}
+              viewOnly={viewOnly}
+            />
           </div>
         ))}
       </div>
-
-      {/* ─── FLOATING CTA (step 4) ─── */}
-      {activeStep === 4 && !viewOnly && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 fade-in duration-700">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-4 bg-[#1B2333] text-white px-10 py-5 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.25)] hover:bg-[#1B2333]/90 transition-all group"
-          >
-            <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
-            <ChevronRight className="h-6 w-6 text-[hsl(var(--gold))] group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      )}
-
-      {/* ─── FLOATING NAV (non-step-4) ─── */}
-      {activeStep > 0 && activeStep < 4 && (
-        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in duration-500">
-          <button
-            onClick={() => scrollTo(stepRefs[activeStep])}
-            className="flex items-center gap-3 bg-card border border-border px-6 py-4 rounded-full shadow-elevated hover:shadow-luxury hover:border-gold/50 transition-all group"
-          >
-            <span className="font-heading text-xl sm:text-xl text-foreground">Étape suivante</span>
-            <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:translate-y-0.5 transition-transform" />
-          </button>
-        </div>
-      )}
 
       {!viewOnly && (
         <PricingModal
