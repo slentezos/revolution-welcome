@@ -206,7 +206,7 @@ const STEPS = [
 
 function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepClick: (i: number) => void }) {
   return (
-    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border py-[50px]">
+    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
       <div className="max-w-4xl mx-auto px-4 py-5">
         {/* Step indicators */}
         <div className="flex items-center justify-between">
@@ -243,7 +243,7 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
                   }`}
                 >
                   <span className="block sm:hidden">{i + 1}</span>
-                  <span className="hidden sm:block text-xl">Étape {i + 1}</span>
+                  <span className="hidden sm:block">Étape {i + 1}</span>
                 </span>
               </button>
             );
@@ -426,7 +426,7 @@ export default function WelcomeRoadmap({
                   <span className="text-foreground font-heading text-lg sm:text-xl leading-snug block mb-2">
                     {step.title}
                   </span>
-                  <span className="text-muted-foreground flex items-center gap-1 text-xl">
+                  <span className="text-muted-foreground text-base flex items-center gap-1">
                     ⏱️ {step.duration}
                   </span>
                 </button>
