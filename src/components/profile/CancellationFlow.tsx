@@ -169,7 +169,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <div className="mx-auto w-16 h-16 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-3">
                 <Heart className="h-8 w-8 text-[hsl(var(--gold))]" />
               </div>
-              <p className="text-muted-foreground uppercase tracking-widest font-medium text-base">
+              <p className="text-muted-foreground uppercase tracking-widest font-medium text-xl">
                 {firstName ? `${firstName}, ` : ""}nous sommes tristes de vous voir partir
               </p>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">
@@ -184,8 +184,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">💖</span>
                 <div>
-                  <p className="font-semibold text-foreground text-xl">J'ai fait une belle rencontre sur Kalimera</p>
-                  <p className="text-muted-foreground mt-1 text-lg">Partagez votre bonheur avec nous</p>
+                  <p className="font-semibold text-foreground text-2xl">J'ai fait une belle rencontre sur Kalimera</p>
+                  <p className="text-muted-foreground mt-1 text-xl">Partagez votre bonheur avec nous</p>
                 </div>
               </button>
               <button
@@ -194,8 +194,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">🕊️</span>
                 <div>
-                  <p className="font-semibold text-foreground text-xl">Je n'ai pas fait la rencontre espérée</p>
-                  <p className="text-muted-foreground mt-1 text-lg">Nous aimerions vous proposer quelque chose</p>
+                  <p className="font-semibold text-foreground text-2xl">Je n'ai pas fait la rencontre espérée</p>
+                  <p className="text-muted-foreground mt-1 text-xl">Nous aimerions vous proposer quelque chose</p>
                 </div>
               </button>
               <button
@@ -204,8 +204,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">💬</span>
                 <div>
-                  <p className="font-semibold text-foreground text-xl">Autre raison / Je souhaite faire une pause</p>
-                  <p className="text-muted-foreground mt-1 text-lg">Mettez votre profil en veille sans tout effacer</p>
+                  <p className="font-semibold text-foreground text-2xl">Autre raison / Je souhaite faire une pause</p>
+                  <p className="text-muted-foreground mt-1 text-xl">Mettez votre profil en veille sans tout effacer</p>
                 </div>
               </button>
             </div>
