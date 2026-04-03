@@ -48,25 +48,25 @@ export default function ProfileGiftTab() {
               <h3 className="font-heading text-2xl md:text-3xl text-foreground">Informations du destinataire</h3>
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <Label className="text-lg font-medium text-foreground">Nom du destinataire</Label>
+                  <Label className="font-medium text-foreground text-xl">Nom du destinataire</Label>
                   <Input
                     placeholder="Ex : Marie Dupont"
-                    className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none" />
+                    className="h-14 border-2 border-muted bg-background focus:border-primary rounded-none text-xl" />
                   
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-lg font-medium text-foreground">Email du destinataire</Label>
+                  <Label className="font-medium text-foreground text-xl">Email du destinataire</Label>
                   <Input
                     type="email"
                     placeholder="marie@exemple.fr"
-                    className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none" />
+                    className="h-14 border-2 border-muted bg-background focus:border-primary rounded-none text-xl" />
                   
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-lg font-medium text-foreground">Votre message personnel (optionnel)</Label>
+                  <Label className="font-medium text-foreground text-xl">Votre message personnel (optionnel)</Label>
                   <Input
                     placeholder="Un petit mot pour accompagner le cadeau…"
-                    className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none" />
+                    className="h-14 border-2 border-muted bg-background focus:border-primary rounded-none text-xl" />
                   
                 </div>
               </div>
