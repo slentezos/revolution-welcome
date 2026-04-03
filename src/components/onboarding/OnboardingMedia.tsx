@@ -269,82 +269,14 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 )}
               </div>
               <div className="flex items-center justify-between px-4">
-                <p className="text-[#1B2333]/60 text-lg italic">Votre sourire est votre plus belle signature.</p>
+                <p className="text-[#1B2333]/60 italic text-xl">Votre sourire est votre plus belle signature.</p>
                 <button
                   onClick={() => setShowVideoTutorial(true)}
-                  className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold text-lg hover:bg-[hsl(var(--gold))]/20 transition-all"
+                  className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold hover:bg-[hsl(var(--gold))]/20 transition-all text-xl"
                 >
-                  <Lightbulb className="h-5 w-5" /> Conseils vidéo
-                </button>
-              </div>
-            </div>
-
-            {/* PHOTOS */}
-            <div className="min-h-0 grid grid-cols-2 gap-4">
-              {photoSlots.map((slot) => (
-                <div key={slot.id} className="min-h-0 flex flex-col gap-2">
-                  <div
-                    className={cn(
-                      "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
-                      slot.preview ? "border-transparent" : "bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
-                    )}
-                    onClick={() => handleSlotClick(slot.id)}
-                  >
-                    {slot.preview ? (
-                      <>
-                        <img src={slot.preview} alt={slot.label} className="w-full h-full object-cover" />
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveSlot(slot.id);
-                          }}
-                          className="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-full shadow-md"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </>
-                    ) : (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                        <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
-                          <Camera className="h-6 w-6 text-muted-foreground" />
-                        </div>
-                        <span className="text-lg font-bold text-[#1B2333]">+ {slot.label}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* FOOTER */}
-      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20 text-left shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
-        <div className="max-w-5xl mx-auto space-y-6">
-          <div
-            className={cn(
-              "flex items-center gap-5 p-6 rounded-3xl border transition-all cursor-pointer",
-              confirmedAge ? "bg-emerald-50/50 border-emerald-200" : "bg-white border-[#E5E0D8]",
-            )}
-            onClick={() => setConfirmedAge(!confirmedAge)}
-          >
-            <div
-              className={cn(
-                "h-8 w-8 rounded-lg border-2 flex items-center justify-center transition-all",
-                confirmedAge ? "bg-emerald-500 border-emerald-500" : "bg-white border-gray-300",
-              )}
-            >
-              {confirmedAge && <Check className="text-white h-6 w-6" />}
-            </div>
-            <p className="text-xl font-medium text-[#1B2333] select-none">
-              Je certifie sur l'honneur que mes photos ont été prises il y a{" "}
-              <span className="font-bold underline text-[hsl(var(--gold))]">moins de 18 mois</span>.
-            </p>
-          </div>
-
+...
           <div className="flex items-center justify-between">
-            <p className="text-xl font-medium text-gray-400 hidden md:block">
+            <p className="font-medium text-gray-400 hidden md:block text-2xl">
               Votre sécurité est notre priorité absolue.
             </p>
             <div className="flex gap-4 w-full md:w-auto">
