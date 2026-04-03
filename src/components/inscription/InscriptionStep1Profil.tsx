@@ -61,7 +61,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
       </div>
 
       <div>
-        <label className="block font-medium text-foreground mb-3 text-lg">Prénom *</label>
+        <label className="block font-medium text-foreground mb-3 text-xl">Prénom *</label>
         <Input
           placeholder="Votre prénom"
           className="h-14 text-xl rounded-xl"
@@ -74,7 +74,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
       </div>
 
       <div>
-        <label className="block font-medium text-foreground mb-3 text-lg">Date de naissance *</label>
+        <label className="block font-medium text-foreground mb-3 text-xl">Date de naissance *</label>
         <div className="grid grid-cols-3 gap-3">
           <Select value={formData.birthDay} onValueChange={(v) => update("birthDay", v)}>
             <SelectTrigger className="h-14 text-xl rounded-xl">
@@ -120,7 +120,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
 
       <div className="flex flex-col gap-8">
         <div>
-          <label className="block font-medium text-foreground mb-3 text-lg">Je suis *</label>
+          <label className="block font-medium text-foreground mb-3 text-xl">Je suis *</label>
           <div className="grid grid-cols-2 gap-3">
             {[
               { value: "homme", label: "Un homme" },
@@ -144,7 +144,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
         </div>
 
         <div>
-          <label className="block font-medium text-foreground mb-3 text-lg">Je recherche *</label>
+          <label className="block font-medium text-foreground mb-3 text-xl">Je recherche *</label>
           <div className="grid grid-cols-2 gap-3">
             {[
               { value: "Un compagnon", label: "Un compagnon" },
