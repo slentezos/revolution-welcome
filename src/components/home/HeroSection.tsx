@@ -33,8 +33,8 @@ export default function HeroSection() {
           className="font-heading text-2xl md:text-3xl lg:text-5xl text-foreground mb-6 leading-relaxed font-semibold"
         >
           L'élégance des rencontres après 60 ans.
-          <br className="hidden md:block" />
-          Déjà disponible en Île-de-France, bientôt chez vous.
+          <br className="hidden lg:block" />
+          <span className="lg:whitespace-nowrap">Déjà disponible en Île-de-France, bientôt chez&nbsp;vous.</span>
         </h1>
 
         <p data-reveal data-reveal-delay="600" className="text-lg mb-10 md:text-2xl text-foreground/80 font-medium">
