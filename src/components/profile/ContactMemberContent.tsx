@@ -205,13 +205,13 @@ export default function ContactMemberContent() {
   return (
     <>
       {/* ─── Hero ─── 
-          MODIFICATION : -mt-16 ou -mt-20 pour "aspirer" le bloc vers le haut 
-          et supprimer l'espace du Layout parent. pt-0 pour être sûr.
+          CORRECTION : On utilise une marge négative précise pour annuler le padding du Layout 
+          et on ajoute top-[-1px] pour recouvrir la bordure de l'onglet si besoin.
       */}
-      <section ref={heroRef} className="relative pt-0 pb-16 md:pb-24 overflow-hidden -mt-16 lg:-mt-20">
+      <section ref={heroRef} className="relative pt-0 pb-16 md:pb-24 overflow-hidden -mt-[81px] z-10">
         <div className="grid lg:grid-cols-2 min-h-[50vh]">
-          {/* Colonne Gauche : On réduit le pt pour aligner le texte avec le haut de l'image */}
-          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 pt-16 pb-16 lg:pt-24 lg:pb-24">
+          {/* Colonne Gauche : On ajoute un pt-32 pour compenser la remontée du bloc et laisser respirer le texte */}
+          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 pt-32 pb-16 lg:pt-40 lg:pb-24">
             <div className="max-w-xl">
               <span
                 data-reveal
@@ -238,7 +238,7 @@ export default function ContactMemberContent() {
           </div>
 
           {/* Colonne Droite (Photo) */}
-          <div className="relative hidden lg:block">
+          <div className="relative hidden lg:block pt-[81px]">
             <img
               src={contactMemberHero}
               alt="Votre conciergerie privée Kalimera"
