@@ -261,7 +261,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
                         <p className="font-bold text-xl leading-tight">Intimidé(e) ?</p>
-                        <p className="text-lg opacity-80 underline">On vous filme en visio (40€)</p>
+                        <p className="text-lg opacity-80 underline">On vous filme en visio (49€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
