@@ -300,7 +300,7 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
             <h2 className="font-heading text-3xl font-bold text-[#1B2333] transition-all duration-300">
               {CHAPTERS[currentChapter]}
             </h2>
-            <span className="text-gray-500 font-medium text-base">
+            <span className="text-gray-500 text-xl font-normal">
               {answeredCount} / {PROFILE_QUESTIONS.length} répondues
             </span>
           </div>
