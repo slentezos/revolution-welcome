@@ -105,7 +105,13 @@ export default function Header() {
         <div className="mx-auto px-6 md:px-12 flex items-center justify-between">
           <span className="font-serif text-2xl md:text-3xl tracking-tight text-slate-900">Kalimera</span>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              if (currentPath.startsWith("/reservation")) {
+                navigate("/onboarding?step=welcome&showPricing=true");
+              } else {
+                navigate(-1);
+              }
+            }}
             className="flex items-center gap-2 bg-white border border-amber-200/50 hover:border-amber-500/50 text-slate-700 px-5 py-2.5 rounded-full transition-all duration-300 shadow-sm group"
           >
             <ChevronLeft className="h-4 w-4 text-amber-500 group-hover:-translate-x-1 transition-transform" />
