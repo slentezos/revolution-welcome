@@ -279,7 +279,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
                 {currentCategory.suggestions.map((suggestion) => (
                   <span
                     key={suggestion}
-                    className="px-4 py-1.5 rounded-full font-medium bg-accent text-accent-foreground border border-border text-base"
+                    className="px-4 py-1.5 rounded-full font-medium bg-accent text-accent-foreground border border-border text-xl"
                   >
                     {suggestion}
                   </span>
