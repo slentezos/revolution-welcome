@@ -232,7 +232,7 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
                 </div>
                 {/* Label */}
                 <span
-                  className={`text-base sm:text-lg font-medium transition-colors text-center leading-tight ${
+                  className={`text-base sm:text-xl font-medium transition-colors text-center leading-tight ${
                     isActive ? "text-foreground" : "text-muted-foreground"
                   }`}
                 >
@@ -270,7 +270,7 @@ function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: num
             <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
           </div>
           <div>
-            <span className="text-gold font-semibold tracking-wider uppercase text-lg sm:text-xl">
+            <span className="text-gold font-semibold tracking-wider uppercase text-xl sm:text-xl">
               Étape {step.number}
             </span>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl text-foreground leading-tight">
@@ -407,7 +407,7 @@ export default function WelcomeRoadmap({
                     <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
                   </div>
                   <div className="flex-grow">
-                    <span className="text-gold text-lg sm:text-xl font-semibold tracking-wide block mb-2">
+                    <span className="text-gold text-xl sm:text-xl font-semibold tracking-wide block mb-2">
                       Étape {step.number}
                     </span>
                     <span className="text-foreground font-heading text-2xl sm:text-3xl leading-snug block mb-4">
@@ -464,7 +464,7 @@ export default function WelcomeRoadmap({
             onClick={() => scrollTo(stepRefs[activeStep])}
             className="flex items-center gap-3 bg-card border border-border px-6 py-4 rounded-full shadow-elevated hover:shadow-luxury hover:border-gold/50 transition-all group"
           >
-            <span className="font-heading text-lg sm:text-xl text-foreground">Étape suivante</span>
+            <span className="font-heading text-xl sm:text-xl text-foreground">Étape suivante</span>
             <ArrowDown className="h-5 w-5 text-gold group-hover:translate-y-0.5 transition-transform" />
           </button>
         </div>
