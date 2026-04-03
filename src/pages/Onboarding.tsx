@@ -188,6 +188,7 @@ export default function Onboarding() {
             <WelcomeRoadmap
               onStartAutonomous={handleStartAutonomous}
               onStartConcierge={handleStartConcierge}
+              showPricingInitially={searchParams.get("showPricing") === "true"}
             />
           )
         )}
