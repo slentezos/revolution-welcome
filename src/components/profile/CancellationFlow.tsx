@@ -35,7 +35,7 @@ interface CancellationFlowProps {
 export default function CancellationFlow({ open, onOpenChange, firstName }: CancellationFlowProps) {
   const [step, setStep] = useState<Step>("reason");
   const [testimony, setTestimony] = useState("");
-  const [interimText, setInterimText] = useState(""); // NOUVEAU: Le texte en temps réel
+  const [interimText, setInterimText] = useState("");
   const [giftEmails, setGiftEmails] = useState(["", "", ""]);
   const [invitesLeft, setInvitesLeft] = useState(3);
   const [copied, setCopied] = useState(false);
@@ -85,13 +85,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     }
   };
 
-  // ─── Native Dictation Setup (AVEC TEMPS RÉEL) ───
+  // ─── Native Dictation Setup ───
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
-      recognition.interimResults = true; // Crucial pour le temps réel
+      recognition.interimResults = true;
       recognition.lang = "fr-FR";
 
       recognition.onresult = (event: any) => {
@@ -103,14 +103,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           if (event.results[i].isFinal) {
             finalSegment += transcript + " ";
           } else {
-            interimSegment += transcript; // Capture les mots à la volée
+            interimSegment += transcript;
           }
         }
 
         if (finalSegment) {
           setTestimony((prev) => prev + finalSegment);
         }
-        // Met à jour l'écran instantanément avec les mots en cours de prononciation
         setInterimText(interimSegment);
       };
 
@@ -121,7 +120,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
 
       recognition.onend = () => {
         setIsRecording(false);
-        setInterimText(""); // Nettoie le texte temporaire quand ça coupe
+        setInterimText("");
       };
 
       recognitionRef.current = recognition;
@@ -133,7 +132,6 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
       stopRecording();
     } else {
       if (recognitionRef.current) {
-        // Ajoute un espace propre avant de commencer à dicter si on reprend
         setTestimony((prev) => prev + (prev.endsWith(" ") || prev === "" ? "" : " "));
         recognitionRef.current.start();
         setIsRecording(true);
@@ -151,7 +149,6 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     if (recognitionRef.current && isRecording) {
       recognitionRef.current.stop();
       setIsRecording(false);
-      // S'il restait des mots non finalisés, on les pousse dans le texte principal
       if (interimText) {
         setTestimony((prev) => prev + interimText + " ");
       }
@@ -169,7 +166,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <div className="mx-auto w-16 h-16 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-3">
                 <Heart className="h-8 w-8 text-[hsl(var(--gold))]" />
               </div>
-              <p className="text-muted-foreground uppercase tracking-widest font-medium text-xl">
+              <p className="text-muted-foreground uppercase tracking-widest font-medium text-base">
                 {firstName ? `${firstName}, ` : ""}nous sommes tristes de vous voir partir
               </p>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">
@@ -184,8 +181,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">💖</span>
                 <div>
-                  <p className="font-semibold text-foreground text-2xl">J'ai fait une belle rencontre sur Kalimera</p>
-                  <p className="text-muted-foreground mt-1 text-xl">Partagez votre bonheur avec nous</p>
+                  <p className="font-semibold text-foreground text-xl">J'ai fait une belle rencontre sur Kalimera</p>
+                  <p className="text-muted-foreground mt-1 text-lg">Partagez votre bonheur avec nous</p>
                 </div>
               </button>
               <button
@@ -194,8 +191,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">🕊️</span>
                 <div>
-                  <p className="font-semibold text-foreground text-2xl">Je n'ai pas fait la rencontre espérée</p>
-                  <p className="text-muted-foreground mt-1 text-xl">Nous aimerions vous proposer quelque chose</p>
+                  <p className="font-semibold text-foreground text-xl">Je n'ai pas fait la rencontre espérée</p>
+                  <p className="text-muted-foreground mt-1 text-lg">Nous aimerions vous proposer quelque chose</p>
                 </div>
               </button>
               <button
@@ -204,8 +201,8 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               >
                 <span className="text-4xl flex-shrink-0 group-hover:scale-110 transition-transform">💬</span>
                 <div>
-                  <p className="font-semibold text-foreground text-2xl">Autre raison / Je souhaite faire une pause</p>
-                  <p className="text-muted-foreground mt-1 text-xl">Mettez votre profil en veille sans tout effacer</p>
+                  <p className="font-semibold text-foreground text-xl">Autre raison / Je souhaite faire une pause</p>
+                  <p className="text-muted-foreground mt-1 text-lg">Mettez votre profil en veille sans tout effacer</p>
                 </div>
               </button>
             </div>
@@ -215,7 +212,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2A: Success Story (With Real-Time Dictation) ───
+  // ─── Step 2A: Success Story ───
   if (step === "success_story") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
@@ -226,7 +223,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 stopRecording();
                 setStep("reason");
               }}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-xl"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -241,21 +238,41 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             </div>
 
             <div className="space-y-4 bg-secondary/30 p-6 md:p-8 rounded-[1.5rem] border border-secondary">
-              <Label className="text-foreground font-medium block text-2xl">
+              <Label className="text-foreground text-xl font-medium block">
                 Racontez-nous votre belle histoire
-                <span className="text-muted-foreground font-normal ml-2 text-xl">(facultatif)</span>
+                <span className="text-muted-foreground font-normal ml-2 text-lg">(facultatif)</span>
               </Label>
 
+              {/* NOUVEL INDICATEUR DE DICTÉE ULTRA VISIBLE */}
+              {isRecording && (
+                <div className="flex items-center gap-4 py-4 px-6 rounded-2xl bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] animate-in slide-in-from-top-2 duration-500 shadow-sm">
+                  <div className="flex items-end gap-[4px] h-6 shrink-0">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <span
+                        key={i}
+                        className="w-[4px] rounded-full bg-[hsl(var(--gold))]"
+                        style={{
+                          animation: `equalizer 0.8s ease-in-out ${i * 0.1}s infinite alternate`,
+                          height: "30%",
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-[hsl(var(--gold))] text-xl md:text-2xl font-bold italic leading-tight">
+                    Je vous écoute... dictez votre message.
+                  </span>
+                </div>
+              )}
+
               <div className="flex flex-col gap-4">
-                {/* La valeur affichée est maintenant la combinaison du texte final ET du texte dicté en temps réel */}
                 <Textarea
                   value={testimony + interimText}
                   onChange={(e) => {
                     setTestimony(e.target.value);
-                    setInterimText(""); // Nettoie l'interim si l'utilisateur tape au clavier
+                    setInterimText("");
                   }}
                   placeholder="Nous nous sommes rencontrés le..."
-                  className="min-h-[160px] text-xl resize-none rounded-2xl border-secondary bg-white focus:ring-[hsl(var(--gold))] p-5 shadow-inner"
+                  className="min-h-[180px] text-xl md:text-2xl resize-none rounded-2xl border-secondary bg-white focus:ring-[hsl(var(--gold))] p-6 shadow-inner leading-relaxed"
                   maxLength={500}
                 />
 
@@ -263,43 +280,20 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   <button
                     type="button"
                     onClick={toggleDictation}
-                    className={`min-h-[48px] px-6 w-full md:w-auto min-w-[200px] flex items-center justify-center gap-3 rounded-xl transition-all duration-300 font-semibold shrink-0 ${
+                    className={`min-h-[60px] px-8 w-full md:w-auto min-w-[240px] flex items-center justify-center gap-4 rounded-2xl transition-all duration-300 text-xl font-bold shadow-lg ${
                       isRecording
-                        ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
-                        : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90 text-xl"
+                        ? "bg-[#E53935] text-white animate-pulse"
+                        : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
                     }`}
-                    aria-label={isRecording ? "Arrêter de dicter" : "Dictée vocale"}
                   >
-                    {isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                    {isRecording ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
                     {isRecording ? "Arrêter de dicter" : "Dicter mon histoire"}
                   </button>
 
                   <div className="min-h-[1.5rem] flex items-center justify-center md:justify-end">
-                    {isRecording ? (
-                      <div className="flex items-center gap-3">
-                        <p className="font-bold text-xl md:text-2xl" style={{ color: "hsl(var(--gold))" }}>
-                          Je vous écoute...
-                        </p>
-                        <div className="flex items-end gap-1 h-5">
-                          <span
-                            className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                            style={{ height: "60%", animationDelay: "0ms" }}
-                          />
-                          <span
-                            className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                            style={{ height: "100%", animationDelay: "150ms" }}
-                          />
-                          <span
-                            className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                            style={{ height: "40%", animationDelay: "300ms" }}
-                          />
-                        </div>
-                      </div>
-                    ) : testimony.length > 0 ? (
-                      <p className="italic text-lg" style={{ color: "hsl(var(--gold))" }}>
-                        ✍️ Votre brouillon est sauvegardé
-                      </p>
-                    ) : null}
+                    {!isRecording && testimony.length > 0 && (
+                      <p className="italic text-lg font-medium text-[hsl(var(--gold))]">✍️ Votre histoire est prête</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -311,7 +305,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   stopRecording();
                   setStep("success_gift");
                 }}
-                className="w-full h-14 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
+                className="w-full h-16 rounded-2xl text-primary-foreground text-2xl font-bold bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-xl"
               >
                 Continuer vers la clôture
               </Button>
@@ -320,7 +314,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   stopRecording();
                   setStep("success_gift");
                 }}
-                className="w-full text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
+                className="w-full text-muted-foreground hover:text-foreground font-medium text-lg transition-colors py-2"
               >
                 Passer cette étape
               </button>
@@ -331,7 +325,10 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
     );
   }
 
-  // ─── Step 2B: Success Gift (No Scroll, Dynamic Counter) ───
+  // (Le reste des étapes success_gift, success_gift_email, retention, pause reste identique...)
+  // Mais assurez-vous d'inclure les keyframes equalizer dans le style à la fin
+
+  // ─── Step 2B: Success Gift ───
   if (step === "success_gift") {
     return (
       <Dialog open={open} onOpenChange={handleClose}>
@@ -624,6 +621,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           </div>
         </div>
       </DialogContent>
+      {/* Equalizer animation keyframes */}
+      <style>{`
+        @keyframes equalizer {
+          0% { height: 30%; }
+          100% { height: 100%; }
+        }
+      `}</style>
     </Dialog>
   );
 }
