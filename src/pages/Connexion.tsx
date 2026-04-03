@@ -384,9 +384,9 @@ export default function Connexion() {
               </div>
             )}
 
-            <p className="mt-10 text-center text-muted-foreground text-xl">
+            <p className="mt-10 text-center text-muted-foreground text-2xl">
               Vous n'avez pas de compte ?{" "}
-              <button onClick={() => setModalOpen(true)} className="text-[#1B2333] font-bold hover:underline">
+              <button onClick={() => setModalOpen(true)} className="text-[#1B2333] font-bold hover:underline text-xl">
                 Rejoindre le Cercle
               </button>
             </p>
