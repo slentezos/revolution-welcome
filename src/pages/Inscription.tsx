@@ -216,7 +216,7 @@ export default function Inscription() {
           <div className="mb-10">
             <div className="flex justify-between mb-3">
               {allSteps.map((label) => (
-                <span key={label} className="text-lg">
+                <span key={label} className="text-xl">
                   {label}
                 </span>
               ))}
