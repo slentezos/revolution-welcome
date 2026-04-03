@@ -146,7 +146,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
           <Button
             type="button"
             onClick={handleVerifyCode}
-            className="btn-primary w-full h-14 text-base rounded-xl"
+            className="btn-primary w-full h-14 text-xl rounded-xl"
             disabled={code.length !== 6 || verifying}
           >
             {verifying ? "Vérification..." : "Vérifier le code"}
