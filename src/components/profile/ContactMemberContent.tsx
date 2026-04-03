@@ -251,7 +251,7 @@ export default function ContactMemberContent() {
             <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
               Questions fréquentes
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-xl">
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Retrouvez ici les réponses aux interrogations les plus courantes de nos membres.
             </p>
           </div>

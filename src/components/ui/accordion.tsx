@@ -10,7 +10,7 @@ const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Item ref={ref} className={cn("border-b border-border/60", className)} {...props} />
+  <AccordionPrimitive.Item ref={ref} className={cn("border-b", className)} {...props} />
 ));
 AccordionItem.displayName = "AccordionItem";
 
@@ -22,14 +22,13 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-6 font-semibold text-xl md:text-2xl transition-all hover:text-primary [&[data-state=open]>svg]:rotate-180 text-left",
+        "flex flex-1 items-center justify-between py-4 font-large transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
         className,
       )}
       {...props}
     >
       {children}
-      {/* Chevron agrandi en h-6 w-6 pour matcher le texte XL */}
-      <ChevronDown className="h-6 w-6 shrink-0 text-muted-foreground transition-transform duration-200" />
+      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ));
@@ -41,13 +40,10 @@ const AccordionContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className="overflow-hidden transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    className="overflow-hidden text-xl transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >
-    {/* Texte en text-xl avec un interligne aéré (leading-relaxed) */}
-    <div className={cn("pb-6 pt-0 text-muted-foreground leading-relaxed text-xl md:text-2xl", className)}>
-      {children}
-    </div>
+    <div className={cn("pb-4 pt-0 text-muted-foreground leading-relaxed text-2xl", className)}>{children}</div>
   </AccordionPrimitive.Content>
 ));
 
