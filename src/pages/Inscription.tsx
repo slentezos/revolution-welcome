@@ -283,8 +283,8 @@ export default function Inscription() {
         <div className="absolute inset-0 bg-primary/70" />
         <div className="absolute inset-0 flex items-center justify-center p-16">
           <div className="text-center text-primary-foreground relative z-10">
-            <h2 className="font-heading text-4xl font-semibold mb-6">75% d'affinités réciproques</h2>
-            <p className="text-primary-foreground/90 max-w-md mx-auto mb-8 text-xl">
+            <h2 className="font-heading font-semibold mb-6 text-5xl">75% d'affinités réciproques</h2>
+            <p className="text-primary-foreground/90 max-w-md mx-auto mb-8 text-2xl">
               Notre algorithme analyse plus de 200 critères pour vous proposer des profils vraiment compatibles.
             </p>
             <div className="flex justify-center gap-8">
@@ -292,13 +292,13 @@ export default function Inscription() {
                 <div className="text-4xl font-heading font-bold" style={{ color: "hsl(var(--gold))" }}>
                   40+
                 </div>
-                <div className="text-lg text-primary-foreground/80">Rubriques</div>
+                <div className="text-primary-foreground/80 text-2xl">Rubriques</div>
               </div>
               <div>
                 <div className="text-4xl font-heading font-bold" style={{ color: "hsl(var(--gold))" }}>
                   300+
                 </div>
-                <div className="text-lg text-primary-foreground/80">Critères</div>
+                <div className="text-primary-foreground/80 text-2xl">Critères</div>
               </div>
             </div>
           </div>
