@@ -88,7 +88,7 @@ export default function Footer() {
             {/* Membre */}
             <div className="text-lg">
               <h4 className="font-medium tracking-[0.2em] uppercase mb-6 text-xl text-neutral-400">Espace membre</h4>
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-4 mb-8 text-xl">
                 {footerLinks.member.map((link) => (
                   <li key={link.href}>
                     <Link

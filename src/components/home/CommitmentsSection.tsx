@@ -57,7 +57,7 @@ export default function CommitmentsSection() {
               Rejoindre Kalimera
             </button>
             <p className="mt-6 text-muted-foreground">
-              <Link to="/connexion" className="link-underline hover:text-primary transition-colors text-xl">
+              <Link to="/connexion" className="link-underline hover:text-primary transition-colors text-2xl">
                 Déjà membre ? Connectez-vous
               </Link>
             </p>

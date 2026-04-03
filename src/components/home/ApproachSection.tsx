@@ -61,10 +61,10 @@ export default function ApproachSection() {
               >
                 <span className="font-medium text-muted-foreground/50 pt-1 text-base">{feature.number}</span>
                 <div>
-                  <h3 className="font-heading text-xl text-foreground mb-1 group-hover:text-primary transition-colors">
+                  <h3 className="font-heading text-foreground mb-1 group-hover:text-primary transition-colors text-2xl">
                     {feature.title}
                   </h3>
-                  <p className="text-muted-foreground text-lg">{feature.description}</p>
+                  <p className="text-muted-foreground text-xl">{feature.description}</p>
                 </div>
               </div>
             ))}

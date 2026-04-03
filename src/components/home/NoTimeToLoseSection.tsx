@@ -38,7 +38,7 @@ export default function NoTimeToLoseSection() {
               <span className="font-heading text-2xl">Kalimera</span>
             </div>
 
-            <p data-reveal data-reveal-delay="500" className="text-lg text-primary-foreground/90 mb-10">
+            <p data-reveal data-reveal-delay="500" className="text-primary-foreground/90 mb-10 text-xl">
               Une plateforme simple et sérieuse pour des rencontres respectueuses et durables.
             </p>
 
