@@ -436,7 +436,7 @@ export default function Messages() {
                       </TooltipTrigger>
                       <TooltipContent
                         side="bottom"
-                        className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-sm leading-relaxed"
+                        className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-xl leading-relaxed"
                       >
                         <p className="font-semibold text-[#1B2333] mb-1">Votre Cercle Privé</p>
                         <p className="text-muted-foreground">
@@ -825,7 +825,7 @@ export default function Messages() {
             <div className="bg-[#1B2333] px-6 py-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Lightbulb className="h-6 w-6 text-[hsl(var(--gold-light))]" />
-                <h2 className="font-heading font-semibold text-white text-2xl">9 conseils pour un bon départ</h2>
+                <h2 className="font-heading text-xl font-semibold text-white">9 conseils pour un bon départ</h2>
               </div>
               <button
                 onClick={() => setShowConseils(false)}
@@ -840,10 +840,10 @@ export default function Messages() {
                   key={index}
                   className="flex items-start gap-3 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 text-left"
                 >
-                  <span className="shrink-0 w-8 h-8 rounded-full bg-[#1B2333] text-white flex items-center justify-center font-semibold text-xl">
+                  <span className="shrink-0 w-8 h-8 rounded-full bg-[#1B2333] text-white flex items-center justify-center text-sm font-semibold">
                     {index + 1}
                   </span>
-                  <p className="leading-relaxed text-foreground pt-1 text-xl">{conseil}</p>
+                  <p className="text-sm leading-relaxed text-foreground pt-1">{conseil}</p>
                 </div>
               ))}
             </div>
