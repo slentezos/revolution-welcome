@@ -63,10 +63,10 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
           <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-4 text-[#1B2333]">
             <MapPin className="h-6 w-6" />
           </div>
-          <h2 className="font-heading text-2xl font-bold text-[#1B2333] mb-3">
+          <h2 className="font-heading font-bold text-[#1B2333] mb-3 text-4xl">
             Bienvenue chez Kalimera.
           </h2>
-          <p className="text-foreground text-base">
+          <p className="text-foreground text-xl">
             Pour vous garantir des rencontres de qualité près de chez vous, vérifions d'abord que notre Cercle est
             ouvert dans votre région.
           </p>
@@ -80,7 +80,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
             onChange={(e) => handleChange(e.target.value)}
             inputMode="numeric"
             maxLength={5}
-            className="h-14 text-lg text-center tracking-widest rounded-xl border-gray-200 focus:border-[hsl(var(--gold))]"
+            className="h-14 text-center tracking-widest rounded-xl border-gray-200 focus:border-[hsl(var(--gold))] text-xl"
             autoFocus
           />
 
@@ -95,7 +95,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
         </div>
 
         {/* Helper text */}
-        <p className="text-gray-500 text-center mb-6 flex items-center justify-center gap-1.5 text-sm">
+        <p className="text-gray-500 text-center mb-6 flex items-center justify-center gap-1.5 text-xl">
           <Lock className="h-3.5 w-3.5" />
           Vérification de la proximité pour garantir des rencontres authentiques.
         </p>
