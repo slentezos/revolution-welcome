@@ -148,13 +148,13 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
         
         <label htmlFor="terms" className="text-muted-foreground leading-relaxed cursor-pointer text-lg">
           J'accepte les{" "}
-          <Link to="/conditions" className="text-primary font-medium hover:underline">
+          <a href="/conditions" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">
             conditions générales
-          </Link>{" "}
+          </a>{" "}
           et la{" "}
-          <Link to="/confidentialite" className="text-primary font-medium hover:underline">
+          <a href="/confidentialite" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">
             politique de confidentialité
-          </Link>
+          </a>
         </label>
       </div>
       {errors.acceptTerms && <p className="text-destructive text-sm -mt-4">{errors.acceptTerms}</p>}
