@@ -303,7 +303,7 @@ export default function NotreMethode() {
             <div className="absolute top-0 right-0 w-40 h-40 bg-[hsl(var(--gold)/0.1)] rounded-full blur-2xl" />
             <div className="relative flex flex-col md:flex-row items-center justify-center gap-4 text-center">
               <Shield className="h-8 w-8 text-[hsl(var(--gold-light))]" />
-              <p className="text-lg text-primary-foreground/90 font-medium">
+              <p className="text-primary-foreground/90 font-medium text-xl">
                 Toutes les informations sont confidentielles. Aucun élément n'est partagé sans votre consentement
                 préalable. Profitez de vos échanges en toute sérénité. Chaque inscription est validée avec soin par
                 notre équipe afin de préserver la qualité et la bienveillance de notre communauté.
@@ -319,7 +319,7 @@ export default function NotreMethode() {
           <div className="text-center max-w-3xl mx-auto mb-20">
             <span
               data-reveal
-              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg"
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl"
             >
               Nos considérations
             </span>
@@ -338,7 +338,7 @@ export default function NotreMethode() {
               >
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-6">{principle.title}</h3>
                 <div className="divider-gold mb-6" />
-                <p className="text-muted-foreground leading-relaxed text-lg">{principle.description}</p>
+                <p className="text-muted-foreground leading-relaxed text-xl">{principle.description}</p>
               </div>
             ))}
           </div>
