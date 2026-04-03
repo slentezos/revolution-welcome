@@ -262,7 +262,7 @@ export default function APropos() {
             <div className="text-center mb-16">
               <span
                 data-reveal
-                className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-lg">
+                className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl">
                 
                 Notre vision
               </span>
