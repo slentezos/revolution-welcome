@@ -82,7 +82,7 @@ function PricingModal({
                     Mode Autonome
                   </span>
                 </div>
-                <h3 className="font-heading mb-2 text-3xl">Vos premières impressions</h3>
+                <h3 className="font-heading mb-2 text-4xl">Vos premières impressions</h3>
                 <div className="divider-gold mb-6" />
                 <p className="text-muted-foreground leading-relaxed flex-grow mb-8 text-xl">
                   Profitez de vos 3 mois d'accès offerts en complétant votre portrait à votre rythme : commencez par
