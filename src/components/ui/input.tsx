@@ -31,7 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         onChange={handleChange}
         autoCapitalize="sentences"
         className={cn(
-          "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-lg shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground",
+          "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-xl shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground",
           className,
         )}
         ref={ref}

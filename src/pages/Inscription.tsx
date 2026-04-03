@@ -227,7 +227,7 @@ export default function Inscription() {
                 style={{ width: `${((step + 1) / allSteps.length) * 100}%` }}
               />
             </div>
-            <p className="text-muted-foreground mt-2 text-lg">
+            <p className="text-muted-foreground mt-2 text-xl">
               Étape {step + 1} sur {allSteps.length}
             </p>
           </div>
