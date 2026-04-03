@@ -206,7 +206,6 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
   return (
     <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border py-[50px] pt-[20px] pb-[50px]">
       <div className="max-w-4xl mx-auto px-4 py-5">
-        {/* Step indicators */}
         <div className="flex items-center justify-between">
           {STEPS.map((step, i) => {
             const Icon = step.icon;
@@ -218,7 +217,6 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
                 onClick={() => onStepClick(i)}
                 className="flex flex-col items-center gap-2 group transition-all"
               >
-                {/* Circle */}
                 <div
                   className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${
                     isActive
@@ -230,7 +228,6 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
                 >
                   {isPast ? <Check className="h-6 w-6" /> : <Icon className="h-6 w-6" />}
                 </div>
-                {/* Label */}
                 <span
                   className={`text-base sm:text-xl font-medium transition-colors text-center leading-tight ${
                     isActive ? "text-foreground" : "text-muted-foreground"
@@ -243,7 +240,6 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
             );
           })}
         </div>
-        {/* Connecting line */}
         <div className="relative mt-[-42px] sm:mt-[-46px] mx-[32px] sm:mx-[36px] -z-10">
           <div className="h-0.5 bg-border w-full" />
           <div
@@ -258,26 +254,12 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
 
 /* ─── STEP CARD (Redesigned for seniors) ─── */
 
-function StepCard({
-  step,
-  index,
-  isLast,
-  onStartClick,
-  viewOnly,
-}: {
-  step: (typeof STEPS)[0];
-  index: number;
-  isLast: boolean;
-  onStartClick?: () => void;
-  viewOnly?: boolean;
-}) {
+function StepCard({ step, isLast }: { step: (typeof STEPS)[0]; isLast: boolean }) {
   const Icon = step.icon;
 
   return (
-    // RETRAIT DE min-h-[calc(100vh-140px)] POUR PERMETTRE À LA CARTE DE S'ADAPTER NATURELLEMENT
     <section className="relative w-full flex items-center py-16 md:py-24">
       <div className="max-w-5xl mx-auto px-6 md:px-12 w-full">
-        {/* Step header */}
         <div className="flex items-center gap-5 mb-10">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center shrink-0">
             <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
@@ -292,16 +274,13 @@ function StepCard({
           </div>
         </div>
 
-        {/* Duration badge */}
         <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
           <span className="text-2xl leading-none">⏱️</span>
           <span className="text-2xl lg:text-2xl font-medium text-foreground">Durée : {step.duration}</span>
         </div>
 
-        {/* Description */}
         <p className="text-xl sm:text-2xl leading-relaxed text-muted-foreground max-w-2xl mb-12">{step.description}</p>
 
-        {/* Highlights grid */}
         <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-10">
           {step.highlights.map((h, i) => (
             <div
@@ -316,26 +295,12 @@ function StepCard({
           ))}
         </div>
 
-        {/* Next step preview OU Bouton Final */}
-        {!isLast ? (
+        {/* Next step preview (Uniquement si ce n'est pas la dernière étape) */}
+        {!isLast && (
           <div className="flex items-center gap-4 text-muted-foreground transition-colors duration-500">
             <ArrowRight className="h-5 w-5" />
             <span className="text-2xl">{step.nextLabel}</span>
           </div>
-        ) : (
-          !viewOnly &&
-          onStartClick && (
-            // LE BOUTON EST MAINTENANT INTÉGRÉ ICI, JUSTE EN DESSOUS DES CARTES DE L'ÉTAPE 4
-            <div className="mt-14 animate-in fade-in duration-500">
-              <button
-                onClick={onStartClick}
-                className="flex items-center justify-center gap-4 bg-primary text-primary-foreground px-12 py-5 rounded-full shadow-xl hover:scale-[1.02] transition-all group w-full md:w-auto"
-              >
-                <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
-                <ChevronRight className="h-6 w-6 text-gold group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          )
         )}
       </div>
     </section>
@@ -358,6 +323,9 @@ export default function WelcomeRoadmap({
   const [isModalOpen, setIsModalOpen] = useState(showPricingInitially);
   const [activeStep, setActiveStep] = useState(0);
 
+  // État pour savoir quels blocs ont été scrollés pour déclencher le fade-in
+  const [revealedSteps, setRevealedSteps] = useState<Set<number>>(new Set([0]));
+
   const heroRef = useRef<HTMLDivElement>(null);
   const stepRefs = [
     useRef<HTMLDivElement>(null),
@@ -376,14 +344,20 @@ export default function WelcomeRoadmap({
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            if (entry.target === heroRef.current) setActiveStep(0);
+            if (entry.target === heroRef.current) {
+              setActiveStep(0);
+            }
             stepRefs.forEach((ref, i) => {
-              if (entry.target === ref.current) setActiveStep(i + 1);
+              if (entry.target === ref.current) {
+                setActiveStep(i + 1);
+                // Ajoute l'étape à la liste des éléments révélés pour jouer l'animation de fondu
+                setRevealedSteps((prev) => new Set(prev).add(i + 1));
+              }
             });
           }
         });
       },
-      { threshold: 0.3 },
+      { threshold: 0.2 }, // Déclenche un peu plus tôt pour que l'animation commence bien
     );
 
     const allRefs = [heroRef, ...stepRefs];
@@ -401,7 +375,10 @@ export default function WelcomeRoadmap({
   return (
     <div className="relative">
       {/* ─── HERO ─── */}
-      <section ref={heroRef} className="section-luxury text-center pb-16">
+      <section
+        ref={heroRef}
+        className="section-luxury text-center pb-16 animate-in fade-in slide-in-from-bottom-8 duration-1000"
+      >
         <div className="max-w-6xl mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-xl sm:text-2xl font-medium">
@@ -420,7 +397,6 @@ export default function WelcomeRoadmap({
             </p>
           </div>
 
-          {/* Steps overview cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-14">
             {STEPS.map((step, i) => {
               const Icon = step.icon;
@@ -449,7 +425,6 @@ export default function WelcomeRoadmap({
             })}
           </div>
 
-          {/* Scroll CTA */}
           <button onClick={() => scrollTo(stepRefs[0])} className="inline-flex flex-col items-center gap-3 group">
             <span className="text-gold font-medium tracking-wide group-hover:text-foreground transition-colors duration-500 text-xl sm:text-2xl">
               Découvrir chaque étape en détail
@@ -465,18 +440,47 @@ export default function WelcomeRoadmap({
       <ProgressBar activeStep={activeStep} onStepClick={(i) => scrollTo(stepRefs[i])} />
 
       {/* ─── STEPS ─── */}
-      {STEPS.map((step, i) => (
-        // J'AI RETIRÉ LE pb-32 ICI
-        <div key={i} ref={stepRefs[i]} className={i === STEPS.length - 1 ? "" : "border-b border-border/40"}>
-          <StepCard
-            step={step}
-            index={i}
-            isLast={i === STEPS.length - 1}
-            onStartClick={() => setIsModalOpen(true)}
-            viewOnly={viewOnly}
-          />
+      <div className="pb-32">
+        {" "}
+        {/* Espacement sécurisé pour le bouton flottant */}
+        {STEPS.map((step, i) => (
+          <div
+            key={i}
+            ref={stepRefs[i]}
+            className={`transition-all duration-1000 ease-out transform ${
+              revealedSteps.has(i + 1) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+            } ${i === STEPS.length - 1 ? "" : "border-b border-border/40"}`}
+          >
+            <StepCard step={step} isLast={i === STEPS.length - 1} />
+          </div>
+        ))}
+      </div>
+
+      {/* ─── FLOATING CTA (step 4) ─── */}
+      {activeStep === 4 && !viewOnly && (
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-8 fade-in duration-700">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-4 bg-[#1B2333] text-white px-10 py-5 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.25)] hover:bg-[#1B2333]/90 transition-all group"
+          >
+            <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
+            <ChevronRight className="h-6 w-6 text-[hsl(var(--gold))] group-hover:translate-x-1 transition-transform" />
+          </button>
         </div>
-      ))}
+      )}
+
+      {/* ─── FLOATING NAV (non-step-4) ─── */}
+      {activeStep > 0 && activeStep < 4 && (
+        <div className="fixed bottom-8 right-8 z-50 animate-in fade-in zoom-in duration-500">
+          <button
+            onClick={() => scrollTo(stepRefs[activeStep])}
+            className="flex items-center gap-3 bg-card border border-border px-6 py-4 rounded-full shadow-elevated hover:shadow-luxury hover:border-gold/50 transition-all group"
+          >
+            <span className="font-heading text-xl sm:text-xl text-foreground">Étape suivante</span>
+            <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:translate-y-0.5 transition-transform" />
+          </button>
+        </div>
+      )}
 
       {!viewOnly && (
         <PricingModal
