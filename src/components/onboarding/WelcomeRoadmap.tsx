@@ -104,7 +104,7 @@ function PricingModal({
                     Service Conciergerie
                   </span>
                 </div>
-                <h3 className="font-heading mb-2 text-white text-3xl">L'Accompagnement Privé</h3>
+                <h3 className="font-heading mb-2 text-white text-4xl">L'Accompagnement Privé</h3>
                 <div className="divider-gold mb-6 border-white/20" />
                 <ul className="space-y-4 mb-8 flex-grow">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
