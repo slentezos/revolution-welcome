@@ -269,10 +269,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 )}
               </div>
               <div className="flex items-center justify-between px-4">
-                <p className="text-[#1B2333]/60 text-lg italic">Votre sourire est votre plus belle signature.</p>
+                <p className="text-[#1B2333]/60 italic text-xl">Votre sourire est votre plus belle signature.</p>
                 <button
                   onClick={() => setShowVideoTutorial(true)}
-                  className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold text-lg hover:bg-[hsl(var(--gold))]/20 transition-all"
+                  className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold hover:bg-[hsl(var(--gold))]/20 transition-all text-xl"
                 >
                   <Lightbulb className="h-5 w-5" /> Conseils vidéo
                 </button>
@@ -344,7 +344,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="text-xl font-medium text-gray-400 hidden md:block">
+            <p className="font-medium text-gray-400 hidden md:block text-2xl">
               Votre sécurité est notre priorité absolue.
             </p>
             <div className="flex gap-4 w-full md:w-auto">
