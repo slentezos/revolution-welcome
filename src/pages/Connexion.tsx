@@ -346,7 +346,7 @@ export default function Connexion() {
                     <Button
                       type="button"
                       onClick={handleVerifyOtp}
-                      className="btn-primary w-full h-14 text-lg mt-4"
+                      className="btn-primary w-full h-14 text-xl mt-4"
                       disabled={otp.length !== 6 || loading}
                     >
                       {loading ? "Vérification..." : "Vérifier le code"}
