@@ -51,7 +51,7 @@ export default function Onboarding() {
         setIsOnboardingCompleted(completed);
 
         const requestedStep = searchParams.get("step");
-        const validSteps = ["welcome", "media_upload", "quiz", "profile", "personality", "personality-results"];
+        const validSteps = ["welcome", "quiz", "media_upload", "profile", "personality", "personality-results"];
 
         if (requestedStep && validSteps.includes(requestedStep)) {
           if (completed) setIsReturningUser(true);
@@ -149,15 +149,7 @@ export default function Onboarding() {
           {tabs.map((tab, index) => {
             const Icon = tab.icon;
             const isActive = tab.id === effectiveTab;
-
-            // NOUVELLE LOGIQUE DYNAMIQUE :
-            // C'est complété si l'index de l'onglet est plus petit que l'index actuel
             const isCompleted = index < currentTabIndex;
-
-            // C'est bloqué si l'index est plus grand que l'actuel (sauf pour les utilisateurs qui reviennent)
-            const isLocked = index > currentTabIndex && !isReturningUser;
-
-            // On peut cliquer si c'est l'étape actuelle ou une étape déjà faite
             const canClick = index <= currentTabIndex || isReturningUser;
 
             return (
@@ -175,8 +167,8 @@ export default function Onboarding() {
                 <Icon className={`h-6 w-6 ${isActive || isCompleted ? "text-[hsl(var(--gold))]" : "text-gray-300"}`} />
                 <span className="hidden sm:inline whitespace-nowrap">{tab.label}</span>
 
-                {/* Checkmark doré uniquement pour les étapes passées */}
-                {isCompleted && <Check className="h-5 w-5 text-[hsl(var(--gold))] hidden lg:block ml-1" />}
+                {/* CORRECTION : On retire 'hidden lg:block' pour que la coche soit TOUJOURS là */}
+                {isCompleted && <Check className="h-5 w-5 text-[hsl(var(--gold))] ml-1 shrink-0" />}
               </button>
             );
           })}
