@@ -627,7 +627,7 @@ export default function Messages() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleViewProfile(selectedChat as (typeof initialConversations)[0])}
-                          className="gap-1.5 text-[#1B2333] hover:bg-amber-50 rounded-lg h-9 text-sm font-medium"
+                          className="gap-1.5 text-[#1B2333] hover:bg-amber-50 rounded-lg h-9 text-lg font-medium"
                         >
                           <Eye className="h-3.5 w-3.5" />
                           Voir le profil
