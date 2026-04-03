@@ -204,10 +204,11 @@ export default function ContactMemberContent() {
 
   return (
     <>
-      {/* ─── Hero ─── */}
-      <section ref={heroRef} className="relative py-24 overflow-hidden md:py-[128px]">
+      {/* ─── Hero ─── MODIFICATION : pt-0 pour supprimer le gap blanc du haut */}
+      <section ref={heroRef} className="relative pt-0 pb-16 md:pb-24 overflow-hidden">
         <div className="grid lg:grid-cols-2 min-h-[50vh]">
-          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 py-16 pt-0">
+          {/* Colonne Gauche : MODIFICATION pt-12 au lieu de py-16 */}
+          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 pt-12 pb-16 lg:pt-20 lg:pb-24">
             <div className="max-w-xl">
               <span
                 data-reveal
@@ -233,6 +234,7 @@ export default function ContactMemberContent() {
             </div>
           </div>
 
+          {/* Colonne Droite (Photo) : Elle touche maintenant le haut car pt-0 sur la section */}
           <div className="relative hidden lg:block">
             <img
               src={contactMemberHero}
@@ -245,34 +247,36 @@ export default function ContactMemberContent() {
       </section>
 
       {/* ─── FAQ Accordions ─── */}
-      <section ref={faqRef} className="section-padding bg-background">
+      <section ref={faqRef} className="section-padding bg-background py-20">
         <div className="container-main mx-auto px-4 md:px-8">
-          <div data-reveal className="text-center mb-12">
-            <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
-              Questions fréquentes
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <div data-reveal className="text-center mb-16">
+            <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-6">Questions fréquentes</h2>
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
               Retrouvez ici les réponses aux interrogations les plus courantes de nos membres.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
             {faqSections.map((section) => (
-              <div key={section.id} data-reveal className="rounded-2xl border border-border bg-secondary/30 p-6 md:p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <section.icon className="h-5 w-5 text-primary" />
+              <div
+                key={section.id}
+                data-reveal
+                className="rounded-3xl border border-border bg-secondary/20 p-8 md:p-10"
+              >
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <section.icon className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="font-heading text-2xl md:text-2xl font-semibold text-foreground">{section.title}</h3>
+                  <h3 className="font-heading text-2xl md:text-3xl font-semibold text-foreground">{section.title}</h3>
                 </div>
 
                 <Accordion type="single" collapsible className="w-full">
                   {section.questions.map((faq, idx) => (
-                    <AccordionItem key={idx} value={`${section.id}-${idx}`} className="border-border/50">
-                      <AccordionTrigger className="text-left text-base md:text-xl font-medium text-foreground hover:no-underline py-3">
+                    <AccordionItem key={idx} value={`${section.id}-${idx}`} className="border-border/40 py-2">
+                      <AccordionTrigger className="text-left text-xl md:text-2xl font-semibold text-foreground hover:no-underline hover:text-primary py-4">
                         {faq.q}
                       </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground text-xl leading-relaxed">
+                      <AccordionContent className="text-muted-foreground text-xl md:text-2xl leading-relaxed pt-2 pb-6">
                         {faq.a}
                       </AccordionContent>
                     </AccordionItem>
@@ -285,30 +289,32 @@ export default function ContactMemberContent() {
       </section>
 
       {/* ─── Contact Form ─── */}
-      <section ref={formRef} className="section-padding bg-secondary/30 py-[100px]">
+      <section ref={formRef} className="section-padding bg-secondary/30 py-32">
         <div className="container-main mx-auto px-4 md:px-8 max-w-3xl">
-          <div data-reveal className="text-center mb-10">
-            <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
+          <div data-reveal className="text-center mb-12">
+            <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-6">
               Écrivez à votre conseiller
             </h2>
-            <p className="text-muted-foreground text-xl">Choisissez un motif, puis rédigez ou dictez votre message.</p>
+            <p className="text-xl md:text-2xl text-muted-foreground">
+              Choisissez un motif, puis rédigez ou dictez votre message.
+            </p>
           </div>
 
           <form
             onSubmit={handleSubmit}
             data-reveal
-            className="bg-background rounded-2xl border border-border p-8 md:p-10 space-y-8"
+            className="bg-background rounded-3xl border border-border p-10 md:p-14 shadow-xl space-y-10"
           >
             {/* Motif selector */}
-            <div className="space-y-2">
-              <label className="font-medium text-foreground text-xl">Motif de votre demande</label>
+            <div className="space-y-4">
+              <label className="font-semibold text-foreground text-2xl">Motif de votre demande</label>
               <Select value={motif} onValueChange={setMotif}>
-                <SelectTrigger className="h-12 rounded-xl bg-background border-border/50 text-xl">
+                <SelectTrigger className="h-14 rounded-xl bg-background border-border/60 text-xl md:text-2xl">
                   <SelectValue placeholder="Sélectionnez un motif..." />
                 </SelectTrigger>
                 <SelectContent>
                   {contactMotifs.map((m) => (
-                    <SelectItem key={m.value} value={m.value} className="text-xl">
+                    <SelectItem key={m.value} value={m.value} className="text-xl md:text-2xl py-3">
                       {m.label}
                     </SelectItem>
                   ))}
@@ -317,47 +323,45 @@ export default function ContactMemberContent() {
             </div>
 
             {/* Message area */}
-            <div className="space-y-2">
+            <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <label className="font-medium text-foreground text-xl">Votre message</label>
+                <label className="font-semibold text-foreground text-2xl">Votre message</label>
 
-                {/* Dictation button */}
                 <Button
                   type="button"
                   variant="outline"
                   size="lg"
                   disabled={isFormLocked}
                   onClick={isListening ? stopDictation : startDictation}
-                  className={`bg-[#181c25] text-primary-foreground gap-2 rounded-xl transition-all duration-300 ${
+                  className={`bg-[#181c25] text-primary-foreground gap-3 px-8 py-6 text-xl rounded-2xl transition-all duration-300 ${
                     isFormLocked
                       ? "opacity-40 cursor-not-allowed"
                       : isListening
-                        ? "border-[hsl(var(--gold))] text-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]"
+                        ? "border-[hsl(var(--gold))] text-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.12)] scale-105"
                         : "hover:border-primary"
                   }`}
                 >
                   {isListening ? (
                     <>
-                      <MicOff className="h-4 w-4" />
+                      <MicOff className="h-6 w-6" />
                       Arrêter
                     </>
                   ) : (
                     <>
-                      <Mic className="h-4 w-4" />
+                      <Mic className="h-6 w-6" />
                       Dicter
                     </>
                   )}
                 </Button>
               </div>
 
-              {/* Listening indicator */}
               {isListening && (
-                <div className="flex items-center gap-3 py-2 px-4 rounded-xl bg-[hsl(var(--gold)/0.08)] border border-[hsl(var(--gold)/0.2)] animate-in fade-in duration-500">
-                  <div className="flex items-end gap-[3px] h-4">
+                <div className="flex items-center gap-4 py-4 px-6 rounded-2xl bg-[hsl(var(--gold)/0.08)] border border-[hsl(var(--gold)/0.2)] animate-in slide-in-from-top-2 duration-500">
+                  <div className="flex items-end gap-[4px] h-6 shrink-0">
                     {[1, 2, 3, 4, 5].map((i) => (
                       <span
                         key={i}
-                        className="w-[3px] rounded-full bg-[hsl(var(--gold))]"
+                        className="w-[4px] rounded-full bg-[hsl(var(--gold))]"
                         style={{
                           animation: `equalizer 0.8s ease-in-out ${i * 0.1}s infinite alternate`,
                           height: "30%",
@@ -365,7 +369,7 @@ export default function ContactMemberContent() {
                       />
                     ))}
                   </div>
-                  <span className="text-[hsl(var(--gold))] text-xl font-medium">
+                  <span className="text-[hsl(var(--gold))] text-xl md:text-2xl font-medium italic leading-tight">
                     Je vous écoute... et j'écris votre message.
                   </span>
                 </div>
@@ -385,10 +389,9 @@ export default function ContactMemberContent() {
                     ? "Veuillez d'abord sélectionner un motif..."
                     : "Décrivez votre demande en quelques mots..."
                 }
-                className={`flex w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-xl resize-none overflow-hidden transition-opacity duration-1000 ${
+                className={`flex w-full rounded-2xl border border-input bg-background px-6 py-5 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-xl md:text-2xl leading-relaxed resize-none overflow-hidden transition-all duration-300 min-h-[200px] ${
                   isFormLocked ? "opacity-40 cursor-not-allowed" : ""
                 }`}
-                style={{ minHeight: "140px" }}
               />
             </div>
 
@@ -396,10 +399,10 @@ export default function ContactMemberContent() {
             <Button
               type="submit"
               disabled={isFormLocked || !message.trim()}
-              className="btn-primary w-full lg:w-auto group"
+              className="btn-primary w-full md:w-auto px-12 py-8 text-2xl rounded-2xl group shadow-luxury"
             >
               Envoyer à mon conseiller
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-2" />
             </Button>
           </form>
         </div>
@@ -407,7 +410,6 @@ export default function ContactMemberContent() {
 
       <GiftBannerSection image={giftBannerContact} />
 
-      {/* Equalizer animation keyframes */}
       <style>{`
         @keyframes equalizer {
           0% { height: 30%; }
