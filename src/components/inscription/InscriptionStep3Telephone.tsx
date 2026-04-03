@@ -5,7 +5,7 @@ import { ArrowRight, ArrowLeft, Phone, RefreshCw, Edit3 } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 interface Props {
-  formData: {phone: string;};
+  formData: { phone: string };
   setFormData: React.Dispatch<React.SetStateAction<any>>;
   onNext: () => void;
   onBack: () => void;
@@ -76,14 +76,14 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
           {codeSent ? "Entrez le code reçu" : "Vérification du téléphone"}
         </h1>
         <p className="text-muted-foreground text-xl">
-          {codeSent ?
-          `Un code à 6 chiffres a été envoyé au +33 ${formData.phone}` :
-          "Pour votre sécurité, nous vérifions votre numéro de téléphone"}
+          {codeSent
+            ? `Un code à 6 chiffres a été envoyé au +33 ${formData.phone}`
+            : "Pour votre sécurité, nous vérifions votre numéro de téléphone"}
         </p>
       </div>
 
-      {!codeSent ?
-      <div className="max-w-sm mx-auto space-y-6">
+      {!codeSent ? (
+        <div className="max-w-sm mx-auto space-y-6">
           <div>
             <label className="block font-medium text-foreground mb-3 text-xl">
               <Phone className="inline h-5 w-5 mr-1 -mt-0.5 text-primary" />
@@ -94,51 +94,42 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
                 🇫🇷 +33
               </div>
               <Input
-              placeholder="6 12 34 56 78"
-              className="h-14 text-xl rounded-xl flex-1"
-              value={formData.phone}
-              onChange={(e) => {
-                const val = formatPhone(e.target.value);
-                setFormData((prev: any) => ({ ...prev, phone: val }));
-              }}
-              inputMode="tel"
-              autoComplete="tel-national"
-              autoFocus />
-            
+                placeholder="6 12 34 56 78"
+                className="h-14 text-xl rounded-xl flex-1"
+                value={formData.phone}
+                onChange={(e) => {
+                  const val = formatPhone(e.target.value);
+                  setFormData((prev: any) => ({ ...prev, phone: val }));
+                }}
+                inputMode="tel"
+                autoComplete="tel-national"
+                autoFocus
+              />
             </div>
-            {errors.phone && <p className="text-destructive text-sm mt-2">{errors.phone}</p>}
+            {errors.phone && <p className="text-destructive text-xl mt-2">{errors.phone}</p>}
           </div>
 
-          <div className="flex gap-4 text-lg">
-            <Button
-            type="button"
-            variant="outline"
-            onClick={onBack}
-            className="h-14 text-base rounded-xl flex-1">
-            
+          <div className="flex gap-4 text-xl">
+            <Button type="button" variant="outline" onClick={onBack} className="h-14 text-base rounded-xl flex-1">
               <ArrowLeft className="mr-2 h-5 w-5" />
               Retour
             </Button>
             <Button
-            type="button"
-            onClick={handleSendCode}
-            className="btn-primary h-14 text-base rounded-xl flex-[2]"
-            disabled={formData.phone.length < 9 || sending}>
-            
+              type="button"
+              onClick={handleSendCode}
+              className="btn-primary h-14 text-base rounded-xl flex-[2]"
+              disabled={formData.phone.length < 9 || sending}
+            >
               {sending ? "Envoi en cours..." : "Envoyer le code"}
               {!sending && <ArrowRight className="ml-2 h-5 w-5" />}
             </Button>
           </div>
-        </div> :
-
-      <div className="max-w-sm mx-auto space-y-8">
+        </div>
+      ) : (
+        <div className="max-w-sm mx-auto space-y-8">
           {/* OTP Input */}
           <div className="flex justify-center">
-            <InputOTP
-            maxLength={6}
-            value={code}
-            onChange={setCode}>
-            
+            <InputOTP maxLength={6} value={code} onChange={setCode}>
               <InputOTPGroup>
                 <InputOTPSlot index={0} className="w-12 h-14 text-xl rounded-lg" />
                 <InputOTPSlot index={1} className="w-12 h-14 text-xl rounded-lg" />
@@ -153,36 +144,36 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
           {codeError && <p className="text-destructive text-sm text-center">{codeError}</p>}
 
           <Button
-          type="button"
-          onClick={handleVerifyCode}
-          className="btn-primary w-full h-14 text-base rounded-xl"
-          disabled={code.length !== 6 || verifying}>
-          
+            type="button"
+            onClick={handleVerifyCode}
+            className="btn-primary w-full h-14 text-base rounded-xl"
+            disabled={code.length !== 6 || verifying}
+          >
             {verifying ? "Vérification..." : "Vérifier le code"}
             {!verifying && <ArrowRight className="ml-2 h-5 w-5" />}
           </Button>
 
           <div className="flex justify-center gap-6 text-sm">
             <button
-            type="button"
-            onClick={handleResend}
-            className="text-primary font-medium hover:underline flex items-center gap-1 text-lg"
-            disabled={sending}>
-            
+              type="button"
+              onClick={handleResend}
+              className="text-primary font-medium hover:underline flex items-center gap-1 text-lg"
+              disabled={sending}
+            >
               <RefreshCw className="h-4 w-4" />
               Renvoyer le code
             </button>
             <button
-            type="button"
-            onClick={handleEditPhone}
-            className="text-primary font-medium hover:underline flex items-center gap-1 text-lg">
-            
+              type="button"
+              onClick={handleEditPhone}
+              className="text-primary font-medium hover:underline flex items-center gap-1 text-lg"
+            >
               <Edit3 className="h-4 w-4" />
               Modifier le numéro
             </button>
           </div>
         </div>
-      }
-    </div>);
-
+      )}
+    </div>
+  );
 }
