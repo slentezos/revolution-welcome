@@ -204,8 +204,8 @@ const STEPS = [
 
 function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepClick: (i: number) => void }) {
   return (
-    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border py-6">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border py-[50px] pt-[20px] pb-[50px]">
+      <div className="max-w-4xl mx-auto px-4 py-5">
         <div className="flex items-center justify-between">
           {STEPS.map((step, i) => {
             const Icon = step.icon;
@@ -222,25 +222,25 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
                     isActive
                       ? "bg-gold border-gold text-white scale-110 shadow-lg"
                       : isPast
-                        ? "bg-[#1B2333] border-[#1B2333] text-white"
+                        ? "bg-primary border-primary text-primary-foreground"
                         : "bg-secondary border-border text-muted-foreground group-hover:border-gold/50"
                   }`}
                 >
                   {isPast ? <Check className="h-6 w-6" /> : <Icon className="h-6 w-6" />}
                 </div>
                 <span
-                  className={`text-sm sm:text-lg font-medium transition-colors text-center leading-tight ${
+                  className={`text-base sm:text-xl font-medium transition-colors text-center leading-tight ${
                     isActive ? "text-foreground" : "text-muted-foreground"
                   }`}
                 >
+                  <span className="block sm:hidden">{i + 1}</span>
                   <span className="hidden sm:block">Étape {i + 1}</span>
-                  <span className="sm:hidden">{i + 1}</span>
                 </span>
               </button>
             );
           })}
         </div>
-        <div className="relative mt-[-38px] sm:mt-[-42px] mx-[32px] sm:mx-[36px] -z-10">
+        <div className="relative mt-[-42px] sm:mt-[-46px] mx-[32px] sm:mx-[36px] -z-10">
           <div className="h-0.5 bg-border w-full" />
           <div
             className="h-0.5 bg-gold absolute top-0 left-0 transition-all duration-700"
@@ -252,7 +252,7 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
   );
 }
 
-/* ─── STEP CARD ─── */
+/* ─── STEP CARD (Redesigned with built-in buttons) ─── */
 
 function StepCard({
   step,
@@ -288,16 +288,16 @@ function StepCard({
 
         <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
           <span className="text-2xl leading-none">⏱️</span>
-          <span className="text-xl lg:text-2xl font-medium text-foreground">Durée : {step.duration}</span>
+          <span className="text-2xl lg:text-2xl font-medium text-foreground">Durée : {step.duration}</span>
         </div>
 
         <p className="text-xl sm:text-2xl leading-relaxed text-muted-foreground max-w-2xl mb-12">{step.description}</p>
 
-        <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-12">
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-10">
           {step.highlights.map((h, i) => (
             <div
               key={i}
-              className="flex items-start gap-4 p-6 bg-card border border-border rounded-lg shadow-sm transition-all hover:shadow-md"
+              className="flex items-start gap-4 p-6 bg-card border border-border rounded-lg shadow-soft transition-all hover:shadow-card"
             >
               <div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5">
                 <Check className="h-4 w-4 text-gold" />
@@ -307,25 +307,32 @@ function StepCard({
           ))}
         </div>
 
-        {/* BOUTON INLINE (SUIVANT) DANS CHAQUE CARTE */}
+        {/* BOUTONS INTÉGRÉS DIRECTEMENT DANS LA CARTE (Remplace le bug des boutons flottants) */}
         {!isLast ? (
-          <button
-            onClick={onNextClick}
-            className="flex items-center justify-center gap-3 bg-white border-2 border-[#E5E0D8] px-10 py-5 rounded-full shadow-sm hover:shadow-md hover:border-gold transition-all group w-full sm:w-auto"
-          >
-            <span className="font-heading text-xl text-[#1B2333] font-bold">Étape suivante</span>
-            <ArrowDown className="h-6 w-6 text-gold group-hover:translate-y-1 transition-transform" />
-          </button>
+          <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-6">
+            <button
+              onClick={onNextClick}
+              className="flex items-center justify-center gap-3 bg-white border border-[#E5E0D8] px-8 py-4 rounded-full shadow-sm hover:shadow-md hover:border-[hsl(var(--gold))] transition-all group w-full sm:w-auto"
+            >
+              <span className="font-heading text-xl text-[#1B2333] font-semibold">Étape suivante</span>
+              <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:translate-y-1 transition-transform" />
+            </button>
+            <div className="flex items-center gap-3 text-muted-foreground">
+              <span className="text-xl opacity-80 italic">{step.nextLabel}</span>
+            </div>
+          </div>
         ) : (
           !viewOnly &&
           onStartClick && (
-            <button
-              onClick={onStartClick}
-              className="flex items-center justify-center gap-4 bg-[#1B2333] text-white px-12 py-6 rounded-full shadow-xl hover:scale-[1.02] transition-all group w-full md:w-auto"
-            >
-              <span className="font-heading text-2xl font-bold tracking-wide">Commencer mon parcours</span>
-              <ChevronRight className="h-6 w-6 text-gold group-hover:translate-x-1 transition-transform" />
-            </button>
+            <div className="mt-14">
+              <button
+                onClick={onStartClick}
+                className="flex items-center justify-center gap-4 bg-[#1B2333] text-white px-12 py-5 rounded-full shadow-xl hover:bg-[#1B2333]/90 transition-all group w-full md:w-auto"
+              >
+                <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
+                <ChevronRight className="h-6 w-6 text-[hsl(var(--gold))] group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
           )
         )}
       </div>
@@ -364,32 +371,53 @@ export default function WelcomeRoadmap({
   };
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    // 1. Observer pour l'animation d'apparition (Déclenche tôt pour un bel effet)
+    const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            if (entry.target === heroRef.current) setActiveStep(0);
             stepRefs.forEach((ref, i) => {
               if (entry.target === ref.current) {
-                setActiveStep(i + 1);
                 setRevealedSteps((prev) => new Set(prev).add(i + 1));
               }
             });
           }
         });
       },
-      { rootMargin: "-30% 0px -30% 0px", threshold: 0 },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0 },
+    );
+
+    // 2. Observer strict pour la barre de progression (L'élément doit être au milieu de l'écran)
+    const spyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === heroRef.current) setActiveStep(0);
+            stepRefs.forEach((ref, i) => {
+              if (entry.target === ref.current) setActiveStep(i + 1);
+            });
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -40% 0px", threshold: 0 },
     );
 
     const allRefs = [heroRef, ...stepRefs];
     allRefs.forEach((ref) => {
-      if (ref.current) observer.observe(ref.current);
+      if (ref.current) {
+        revealObserver.observe(ref.current);
+        spyObserver.observe(ref.current);
+      }
     });
 
-    return () =>
+    return () => {
       allRefs.forEach((ref) => {
-        if (ref.current) observer.unobserve(ref.current);
+        if (ref.current) {
+          revealObserver.unobserve(ref.current);
+          spyObserver.unobserve(ref.current);
+        }
       });
+    };
   }, []);
 
   return (
@@ -408,32 +436,51 @@ export default function WelcomeRoadmap({
               Votre parcours en 4 étapes <br className="hidden sm:block" /> vers de belles rencontres
             </h1>
             <div className="divider-gold mx-auto mb-8" />
+            <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-6 font-medium">
+              4 étapes simples et guidées pour composer votre profil.
+            </p>
             <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-14">
-              4 étapes simples et guidées pour composer votre profil. L'inscription va vous prendre un peu de temps mais
-              le jeu en vaut la chandelle.
+              L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes
+              aujourd'hui peuvent faire toute la différence demain.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-14">
-            {STEPS.map((step, i) => (
-              <button
-                key={i}
-                onClick={() => scrollTo(stepRefs[i])}
-                className="group bg-card border border-border rounded-xl p-6 sm:p-8 hover:border-gold hover:shadow-card transition-all duration-300 text-left flex flex-col h-full"
-              >
-                <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center mb-6 shrink-0">
-                  <step.icon className="h-8 w-8 text-gold" />
-                </div>
-                <div className="flex-grow">
-                  <span className="text-gold text-lg font-semibold block mb-2">Étape {step.number}</span>
-                  <span className="text-foreground font-heading text-2xl leading-snug block mb-4">{step.title}</span>
-                </div>
-                <span className="text-muted-foreground text-xl flex items-center gap-2 mt-auto pt-4 border-t border-border/50">
-                  <span className="text-2xl">⏱️</span> {step.duration}
-                </span>
-              </button>
-            ))}
+            {STEPS.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <button
+                  key={i}
+                  onClick={() => scrollTo(stepRefs[i])}
+                  className="group bg-card border border-border rounded-xl p-6 sm:p-8 hover:border-gold/50 hover:shadow-card transition-all duration-300 text-left flex flex-col h-full"
+                >
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold/10 flex items-center justify-center mb-6 group-hover:bg-gold/20 transition-colors shrink-0">
+                    <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
+                  </div>
+                  <div className="flex-grow">
+                    <span className="text-gold text-xl sm:text-xl font-semibold tracking-wide block mb-2">
+                      Étape {step.number}
+                    </span>
+                    <span className="text-foreground font-heading text-2xl sm:text-3xl leading-snug block mb-4">
+                      {step.title}
+                    </span>
+                  </div>
+                  <span className="text-muted-foreground text-xl flex items-center gap-2 mt-auto pt-4 border-t border-border/50">
+                    <span className="text-2xl">⏱️</span> {step.duration}
+                  </span>
+                </button>
+              );
+            })}
           </div>
+
+          <button onClick={() => scrollTo(stepRefs[0])} className="inline-flex flex-col items-center gap-3 group">
+            <span className="text-gold font-medium tracking-wide group-hover:text-foreground transition-colors duration-500 text-xl sm:text-2xl">
+              Découvrir chaque étape en détail
+            </span>
+            <div className="w-14 h-14 rounded-full border-2 border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all duration-500">
+              <ArrowDown className="h-6 w-6 text-gold group-hover:text-white" />
+            </div>
+          </button>
         </div>
       </section>
 
@@ -441,7 +488,7 @@ export default function WelcomeRoadmap({
       <ProgressBar activeStep={activeStep} onStepClick={(i) => scrollTo(stepRefs[i])} />
 
       {/* ─── STEPS ─── */}
-      <div className="pb-32">
+      <div className="pb-16">
         {STEPS.map((step, i) => (
           <div
             key={i}
@@ -460,29 +507,6 @@ export default function WelcomeRoadmap({
           </div>
         ))}
       </div>
-
-      {/* ─── BOUTON FLOTTANT UNIQUE (DYNAMIQUE) ─── */}
-      {activeStep > 0 && !viewOnly && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-12 fade-in duration-700">
-          {activeStep < 4 ? (
-            <button
-              onClick={() => scrollTo(stepRefs[activeStep])}
-              className="flex items-center gap-3 bg-white/90 backdrop-blur-md border-2 border-gold px-8 py-4 rounded-full shadow-2xl hover:bg-white transition-all group"
-            >
-              <span className="font-heading text-lg text-[#1B2333] font-bold">Étape suivante</span>
-              <ArrowDown className="h-5 w-5 text-gold group-hover:translate-y-1 transition-transform" />
-            </button>
-          ) : (
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-4 bg-[#1B2333] text-white px-10 py-5 rounded-full shadow-[0_15px_50px_rgba(0,0,0,0.3)] hover:scale-[1.05] transition-all group"
-            >
-              <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
-              <ChevronRight className="h-6 w-6 text-gold group-hover:translate-x-1 transition-transform" />
-            </button>
-          )}
-        </div>
-      )}
 
       {!viewOnly && (
         <PricingModal
