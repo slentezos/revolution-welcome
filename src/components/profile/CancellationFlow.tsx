@@ -226,7 +226,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 stopRecording();
                 setStep("reason");
               }}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-xl"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
@@ -241,9 +241,9 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             </div>
 
             <div className="space-y-4 bg-secondary/30 p-6 md:p-8 rounded-[1.5rem] border border-secondary">
-              <Label className="text-foreground text-xl font-medium block">
+              <Label className="text-foreground font-medium block text-2xl">
                 Racontez-nous votre belle histoire
-                <span className="text-muted-foreground font-normal ml-2 text-lg">(facultatif)</span>
+                <span className="text-muted-foreground font-normal ml-2 text-xl">(facultatif)</span>
               </Label>
 
               <div className="flex flex-col gap-4">
@@ -263,10 +263,10 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   <button
                     type="button"
                     onClick={toggleDictation}
-                    className={`min-h-[48px] px-6 w-full md:w-auto min-w-[200px] flex items-center justify-center gap-3 rounded-xl transition-all duration-300 text-lg font-semibold shrink-0 ${
+                    className={`min-h-[48px] px-6 w-full md:w-auto min-w-[200px] flex items-center justify-center gap-3 rounded-xl transition-all duration-300 font-semibold shrink-0 ${
                       isRecording
                         ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
-                        : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
+                        : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90 text-xl"
                     }`}
                     aria-label={isRecording ? "Arrêter de dicter" : "Dictée vocale"}
                   >
@@ -320,7 +320,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   stopRecording();
                   setStep("success_gift");
                 }}
-                className="w-full text-muted-foreground hover:text-foreground font-medium text-lg transition-colors"
+                className="w-full text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
               >
                 Passer cette étape
               </button>
