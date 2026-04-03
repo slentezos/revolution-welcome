@@ -84,7 +84,7 @@ export default function Header() {
   const currentPath = location.pathname.toLowerCase();
 
   // ─── 1. ROUTES SANS HEADER (Le menu à onglets fait le job) ───
-  const NO_HEADER_ROUTES = ["/tutoriel", "/quiz", "/photos", "/video", "/creation-profil", "/personnalite"];
+  const NO_HEADER_ROUTES = ["/tutoriel", "/quiz", "/photos", "/video", "/creation-profil", "/personnalite", "/onboarding"];
   const hideHeader = NO_HEADER_ROUTES.some((route) => currentPath.startsWith(route));
 
   // Si on est sur une de ces pages, on supprime totalement le Header
@@ -92,8 +92,8 @@ export default function Header() {
     return null;
   }
 
-  // ─── 2. ROUTES AVEC HEADER MINIMALISTE (ex: Paiement, Accueil Onboarding) ───
-  const MINIMAL_HEADER_ROUTES = ["/onboarding", "/reservation"];
+  // ─── 2. ROUTES AVEC HEADER MINIMALISTE (ex: Paiement, Service Conciergerie) ───
+  const MINIMAL_HEADER_ROUTES = ["/reservation"];
   const isMinimalHeader = MINIMAL_HEADER_ROUTES.some((route) => currentPath.startsWith(route));
 
   if (isMinimalHeader) {
