@@ -165,7 +165,7 @@ export default function Connexion() {
         <div className="w-14 h-8 bg-muted rounded-full peer-checked:bg-[hsl(var(--gold))] transition-colors duration-300 shadow-inner border border-border peer-checked:border-[hsl(var(--gold))]" />
         <div className="absolute left-1 w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 peer-checked:translate-x-6" />
       </div>
-      <span className="text-muted-foreground text-lg select-none group-hover:text-foreground transition-colors">
+      <span className="text-muted-foreground select-none group-hover:text-foreground transition-colors text-xl">
         {label}
       </span>
     </label>
@@ -191,7 +191,7 @@ export default function Connexion() {
               <button
                 type="button"
                 onClick={() => { setMethod("email"); setOtpSent(false); setOtp(""); }}
-                className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-xl text-lg font-medium transition-all duration-300 ${
+                className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-xl font-medium transition-all duration-300 text-xl ${
                   method === "email"
                     ? "bg-background text-foreground shadow-md"
                     : "text-muted-foreground hover:text-foreground"
@@ -203,7 +203,7 @@ export default function Connexion() {
               <button
                 type="button"
                 onClick={() => setMethod("phone")}
-                className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-xl text-lg font-medium transition-all duration-300 ${
+                className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-xl font-medium transition-all duration-300 text-xl ${
                   method === "phone"
                     ? "bg-background text-foreground shadow-md"
                     : "text-muted-foreground hover:text-foreground"
@@ -218,7 +218,7 @@ export default function Connexion() {
             {method === "email" && (
               <form onSubmit={handleEmailSubmit} className="space-y-5 animate-in fade-in duration-300">
                 <div>
-                  <label className="block font-medium text-foreground mb-2 text-lg">Adresse email</label>
+                  <label className="block font-medium text-foreground mb-2 text-xl">Adresse email</label>
                   <Input
                     type="email"
                     placeholder="votre@email.com"
@@ -229,7 +229,7 @@ export default function Connexion() {
                   />
                 </div>
                 <div>
-                  <label className="block font-medium text-foreground mb-2 text-lg">Mot de passe</label>
+                  <label className="block font-medium text-foreground mb-2 text-xl">Mot de passe</label>
                   <PasswordInput
                     placeholder="••••••••"
                     className="h-14 text-lg"
@@ -240,7 +240,7 @@ export default function Connexion() {
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <RememberMeToggle checked={rememberEmail} onChange={setRememberEmail} label="Se souvenir de moi" />
-                  <Link to="/mot-de-passe-oublie" className="text-primary hover:underline text-lg">
+                  <Link to="/mot-de-passe-oublie" className="text-primary hover:underline text-xl">
                     Mot de passe oublié ?
                   </Link>
                 </div>
@@ -257,7 +257,7 @@ export default function Connexion() {
                 {!otpSent ? (
                   <>
                     <div>
-                      <label className="block font-medium text-foreground mb-2 text-lg">
+                      <label className="block font-medium text-foreground mb-2 text-xl">
                         <Phone className="inline h-5 w-5 mr-1.5 -mt-0.5 text-primary" />
                         Numéro de téléphone
                       </label>
@@ -295,7 +295,7 @@ export default function Connexion() {
                 ) : (
                   <>
                     <div className="text-center mb-2">
-                      <p className="text-muted-foreground text-lg">
+                      <p className="text-muted-foreground text-xl">
                         Un code à 6 chiffres a été envoyé au{" "}
                         <span className="font-semibold text-foreground">+33 {phone}</span>
                       </p>
@@ -328,7 +328,7 @@ export default function Connexion() {
                       <button
                         type="button"
                         onClick={() => { setOtp(""); handleSendOtp(); }}
-                        className="text-primary font-medium hover:underline text-lg"
+                        className="text-primary font-medium hover:underline text-xl"
                         disabled={sendingOtp}
                       >
                         Renvoyer le code
@@ -336,7 +336,7 @@ export default function Connexion() {
                       <button
                         type="button"
                         onClick={() => { setOtpSent(false); setOtp(""); }}
-                        className="text-primary font-medium hover:underline text-lg"
+                        className="text-primary font-medium hover:underline text-xl"
                       >
                         Modifier le numéro
                       </button>
@@ -346,7 +346,7 @@ export default function Connexion() {
               </div>
             )}
 
-            <p className="mt-8 text-center text-muted-foreground text-lg">
+            <p className="mt-8 text-center text-muted-foreground text-xl">
               Vous n'avez pas de compte ?{" "}
               <button onClick={() => setModalOpen(true)} className="text-primary font-medium hover:underline">
                 Rejoindre le Cercle
