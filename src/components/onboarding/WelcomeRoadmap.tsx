@@ -435,6 +435,19 @@ export default function WelcomeRoadmap({
         </div>
       ))}
 
+      {/* ─── BOTTOM CTA ─── */}
+      {!viewOnly && (
+        <div className="flex justify-center py-16 pb-32">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-4 bg-primary text-primary-foreground px-10 py-5 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.25)] hover:brightness-110 transition-all group"
+          >
+            <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
+            <ChevronRight className="h-6 w-6 text-gold group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      )}
+
       {/* ─── FLOATING CTA (step 4) ─── */}
       {activeStep === 4 && !viewOnly && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 duration-500">
