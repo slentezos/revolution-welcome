@@ -323,7 +323,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
         style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-[60px] flex items-center justify-between">
-          <div className="text-lg font-medium text-gray-500 hidden lg:block">
+          <div className="text-xl font-medium text-gray-500 hidden lg:block">
             Question {currentPage + 1} / {TOTAL_PAGES}
           </div>
 
