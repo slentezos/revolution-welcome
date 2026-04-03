@@ -9,21 +9,12 @@ import {
   ClipboardList,
   Brain,
   ArrowDown,
-  ArrowUp,
+  ArrowRight,
   Sparkles,
+  ChevronRight,
 } from "lucide-react";
 
-/* ─── ANIMATION DOUCE PERSONNALISÉE ─── */
-const slowFloatAnimation = `
-  @keyframes slowFloat {
-    0% { transform: translateY(0); opacity: 0.8; }
-    50% { transform: translateY(15px); opacity: 1; }
-    100% { transform: translateY(0); opacity: 0.8; }
-  }
-  .animate-slow-float {
-    animation: slowFloat 4s ease-in-out infinite;
-  }
-`;
+/* ─── PRICING MODAL ─── */
 
 const CONCIERGE_BENEFITS = [
   "Un entretien téléphonique privé de 45 minutes",
@@ -31,17 +22,6 @@ const CONCIERGE_BENEFITS = [
   "Accompagnement pas à pas pour votre vidéo",
   "Zéro stress technique, nous nous occupons de tout",
 ];
-
-const TABS = [
-  { id: "step1", label: "Étape 1", icon: HelpCircle },
-  { id: "step2", label: "Étape 2", icon: Camera },
-  { id: "step3", label: "Étape 3", icon: ClipboardList },
-  { id: "step4", label: "Étape 4", icon: Brain },
-];
-
-/* ═══════════════════════════════════════════════
-   PRICING MODAL
-   ═══════════════════════════════════════════════ */
 
 function PricingModal({
   open,
@@ -97,7 +77,7 @@ function PricingModal({
               <div className="bg-card border border-border p-8 flex flex-col h-full">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-10 h-10 bg-secondary flex items-center justify-center">
-                    <Star className="h-5 w-5 text-[hsl(var(--gold))]" />
+                    <Star className="h-5 w-5 text-gold" />
                   </div>
                   <span className="font-medium tracking-widest uppercase text-muted-foreground text-xl">
                     Mode Autonome
@@ -119,7 +99,7 @@ function PricingModal({
               <div className="bg-primary text-primary-foreground p-8 flex flex-col h-full relative shadow-2xl">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
-                    <Phone className="h-5 w-5 text-[hsl(var(--gold-light))]" />
+                    <Phone className="h-5 w-5 text-gold-light" />
                   </div>
                   <span className="font-medium tracking-widest uppercase text-white/70 text-lg">
                     Service Conciergerie
@@ -130,14 +110,14 @@ function PricingModal({
                 <ul className="space-y-4 mb-8 flex-grow">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-[hsl(var(--gold-light))] shrink-0 mt-0.5" />
+                      <Check className="h-5 w-5 text-gold-light shrink-0 mt-0.5" />
                       <span className="text-white/90 leading-snug text-xl">{benefit}</span>
                     </li>
                   ))}
                 </ul>
                 <button
                   onClick={onStartConcierge}
-                  className="w-full bg-[hsl(var(--gold))] text-white py-4 font-bold hover:brightness-110 transition-all shadow-lg text-xl"
+                  className="w-full bg-gold text-white py-4 font-bold hover:brightness-110 transition-all shadow-lg text-xl"
                 >
                   Découvrir l'accompagnement Privé (89 €)
                 </button>
@@ -158,83 +138,202 @@ function PricingModal({
   );
 }
 
-/* ═══════════════════════════════════════════════
-   STEP CARD (Design "Split-Screen" 100vh sans scroll)
-   ═══════════════════════════════════════════════ */
+/* ─── STEP DATA ─── */
+
+const STEPS = [
+  {
+    number: "01",
+    icon: HelpCircle,
+    title: "Le Quiz des 3 Préférences",
+    duration: "3 minutes",
+    description:
+      "Un court questionnaire ludique de 10 questions pour mieux comprendre ce que vous recherchez. Trois questions simples, trois réponses sincères.",
+    highlights: [
+      "Questions simples et bienveillantes",
+      "Aucune mauvaise réponse possible",
+      "Aide notre équipe à mieux vous connaître",
+      "Résultats confidentiels et sécurisés",
+    ],
+    nextLabel: "Ensuite : vos photos & vidéo",
+  },
+  {
+    number: "02",
+    icon: Camera,
+    title: "Photos & Vidéo",
+    duration: "5 à 10 minutes",
+    description:
+      "Montrez qui vous êtes vraiment. Ajoutez vos plus belles photos, et enregistrez une courte vidéo de présentation.",
+    highlights: [
+      "Jusqu'à 4 photos pour illustrer votre quotidien",
+      "Une vidéo pour révéler votre personnalité",
+      "Tutoriel pour réussir votre vidéo inclus",
+      "Un message sonore pour faire entendre votre voix",
+    ],
+    nextLabel: "Ensuite : votre profil détaillé",
+  },
+  {
+    number: "03",
+    icon: ClipboardList,
+    title: "Mon Profil & Le Profil Idéal",
+    duration: "15 à 20 minutes",
+    description:
+      "Décrivez-vous en détail et esquissez le portrait de la personne que vous aimeriez rencontrer.",
+    highlights: [
+      "Votre description personnelle approfondie",
+      "Le portrait de votre partenaire idéal(e)",
+      "Vos valeurs, passions et style de vie",
+      "Critères de recherche personnalisés",
+    ],
+    nextLabel: "Ensuite : test de personnalité",
+  },
+  {
+    number: "04",
+    icon: Brain,
+    title: "Le Test de Personnalité",
+    duration: "15 à 20 minutes",
+    description: "Un test psychologique simple pour affiner vos correspondances et révéler vos traits dominants.",
+    highlights: [
+      "Basé sur des méthodes éprouvées",
+      "Révèle vos traits dominants",
+      "Améliore la qualité des correspondances",
+      "Résultats personnalisés et détaillés",
+    ],
+    nextLabel: "Votre espace personnel s'ouvre !",
+  },
+];
+
+/* ─── PROGRESS BAR ─── */
+
+function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepClick: (i: number) => void }) {
+  return (
+    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
+      <div className="max-w-4xl mx-auto px-4 py-5">
+        {/* Step indicators */}
+        <div className="flex items-center justify-between">
+          {STEPS.map((step, i) => {
+            const Icon = step.icon;
+            const isActive = activeStep === i + 1;
+            const isPast = activeStep > i + 1;
+            return (
+              <button
+                key={i}
+                onClick={() => onStepClick(i)}
+                className="flex flex-col items-center gap-2 group transition-all"
+              >
+                {/* Circle */}
+                <div
+                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${
+                    isActive
+                      ? "bg-gold border-gold text-white scale-110 shadow-lg"
+                      : isPast
+                        ? "bg-primary border-primary text-primary-foreground"
+                        : "bg-secondary border-border text-muted-foreground group-hover:border-gold/50"
+                  }`}
+                >
+                  {isPast ? (
+                    <Check className="h-6 w-6" />
+                  ) : (
+                    <Icon className="h-6 w-6" />
+                  )}
+                </div>
+                {/* Label */}
+                <span
+                  className={`text-base sm:text-lg font-medium transition-colors text-center leading-tight ${
+                    isActive ? "text-foreground" : "text-muted-foreground"
+                  }`}
+                >
+                  <span className="block sm:hidden">{i + 1}</span>
+                  <span className="hidden sm:block">Étape {i + 1}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        {/* Connecting line */}
+        <div className="relative mt-[-42px] sm:mt-[-46px] mx-[32px] sm:mx-[36px] -z-10">
+          <div className="h-0.5 bg-border w-full" />
+          <div
+            className="h-0.5 bg-gold absolute top-0 left-0 transition-all duration-700"
+            style={{ width: `${((Math.max(0, activeStep - 1)) / (STEPS.length - 1)) * 100}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── STEP CARD (Redesigned for seniors) ─── */
 
 function StepCard({
-  number,
-  title,
-  duration,
-  description,
-  highlights,
-  nextSteps,
+  step,
+  index,
+  isLast,
 }: {
-  number: string;
-  title: string;
-  duration: string;
-  description: string;
-  highlights: string[];
-  nextSteps: string[];
+  step: (typeof STEPS)[0];
+  index: number;
+  isLast: boolean;
 }) {
+  const Icon = step.icon;
+  
   return (
-    <section className="relative w-full min-h-[calc(100vh-80px)] flex items-center py-16 md:py-0 border-b border-border/40">
-      <div className="max-w-6xl mx-auto px-6 md:px-16 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="relative z-10">
-            <span className="absolute -top-16 -left-10 font-heading text-[160px] leading-none text-muted-foreground/5 select-none -z-10">
-              {number}
+    <section className="relative w-full min-h-[calc(100vh-140px)] flex items-center py-16 md:py-12">
+      <div className="max-w-5xl mx-auto px-6 md:px-12 w-full">
+        {/* Step header */}
+        <div className="flex items-center gap-5 mb-10">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center shrink-0">
+            <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
+          </div>
+          <div>
+            <span className="text-gold font-semibold tracking-wider uppercase text-lg sm:text-xl">
+              Étape {step.number}
             </span>
-
-            <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-foreground mb-4 leading-tight">
-              {title}
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl text-foreground leading-tight">
+              {step.title}
             </h2>
-            <p className="text-[hsl(var(--gold))] font-medium text-xl sm:text-2xl mb-8 flex flex-col items-start gap-1">
-              <span className="text-2xl leading-none">⏱️</span>
-              <span>{duration}</span>
-            </p>
-
-            <div className="w-16 h-px bg-[hsl(var(--gold))] mb-8" />
-
-            <p className="leading-relaxed text-xl max-w-lg text-secondary-foreground font-normal sm:text-2xl">
-              {description}
-            </p>
           </div>
+        </div>
 
-          <div className="flex flex-col gap-8 z-10">
-            <div className="grid sm:grid-cols-2 gap-4">
-              {highlights.map((h, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-3 p-5 bg-white border border-slate-200 shadow-sm rounded-sm"
-                >
-                  <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                  <span className="leading-snug text-[#232a39] font-medium text-xl">{h}</span>
-                </div>
-              ))}
-            </div>
+        {/* Duration badge */}
+        <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
+          <span className="text-2xl leading-none">⏱️</span>
+          <span className="text-xl sm:text-2xl font-medium text-foreground">{step.duration}</span>
+        </div>
 
-            <div className="border border-[hsl(var(--gold)/0.2)] p-8 sm:p-10 bg-[#b27615] rounded-sm shadow-md">
-              <h3 className="font-heading mb-6 font-semibold text-white text-3xl">Que se passe-t-il ensuite ?</h3>
-              <ul className="space-y-4">
-                {nextSteps.map((s, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="text-[hsl(var(--gold-light))] font-bold mt-1">→</span>
-                    <span className="leading-relaxed text-white/95 text-xl">{s}</span>
-                  </li>
-                ))}
-              </ul>
+        {/* Description */}
+        <p className="text-xl sm:text-2xl leading-relaxed text-muted-foreground max-w-2xl mb-12">
+          {step.description}
+        </p>
+
+        {/* Highlights grid */}
+        <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-10">
+          {step.highlights.map((h, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-4 p-6 bg-card border border-border rounded-lg shadow-soft transition-all hover:shadow-card"
+            >
+              <div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5">
+                <Check className="h-4 w-4 text-gold" />
+              </div>
+              <span className="text-xl leading-snug text-foreground font-medium">{h}</span>
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* Next step preview */}
+        <div className="flex items-center gap-3 text-gold text-xl font-medium">
+          {isLast ? (
+            <Sparkles className="h-5 w-5" />
+          ) : (
+            <ArrowRight className="h-5 w-5" />
+          )}
+          <span>{step.nextLabel}</span>
         </div>
       </div>
     </section>
   );
 }
 
-/* ═══════════════════════════════════════════════
-   MAIN COMPONENT
-   ═══════════════════════════════════════════════ */
+/* ─── MAIN COMPONENT ─── */
 
 export default function WelcomeRoadmap({
   onStartAutonomous,
@@ -246,18 +345,18 @@ export default function WelcomeRoadmap({
   viewOnly?: boolean;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(0); // 0 = hero, 1-4 = steps
+  const [activeStep, setActiveStep] = useState(0);
 
   const heroRef = useRef<HTMLDivElement>(null);
-  const step1Ref = useRef<HTMLDivElement>(null);
-  const step2Ref = useRef<HTMLDivElement>(null);
-  const step3Ref = useRef<HTMLDivElement>(null);
-  const step4Ref = useRef<HTMLDivElement>(null);
-
-  const refs = [step1Ref, step2Ref, step3Ref, step4Ref];
+  const stepRefs = [
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+    useRef<HTMLDivElement>(null),
+  ];
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
-    const y = (ref.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 100;
+    const y = (ref.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 140;
     window.scrollTo({ top: y, behavior: "smooth" });
   };
 
@@ -267,222 +366,128 @@ export default function WelcomeRoadmap({
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             if (entry.target === heroRef.current) setActiveStep(0);
-            if (entry.target === step1Ref.current) setActiveStep(1);
-            if (entry.target === step2Ref.current) setActiveStep(2);
-            if (entry.target === step3Ref.current) setActiveStep(3);
-            if (entry.target === step4Ref.current) setActiveStep(4);
+            stepRefs.forEach((ref, i) => {
+              if (entry.target === ref.current) setActiveStep(i + 1);
+            });
           }
         });
       },
-      { threshold: 0.4 },
+      { threshold: 0.3 },
     );
 
-    const rH = heroRef.current;
-    const r1 = step1Ref.current;
-    const r2 = step2Ref.current;
-    const r3 = step3Ref.current;
-    const r4 = step4Ref.current;
-
-    if (rH) observer.observe(rH);
-    if (r1) observer.observe(r1);
-    if (r2) observer.observe(r2);
-    if (r3) observer.observe(r3);
-    if (r4) observer.observe(r4);
+    const allRefs = [heroRef, ...stepRefs];
+    allRefs.forEach((ref) => {
+      if (ref.current) observer.observe(ref.current);
+    });
 
     return () => {
-      if (rH) observer.unobserve(rH);
-      if (r1) observer.unobserve(r1);
-      if (r2) observer.unobserve(r2);
-      if (r3) observer.unobserve(r3);
-      if (r4) observer.unobserve(r4);
+      allRefs.forEach((ref) => {
+        if (ref.current) observer.unobserve(ref.current);
+      });
     };
   }, []);
 
   return (
     <div className="relative">
-      <style>{slowFloatAnimation}</style>
-
       {/* ─── HERO ─── */}
-      <section ref={heroRef} className="section-luxury text-center pb-0">
+      <section ref={heroRef} className="section-luxury text-center pb-16">
         <div className="max-w-3xl mx-auto px-6">
-          <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-2xl font-medium">
+          <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-xl sm:text-2xl font-medium">
             BIENVENUE SUR LE TUTORIEL KALIMERA
           </span>
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
-            Votre parcours en 4 étapes vers <br /> de belles rencontres
+            Votre parcours en 4 étapes <br className="hidden sm:block" /> vers de belles rencontres
           </h1>
           <div className="divider-gold mx-auto mb-8" />
-          <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-12 font-medium">
-            4 étapes simples et guidées pour composer vôtre profil.
-            <br className="hidden sm:block" />
-            L’inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd’hui
-            peuvent faire toute la différence demain.
+          <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-6 font-medium max-w-2xl mx-auto">
+            4 étapes simples et guidées pour composer votre profil.
+          </p>
+          <p className="text-muted-foreground text-lg sm:text-xl leading-relaxed mb-14 max-w-2xl mx-auto">
+            L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. 
+            Quelques minutes aujourd'hui peuvent faire toute la différence demain.
           </p>
 
-          <div className="flex justify-center pb-16 animate-slow-float">
-            <button onClick={() => scrollTo(step1Ref)} className="flex flex-col items-center gap-3 group">
-              <span className="text-[hsl(var(--gold))] font-medium tracking-wide group-hover:text-foreground transition-colors duration-700 text-2xl sm:text-3xl">
-                Découvrir votre parcours pas à pas
-              </span>
-              <div className="w-12 h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-700">
-                <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
-              </div>
-            </button>
+          {/* Steps overview cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+            {STEPS.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <button
+                  key={i}
+                  onClick={() => scrollTo(stepRefs[i])}
+                  className="group bg-card border border-border rounded-xl p-5 sm:p-6 hover:border-gold/50 hover:shadow-card transition-all duration-300 text-left"
+                >
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gold/10 flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
+                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-gold" />
+                  </div>
+                  <span className="text-gold text-base font-semibold tracking-wide block mb-1">
+                    Étape {step.number}
+                  </span>
+                  <span className="text-foreground font-heading text-lg sm:text-xl leading-snug block mb-2">
+                    {step.title}
+                  </span>
+                  <span className="text-muted-foreground text-base flex items-center gap-1">
+                    ⏱️ {step.duration}
+                  </span>
+                </button>
+              );
+            })}
           </div>
+
+          {/* Scroll CTA */}
+          <button
+            onClick={() => scrollTo(stepRefs[0])}
+            className="inline-flex flex-col items-center gap-3 group"
+          >
+            <span className="text-gold font-medium tracking-wide group-hover:text-foreground transition-colors duration-500 text-xl sm:text-2xl">
+              Découvrir chaque étape en détail
+            </span>
+            <div className="w-14 h-14 rounded-full border-2 border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all duration-500">
+              <ArrowDown className="h-6 w-6 text-gold group-hover:text-white" />
+            </div>
+          </button>
         </div>
       </section>
 
-      {/* ─── STICKY TABS ─── */}
-      <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="flex max-w-4xl mx-auto">
-          {TABS.map((tab, i) => {
-            const Icon = tab.icon;
-            const isActive = activeStep === i + 1;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => scrollTo(refs[i])}
-                className={`flex-1 flex items-center justify-center gap-2 py-4 transition-colors border-b-2 ${
-                  isActive
-                    ? "border-[hsl(var(--gold))] text-foreground"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Icon className={`h-4 w-4 ${isActive ? "text-[hsl(var(--gold))]" : ""}`} />
-                <span className="font-medium tracking-wide text-xl sm:text-2xl hidden md:inline">{tab.label}</span>
-                <span className="font-medium tracking-wide text-lg sm:text-xl md:hidden">{i + 1}</span>
-              </button>
-            );
-          })}
+      {/* ─── PROGRESS BAR ─── */}
+      <ProgressBar activeStep={activeStep} onStepClick={(i) => scrollTo(stepRefs[i])} />
+
+      {/* ─── STEPS ─── */}
+      {STEPS.map((step, i) => (
+        <div key={i} ref={stepRefs[i]} className={i === STEPS.length - 1 ? "pb-32" : "border-b border-border/40"}>
+          <StepCard step={step} index={i} isLast={i === STEPS.length - 1} />
         </div>
-      </nav>
+      ))}
 
-      {/* ─── ÉTAPES ─── */}
-      <div ref={step1Ref}>
-        <StepCard
-          number="01"
-          title="Le Quiz des 3 Préférences"
-          duration="3 minutes"
-          description="Un court questionnaire ludique de 10 questions pour mieux comprendre ce que vous recherchez. Trois questions simples, trois réponses sincères."
-          highlights={[
-            "Questions simples et bienveillantes",
-            "Aucune mauvaise réponse possible",
-            "Aide notre équipe à mieux vous connaître",
-            "Résultats confidentiels et sécurisés",
-          ]}
-          nextSteps={[
-            "Vos réponses sont enregistrées en toute confidentialité.",
-            "Elles nous permettent de vous proposer des profils compatibles.",
-            "Vous passez ensuite à la présentation de vos photos et vidéo.",
-          ]}
-        />
-      </div>
-
-      <div ref={step2Ref}>
-        <StepCard
-          number="02"
-          title="Photos & Vidéo"
-          duration="5 à 10 min"
-          description="Montrez qui vous êtes vraiment. Ajoutez vos plus belles photos, et enregistrez une courte vidéo de présentation."
-          highlights={[
-            "Jusqu'à 4 photos pour illustrer votre quotidien",
-            "Une vidéo pour révéler votre personnalité",
-            "Tutoriel pour réussir votre vidéo inclus",
-            "Un message sonore pour faire entendre votre voix",
-          ]}
-          nextSteps={[
-            "Vos médias sont stockés de manière sécurisée.",
-            "Ils permettent aux autres de mieux vous découvrir.",
-            "Vous poursuivez ensuite avec la construction de votre profil.",
-          ]}
-        />
-      </div>
-
-      <div ref={step3Ref}>
-        <StepCard
-          number="03"
-          title="Mon Profil & Le Profil Idéal"
-          duration="15 à 20 min"
-          description="Décrivez-vous en détail et esquissez le portrait de la personne que vous aimeriez rencontrer."
-          highlights={[
-            "Votre description personnelle approfondie",
-            "Le portrait de votre partenaire idéal(e)",
-            "Vos valeurs, passions et style de vie",
-            "Critères de recherche personnalisés",
-          ]}
-          nextSteps={[
-            "Votre profil est analysé par notre algorithme.",
-            "Il est croisé avec les profils existants.",
-            "Dernière étape : le test de personnalité.",
-          ]}
-        />
-      </div>
-
-      <div ref={step4Ref} className="pb-32">
-        <StepCard
-          number="04"
-          title="Le Test de Personnalité"
-          duration="15 à 20 min"
-          description="Un test psychologique simple pour affiner vos correspondances."
-          highlights={[
-            "Basé sur des méthodes éprouvées",
-            "Révèle vos traits dominants",
-            "Améliore la qualité des correspondances",
-            "Résultats personnalisés et détaillés",
-          ]}
-          nextSteps={[
-            "Votre profil de personnalité est calculé.",
-            "Il complète votre portrait unique.",
-            "Votre espace personnel s'ouvre enfin !",
-          ]}
-        />
-      </div>
-
-      {/* ─── BOUTONS FLOTTANTS (NAVIGATION GLOBALE) ─── */}
-
-      {/* Bouton Gauche (Précédent : Flèche Haut) */}
-      <div
-        className={`fixed top-1/2 -translate-y-1/2 left-4 md:left-8 z-50 transition-all duration-500 ${activeStep > 1 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[-20px]"}`}
-      >
-        <button
-          onClick={() => scrollTo(refs[activeStep - 2])}
-          className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pr-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
-        >
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
-            <ArrowUp className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
-          </div>
-          <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep - 1}</span>
-        </button>
-      </div>
-
-      {/* Bouton Droite (Suivant ou Fin) */}
-      <div
-        className={`fixed top-1/2 -translate-y-1/2 right-4 md:right-8 z-50 transition-all duration-500 ${activeStep >= 0 ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none translate-x-[20px]"}`}
-      >
-        {/* Affiché pour Hero(0), Etape 1, 2, 3 (Flèche Bas) */}
-        {activeStep < 4 && (
-          <button
-            onClick={() => scrollTo(refs[activeStep])}
-            className="flex items-center gap-3 group bg-white/95 backdrop-blur-sm p-3 pl-6 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] transition-all"
-          >
-            <span className="hidden md:block font-heading text-xl text-foreground mt-1">Étape {activeStep + 1}</span>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-[hsl(var(--gold))] flex items-center justify-center group-hover:bg-[hsl(var(--gold))] transition-all duration-500 shrink-0">
-              <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:text-white" />
-            </div>
-          </button>
-        )}
-
-        {/* Affiché pour Etape 4 (Action Finale) — Version Elegante / Quiet Luxury */}
-        {activeStep === 4 && !viewOnly && (
+      {/* ─── FLOATING CTA (step 4) ─── */}
+      {activeStep === 4 && !viewOnly && (
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 duration-500">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-4 group bg-[#1B2333] p-4 pl-8 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.25)] border border-[#1B2333] hover:brightness-110 transition-all text-white"
+            className="flex items-center gap-4 bg-primary text-primary-foreground px-10 py-5 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.25)] hover:brightness-110 transition-all group"
           >
-            <span className="hidden md:block font-heading text-xl font-bold mt-1 tracking-wide">Choisir mon mode</span>
-            <Sparkles className="h-5 w-5 text-[hsl(var(--gold))]" />
+            <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">
+              Commencer mon parcours
+            </span>
+            <ChevronRight className="h-6 w-6 text-gold group-hover:translate-x-1 transition-transform" />
           </button>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* ─── FLOATING NAV (non-step-4) ─── */}
+      {activeStep > 0 && activeStep < 4 && (
+        <div className="fixed bottom-8 right-8 z-50">
+          <button
+            onClick={() => scrollTo(stepRefs[activeStep])}
+            className="flex items-center gap-3 bg-card border border-border px-6 py-4 rounded-full shadow-elevated hover:shadow-luxury hover:border-gold/50 transition-all group"
+          >
+            <span className="font-heading text-lg sm:text-xl text-foreground">
+              Étape suivante
+            </span>
+            <ArrowDown className="h-5 w-5 text-gold group-hover:translate-y-0.5 transition-transform" />
+          </button>
+        </div>
+      )}
 
       {!viewOnly && (
         <PricingModal
