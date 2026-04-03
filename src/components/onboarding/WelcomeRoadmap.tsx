@@ -78,7 +78,7 @@ function PricingModal({
                   <div className="w-10 h-10 bg-secondary flex items-center justify-center">
                     <Star className="h-5 w-5 text-gold" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-muted-foreground text-xl">
+                  <span className="font-medium tracking-widest uppercase text-muted-foreground text-2xl">
                     Mode Autonome
                   </span>
                 </div>
