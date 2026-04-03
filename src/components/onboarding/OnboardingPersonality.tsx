@@ -39,6 +39,11 @@ export default function OnboardingPersonality({
 }: OnboardingPersonalityProps) {
   const { toast } = useToast();
 
+  // ── S'assurer que la page s'ouvre tout en haut ──
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [currentPart, setCurrentPart] = useState(0);
   const [saving, setSaving] = useState(false);
