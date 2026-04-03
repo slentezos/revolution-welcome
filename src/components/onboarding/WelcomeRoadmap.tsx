@@ -110,7 +110,7 @@ function PricingModal({
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <Check className="h-5 w-5 text-gold-light shrink-0 mt-0.5" />
-                      <span className="text-white/90 leading-snug text-xl">{benefit}</span>
+                      <span className="text-white/90 leading-snug text-2xl">{benefit}</span>
                     </li>
                   ))}
                 </ul>
