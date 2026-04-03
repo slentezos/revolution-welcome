@@ -206,7 +206,7 @@ const STEPS = [
 
 function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepClick: (i: number) => void }) {
   return (
-    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
+    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border py-[50px] pt-[25px]">
       <div className="max-w-4xl mx-auto px-4 py-5">
         {/* Step indicators */}
         <div className="flex items-center justify-between">
