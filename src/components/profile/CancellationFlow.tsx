@@ -570,7 +570,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
         <div className="px-6 sm:px-12 py-10 space-y-8 max-w-2xl mx-auto">
           <button
             onClick={() => setStep("reason")}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors text-base uppercase tracking-wider"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-lg"
           >
             <ArrowLeft className="h-5 w-5" /> Retour
           </button>
@@ -587,13 +587,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="space-y-4">
             <div className="flex items-start gap-5 p-5 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <EyeOff className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-lg">
+              <p className="text-foreground leading-relaxed text-xl">
                 Votre profil devient <span className="font-medium">totalement invisible</span> pour les autres membres.
               </p>
             </div>
             <div className="flex items-start gap-5 p-5 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-lg">
+              <p className="text-foreground leading-relaxed text-xl">
                 Vos <span className="font-medium">messages sont sauvegardés</span> et votre facturation suspendue.
               </p>
             </div>
@@ -617,7 +617,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   variant: "destructive",
                 });
               }}
-              className="w-full text-[#E53935] hover:text-[#C62828] font-medium text-lg transition-colors"
+              className="w-full text-[#E53935] hover:text-[#C62828] font-medium transition-colors text-xl"
             >
               Confirmer la suppression définitive
             </button>
