@@ -387,7 +387,7 @@ export default function WelcomeRoadmap({
           <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-6 font-medium max-w-2xl mx-auto">
             4 étapes simples et guidées pour composer votre profil.
           </p>
-          <p className="text-muted-foreground text-lg sm:text-xl leading-relaxed mb-14 max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg sm:text-2xl leading-relaxed mb-14 max-w-2xl mx-auto">
             L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd'hui
             peuvent faire toute la différence demain.
           </p>
