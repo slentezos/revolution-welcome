@@ -1,6 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogOut, CreditCard, Settings, ChevronDown, MessageCircle, Gift } from "lucide-react";
+import {
+  Menu,
+  X,
+  User,
+  LogOut,
+  CreditCard,
+  Settings,
+  ChevronDown,
+  MessageCircle,
+  Gift,
+  ChevronLeft, // Ajout de l'icône de retour
+} from "lucide-react";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -70,11 +81,33 @@ export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
   const navLinks = user ? authNavLinks : publicNavLinks;
 
-  // Hide header entirely on onboarding route
-  if (location.pathname === "/onboarding") {
-    return null;
+  // ─── MODE ONBOARDING : En-tête minimaliste ───
+  // Si vous avez d'autres routes pour l'onboarding (ex: /quiz, /photos), vous pouvez utiliser :
+  // const isOnboarding = location.pathname.startsWith("/onboarding") || location.pathname === "/quiz";
+  const isOnboarding = location.pathname === "/onboarding";
+
+  if (isOnboarding) {
+    return (
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[#FAF9F6]/95 backdrop-blur-md shadow-sm py-4 border-b border-amber-200/20">
+        <div className="mx-auto px-6 md:px-12 flex items-center justify-between">
+          <span className="font-serif text-2xl md:text-3xl tracking-tight text-slate-900">Kalimera</span>
+          <button
+            // Vous pouvez remplacer navigate(-1) par la route exacte de votre modal, par exemple navigate("/tutoriel")
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 bg-white border border-amber-200/50 hover:border-amber-500/50 text-slate-700 px-5 py-2.5 rounded-full transition-all duration-300 shadow-sm group"
+          >
+            <ChevronLeft className="h-4 w-4 text-amber-500 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-[12px] sm:text-[13px] uppercase tracking-widest font-semibold hidden sm:block">
+              Modifier mon accompagnement
+            </span>
+            <span className="text-[12px] uppercase tracking-widest font-semibold sm:hidden">Retour</span>
+          </button>
+        </div>
+      </header>
+    );
   }
 
+  // ─── MODE NORMAL : Navigation complète ───
   return (
     <>
       <LocationCheckModal open={modalOpen} onClose={() => setModalOpen(false)} />
@@ -122,7 +155,7 @@ export default function Header() {
               ))}
             </div>
             {/* 3. CTA / Profile Buttons */}
-             <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
               {user && (
                 <div className="hidden lg:block">
                   <VisualComfortToggle />
