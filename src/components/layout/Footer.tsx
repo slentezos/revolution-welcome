@@ -117,7 +117,7 @@ export default function Footer() {
         <div className="border-t border-primary-foreground/10">
           <div className="container-main mx-auto px-6 md:px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-primary-foreground/40 text-lg">© 2026 Kalimera. Tous droits réservés.</p>
-            <p className="text-primary-foreground/40 text-lg">Conçu avec amour pour les seniors en Île-de-France</p>
+            <p className="text-primary-foreground/40 text-lg">Conçu avec amour pour les seniors</p>
           </div>
         </div>
       </footer>
