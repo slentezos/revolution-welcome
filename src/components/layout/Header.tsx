@@ -81,25 +81,22 @@ export default function Header() {
   const [modalOpen, setModalOpen] = useState(false);
   const navLinks = user ? authNavLinks : publicNavLinks;
 
-  // ─── MODE ONBOARDING : En-tête minimaliste ───
-  // AJOUTEZ VOTRE URL EXACTE ICI SI ELLE N'Y EST PAS
-  const ONBOARDING_ROUTES = [
-    "/onboarding",
-    "/tutoriel",
-    "/quiz",
-    "/photos",
-    "/video",
-    "/creation-profil",
-    "/personnalite",
-    "/reservation",
-  ];
-
-  // Rend la vérification insensible à la casse et vérifie si l'URL commence par l'une des routes
   const currentPath = location.pathname.toLowerCase();
-  const isOnboarding = ONBOARDING_ROUTES.some((route) => currentPath.startsWith(route));
 
-  // Si on est dans le processus d'onboarding, on affiche UNIQUEMENT le bouton de retour, sans AUCUN menu.
-  if (isOnboarding) {
+  // ─── 1. ROUTES SANS HEADER (Le menu à onglets fait le job) ───
+  const NO_HEADER_ROUTES = ["/tutoriel", "/quiz", "/photos", "/video", "/creation-profil", "/personnalite"];
+  const hideHeader = NO_HEADER_ROUTES.some((route) => currentPath.startsWith(route));
+
+  // Si on est sur une de ces pages, on supprime totalement le Header
+  if (hideHeader) {
+    return null;
+  }
+
+  // ─── 2. ROUTES AVEC HEADER MINIMALISTE (ex: Paiement, Accueil Onboarding) ───
+  const MINIMAL_HEADER_ROUTES = ["/onboarding", "/reservation"];
+  const isMinimalHeader = MINIMAL_HEADER_ROUTES.some((route) => currentPath.startsWith(route));
+
+  if (isMinimalHeader) {
     return (
       <header className="fixed top-0 left-0 right-0 z-50 bg-[#FAF9F6]/95 backdrop-blur-md shadow-sm py-4 border-b border-amber-200/20">
         <div className="mx-auto px-6 md:px-12 flex items-center justify-between">
@@ -125,7 +122,7 @@ export default function Header() {
     );
   }
 
-  // ─── MODE NORMAL : Navigation complète (avec gestion connexion) ───
+  // ─── 3. MODE NORMAL : Navigation complète (avec gestion connexion) ───
   return (
     <>
       <LocationCheckModal open={modalOpen} onClose={() => setModalOpen(false)} />
