@@ -14,7 +14,7 @@ export default function NoTimeToLoseSection() {
         {/* Content */}
         <div className="flex items-center justify-center p-10 md:p-16 lg:p-20 bg-primary text-primary-foreground">
           <div className="max-w-lg">
-            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-lg">
+            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl">
               02 — Le constat
             </span>
 

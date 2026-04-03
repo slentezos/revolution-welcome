@@ -48,7 +48,7 @@ export default function Footer() {
                 La plateforme d'élégance des rencontres après 60 ans. Déjà disponible en Île-de-France, bientôt chez
                 vous.
               </p>
-              <div className="text-lg text-neutral-400">75% d'affinités réciproques</div>
+              <div className="text-neutral-400 text-xl">75% d'affinités réciproques</div>
             </div>
 
             {/* Découvrir */}
