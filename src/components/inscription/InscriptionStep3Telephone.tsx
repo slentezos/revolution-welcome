@@ -117,7 +117,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
             <Button
               type="button"
               onClick={handleSendCode}
-              className="btn-primary h-14 text-base rounded-xl flex-[2]"
+              className="btn-primary h-14 text-xl rounded-xl flex-[2]"
               disabled={formData.phone.length < 9 || sending}
             >
               {sending ? "Envoi en cours..." : "Envoyer le code"}
