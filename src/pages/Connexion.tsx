@@ -294,7 +294,7 @@ export default function Connexion() {
                         </div>
                         <Input
                           placeholder="6 12 34 56 78"
-                          className="h-14 text-lg rounded-xl flex-1"
+                          className="h-14 text-xl rounded-xl flex-1"
                           value={phone}
                           onChange={(e) => setPhone(formatPhoneDigits(e.target.value))}
                           inputMode="tel"
@@ -314,7 +314,7 @@ export default function Connexion() {
                     <Button
                       type="button"
                       onClick={handleSendOtp}
-                      className="btn-primary w-full h-14 text-lg"
+                      className="btn-primary w-full h-14 text-xl"
                       disabled={phone.length < 9 || sendingOtp}
                     >
                       {sendingOtp ? "Envoi en cours..." : "Recevoir un code par SMS"}
