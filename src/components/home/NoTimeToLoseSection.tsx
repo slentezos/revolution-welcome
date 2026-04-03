@@ -27,10 +27,10 @@ export default function NoTimeToLoseSection() {
             <div data-reveal data-reveal-delay="250" className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-10" />
 
             <div data-reveal data-reveal-delay="350" className="space-y-4 text-primary-foreground/80 text-lg mb-12">
-              <p className="text-lg">Tous ces profils sans intérêt</p>
-              <p>Tous ces « likes » impersonnels</p>
-              <p>Tous ces messages sans suite</p>
-              <p>Toutes ces annonces fictives</p>
+              <p className="text-xl">Tous ces profils sans intérêt</p>
+              <p className="text-xl">Tous ces "likes" impersonnels</p>
+              <p className="text-xl">Tous ces messages sans suite</p>
+              <p className="text-xl">Toutes ces annonces fictives</p>
             </div>
 
             <div data-reveal data-reveal-delay="450" className="flex items-center gap-3 mb-8">
