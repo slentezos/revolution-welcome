@@ -16,7 +16,7 @@ export default function Contact() {
     lastName: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
   });
 
   const heroRef = useScrollReveal<HTMLElement>({ threshold: 0.08 });
@@ -30,17 +30,31 @@ export default function Contact() {
   return (
     <Layout>
       {/* Hero - Minimal & Modern */}
-      <section ref={heroRef} className="relative py-24 md:py-32 overflow-hidden">
-        <div className="grid lg:grid-cols-2 min-h-[50vh]">
+      {/* Correction : On retire les 'py-24 md:py-32' ici pour que la section touche le haut de l'écran */}
+      <section ref={heroRef} className="relative overflow-hidden">
+        <div className="grid lg:grid-cols-2 min-h-[50vh] md:min-h-[60vh]">
           {/* Left content */}
-          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 py-16">
+          {/* Correction : On ajoute le padding (pt-32 pb-16) ici, à l'intérieur du bloc coloré */}
+          <div className="flex flex-col justify-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 pt-32 md:pt-40 pb-16 md:pb-24">
             <div className="max-w-xl">
-              <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-2xl">Contact</span>
-              <h1 data-reveal data-reveal-delay="150" className="font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-6 leading-tight">
-                Notre équipe 
-                <span className="text-primary block">à votre écoute</span>
+              <span
+                data-reveal
+                className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-2xl"
+              >
+                Contact
+              </span>
+              <h1
+                data-reveal
+                data-reveal-delay="150"
+                className="font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-6 leading-tight"
+              >
+                Notre équipe <span className="text-primary block">à votre écoute</span>
               </h1>
-              <p data-reveal data-reveal-delay="300" className="text-lg text-muted-foreground leading-relaxed md:text-2xl">
+              <p
+                data-reveal
+                data-reveal-delay="300"
+                className="text-lg text-muted-foreground leading-relaxed md:text-2xl"
+              >
                 Notre équipe est à votre écoute pour répondre à toutes vos questions et vous accompagner dans votre
                 recherche.
               </p>
@@ -49,7 +63,12 @@ export default function Contact() {
 
           {/* Right image with overlay */}
           <div className="relative hidden lg:block">
-            <img src={contactHero} alt="Notre équipe à votre écoute" className="absolute inset-0 w-full h-full object-cover" />
+            {/* L'image prendra maintenant toute la hauteur, y compris l'espace sous le Header */}
+            <img
+              src={contactHero}
+              alt="Notre équipe à votre écoute"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-r from-secondary via-primary/30 to-primary/50" />
           </div>
         </div>
@@ -75,7 +94,8 @@ export default function Contact() {
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                         placeholder="Votre prénom"
-                        className="h-12 rounded-xl bg-background border-border/50 focus:border-primary" />
+                        className="h-12 rounded-xl bg-background border-border/50 focus:border-primary"
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="font-medium text-foreground text-xl">Nom</label>
@@ -83,7 +103,8 @@ export default function Contact() {
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                         placeholder="Votre nom"
-                        className="h-12 rounded-xl bg-background border-border/50 focus:border-primary" />
+                        className="h-12 rounded-xl bg-background border-border/50 focus:border-primary"
+                      />
                     </div>
                   </div>
 
@@ -94,7 +115,8 @@ export default function Contact() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="votre@email.com"
-                      className="h-12 rounded-xl bg-background border-border/50 focus:border-primary" />
+                      className="h-12 rounded-xl bg-background border-border/50 focus:border-primary"
+                    />
                   </div>
 
                   <div className="space-y-2">
@@ -103,7 +125,8 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       placeholder="Le sujet de votre message"
-                      className="h-12 rounded-xl bg-background border-border/50 focus:border-primary" />
+                      className="h-12 rounded-xl bg-background border-border/50 focus:border-primary"
+                    />
                   </div>
 
                   <div className="space-y-2">
@@ -112,7 +135,8 @@ export default function Contact() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Décrivez votre demande..."
-                      className="min-h-[140px] rounded-xl bg-background border-border/50 focus:border-primary resize-none" />
+                      className="min-h-[140px] rounded-xl bg-background border-border/50 focus:border-primary resize-none"
+                    />
                   </div>
 
                   <Button type="submit" className="btn-primary w-full sm:w-auto group">
@@ -126,11 +150,41 @@ export default function Contact() {
             {/* Contact Info - Sidebar */}
             <div className="lg:col-span-2 space-y-6">
               {[
-              { icon: Mail, title: "Email", content: <a href="mailto:contact@monkalimera.fr" className="text-muted-foreground hover:text-primary transition-colors text-lg">contact@monkalimera.fr</a> },
-              { icon: MapPin, title: "Adresse", content: <p className="text-muted-foreground text-lg">123 Avenue des Champs-Élysées<br />75008 Paris, France</p> },
-              { icon: Clock, title: "Temps de réponse", content: <p className="text-muted-foreground text-lg">Sous 24 heures ouvrées</p> }].
-              map((item, i) =>
-              <div key={i} data-reveal data-reveal-delay={String(150 + i * 150)} className="group p-6 rounded-2xl bg-secondary/50 hover:bg-secondary transition-colors duration-300">
+                {
+                  icon: Mail,
+                  title: "Email",
+                  content: (
+                    <a
+                      href="mailto:contact@monkalimera.fr"
+                      className="text-muted-foreground hover:text-primary transition-colors text-lg"
+                    >
+                      contact@monkalimera.fr
+                    </a>
+                  ),
+                },
+                {
+                  icon: MapPin,
+                  title: "Adresse",
+                  content: (
+                    <p className="text-muted-foreground text-lg">
+                      123 Avenue des Champs-Élysées
+                      <br />
+                      75008 Paris, France
+                    </p>
+                  ),
+                },
+                {
+                  icon: Clock,
+                  title: "Temps de réponse",
+                  content: <p className="text-muted-foreground text-lg">Sous 24 heures ouvrées</p>,
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  data-reveal
+                  data-reveal-delay={String(150 + i * 150)}
+                  className="group p-6 rounded-2xl bg-secondary/50 hover:bg-secondary transition-colors duration-300"
+                >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                       <item.icon className="h-5 w-5 text-primary" />
@@ -141,7 +195,7 @@ export default function Contact() {
                     </div>
                   </div>
                 </div>
-              )}
+              ))}
 
               {/* FAQ Highlight */}
               <div data-reveal data-reveal-delay="600" className="p-6 rounded-2xl bg-primary text-primary-foreground">
@@ -152,7 +206,8 @@ export default function Contact() {
                 <Button
                   variant="secondary"
                   className="w-full bg-white/10 hover:bg-white/20 text-primary-foreground border-0"
-                  asChild>
+                  asChild
+                >
                   <Link to="/faq">
                     Consulter la FAQ
                     <ArrowRight className="ml-2 h-4 w-4" />
@@ -165,5 +220,6 @@ export default function Contact() {
       </section>
 
       <GiftBannerSection image={giftBannerContact} />
-    </Layout>);
+    </Layout>
+  );
 }
