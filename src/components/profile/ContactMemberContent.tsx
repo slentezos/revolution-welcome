@@ -204,11 +204,14 @@ export default function ContactMemberContent() {
 
   return (
     <>
-      {/* ─── Hero ─── MODIFICATION : pt-0 pour supprimer le gap blanc du haut */}
-      <section ref={heroRef} className="relative pt-0 pb-16 md:pb-24 overflow-hidden">
+      {/* ─── Hero ─── 
+          MODIFICATION : -mt-16 ou -mt-20 pour "aspirer" le bloc vers le haut 
+          et supprimer l'espace du Layout parent. pt-0 pour être sûr.
+      */}
+      <section ref={heroRef} className="relative pt-0 pb-16 md:pb-24 overflow-hidden -mt-16 lg:-mt-20">
         <div className="grid lg:grid-cols-2 min-h-[50vh]">
-          {/* Colonne Gauche : MODIFICATION pt-12 au lieu de py-16 */}
-          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 pt-12 pb-16 lg:pt-20 lg:pb-24">
+          {/* Colonne Gauche : On réduit le pt pour aligner le texte avec le haut de l'image */}
+          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 pt-16 pb-16 lg:pt-24 lg:pb-24">
             <div className="max-w-xl">
               <span
                 data-reveal
@@ -234,7 +237,7 @@ export default function ContactMemberContent() {
             </div>
           </div>
 
-          {/* Colonne Droite (Photo) : Elle touche maintenant le haut car pt-0 sur la section */}
+          {/* Colonne Droite (Photo) */}
           <div className="relative hidden lg:block">
             <img
               src={contactMemberHero}
