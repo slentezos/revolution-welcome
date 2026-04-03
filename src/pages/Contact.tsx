@@ -156,7 +156,7 @@ export default function Contact() {
                   content: (
                     <a
                       href="mailto:contact@monkalimera.fr"
-                      className="text-muted-foreground hover:text-primary transition-colors text-lg"
+                      className="text-muted-foreground hover:text-primary transition-colors text-xl"
                     >
                       contact@monkalimera.fr
                     </a>
@@ -166,7 +166,7 @@ export default function Contact() {
                   icon: MapPin,
                   title: "Adresse",
                   content: (
-                    <p className="text-muted-foreground text-lg">
+                    <p className="text-muted-foreground text-xl">
                       123 Avenue des Champs-Élysées
                       <br />
                       75008 Paris, France
@@ -176,7 +176,7 @@ export default function Contact() {
                 {
                   icon: Clock,
                   title: "Temps de réponse",
-                  content: <p className="text-muted-foreground text-lg">Sous 24 heures ouvrées</p>,
+                  content: <p className="text-muted-foreground text-xl">Sous 24 heures ouvrées</p>,
                 },
               ].map((item, i) => (
                 <div
