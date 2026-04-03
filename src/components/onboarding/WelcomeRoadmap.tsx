@@ -10,7 +10,6 @@ import {
   Brain,
   ArrowDown,
   ArrowRight,
-  Sparkles,
   ChevronRight,
 } from "lucide-react";
 
@@ -283,7 +282,7 @@ function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: num
         {/* Duration badge */}
         <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
           <span className="text-2xl leading-none">⏱️</span>
-          <span className="text-2xl lg:text-2xl font-medium text-foreground">Durée : {step.duration}</span>
+          <span className="text-2xl lg:text-2xl font-medium text-foreground">{step.duration}</span>
         </div>
 
         {/* Description */}
@@ -376,42 +375,48 @@ export default function WelcomeRoadmap({
     <div className="relative">
       {/* ─── HERO ─── */}
       <section ref={heroRef} className="section-luxury text-center pb-16">
-        <div className="max-w-3xl mx-auto px-6">
-          <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-xl sm:text-2xl font-medium">
-            BIENVENUE SUR LE TUTORIEL KALIMERA
-          </span>
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
-            Votre parcours en 4 étapes <br className="hidden sm:block" /> vers de belles rencontres
-          </h1>
-          <div className="divider-gold mx-auto mb-8" />
-          <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-6 font-medium max-w-2xl mx-auto">
-            4 étapes simples et guidées pour composer votre profil.
-          </p>
-          <p className="text-muted-foreground text-lg sm:text-2xl leading-relaxed mb-14 max-w-2xl mx-auto">
-            L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd'hui
-            peuvent faire toute la différence demain.
-          </p>
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-xl sm:text-2xl font-medium">
+              BIENVENUE SUR LE TUTORIEL KALIMERA
+            </span>
+            <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
+              Votre parcours en 4 étapes <br className="hidden sm:block" /> vers de belles rencontres
+            </h1>
+            <div className="divider-gold mx-auto mb-8" />
+            <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-6 font-medium">
+              4 étapes simples et guidées pour composer votre profil.
+            </p>
+            <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-14">
+              L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes
+              aujourd'hui peuvent faire toute la différence demain.
+            </p>
+          </div>
 
           {/* Steps overview cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-14">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-14">
             {STEPS.map((step, i) => {
               const Icon = step.icon;
               return (
                 <button
                   key={i}
                   onClick={() => scrollTo(stepRefs[i])}
-                  className="group bg-card border border-border rounded-xl p-5 sm:p-6 hover:border-gold/50 hover:shadow-card transition-all duration-300 text-left"
+                  className="group bg-card border border-border rounded-xl p-6 sm:p-8 hover:border-gold/50 hover:shadow-card transition-all duration-300 text-left flex flex-col h-full"
                 >
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gold/10 flex items-center justify-center mb-4 group-hover:bg-gold/20 transition-colors">
-                    <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-gold" />
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold/10 flex items-center justify-center mb-6 group-hover:bg-gold/20 transition-colors shrink-0">
+                    <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
                   </div>
-                  <span className="text-gold text-base font-semibold tracking-wide block mb-1">
-                    Étape {step.number}
+                  <div className="flex-grow">
+                    <span className="text-gold text-lg sm:text-xl font-semibold tracking-wide block mb-2">
+                      Étape {step.number}
+                    </span>
+                    <span className="text-foreground font-heading text-2xl sm:text-3xl leading-snug block mb-4">
+                      {step.title}
+                    </span>
+                  </div>
+                  <span className="text-muted-foreground text-xl flex items-center gap-2 mt-auto pt-4 border-t border-border/50">
+                    <span className="text-2xl">⏱️</span> {step.duration}
                   </span>
-                  <span className="text-foreground font-heading text-lg sm:text-xl leading-snug block mb-2">
-                    {step.title}
-                  </span>
-                  <span className="text-muted-foreground flex items-center gap-1 text-2xl">⏱️ {step.duration}</span>
                 </button>
               );
             })}
