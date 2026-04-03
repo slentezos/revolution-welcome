@@ -10,6 +10,7 @@ import {
   Brain,
   ArrowDown,
   ArrowRight,
+  Sparkles,
   ChevronRight,
 } from "lucide-react";
 
