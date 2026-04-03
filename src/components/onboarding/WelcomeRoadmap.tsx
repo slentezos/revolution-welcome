@@ -197,7 +197,7 @@ const STEPS = [
       "Améliore la qualité des correspondances",
       "Résultats personnalisés et détaillés",
     ],
-    nextLabel: "Votre espace personnel s'ouvre !",
+    nextLabel: "​",
   },
 ];
 
