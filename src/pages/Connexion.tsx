@@ -243,7 +243,7 @@ export default function Connexion() {
                   <Input
                     type="email"
                     placeholder="votre@email.com"
-                    className="h-14 text-lg"
+                    className="h-14 text-xl"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -253,7 +253,7 @@ export default function Connexion() {
                   <label className="block font-medium text-foreground mb-2 text-xl">Mot de passe</label>
                   <PasswordInput
                     placeholder="••••••••"
-                    className="h-14 text-lg"
+                    className="h-14 text-xl"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -271,7 +271,7 @@ export default function Connexion() {
                   </Link>
                 </div>
 
-                <Button type="submit" className="btn-primary w-full h-14 text-lg mt-2" disabled={loading}>
+                <Button type="submit" className="btn-primary w-full h-14 text-xl mt-2" disabled={loading}>
                   {loading ? "Connexion..." : "Se connecter"}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
