@@ -84,7 +84,7 @@ function PricingModal({
                 </div>
                 <h3 className="font-heading mb-2 text-4xl">Vos premières impressions</h3>
                 <div className="divider-gold mb-6" />
-                <p className="text-muted-foreground leading-relaxed flex-grow mb-8 text-xl">
+                <p className="text-muted-foreground leading-relaxed flex-grow mb-8 text-2xl">
                   Profitez de vos 3 mois d'accès offerts en complétant votre portrait à votre rythme : commencez par
                   notre <strong>quiz ludique</strong>, ajoutez vos plus belles <strong>photos</strong>, suivez notre{" "}
                   <strong>tutoriel pour réussir votre vidéo</strong>, enregistrez votre <strong>son</strong>, puis
