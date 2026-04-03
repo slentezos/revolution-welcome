@@ -19,7 +19,7 @@ const testimonials = [
 {
   name: "Marie",
   quote:
-  "J'ai découvert sa liaison avec une plus jeune. Quand ça arrive aux autres, ça fait sourire. Mais quand ça vous arrive, tout s'effondre. On finit par douter de soi, de sa féminité, de sa capacité d'être aimée. Colère, déprime, confiance trahie. Plus jamais ça…"
+  "J'J'ai découvert sa liaison avec une plus jeune. Quand ça arrive aux autres, ça fait sourire. Mais quand ça vous arrive, tout s'effondre. On finit par douter de soi, de sa féminité, de sa capacité d'être aimée. Colère, déprime, confiance trahie. Plus jamais ça…"
 },
 {
   name: "Éric",
@@ -84,7 +84,7 @@ export default function APropos() {
           <div className="max-w-lg">
             <span
               data-reveal
-              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-lg">
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-xl">
               
               2020 — Le déclic
             </span>
@@ -120,7 +120,7 @@ export default function APropos() {
                 faire entre étudiants. Le moral de nos grands-parents nous inquiétait.
               </p>
 
-              <p data-reveal data-reveal-delay="750" className="font-medium text-primary font-sans text-xl">
+              <p data-reveal data-reveal-delay="750" className="text-primary font-sans text-xl font-normal">
                 Ils vivaient leur situation comme un échec. Un sentiment profond d'amertume. Progressivement, ils se
                 repliaient sur eux-mêmes.
               </p>
@@ -208,7 +208,7 @@ export default function APropos() {
           <div className="max-w-lg">
             <span
               data-reveal
-              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-lg">
+              className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-xl">
               
               L'expérience
             </span>
@@ -246,7 +246,7 @@ export default function APropos() {
                 data-reveal-delay="650"
                 className="py-6 px-8 bg-background border-l-4 border-primary mt-8">
                 
-                <p className="text-xl text-foreground font-heading">
+                <p className="text-foreground font-heading text-2xl">
                   L'amour et l'amitié ne sont pas des promos de grandes surfaces !
                 </p>
               </div>
@@ -281,7 +281,7 @@ export default function APropos() {
             <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
               {/* What we're NOT */}
               <div data-reveal data-reveal-delay="300" className="p-10 bg-secondary">
-                <h3 className="font-heading text-2xl text-foreground mb-6">
+                <h3 className="font-heading text-foreground mb-6 text-3xl">
                   Parce qu'il fallait une approche sélective
                 </h3>
                 <div className="space-y-4 text-muted-foreground">
@@ -298,7 +298,7 @@ export default function APropos() {
 
               {/* What we ARE */}
               <div data-reveal data-reveal-delay="450" className="p-10 bg-primary text-primary-foreground">
-                <h3 className="font-heading text-2xl mb-6">Bien au contraire</h3>
+                <h3 className="font-heading mb-6 text-3xl">Bien au contraire</h3>
                 <div className="space-y-4 text-primary-foreground/90">
                   <p className="flex items-start gap-3 text-lg">
                     <Heart className="h-5 w-5 mt-1 flex-shrink-0 fill-current" />
@@ -322,7 +322,7 @@ export default function APropos() {
             <span className="font-heading text-4xl md:text-5xl text-foreground">Kalimera</span>
           </div>
 
-          <p data-reveal data-reveal-delay="150" className="text-muted-foreground mb-12 max-w-2xl mx-auto text-xl">
+          <p data-reveal data-reveal-delay="150" className="text-muted-foreground mb-12 max-w-2xl mx-auto text-2xl">
             Rejoignez une communauté où chaque rencontre est pensée pour durer.
           </p>
 
