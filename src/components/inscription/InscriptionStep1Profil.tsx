@@ -70,12 +70,11 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
           autoComplete="given-name"
           autoFocus
         />
-
-        {errors.firstName && <p className="text-destructive text-xl mt-2">{errors.firstName}</p>}
+        {errors.firstName && <p className="text-destructive text-lg mt-2">{errors.firstName}</p>}
       </div>
 
       <div>
-        <label className="block font-medium text-foreground mb-3 text-xl">Date de naissance *</label>
+        <label className="block font-medium text-foreground mb-3 text-lg">Date de naissance *</label>
         <div className="grid grid-cols-3 gap-3">
           <Select value={formData.birthDay} onValueChange={(v) => update("birthDay", v)}>
             <SelectTrigger className="h-14 text-base rounded-xl">
@@ -117,7 +116,8 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
         {errors.birthDate && <p className="text-destructive text-lg mt-2">{errors.birthDate}</p>}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {/* MODIFICATION ICI : On passe en flex-col au lieu de grid pour que les boutons prennent toute la largeur */}
+      <div className="flex flex-col gap-8">
         <div>
           <label className="block font-medium text-foreground mb-3 text-lg">Je suis *</label>
           <div className="grid grid-cols-2 gap-3">
@@ -129,7 +129,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 key={opt.value}
                 type="button"
                 onClick={() => update("gender", opt.value)}
-                className={`h-14 rounded-xl text-base font-medium border-2 transition-all duration-300 ${
+                className={`h-14 px-3 rounded-xl text-base font-medium border-2 whitespace-nowrap transition-all duration-300 ${
                   formData.gender === opt.value
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border bg-background text-foreground hover:border-primary/40"
@@ -143,7 +143,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
         </div>
 
         <div>
-          <label className="block font-medium text-foreground mb-3 text-xl">Je recherche *</label>
+          <label className="block font-medium text-foreground mb-3 text-lg">Je recherche *</label>
           <div className="grid grid-cols-2 gap-3">
             {[
               { value: "Un compagnon", label: "Un compagnon" },
@@ -153,7 +153,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 key={opt.value}
                 type="button"
                 onClick={() => update("lookingFor", opt.value)}
-                className={`h-14 rounded-xl text-base font-medium border-2 transition-all duration-300 ${
+                className={`h-14 px-3 rounded-xl text-base font-medium border-2 whitespace-nowrap transition-all duration-300 ${
                   formData.lookingFor === opt.value
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border bg-background text-foreground hover:border-primary/40"
