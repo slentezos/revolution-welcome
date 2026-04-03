@@ -164,7 +164,8 @@ export default function Privileges() {
 
               <div className="mb-10 pb-8 border-b border-slate-100">
                 <div className="mb-4">
-                  <span className="font-heading text-5xl text-foreground line-through decoration-foreground/30 decoration-2">
+                  {/* CORRECTION ICI : Retrait du /30 sur la couleur de décoration */}
+                  <span className="font-heading text-5xl text-foreground line-through decoration-[#1B2333] decoration-[3px]">
                     50€
                   </span>
                 </div>
