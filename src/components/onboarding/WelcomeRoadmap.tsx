@@ -206,7 +206,7 @@ const STEPS = [
 
 function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepClick: (i: number) => void }) {
   return (
-    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
+    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border py-[50px] pt-[25px]">
       <div className="max-w-4xl mx-auto px-4 py-5">
         {/* Step indicators */}
         <div className="flex items-center justify-between">
@@ -314,7 +314,7 @@ function StepCard({
               <div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5">
                 <Check className="h-4 w-4 text-gold" />
               </div>
-              <span className="text-xl leading-snug text-foreground font-medium">{h}</span>
+              <span className="leading-snug text-foreground font-medium text-2xl">{h}</span>
             </div>
           ))}
         </div>
@@ -326,7 +326,7 @@ function StepCard({
           ) : (
             <ArrowRight className="h-5 w-5" />
           )}
-          <span>{step.nextLabel}</span>
+          <span className="text-2xl">{step.nextLabel}</span>
         </div>
       </div>
     </section>
