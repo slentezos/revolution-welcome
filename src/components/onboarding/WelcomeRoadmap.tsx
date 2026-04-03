@@ -426,7 +426,7 @@ export default function WelcomeRoadmap({
                   <span className="text-foreground font-heading text-lg sm:text-xl leading-snug block mb-2">
                     {step.title}
                   </span>
-                  <span className="text-muted-foreground text-base flex items-center gap-1">
+                  <span className="text-muted-foreground flex items-center gap-1 text-xl">
                     ⏱️ {step.duration}
                   </span>
                 </button>
