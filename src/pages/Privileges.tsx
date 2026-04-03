@@ -83,7 +83,9 @@ export default function Privileges() {
 
           <div className="inline-block border border-[hsl(var(--gold)/0.4)] bg-[hsl(var(--gold)/0.1)] backdrop-blur-sm px-8 py-5 md:px-12 md:py-6 mb-10 animate-fade-up delay-300">
             <p className="font-heading text-xl md:text-4xl text-[hsl(var(--gold-light))] font-medium">
-              L'élégance de la confiance : Vos 3 premiers mois offerts.
+              L'élégance de la confiance :
+              <br />
+              Vos 3 premiers mois offerts
             </p>
           </div>
 
