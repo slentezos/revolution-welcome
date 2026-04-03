@@ -10,7 +10,7 @@ import {
   ChevronDown,
   MessageCircle,
   Gift,
-  ChevronLeft, // Ajout de l'icône de retour
+  ChevronLeft,
 } from "lucide-react";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
 import { supabase } from "@/integrations/supabase/client";
@@ -82,9 +82,17 @@ export default function Header() {
   const navLinks = user ? authNavLinks : publicNavLinks;
 
   // ─── MODE ONBOARDING : En-tête minimaliste ───
-  // Si vous avez d'autres routes pour l'onboarding (ex: /quiz, /photos), vous pouvez utiliser :
-  // const isOnboarding = location.pathname.startsWith("/onboarding") || location.pathname === "/quiz";
-  const isOnboarding = location.pathname === "/onboarding";
+  const ONBOARDING_ROUTES = [
+    "/onboarding",
+    "/tutoriel",
+    "/quiz",
+    "/photos",
+    "/video",
+    "/creation-profil",
+    "/personnalite",
+  ];
+
+  const isOnboarding = ONBOARDING_ROUTES.some((route) => location.pathname.startsWith(route));
 
   if (isOnboarding) {
     return (
@@ -92,7 +100,6 @@ export default function Header() {
         <div className="mx-auto px-6 md:px-12 flex items-center justify-between">
           <span className="font-serif text-2xl md:text-3xl tracking-tight text-slate-900">Kalimera</span>
           <button
-            // Vous pouvez remplacer navigate(-1) par la route exacte de votre modal, par exemple navigate("/tutoriel")
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 bg-white border border-amber-200/50 hover:border-amber-500/50 text-slate-700 px-5 py-2.5 rounded-full transition-all duration-300 shadow-sm group"
           >
