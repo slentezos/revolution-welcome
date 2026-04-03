@@ -172,7 +172,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
         <Button
           type="button"
           onClick={onSubmit}
-          className="btn-primary h-14 text-lg rounded-xl flex-[2]"
+          className="btn-primary h-14 rounded-xl flex-[2] text-xl"
           disabled={loading}>
           
           {loading ? "Création en cours..." : "Créer mon compte"}
