@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { MessageSquare, Sparkles, Send, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface DashboardStatsCardsProps {
   onMessagesClick: () => void;
@@ -10,6 +9,19 @@ interface DashboardStatsCardsProps {
   unreadMessageCount?: number;
 }
 
+const messageAvatars = [
+  { name: "Marie", src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face" },
+  {
+    name: "Sophie",
+    src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+  },
+];
+
+const scrollTo = (id: string) => {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
 export default function DashboardStatsCards({
   onMessagesClick,
   newProposalsCount,
@@ -17,133 +29,81 @@ export default function DashboardStatsCards({
   savedCount,
   unreadMessageCount = 0,
 }: DashboardStatsCardsProps) {
-  // État pour savoir quelle section est actuellement visible à l'écran
-  const [activeSection, setActiveSection] = useState<string>("messages");
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      // On soustrait 140px pour ne pas que l'élément soit caché sous le header + la sticky bar
-      const y = el.getBoundingClientRect().top + window.scrollY - 140;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  };
-
   const tabs = [
-    {
-      id: "messages",
-      label: "Mes nouveaux messages",
-      count: unreadMessageCount,
-      icon: MessageSquare,
-      badgeColor: "bg-[#1B2333] text-white",
-      action: onMessagesClick,
-    },
     {
       id: "section-nouvelles",
       label: "Nouvelles propositions",
       count: newProposalsCount,
       icon: Sparkles,
-      badgeColor: "bg-[hsl(var(--gold))] text-white",
-      action: () => scrollTo("section-nouvelles"),
+      colorClasses: "bg-primary/10 text-primary",
+      badgeClasses: "bg-primary text-primary-foreground",
     },
     {
       id: "section-attente",
       label: "En attente de sa réponse",
       count: pendingCount,
       icon: Send,
-      badgeColor: "bg-emerald-500 text-white",
-      action: () => scrollTo("section-attente"),
+      colorClasses: "bg-emerald-100 text-emerald-700",
+      badgeClasses: "bg-emerald-600 text-white",
     },
     {
       id: "section-finaliser",
-      label: "À finaliser",
+      label: "À finaliser de ma part",
       count: savedCount,
       icon: Clock,
-      badgeColor: "bg-amber-500 text-white",
-      action: () => scrollTo("section-finaliser"),
+      colorClasses: "bg-amber-100 text-amber-700",
+      badgeClasses: "bg-amber-600 text-white",
     },
   ];
 
-  // (Optionnel) Intersection Observer pour mettre à jour l'onglet actif automatiquement au scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-150px 0px -60% 0px" }, // Déclenche quand la section arrive dans le tiers supérieur
-    );
-
-    tabs.forEach((tab) => {
-      if (tab.id !== "messages") {
-        const el = document.getElementById(tab.id);
-        if (el) observer.observe(el);
-      }
-    });
-
-    return () => observer.disconnect();
-  }, [tabs]);
-
   return (
-    <div className="sticky top-[80px] z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/40 shadow-sm mb-10 pt-2 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
-        {/* SCROLL HORIZONTAL (Pour tablette/mobile) */}
-        <div className="flex overflow-x-auto scrollbar-none gap-4 md:gap-8 lg:gap-12 pb-1">
-          {tabs.map((tab) => {
-            const Icon = tab.icon;
-            // On considère que "messages" n'est actif que si cliqué, les autres le sont au scroll
-            const isActive = activeSection === tab.id;
-
-            return (
-              <button
-                key={tab.id}
-                onClick={() => {
-                  setActiveSection(tab.id);
-                  tab.action();
-                }}
-                className={cn(
-                  "relative flex items-center gap-3 py-4 px-2 whitespace-nowrap transition-all duration-300 outline-none group",
-                  isActive ? "text-[#1B2333]" : "text-muted-foreground hover:text-foreground/80",
-                )}
-              >
-                <Icon
-                  className={cn(
-                    "h-6 w-6 transition-colors",
-                    isActive ? "text-[hsl(var(--gold))]" : "opacity-60 group-hover:opacity-100",
-                  )}
-                />
-
-                <span
-                  className={cn(
-                    "font-heading text-xl md:text-2xl transition-all",
-                    isActive ? "font-bold" : "font-medium",
-                  )}
-                >
-                  {tab.label}
+    <div className="sticky top-16 md:top-20 z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/30 shadow-sm py-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 max-w-7xl mx-auto px-4">
+        {/* ... le reste de votre code ne change pas ... */}
+        <div
+          className="bg-card rounded-xl p-4 md:p-5 border border-border/30 cursor-pointer hover:shadow-md transition-shadow"
+          onClick={onMessagesClick}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <MessageSquare className="h-5 w-5 text-primary" />
+            </div>
+              {unreadMessageCount > 0 && (
+                <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-primary text-primary-foreground text-sm font-bold">
+                  {unreadMessageCount}
                 </span>
+              )}
+          </div>
+          <h3 className="font-semibold text-foreground text-base leading-tight md:text-2xl">Mes nouveaux messages</h3>
+        </div>
 
+        {/* Section navigation tabs */}
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          return (
+            <div
+              key={tab.id}
+              className="bg-card rounded-xl p-4 md:p-5 border border-border/30 cursor-pointer hover:shadow-md transition-shadow group"
+              onClick={() => scrollTo(tab.id)}
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${tab.colorClasses}`}>
+                  <Icon className="h-5 w-5" />
+                </div>
                 {tab.count > 0 && (
                   <span
-                    className={cn(
-                      "flex items-center justify-center h-7 px-2.5 min-w-[28px] rounded-full text-sm font-bold ml-1 transition-all",
-                      isActive ? tab.badgeColor : "bg-gray-200 text-gray-600",
-                    )}
+                    className={`inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full text-sm font-bold ${tab.badgeClasses}`}
                   >
                     {tab.count}
                   </span>
                 )}
-
-                {/* Soulignement de l'onglet actif */}
-                {isActive && (
-                  <div className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t-full bg-[hsl(var(--gold))] animate-in fade-in zoom-in-95 duration-300" />
-                )}
-              </button>
-            );
-          })}
-        </div>
+              </div>
+              <h3 className="font-semibold text-foreground text-base leading-tight group-hover:text-primary transition-colors md:text-2xl">
+                {tab.label}
+              </h3>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
