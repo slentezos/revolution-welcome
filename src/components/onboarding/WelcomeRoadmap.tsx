@@ -258,11 +258,24 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
 
 /* ─── STEP CARD (Redesigned for seniors) ─── */
 
-function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: number; isLast: boolean }) {
+function StepCard({
+  step,
+  index,
+  isLast,
+  onStartClick,
+  viewOnly,
+}: {
+  step: (typeof STEPS)[0];
+  index: number;
+  isLast: boolean;
+  onStartClick?: () => void;
+  viewOnly?: boolean;
+}) {
   const Icon = step.icon;
 
   return (
-    <section className="relative w-full min-h-[calc(100vh-140px)] flex items-center py-16 md:py-12">
+    // RETRAIT DE min-h-[calc(100vh-140px)] POUR PERMETTRE À LA CARTE DE S'ADAPTER NATURELLEMENT
+    <section className="relative w-full flex items-center py-16 md:py-24">
       <div className="max-w-5xl mx-auto px-6 md:px-12 w-full">
         {/* Step header */}
         <div className="flex items-center gap-5 mb-10">
@@ -303,15 +316,27 @@ function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: num
           ))}
         </div>
 
-        {/* Next step preview */}
-        <div className="flex items-center gap-4 text-muted-foreground group-hover:text-gold transition-colors duration-500">
-          {!isLast && (
-            <>
-              <ArrowRight className="h-5 w-5" />
-              <span className="text-2xl">{step.nextLabel}</span>
-            </>
-          )}
-        </div>
+        {/* Next step preview OU Bouton Final */}
+        {!isLast ? (
+          <div className="flex items-center gap-4 text-muted-foreground transition-colors duration-500">
+            <ArrowRight className="h-5 w-5" />
+            <span className="text-2xl">{step.nextLabel}</span>
+          </div>
+        ) : (
+          !viewOnly &&
+          onStartClick && (
+            // LE BOUTON EST MAINTENANT INTÉGRÉ ICI, JUSTE EN DESSOUS DES CARTES DE L'ÉTAPE 4
+            <div className="mt-14 animate-in fade-in duration-500">
+              <button
+                onClick={onStartClick}
+                className="flex items-center justify-center gap-4 bg-primary text-primary-foreground px-12 py-5 rounded-full shadow-xl hover:scale-[1.02] transition-all group w-full md:w-auto"
+              >
+                <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
+                <ChevronRight className="h-6 w-6 text-gold group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          )
+        )}
       </div>
     </section>
   );
@@ -441,36 +466,17 @@ export default function WelcomeRoadmap({
 
       {/* ─── STEPS ─── */}
       {STEPS.map((step, i) => (
-        <div key={i} ref={stepRefs[i]} className={i === STEPS.length - 1 ? "pb-32" : "border-b border-border/40"}>
-          <StepCard step={step} index={i} isLast={i === STEPS.length - 1} />
+        // J'AI RETIRÉ LE pb-32 ICI
+        <div key={i} ref={stepRefs[i]} className={i === STEPS.length - 1 ? "" : "border-b border-border/40"}>
+          <StepCard
+            step={step}
+            index={i}
+            isLast={i === STEPS.length - 1}
+            onStartClick={() => setIsModalOpen(true)}
+            viewOnly={viewOnly}
+          />
         </div>
       ))}
-
-      {/* ─── FLOATING CTA (step 4) ─── */}
-      {activeStep === 4 && !viewOnly && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-4 duration-500">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-4 bg-primary text-primary-foreground px-10 py-5 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.25)] hover:brightness-110 transition-all group"
-          >
-            <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
-            <ChevronRight className="h-6 w-6 text-gold group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
-      )}
-
-      {/* ─── FLOATING NAV (non-step-4) ─── */}
-      {activeStep > 0 && activeStep < 4 && (
-        <div className="fixed bottom-8 right-8 z-50">
-          <button
-            onClick={() => scrollTo(stepRefs[activeStep])}
-            className="flex items-center gap-3 bg-card border border-border px-6 py-4 rounded-full shadow-elevated hover:shadow-luxury hover:border-gold/50 transition-all group"
-          >
-            <span className="font-heading text-xl sm:text-xl text-foreground">Étape suivante</span>
-            <ArrowDown className="h-5 w-5 text-gold group-hover:translate-y-0.5 transition-transform" />
-          </button>
-        </div>
-      )}
 
       {!viewOnly && (
         <PricingModal
