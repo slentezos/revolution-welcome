@@ -267,7 +267,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
                   value={preferences[currentCategory.id][index]}
                   onChange={(e) => handleInputChange(currentCategory.id, index, e.target.value)}
                   maxLength={40}
-                  className="bg-[hsl(35,15%,97%)] border-2 border-input focus:border-primary focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-14 text-lg placeholder:text-muted-foreground placeholder:font-light"
+                  className="bg-[hsl(35,15%,97%)] border-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-14 text-xl placeholder:text-muted-foreground placeholder:font-light border-[#7a7a7a]"
                 />
               ))}
             </div>
