@@ -78,13 +78,13 @@ function PricingModal({
                   <div className="w-10 h-10 bg-secondary flex items-center justify-center">
                     <Star className="h-5 w-5 text-gold" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-muted-foreground text-xl">
+                  <span className="font-medium tracking-widest uppercase text-muted-foreground text-2xl">
                     Mode Autonome
                   </span>
                 </div>
-                <h3 className="font-heading mb-2 text-3xl">Vos premières impressions</h3>
+                <h3 className="font-heading mb-2 text-4xl">Vos premières impressions</h3>
                 <div className="divider-gold mb-6" />
-                <p className="text-muted-foreground leading-relaxed flex-grow mb-8 text-xl">
+                <p className="text-muted-foreground leading-relaxed flex-grow mb-8 text-2xl">
                   Profitez de vos 3 mois d'accès offerts en complétant votre portrait à votre rythme : commencez par
                   notre <strong>quiz ludique</strong>, ajoutez vos plus belles <strong>photos</strong>, suivez notre{" "}
                   <strong>tutoriel pour réussir votre vidéo</strong>, enregistrez votre <strong>son</strong>, puis
@@ -100,17 +100,17 @@ function PricingModal({
                   <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
                     <Phone className="h-5 w-5 text-gold-light" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-white/70 text-lg">
+                  <span className="font-medium tracking-widest uppercase text-white/70 text-2xl">
                     Service Conciergerie
                   </span>
                 </div>
-                <h3 className="font-heading mb-2 text-white text-3xl">L'Accompagnement Privé</h3>
+                <h3 className="font-heading mb-2 text-white text-4xl">L'Accompagnement Privé</h3>
                 <div className="divider-gold mb-6 border-white/20" />
                 <ul className="space-y-4 mb-8 flex-grow">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <Check className="h-5 w-5 text-gold-light shrink-0 mt-0.5" />
-                      <span className="text-white/90 leading-snug text-xl">{benefit}</span>
+                      <span className="text-white/90 leading-snug text-2xl">{benefit}</span>
                     </li>
                   ))}
                 </ul>
@@ -125,7 +125,7 @@ function PricingModal({
             <div className="text-center py-4">
               <button
                 onClick={() => setView("story")}
-                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-xl"
+                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-2xl"
               >
                 ← Revoir notre engagement de sérénité
               </button>
