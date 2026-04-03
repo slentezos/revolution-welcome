@@ -97,7 +97,7 @@ export default function Conseils() {
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl">
+          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-2xl">
             Conseils
           </span>
 
