@@ -17,7 +17,8 @@ const InputOTP = React.forwardRef<React.ElementRef<typeof OTPInput>, React.Compo
 InputOTP.displayName = "InputOTP";
 
 const InputOTPGroup = React.forwardRef<React.ElementRef<"div">, React.ComponentPropsWithoutRef<"div">>(
-  ({ className, ...props }, ref) => <div ref={ref} className={cn("flex items-center", className)} {...props} />,
+  // AJOUT DU GAP ICI POUR L'ESPACEMENT
+  ({ className, ...props }, ref) => <div ref={ref} className={cn("flex items-center gap-3", className)} {...props} />,
 );
 InputOTPGroup.displayName = "InputOTPGroup";
 
@@ -32,7 +33,8 @@ const InputOTPSlot = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "relative flex h-10 w-10 items-center justify-center border-2 border-input text-sm transition-all first:rounded-l-md last:rounded-r-md",
+        // TAILLES AGRANDIES, BORDS ARRONDIS ET SUPPRESSION DES CLASSES QUI COLLAIENT LES CASES
+        "relative flex h-14 w-12 sm:h-16 sm:w-14 items-center justify-center border-2 border-input text-2xl font-semibold transition-all rounded-xl",
         isActive && "z-10 ring-2 ring-ring ring-offset-background border-primary",
         className,
       )}
@@ -41,7 +43,7 @@ const InputOTPSlot = React.forwardRef<
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="animate-caret-blink h-4 w-px bg-foreground duration-1000" />
+          <div className="animate-caret-blink h-6 w-px bg-foreground duration-1000" />
         </div>
       )}
     </div>
