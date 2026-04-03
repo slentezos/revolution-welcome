@@ -283,7 +283,7 @@ function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: num
         {/* Duration badge */}
         <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
           <span className="text-2xl leading-none">⏱️</span>
-          <span className="text-2xl lg:text-2xl font-medium text-foreground">{step.duration}</span>
+          <span className="text-2xl lg:text-2xl font-medium text-foreground">Durée : {step.duration}</span>
         </div>
 
         {/* Description */}
