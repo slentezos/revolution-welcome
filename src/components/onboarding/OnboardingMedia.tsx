@@ -444,7 +444,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       Guide Privé
                     </span>
                   </div>
-// ... keep existing code
+                  <DialogTitle className="font-heading text-4xl lg:text-5xl text-[#1B2333] leading-[1.1] mb-2">
+                    L'art de se <br /> <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
+                  </DialogTitle>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-auto">
                   {[
                     { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
                     { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
