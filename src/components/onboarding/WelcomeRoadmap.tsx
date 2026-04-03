@@ -243,7 +243,7 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
                   }`}
                 >
                   <span className="block sm:hidden">{i + 1}</span>
-                  <span className="hidden sm:block">Étape {i + 1}</span>
+                  <span className="hidden sm:block text-xl">Étape {i + 1}</span>
                 </span>
               </button>
             );
