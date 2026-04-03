@@ -736,7 +736,7 @@ export default function Messages() {
                     <div className="flex items-end gap-3">
                       <button
                         onClick={toggleListening}
-                        className={`min-h-[48px] px-4 w-auto min-w-[120px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-sm font-semibold shrink-0 ${
+                        className={`min-h-[48px] px-4 w-auto min-w-[120px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 ${
                           isListening
                             ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
                             : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
