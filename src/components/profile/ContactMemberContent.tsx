@@ -208,7 +208,7 @@ export default function ContactMemberContent() {
           CORRECTION : On utilise une marge négative précise pour annuler le padding du Layout 
           et on ajoute top-[-1px] pour recouvrir la bordure de l'onglet si besoin.
       */}
-      <section ref={heroRef} className="relative pt-0 pb-16 md:pb-24 overflow-hidden -mt-[81px] z-10">
+      <section ref={heroRef} className="relative pt-0 pb-16 md:pb-24 overflow-hidden z-10 mt-0">
         <div className="grid lg:grid-cols-2 min-h-[50vh]">
           {/* Colonne Gauche : On ajoute un pt-32 pour compenser la remontée du bloc et laisser respirer le texte */}
           <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 pt-32 pb-16 lg:pt-40 lg:pb-24">
