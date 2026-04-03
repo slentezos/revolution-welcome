@@ -42,8 +42,8 @@ export default function CommitmentsSection() {
                 className="group p-10 bg-secondary border border-border hover:border-primary/20 transition-all duration-500 hover:shadow-card"
               >
                 <commitment.icon className="h-8 w-8 text-primary mb-6 transition-transform group-hover:scale-110" />
-                <h3 className="font-heading text-2xl text-foreground mb-4">{commitment.title}</h3>
-                <p className="text-muted-foreground leading-relaxed text-lg">{commitment.description}</p>
+                <h3 className="font-heading text-foreground mb-4 text-3xl">{commitment.title}</h3>
+                <p className="text-muted-foreground leading-relaxed text-xl">{commitment.description}</p>
               </div>
             ))}
           </div>
