@@ -490,7 +490,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       </div>
                       <div>
                         <p className="font-bold text-[hsl(var(--gold))] text-base leading-tight">Intimidé(e) ?</p>
-                        <p className="text-[hsl(var(--gold))] opacity-80 text-sm">On vous filme en visio (40€)</p>
+                        <p className="text-[hsl(var(--gold))] opacity-80 text-sm">On vous filme en visio (49€)</p>
                       </div>
                     </div>
                     <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
