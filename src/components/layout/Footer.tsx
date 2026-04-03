@@ -56,7 +56,7 @@ export default function Footer() {
               <h4 className="font-medium tracking-[0.2em] uppercase mb-6 text-xl text-neutral-400">Découvrir</h4>
               <ul className="space-y-4">
                 {footerLinks.discover.map((link) => (
-                  <li key={link.href} className="text-lg">
+                  <li key={link.href} className="text-xl">
                     <Link
                       to={link.href}
                       className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-300"
