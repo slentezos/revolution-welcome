@@ -72,7 +72,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
   return (
     <div className="space-y-8">
       <div className="text-center mb-10">
-        <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
+        <h1 className="font-heading text-3xl md:text-5xl font-semibold text-foreground mb-3">
           {codeSent ? "Entrez le code reçu" : "Vérification du téléphone"}
         </h1>
         <p className="text-muted-foreground text-xl">
@@ -157,7 +157,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
             <button
               type="button"
               onClick={handleResend}
-              className="text-primary font-medium hover:underline flex items-center gap-1 text-lg"
+              className="text-primary font-medium hover:underline flex items-center gap-1 text-xl"
               disabled={sending}
             >
               <RefreshCw className="h-4 w-4" />
@@ -166,7 +166,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
             <button
               type="button"
               onClick={handleEditPhone}
-              className="text-primary font-medium hover:underline flex items-center gap-1 text-lg"
+              className="text-primary font-medium hover:underline flex items-center gap-1 text-xl"
             >
               <Edit3 className="h-4 w-4" />
               Modifier le numéro
