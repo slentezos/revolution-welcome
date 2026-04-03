@@ -176,8 +176,7 @@ const STEPS = [
     icon: ClipboardList,
     title: "Mon Profil & Le Profil Idéal",
     duration: "15 à 20 minutes",
-    description:
-      "Décrivez-vous en détail et esquissez le portrait de la personne que vous aimeriez rencontrer.",
+    description: "Décrivez-vous en détail et esquissez le portrait de la personne que vous aimeriez rencontrer.",
     highlights: [
       "Votre description personnelle approfondie",
       "Le portrait de votre partenaire idéal(e)",
@@ -230,11 +229,7 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
                         : "bg-secondary border-border text-muted-foreground group-hover:border-gold/50"
                   }`}
                 >
-                  {isPast ? (
-                    <Check className="h-6 w-6" />
-                  ) : (
-                    <Icon className="h-6 w-6" />
-                  )}
+                  {isPast ? <Check className="h-6 w-6" /> : <Icon className="h-6 w-6" />}
                 </div>
                 {/* Label */}
                 <span
@@ -254,7 +249,7 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
           <div className="h-0.5 bg-border w-full" />
           <div
             className="h-0.5 bg-gold absolute top-0 left-0 transition-all duration-700"
-            style={{ width: `${((Math.max(0, activeStep - 1)) / (STEPS.length - 1)) * 100}%` }}
+            style={{ width: `${(Math.max(0, activeStep - 1) / (STEPS.length - 1)) * 100}%` }}
           />
         </div>
       </div>
@@ -264,17 +259,9 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
 
 /* ─── STEP CARD (Redesigned for seniors) ─── */
 
-function StepCard({
-  step,
-  index,
-  isLast,
-}: {
-  step: (typeof STEPS)[0];
-  index: number;
-  isLast: boolean;
-}) {
+function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: number; isLast: boolean }) {
   const Icon = step.icon;
-  
+
   return (
     <section className="relative w-full min-h-[calc(100vh-140px)] flex items-center py-16 md:py-12">
       <div className="max-w-5xl mx-auto px-6 md:px-12 w-full">
@@ -296,13 +283,11 @@ function StepCard({
         {/* Duration badge */}
         <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
           <span className="text-2xl leading-none">⏱️</span>
-          <span className="text-xl sm:text-2xl font-medium text-foreground">{step.duration}</span>
+          <span className="text-2xl sm:text-2xl font-medium text-foreground">{step.duration}</span>
         </div>
 
         {/* Description */}
-        <p className="text-xl sm:text-2xl leading-relaxed text-muted-foreground max-w-2xl mb-12">
-          {step.description}
-        </p>
+        <p className="text-xl sm:text-2xl leading-relaxed text-muted-foreground max-w-2xl mb-12">{step.description}</p>
 
         {/* Highlights grid */}
         <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-10">
@@ -321,11 +306,7 @@ function StepCard({
 
         {/* Next step preview */}
         <div className="flex items-center gap-3 text-gold text-xl font-medium">
-          {isLast ? (
-            <Sparkles className="h-5 w-5" />
-          ) : (
-            <ArrowRight className="h-5 w-5" />
-          )}
+          {isLast ? <Sparkles className="h-5 w-5" /> : <ArrowRight className="h-5 w-5" />}
           <span className="text-2xl">{step.nextLabel}</span>
         </div>
       </div>
@@ -403,8 +384,8 @@ export default function WelcomeRoadmap({
             4 étapes simples et guidées pour composer votre profil.
           </p>
           <p className="text-muted-foreground text-lg sm:text-xl leading-relaxed mb-14 max-w-2xl mx-auto">
-            L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. 
-            Quelques minutes aujourd'hui peuvent faire toute la différence demain.
+            L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd'hui
+            peuvent faire toute la différence demain.
           </p>
 
           {/* Steps overview cards */}
@@ -426,19 +407,14 @@ export default function WelcomeRoadmap({
                   <span className="text-foreground font-heading text-lg sm:text-xl leading-snug block mb-2">
                     {step.title}
                   </span>
-                  <span className="text-muted-foreground text-base flex items-center gap-1">
-                    ⏱️ {step.duration}
-                  </span>
+                  <span className="text-muted-foreground text-base flex items-center gap-1">⏱️ {step.duration}</span>
                 </button>
               );
             })}
           </div>
 
           {/* Scroll CTA */}
-          <button
-            onClick={() => scrollTo(stepRefs[0])}
-            className="inline-flex flex-col items-center gap-3 group"
-          >
+          <button onClick={() => scrollTo(stepRefs[0])} className="inline-flex flex-col items-center gap-3 group">
             <span className="text-gold font-medium tracking-wide group-hover:text-foreground transition-colors duration-500 text-xl sm:text-2xl">
               Découvrir chaque étape en détail
             </span>
@@ -466,9 +442,7 @@ export default function WelcomeRoadmap({
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-4 bg-primary text-primary-foreground px-10 py-5 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.25)] hover:brightness-110 transition-all group"
           >
-            <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">
-              Commencer mon parcours
-            </span>
+            <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
             <ChevronRight className="h-6 w-6 text-gold group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
@@ -481,9 +455,7 @@ export default function WelcomeRoadmap({
             onClick={() => scrollTo(stepRefs[activeStep])}
             className="flex items-center gap-3 bg-card border border-border px-6 py-4 rounded-full shadow-elevated hover:shadow-luxury hover:border-gold/50 transition-all group"
           >
-            <span className="font-heading text-lg sm:text-xl text-foreground">
-              Étape suivante
-            </span>
+            <span className="font-heading text-lg sm:text-xl text-foreground">Étape suivante</span>
             <ArrowDown className="h-5 w-5 text-gold group-hover:translate-y-0.5 transition-transform" />
           </button>
         </div>
