@@ -20,7 +20,8 @@ export default function Layout({ children }: LayoutProps) {
   // Hide footer & floating elements during onboarding or messaging
   const isOnboardingFlow = location.pathname === "/onboarding";
   const isMessagesPage = location.pathname === "/messages";
-  const hideFooter = isOnboardingFlow || isMessagesPage;
+  const isReservationFlow = location.pathname.startsWith("/reservation");
+  const hideFooter = isOnboardingFlow || isMessagesPage || isReservationFlow;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

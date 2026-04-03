@@ -427,13 +427,19 @@ export default function ReservationPromesse() {
           >
             Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre portrait sera prêt à séduire les membres qui vous correspondent.
           </p>
-          <div data-reveal data-reveal-delay="450">
+          <div data-reveal data-reveal-delay="450" className="flex flex-col items-center gap-6">
             <button
               onClick={() => navigate("/reservation/calendrier")}
               className="inline-flex items-center gap-3 px-14 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-xl rounded-full bg-[#e2a336] text-[#232a39]"
             >
               Réserver mon créneau
               <ArrowRight className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => navigate("/onboarding")}
+              className="text-primary-foreground/60 hover:text-primary-foreground underline underline-offset-4 text-base transition-colors"
+            >
+              ← Revenir à l'option gratuite
             </button>
           </div>
         </div>
