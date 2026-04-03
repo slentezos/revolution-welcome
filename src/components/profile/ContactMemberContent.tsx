@@ -205,9 +205,9 @@ export default function ContactMemberContent() {
   return (
     <>
       {/* ─── Hero ─── */}
-      <section ref={heroRef} className="relative py-24 md:py-32 overflow-hidden">
+      <section ref={heroRef} className="relative py-24 overflow-hidden md:py-[128px]">
         <div className="grid lg:grid-cols-2 min-h-[50vh]">
-          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 py-16">
+          <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 py-16 pt-0">
             <div className="max-w-xl">
               <span
                 data-reveal
