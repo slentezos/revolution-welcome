@@ -593,7 +593,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             </div>
             <div className="flex items-start gap-5 p-5 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-lg">
+              <p className="text-foreground leading-relaxed text-xl">
                 Vos <span className="font-medium">messages sont sauvegardés</span> et votre facturation suspendue.
               </p>
             </div>
