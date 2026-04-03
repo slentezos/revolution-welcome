@@ -425,7 +425,7 @@ export default function OnboardingPersonality({
         style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-          <div className="text-sm font-medium text-gray-500 hidden sm:block">
+          <div className="text-lg font-medium text-gray-500 hidden sm:block">
             {activeNode?.type === "chapter"
               ? `Partie ${parseInt(activeNode.id.split("-")[1]) + 1} sur ${wizardParts.length}`
               : `Question ${activeNode?.index !== undefined ? activeNode.index + 1 : 1} sur ${TOTAL}`}
