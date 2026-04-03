@@ -149,15 +149,21 @@ export default function Onboarding() {
           {tabs.map((tab, index) => {
             const Icon = tab.icon;
             const isActive = tab.id === effectiveTab;
-            const isLockedTab = !isReturningUser && (tab.id === "quiz" || tab.id === "media_upload");
-            const canClick = !isLockedTab && (index <= currentTabIndex || isReturningUser);
-            const isCompleted = canClick && !isActive;
+
+            // NOUVELLE LOGIQUE DYNAMIQUE :
+            // C'est complété si l'index de l'onglet est plus petit que l'index actuel
+            const isCompleted = index < currentTabIndex;
+
+            // C'est bloqué si l'index est plus grand que l'actuel (sauf pour les utilisateurs qui reviennent)
+            const isLocked = index > currentTabIndex && !isReturningUser;
+
+            // On peut cliquer si c'est l'étape actuelle ou une étape déjà faite
+            const canClick = index <= currentTabIndex || isReturningUser;
 
             return (
               <button
                 key={tab.id}
                 onClick={() => canClick && handleTabClick(tab.id)}
-                // MODIFICATION : passage en text-xl et min-w légèrement augmenté pour le texte plus large
                 className={`flex-1 min-w-[200px] flex items-center justify-center gap-4 py-6 px-8 text-xl font-semibold transition-all duration-300 ${
                   isActive
                     ? "bg-[#1B2333] text-white border-b-4 border-[hsl(var(--gold))] shadow-md z-10"
@@ -166,16 +172,11 @@ export default function Onboarding() {
                       : "bg-gray-50 text-gray-400 border-b-4 border-transparent cursor-not-allowed opacity-60"
                 }`}
               >
-                <Icon
-                  // MODIFICATION : Icônes agrandies en h-6 w-6 pour correspondre au texte XL
-                  className={`h-6 w-6 ${
-                    isActive ? "text-[hsl(var(--gold))]" : isCompleted ? "text-[hsl(var(--gold))]" : "text-gray-300"
-                  }`}
-                />
+                <Icon className={`h-6 w-6 ${isActive || isCompleted ? "text-[hsl(var(--gold))]" : "text-gray-300"}`} />
                 <span className="hidden sm:inline whitespace-nowrap">{tab.label}</span>
 
-                {/* MODIFICATION : Checkmark agrandi en h-5 w-5 */}
-                {isCompleted && <Check className="h-5 w-5 text-[#1B2333] hidden lg:block ml-1 opacity-70" />}
+                {/* Checkmark doré uniquement pour les étapes passées */}
+                {isCompleted && <Check className="h-5 w-5 text-[hsl(var(--gold))] hidden lg:block ml-1" />}
               </button>
             );
           })}
