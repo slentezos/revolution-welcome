@@ -704,7 +704,7 @@ export default function Messages() {
                                 className={`flex items-center gap-2 mt-1.5 ${msg.sender === "me" ? "justify-end" : ""}`}
                               >
                                 <p
-                                  className={`text-xs ${msg.sender === "me" ? "text-white/50" : "text-muted-foreground"}`}
+                                  className={`text-base ${msg.sender === "me" ? "text-white/50" : "text-muted-foreground"}`}
                                 >
                                   {msg.sender === "me"
                                     ? msg.read
