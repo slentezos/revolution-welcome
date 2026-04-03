@@ -95,7 +95,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
               </div>
               <Input
               placeholder="6 12 34 56 78"
-              className="h-14 text-lg rounded-xl flex-1"
+              className="h-14 text-xl rounded-xl flex-1"
               value={formData.phone}
               onChange={(e) => {
                 const val = formatPhone(e.target.value);
