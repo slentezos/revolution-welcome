@@ -100,7 +100,7 @@ function PricingModal({
                   <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
                     <Phone className="h-5 w-5 text-gold-light" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-white/70 text-lg">
+                  <span className="font-medium tracking-widest uppercase text-white/70 text-2xl">
                     Service Conciergerie
                   </span>
                 </div>
