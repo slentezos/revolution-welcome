@@ -195,7 +195,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               </Button>
               <button
                 onClick={() => setPauseOpen(false)}
-                className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium transition-colors text-lg"
+                className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
               >
                 Annuler
               </button>
