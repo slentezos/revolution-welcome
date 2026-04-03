@@ -56,20 +56,20 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
 
                 {/* Badge Statut & Prix */}
                 <div className="mb-8 pb-8 border-b border-secondary">
-                  <div className="inline-flex items-center justify-center bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] px-4 py-1.5 text-sm font-bold tracking-[0.15em] uppercase rounded-lg mb-6">
+                  <div className="inline-flex items-center justify-center bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] px-4 py-1.5 font-bold tracking-[0.15em] uppercase rounded-lg mb-6 text-lg">
                     Offre Active
                   </div>
                   <div className="flex items-baseline gap-3 mb-2">
                     <span className="font-heading text-5xl md:text-6xl text-foreground">60€</span>
-                    <span className="text-xl text-muted-foreground font-medium">/ 3 mois</span>
+                    <span className="text-muted-foreground font-medium text-2xl">/ 3 mois</span>
                   </div>
-                  <p className="text-muted-foreground tracking-widest uppercase text-sm font-medium mt-3">
+                  <p className="text-muted-foreground tracking-widest uppercase font-medium mt-3 text-xl">
                     Expire le 12 juin 2026
                   </p>
                 </div>
 
                 {/* Fonctionnalités */}
-                <h4 className="font-medium text-foreground mb-5 text-xl">Inclus dans votre offre :</h4>
+                <h4 className="font-medium text-foreground mb-5 text-2xl">Inclus dans votre offre :</h4>
                 <ul className="space-y-4 mb-10 flex-1">
                   {[
                     "Espace personnel",
@@ -80,7 +80,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-4">
                       <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                      <span className="text-foreground/80 leading-relaxed text-lg">{item}</span>
+                      <span className="text-foreground/80 leading-relaxed text-xl">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -96,13 +96,13 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
             <div className="flex flex-col h-full pt-14 lg:pt-0 space-y-8">
               <div className="bg-secondary/30 p-8 md:p-10 rounded-[2rem] border border-secondary flex flex-col justify-center">
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-3">Besoin d'une pause ?</h3>
-                <p className="mb-6 leading-relaxed text-lg text-muted-foreground">
+                <p className="mb-6 leading-relaxed text-muted-foreground text-xl">
                   Mettez votre compte en veille pendant 1 mois sans perdre vos données ni vos conversations.
                 </p>
                 <Button
                   onClick={() => setPauseOpen(true)}
                   variant="outline"
-                  className="py-6 px-8 text-lg h-auto w-full border-secondary hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] hover:text-[hsl(var(--gold))] transition-colors rounded-2xl bg-white"
+                  className="py-6 px-8 text-xl h-auto w-full border-secondary hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))/0.05] hover:text-[hsl(var(--gold))] transition-colors rounded-2xl bg-white"
                 >
                   <Pause className="h-5 w-5 mr-3" />
                   Mettre mon profil en pause
@@ -113,7 +113,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-3">
                   Vous souhaitez nous quitter ?
                 </h3>
-                <p className="mb-6 leading-relaxed text-lg text-muted-foreground">
+                <p className="mb-6 leading-relaxed text-muted-foreground text-xl">
                   Cette action est irréversible. Votre profil et toutes vos données seront définitivement supprimés.
                 </p>
                 <Button
