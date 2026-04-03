@@ -440,16 +440,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <header className="mb-6">
                   <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-4">
                     <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="text-xs font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))]">
+                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-lg">
                       Guide Privé
                     </span>
                   </div>
-                  <DialogTitle className="font-heading text-4xl lg:text-5xl text-[#1B2333] leading-[1.1] mb-2">
-                    L'art de se <br /> <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
-                  </DialogTitle>
-                </header>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-auto">
+// ... keep existing code
                   {[
                     { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
                     { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
@@ -461,8 +456,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <item.icon className="h-6 w-6 text-[#1B2333]" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-[#1B2333] text-xl mb-1">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 text-sm leading-snug">{item.desc}</p>
+                        <h4 className="font-bold text-[#1B2333] mb-1 text-3xl">{item.title}</h4>
+                        <p className="text-[#1B2333]/60 leading-snug text-xl">{item.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -471,7 +466,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <div className="flex flex-col gap-4 mt-6 max-w-sm">
                   <Button
                     onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white text-lg font-bold shadow-xl hover:scale-[1.02] transition-transform"
+                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-xl hover:scale-[1.02] transition-transform text-xl"
                   >
                     J'ai compris, je commence seul(e)
                   </Button>
@@ -489,8 +484,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <Headphones className="h-5 w-5 text-[hsl(var(--gold))] animate-pulse" />
                       </div>
                       <div>
-                        <p className="font-bold text-[hsl(var(--gold))] text-base leading-tight">Intimidé(e) ?</p>
-                        <p className="text-[hsl(var(--gold))] opacity-80 text-sm">On vous filme en visio (49€)</p>
+                        <p className="font-bold text-[hsl(var(--gold))] leading-tight text-xl">Intimidé(e) ?</p>
+                        <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (49€)</p>
                       </div>
                     </div>
                     <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
