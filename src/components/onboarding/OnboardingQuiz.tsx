@@ -294,7 +294,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
               <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-2xl">
                 11
               </span>
-              <h3 className="font-heading text-xl font-bold text-[#1B2333] leading-snug md:text-3xl">
+              <h3 className="font-heading text-2xl font-bold text-[#1B2333] leading-snug md:text-2xl">
                 Pourquoi êtes-vous seul(e) aujourd'hui ?
               </h3>
             </div>
