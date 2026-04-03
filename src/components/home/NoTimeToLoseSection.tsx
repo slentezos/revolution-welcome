@@ -14,17 +14,28 @@ export default function NoTimeToLoseSection() {
         {/* Content */}
         <div className="flex items-center justify-center p-10 md:p-16 lg:p-20 bg-primary text-primary-foreground">
           <div className="max-w-lg">
-            <span data-reveal className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl">
+            <span
+              data-reveal
+              className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl"
+            >
               02 — Le constat
             </span>
 
-            <h2 data-reveal data-reveal-delay="150" className="font-heading text-4xl md:text-5xl lg:text-6xl mb-8 leading-tight">
+            <h2
+              data-reveal
+              data-reveal-delay="150"
+              className="font-heading text-4xl md:text-5xl lg:text-6xl mb-8 leading-tight"
+            >
               Vous n'avez plus
               <br />
               de temps à perdre
             </h2>
 
-            <div data-reveal data-reveal-delay="250" className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-10" />
+            <div
+              data-reveal
+              data-reveal-delay="250"
+              className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-10"
+            />
 
             <div data-reveal data-reveal-delay="350" className="space-y-4 text-primary-foreground/80 text-lg mb-12">
               <p className="text-xl">Tous ces profils sans intérêt</p>
@@ -33,8 +44,7 @@ export default function NoTimeToLoseSection() {
               <p className="text-xl">Toutes ces annonces fictives</p>
             </div>
 
-            <div data-reveal data-reveal-delay="450" className="flex items-center gap-3 mb-8">
-              <span className="font-heading text-2xl"></span>
+            <div data-reveal data-reveal-delay="450" className="mb-8">
               <span className="font-heading text-2xl">Kalimera</span>
             </div>
 
@@ -59,7 +69,8 @@ export default function NoTimeToLoseSection() {
             data-reveal
             src={coupleCafe}
             alt="Couple senior souriant"
-            className="absolute inset-0 w-full h-full object-cover" />
+            className="absolute inset-0 w-full h-full object-cover"
+          />
         </div>
       </section>
 
