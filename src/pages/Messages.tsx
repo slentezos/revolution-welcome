@@ -840,7 +840,7 @@ export default function Messages() {
                   key={index}
                   className="flex items-start gap-3 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 text-left"
                 >
-                  <span className="shrink-0 w-8 h-8 rounded-full bg-[#1B2333] text-white flex items-center justify-center text-sm font-semibold">
+                  <span className="shrink-0 w-8 h-8 rounded-full bg-[#1B2333] text-white flex items-center justify-center font-semibold text-xl">
                     {index + 1}
                   </span>
                   <p className="leading-relaxed text-foreground pt-1 text-xl">{conseil}</p>
