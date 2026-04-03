@@ -125,7 +125,7 @@ function PricingModal({
             <div className="text-center py-4">
               <button
                 onClick={() => setView("story")}
-                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-xl"
+                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-2xl"
               >
                 ← Revoir notre engagement de sérénité
               </button>
