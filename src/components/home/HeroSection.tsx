@@ -30,9 +30,11 @@ export default function HeroSection() {
         <h1
           data-reveal
           data-reveal-delay="400"
-          className="font-heading text-2xl md:text-3xl lg:text-5xl text-foreground mb-6 leading-relaxed text-balance font-semibold"
+          className="font-heading text-2xl md:text-3xl lg:text-5xl text-foreground mb-6 leading-relaxed font-semibold"
         >
-          L'élégance des rencontres après 60 ans. Déjà disponible en Île-de-France, bientôt chez vous.
+          L'élégance des rencontres après 60 ans.
+          <br className="hidden md:block" />
+          Déjà disponible en Île-de-France, bientôt chez vous.
         </h1>
 
         <p data-reveal data-reveal-delay="600" className="text-lg mb-10 md:text-2xl text-foreground/80 font-medium">
