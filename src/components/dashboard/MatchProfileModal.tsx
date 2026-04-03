@@ -358,8 +358,8 @@ export default function MatchProfileModal({
             <div className="flex flex-col min-h-full bg-[hsl(var(--cream))] p-5 lg:p-6 pb-10">
                 <div className="flex items-center gap-3 mb-6">
                   <span className="w-8 h-[2px] bg-[hsl(var(--gold))]" />
-                  <h3 className="font-heading text-2xl font-semibold text-foreground">Quiz des 3 préférences</h3>
-                  <span className="text-muted-foreground text-xl">— Ce que {match.name} apprécie</span>
+                  <h3 className="font-heading font-semibold text-foreground text-3xl">Quiz des 3 préférences</h3>
+                  <span className="text-muted-foreground text-2xl">— Ce que {match.name} apprécie</span>
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 flex-1">
                   {quizCategories.map((cat, idx) =>
@@ -369,13 +369,13 @@ export default function MatchProfileModal({
                   
                       <div className="flex items-center gap-2 mb-3">
                         <span className="text-xl">{cat.emoji}</span>
-                        <span className="font-heading font-semibold text-foreground text-2xl">{cat.label}</span>
+                        <span className="font-heading font-semibold text-foreground text-3xl">{cat.label}</span>
                       </div>
                       <div className="flex flex-col gap-2 flex-1">
                         {cat.items?.map((item, itemIdx) =>
                     <span
                       key={itemIdx}
-                      className="px-3 py-1.5 bg-secondary rounded-lg text-foreground font-medium border border-border/15 text-lg">
+                      className="px-3 py-1.5 bg-secondary rounded-lg text-foreground font-medium border border-border/15 text-xl">
                       
                             {item}
                           </span>
