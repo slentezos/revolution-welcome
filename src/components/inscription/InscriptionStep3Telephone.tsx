@@ -110,14 +110,14 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
           </div>
 
           <div className="flex gap-4 text-xl">
-            <Button type="button" variant="outline" onClick={onBack} className="h-14 text-base rounded-xl flex-1">
+            <Button type="button" variant="outline" onClick={onBack} className="h-14 text-xl rounded-xl flex-1">
               <ArrowLeft className="mr-2 h-5 w-5" />
               Retour
             </Button>
             <Button
               type="button"
               onClick={handleSendCode}
-              className="btn-primary h-14 text-base rounded-xl flex-[2]"
+              className="btn-primary h-14 text-xl rounded-xl flex-[2]"
               disabled={formData.phone.length < 9 || sending}
             >
               {sending ? "Envoi en cours..." : "Envoyer le code"}
@@ -146,7 +146,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
           <Button
             type="button"
             onClick={handleVerifyCode}
-            className="btn-primary w-full h-14 text-base rounded-xl"
+            className="btn-primary w-full h-14 text-xl rounded-xl"
             disabled={code.length !== 6 || verifying}
           >
             {verifying ? "Vérification..." : "Vérifier le code"}
