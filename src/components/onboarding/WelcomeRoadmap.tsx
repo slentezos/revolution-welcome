@@ -270,7 +270,7 @@ function StepCard({
   const Icon = step.icon;
 
   return (
-    <section className="relative w-full flex items-center py-16 md:py-24">
+    <section className="relative w-full flex items-center py-16 md:py-24 pb-0">
       <div className="max-w-5xl mx-auto px-6 md:px-12 w-full">
         <div className="flex items-center gap-5 mb-10">
           <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center shrink-0">
