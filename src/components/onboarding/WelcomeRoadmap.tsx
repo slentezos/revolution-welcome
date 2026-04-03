@@ -305,7 +305,6 @@ function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: num
         </div>
 
         {/* Next step preview */}
-        <div className="flex items-center gap-3 text-gold text-xl font-medium">
           {isLast ? <Sparkles className="h-5 w-5" /> : <ArrowRight className="h-5 w-5" />}
           <span className="text-2xl">{step.nextLabel}</span>
         </div>
