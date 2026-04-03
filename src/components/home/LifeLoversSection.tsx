@@ -11,7 +11,8 @@ export default function LifeLoversSection() {
           data-reveal
           alt="Couple senior épanoui dans un jardin"
           className="absolute inset-0 w-full h-full object-cover"
-          src="/lovable-uploads/7fe00c53-758e-4105-80d8-0beb25a0a44d.jpg" />
+          src="/lovable-uploads/7fe00c53-758e-4105-80d8-0beb25a0a44d.jpg"
+        />
       </div>
 
       {/* Content */}
@@ -21,7 +22,11 @@ export default function LifeLoversSection() {
             01 — Notre philosophie
           </span>
 
-          <h2 data-reveal data-reveal-delay="150" className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-8 leading-tight">
+          <h2
+            data-reveal
+            data-reveal-delay="150"
+            className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-8 leading-tight"
+          >
             Aux amoureux
             <br />
             <span className="text-primary">de la vie</span>
@@ -32,15 +37,14 @@ export default function LifeLoversSection() {
           <div data-reveal data-reveal-delay="350" className="space-y-8 text-muted-foreground text-lg leading-relaxed">
             <p className="text-xl">
               Votre carrière professionnelle s'éloigne. Vos enfants sont à présent indépendants.
-              <strong className="text-foreground"> Et si c'était le moment de penser à vous ?</strong>
+              <strong className="text-foreground font-bold"> Et si c'était le moment de penser à vous ?</strong>
             </p>
             <p className="text-xl">
-              Le moment de rechercher une compagne ou un compagnon pour aborder ensemble,
-              de façon durable, cette nouvelle étape de votre existence.
+              Le moment de rechercher une compagne ou un compagnon pour aborder ensemble, de façon durable, cette
+              nouvelle étape de votre existence.
             </p>
-            <p className="text-[#676f7e] text-xl font-normal">
-              Il n'y a pas de honte à afficher son besoin d'amour, d'émotions partagées,
-              de complicité heureuse.
+            <p className="text-xl">
+              Il n'y a pas de honte à afficher son besoin d'amour, d'émotions partagées, de complicité heureuse.
             </p>
           </div>
         </div>
