@@ -151,34 +151,31 @@ export default function Onboarding() {
             const isActive = tab.id === effectiveTab;
             const isLockedTab = !isReturningUser && (tab.id === "quiz" || tab.id === "media_upload");
             const canClick = !isLockedTab && (index <= currentTabIndex || isReturningUser);
-            // On considère l'étape complétée si elle est cliquable MAIS qu'elle n'est pas l'étape active
             const isCompleted = canClick && !isActive;
 
             return (
               <button
                 key={tab.id}
                 onClick={() => canClick && handleTabClick(tab.id)}
-                className={`flex-1 min-w-[160px] flex items-center justify-center gap-3 py-5 px-6 text-sm lg:text-base font-semibold transition-all duration-300 ${
+                // MODIFICATION : passage en text-xl et min-w légèrement augmenté pour le texte plus large
+                className={`flex-1 min-w-[200px] flex items-center justify-center gap-4 py-6 px-8 text-xl font-semibold transition-all duration-300 ${
                   isActive
-                    ? "bg-[#1B2333] text-white border-b-4 border-[hsl(var(--gold))] shadow-md z-10" // ÉTAPE ACTIVE
+                    ? "bg-[#1B2333] text-white border-b-4 border-[hsl(var(--gold))] shadow-md z-10"
                     : isCompleted
-                      ? "bg-white text-[#1B2333] border-b-4 border-[#E5E0D8] hover:bg-gray-50" // ÉTAPE COMPLÉTÉE
-                      : "bg-gray-50 text-gray-400 border-b-4 border-transparent cursor-not-allowed opacity-60" // ÉTAPE BLOQUÉE
+                      ? "bg-white text-[#1B2333] border-b-4 border-[#E5E0D8] hover:bg-gray-50"
+                      : "bg-gray-50 text-gray-400 border-b-4 border-transparent cursor-not-allowed opacity-60"
                 }`}
               >
                 <Icon
-                  className={`h-5 w-5 ${
-                    isActive
-                      ? "text-[hsl(var(--gold))]" // Icône dorée si actif
-                      : isCompleted
-                        ? "text-[hsl(var(--gold))]" // Icône dorée si complété
-                        : "text-gray-300" // Icône grise si bloqué
+                  // MODIFICATION : Icônes agrandies en h-6 w-6 pour correspondre au texte XL
+                  className={`h-6 w-6 ${
+                    isActive ? "text-[hsl(var(--gold))]" : isCompleted ? "text-[hsl(var(--gold))]" : "text-gray-300"
                   }`}
                 />
                 <span className="hidden sm:inline whitespace-nowrap">{tab.label}</span>
 
-                {/* Petit check vert/bleu pour bien confirmer visuellement que c'est fait */}
-                {isCompleted && <Check className="h-4 w-4 text-[#1B2333] hidden lg:block ml-1 opacity-70" />}
+                {/* MODIFICATION : Checkmark agrandi en h-5 w-5 */}
+                {isCompleted && <Check className="h-5 w-5 text-[#1B2333] hidden lg:block ml-1 opacity-70" />}
               </button>
             );
           })}
