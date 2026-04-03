@@ -587,7 +587,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="space-y-4">
             <div className="flex items-start gap-5 p-5 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <EyeOff className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-lg">
+              <p className="text-foreground leading-relaxed text-xl">
                 Votre profil devient <span className="font-medium">totalement invisible</span> pour les autres membres.
               </p>
             </div>
