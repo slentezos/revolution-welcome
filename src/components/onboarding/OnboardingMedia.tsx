@@ -261,7 +261,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
                         <p className="font-bold text-xl leading-tight">Intimidé(e) ?</p>
-                        <p className="text-lg opacity-80 underline">On vous filme en visio (40€)</p>
+                        <p className="text-lg opacity-80 underline">On vous filme en visio (49€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -407,7 +407,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 ) : (
                   <CreditCard className="h-6 w-6" />
                 )}
-                Payer et réserver (40€)
+                Payer et réserver (49€)
               </Button>
               <p className="text-sm text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
             </div>
@@ -490,7 +490,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       </div>
                       <div>
                         <p className="font-bold text-[hsl(var(--gold))] text-base leading-tight">Intimidé(e) ?</p>
-                        <p className="text-[hsl(var(--gold))] opacity-80 text-sm">On vous filme en visio (40€)</p>
+                        <p className="text-[hsl(var(--gold))] opacity-80 text-sm">On vous filme en visio (49€)</p>
                       </div>
                     </div>
                     <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
