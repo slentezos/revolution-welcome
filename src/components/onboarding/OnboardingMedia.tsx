@@ -407,7 +407,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 ) : (
                   <CreditCard className="h-6 w-6" />
                 )}
-                Payer et réserver (40€)
+                Payer et réserver (49€)
               </Button>
               <p className="text-sm text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
             </div>
