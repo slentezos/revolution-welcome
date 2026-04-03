@@ -767,7 +767,7 @@ export default function Messages() {
                       <Button
                         onClick={handleSend}
                         disabled={isSent || (!message.trim() && !isListening)}
-                        className="min-h-[48px] w-[120px] rounded-xl text-sm font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300"
+                        className="min-h-[48px] w-[120px] rounded-xl text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300"
                       >
                         {isSent ? <Check className="h-5 w-5" /> : <Send className="h-5 w-5" />}
                         {isSent ? "Envoyé" : "Envoyer"}
