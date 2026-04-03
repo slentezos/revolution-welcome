@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import Layout from "@/components/layout/Layout";
+// Vous pouvez retirer l'import de Layout si vous ne l'utilisez plus ailleurs dans ce fichier
+// import Layout from "@/components/layout/Layout";
 import OnboardingMedia from "@/components/onboarding/OnboardingMedia";
 import OnboardingQuiz from "@/components/onboarding/OnboardingQuiz";
 import OnboardingProfile from "@/components/onboarding/OnboardingProfile";
@@ -88,7 +89,6 @@ export default function Onboarding() {
 
   const handleQuizComplete = async () => {
     if (isReturningUser) {
-      // Record criteria update when returning user edits quiz
       await cooldown.recordCriteriaUpdate();
       navigate("/profil");
       return;
@@ -106,7 +106,6 @@ export default function Onboarding() {
 
   const handleProfileComplete = async () => {
     if (isReturningUser) {
-      // Record criteria update when returning user edits profile criteria
       await cooldown.recordCriteriaUpdate();
       navigate("/profil");
       return;
@@ -119,7 +118,6 @@ export default function Onboarding() {
       navigate("/profil");
       return;
     }
-    // Record onboarding completion timestamp
     await cooldown.recordOnboardingComplete();
     navigate("/dashboard");
   };
@@ -128,7 +126,6 @@ export default function Onboarding() {
     setStep(tabId as OnboardingStep);
   };
 
-  // Dynamic tabs based on completion state
   const tabs = [
     { id: "welcome", label: "Notre Tutoriel", icon: BookOpen },
     { id: "quiz", label: "Quiz des 3 préférences", icon: HelpCircle },
@@ -148,76 +145,71 @@ export default function Onboarding() {
   if (loading) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-background">
-          <nav className="bg-secondary border-b border-border/30 sticky top-0 z-40">
-            <div className="flex overflow-x-auto scrollbar-none">
-              {tabs.map((tab, index) => {
-                const Icon = tab.icon;
-                const isActive = tab.id === effectiveTab;
-                const isLockedTab = !isReturningUser && (tab.id === "quiz" || tab.id === "media_upload");
-                const canClick = !isLockedTab && (index <= currentTabIndex || isReturningUser);
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => canClick && handleTabClick(tab.id)}
-                    className={`flex-1 min-w-[140px] flex items-center justify-center gap-3 py-5 px-6 text-lg font-medium border-b-2 transition-colors ${
-                      isActive
-                        ? "border-[hsl(var(--gold))] text-foreground"
-                        : isLockedTab
-                          ? "border-transparent text-muted-foreground/40 cursor-not-allowed"
-                          : "border-transparent text-muted-foreground"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5 text-[#bfc1c5]" />
-                    <span className="hidden sm:inline text-[#bfc1c5]">{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </nav>
+    // SUPPRESSION DE LA BALISE <Layout> ICI
+    <div className="min-h-screen bg-background">
+      <nav className="bg-secondary border-b border-border/30 sticky top-0 z-40">
+        <div className="flex overflow-x-auto scrollbar-none">
+          {tabs.map((tab, index) => {
+            const Icon = tab.icon;
+            const isActive = tab.id === effectiveTab;
+            const isLockedTab = !isReturningUser && (tab.id === "quiz" || tab.id === "media_upload");
+            const canClick = !isLockedTab && (index <= currentTabIndex || isReturningUser);
+            return (
+              <button
+                key={tab.id}
+                onClick={() => canClick && handleTabClick(tab.id)}
+                className={`flex-1 min-w-[140px] flex items-center justify-center gap-3 py-5 px-6 text-lg font-medium border-b-2 transition-colors ${
+                  isActive
+                    ? "border-[hsl(var(--gold))] text-foreground"
+                    : isLockedTab
+                      ? "border-transparent text-muted-foreground/40 cursor-not-allowed"
+                      : "border-transparent text-muted-foreground"
+                }`}
+              >
+                <Icon className="h-5 w-5 text-[#bfc1c5]" />
+                <span className="hidden sm:inline text-[#bfc1c5]">{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
 
-        {step === "welcome" && (
-          isReturningUser ? (
-            <WelcomeRoadmap
-              onStartAutonomous={handleStartAutonomous}
-              onStartConcierge={handleStartConcierge}
-              viewOnly
-            />
-          ) : (
-            <WelcomeRoadmap
-              onStartAutonomous={handleStartAutonomous}
-              onStartConcierge={handleStartConcierge}
-              showPricingInitially={searchParams.get("showPricing") === "true"}
-            />
-          )
-        )}
-        {step === "quiz" && profileId && (
-          <OnboardingQuiz
-            profileId={profileId}
-            onComplete={handleQuizComplete}
-            cooldown={isReturningUser ? cooldown : undefined}
+      {step === "welcome" &&
+        (isReturningUser ? (
+          <WelcomeRoadmap onStartAutonomous={handleStartAutonomous} onStartConcierge={handleStartConcierge} viewOnly />
+        ) : (
+          <WelcomeRoadmap
+            onStartAutonomous={handleStartAutonomous}
+            onStartConcierge={handleStartConcierge}
+            showPricingInitially={searchParams.get("showPricing") === "true"}
           />
-        )}
-        {step === "media_upload" && profileId && (
-          <OnboardingMedia profileId={profileId} onComplete={handleMediaComplete} />
-        )}
-        {step === "profile" && profileId && (
-          <OnboardingProfile
-            profileId={profileId}
-            onComplete={handleProfileComplete}
-            readOnly={isViewMode}
-            cooldown={isReturningUser ? cooldown : undefined}
-          />
-        )}
-        {step === "personality" && profileId && (
-          <OnboardingPersonality profileId={profileId} onComplete={handlePersonalityComplete} />
-        )}
+        ))}
+      {step === "quiz" && profileId && (
+        <OnboardingQuiz
+          profileId={profileId}
+          onComplete={handleQuizComplete}
+          cooldown={isReturningUser ? cooldown : undefined}
+        />
+      )}
+      {step === "media_upload" && profileId && (
+        <OnboardingMedia profileId={profileId} onComplete={handleMediaComplete} />
+      )}
+      {step === "profile" && profileId && (
+        <OnboardingProfile
+          profileId={profileId}
+          onComplete={handleProfileComplete}
+          readOnly={isViewMode}
+          cooldown={isReturningUser ? cooldown : undefined}
+        />
+      )}
+      {step === "personality" && profileId && (
+        <OnboardingPersonality profileId={profileId} onComplete={handlePersonalityComplete} />
+      )}
 
-        {step === "personality-results" && profileId && (
-          <OnboardingPersonality profileId={profileId} onComplete={handlePersonalityComplete} showResultDirectly />
-        )}
-      </div>
-    </Layout>
+      {step === "personality-results" && profileId && (
+        <OnboardingPersonality profileId={profileId} onComplete={handlePersonalityComplete} showResultDirectly />
+      )}
+    </div>
+    // SUPPRESSION DE LA BALISE </Layout> ICI
   );
 }
