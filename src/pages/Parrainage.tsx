@@ -112,8 +112,8 @@ function HowItWorksSection() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-border bg-background mb-6 transition-all duration-500 group-hover:border-[hsl(var(--gold))] group-hover:shadow-[var(--shadow-card)]">
                 <step.icon className="w-7 h-7 text-primary" />
               </div>
-              <h3 className="font-heading text-xl mb-3 md:text-2xl text-[#0e172a] font-medium">{step.title}</h3>
-              <p className="text-muted-foreground leading-relaxed max-w-xs mx-auto text-xl">{step.description}</p>
+              <h3 className="font-heading text-2xl mb-3 md:text-2xl text-[#0e172a] font-medium">{step.title}</h3>
+              <p className="text-muted-foreground leading-relaxed max-w-xs mx-auto text-2xl">{step.description}</p>
             </div>
           ))}
         </div>
@@ -352,7 +352,11 @@ function FormSection() {
               disabled={invitesLeft <= 0}
               className={`flex items-center justify-center h-16 rounded-xl border border-white/20 hover:bg-white/5 transition-all font-medium ${invitesLeft <= 0 ? "opacity-50 cursor-not-allowed" : ""} text-xl`}
             >
-              {copied ? <CheckCircle2 className="w-5 h-5 mr-3 text-green-400" /> : <Copy className="w-5 h-5 mr-3 text-[hsl(var(--gold))]" />}
+              {copied ? (
+                <CheckCircle2 className="w-5 h-5 mr-3 text-green-400" />
+              ) : (
+                <Copy className="w-5 h-5 mr-3 text-[hsl(var(--gold))]" />
+              )}
               {copied ? "Copié !" : "Copier le message"}
             </button>
           </div>
