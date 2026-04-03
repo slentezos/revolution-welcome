@@ -120,7 +120,7 @@ export default function APropos() {
                 faire entre étudiants. Le moral de nos grands-parents nous inquiétait.
               </p>
 
-              <p data-reveal data-reveal-delay="750" className="text-primary font-sans text-xl font-normal">
+              <p data-reveal data-reveal-delay="750" className="font-sans text-xl font-normal text-[#676f7e]">
                 Ils vivaient leur situation comme un échec. Un sentiment profond d'amertume. Progressivement, ils se
                 repliaient sur eux-mêmes.
               </p>
