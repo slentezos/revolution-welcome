@@ -57,7 +57,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
       </div>
 
       <div>
-        <label className="block text-base font-medium text-foreground mb-3">Nationalité *</label>
+        <label className="block font-medium text-foreground mb-3 text-xl">Nationalité *</label>
         <Popover open={nationalityOpen} onOpenChange={setNationalityOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" className="h-14 w-full justify-between font-normal text-base rounded-xl">
@@ -67,7 +67,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
                   {NATIONALITIES.find((n) => n.value === formData.nationality)?.label}
                 </span> :
 
-              <span className="text-muted-foreground">Sélectionnez votre nationalité</span>
+              <span className="text-muted-foreground text-xl">Sélectionnez votre nationalité</span>
               }
             </Button>
           </PopoverTrigger>
@@ -112,11 +112,11 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
       </div>
 
       <div>
-        <label className="block text-base font-medium text-foreground mb-3">Adresse email *</label>
+        <label className="block font-medium text-foreground mb-3 text-xl">Adresse email *</label>
         <Input
           type="email"
           placeholder="votre@email.com"
-          className="h-14 text-lg rounded-xl"
+          className="h-14 text-xl rounded-xl"
           value={formData.email}
           onChange={(e) => update("email", e.target.value)}
           autoComplete="email" />
@@ -125,18 +125,18 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
       </div>
 
       <div>
-        <label className="block text-base font-medium text-foreground mb-3">Mot de passe *</label>
+        <label className="block font-medium text-foreground mb-3 text-xl">Mot de passe *</label>
         <Input
           type="password"
           placeholder="Minimum 6 caractères"
-          className="h-14 text-lg rounded-xl"
+          className="h-14 text-xl rounded-xl"
           value={formData.password}
           onChange={(e) => update("password", e.target.value)}
           autoComplete="new-password"
           minLength={6} />
         
         {errors.password && <p className="text-destructive text-sm mt-2">{errors.password}</p>}
-        <p className="text-muted-foreground mt-2 text-base">Au moins 6 caractères</p>
+        <p className="text-muted-foreground mt-2 text-lg">Au moins 6 caractères</p>
       </div>
 
       <div className="flex items-start gap-3 py-2">
