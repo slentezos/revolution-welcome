@@ -172,7 +172,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                   <item.icon className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
                   <div>
                     <p className="text-foreground font-semibold text-xl">{item.title}</p>
-                    <p className="leading-relaxed text-muted-foreground mt-1 text-lg">{item.desc}</p>
+                    <p className="leading-relaxed text-muted-foreground mt-1 text-xl">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -195,7 +195,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               </Button>
               <button
                 onClick={() => setPauseOpen(false)}
-                className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium transition-colors text-lg"
+                className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
               >
                 Annuler
               </button>
