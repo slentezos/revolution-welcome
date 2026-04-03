@@ -617,7 +617,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                   variant: "destructive",
                 });
               }}
-              className="w-full text-[#E53935] hover:text-[#C62828] font-medium text-lg transition-colors"
+              className="w-full text-[#E53935] hover:text-[#C62828] font-medium transition-colors text-xl"
             >
               Confirmer la suppression définitive
             </button>
