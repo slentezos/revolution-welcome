@@ -91,6 +91,7 @@ export default function Header() {
     "/video",
     "/creation-profil",
     "/personnalite",
+    "/reservation",
   ];
 
   // Rend la vérification insensible à la casse et vérifie si l'URL commence par l'une des routes
