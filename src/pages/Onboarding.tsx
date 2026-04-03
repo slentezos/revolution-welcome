@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-// Vous pouvez retirer l'import de Layout si vous ne l'utilisez plus ailleurs dans ce fichier
-// import Layout from "@/components/layout/Layout";
 import OnboardingMedia from "@/components/onboarding/OnboardingMedia";
 import OnboardingQuiz from "@/components/onboarding/OnboardingQuiz";
 import OnboardingProfile from "@/components/onboarding/OnboardingProfile";
 import OnboardingPersonality from "@/components/onboarding/OnboardingPersonality";
 import WelcomeRoadmap from "@/components/onboarding/WelcomeRoadmap";
-import { Image, HelpCircle, ClipboardList, Brain, BookOpen } from "lucide-react";
+import { Image, HelpCircle, ClipboardList, Brain, BookOpen, Check } from "lucide-react";
 import { useCriteriaCooldown } from "@/hooks/useCriteriaCooldown";
 
 type OnboardingStep =
@@ -145,29 +143,42 @@ export default function Onboarding() {
   if (loading) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
 
   return (
-    // SUPPRESSION DE LA BALISE <Layout> ICI
     <div className="min-h-screen bg-background">
-      <nav className="bg-secondary border-b border-border/30 sticky top-0 z-40">
+      <nav className="bg-white border-b border-[#E5E0D8] sticky top-0 z-40 shadow-sm">
         <div className="flex overflow-x-auto scrollbar-none">
           {tabs.map((tab, index) => {
             const Icon = tab.icon;
             const isActive = tab.id === effectiveTab;
             const isLockedTab = !isReturningUser && (tab.id === "quiz" || tab.id === "media_upload");
             const canClick = !isLockedTab && (index <= currentTabIndex || isReturningUser);
+            // On considère l'étape complétée si elle est cliquable MAIS qu'elle n'est pas l'étape active
+            const isCompleted = canClick && !isActive;
+
             return (
               <button
                 key={tab.id}
                 onClick={() => canClick && handleTabClick(tab.id)}
-                className={`flex-1 min-w-[140px] flex items-center justify-center gap-3 py-5 px-6 text-lg font-medium border-b-2 transition-colors ${
+                className={`flex-1 min-w-[160px] flex items-center justify-center gap-3 py-5 px-6 text-sm lg:text-base font-semibold transition-all duration-300 ${
                   isActive
-                    ? "border-[hsl(var(--gold))] text-foreground"
-                    : isLockedTab
-                      ? "border-transparent text-muted-foreground/40 cursor-not-allowed"
-                      : "border-transparent text-muted-foreground"
+                    ? "bg-[#1B2333] text-white border-b-4 border-[hsl(var(--gold))] shadow-md z-10" // ÉTAPE ACTIVE
+                    : isCompleted
+                      ? "bg-white text-[#1B2333] border-b-4 border-[#E5E0D8] hover:bg-gray-50" // ÉTAPE COMPLÉTÉE
+                      : "bg-gray-50 text-gray-400 border-b-4 border-transparent cursor-not-allowed opacity-60" // ÉTAPE BLOQUÉE
                 }`}
               >
-                <Icon className="h-5 w-5 text-[#bfc1c5]" />
-                <span className="hidden sm:inline text-[#bfc1c5]">{tab.label}</span>
+                <Icon
+                  className={`h-5 w-5 ${
+                    isActive
+                      ? "text-[hsl(var(--gold))]" // Icône dorée si actif
+                      : isCompleted
+                        ? "text-[hsl(var(--gold))]" // Icône dorée si complété
+                        : "text-gray-300" // Icône grise si bloqué
+                  }`}
+                />
+                <span className="hidden sm:inline whitespace-nowrap">{tab.label}</span>
+
+                {/* Petit check vert/bleu pour bien confirmer visuellement que c'est fait */}
+                {isCompleted && <Check className="h-4 w-4 text-[#1B2333] hidden lg:block ml-1 opacity-70" />}
               </button>
             );
           })}
@@ -210,6 +221,5 @@ export default function Onboarding() {
         <OnboardingPersonality profileId={profileId} onComplete={handlePersonalityComplete} showResultDirectly />
       )}
     </div>
-    // SUPPRESSION DE LA BALISE </Layout> ICI
   );
 }
