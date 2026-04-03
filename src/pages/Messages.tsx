@@ -843,7 +843,7 @@ export default function Messages() {
                   <span className="shrink-0 w-8 h-8 rounded-full bg-[#1B2333] text-white flex items-center justify-center text-sm font-semibold">
                     {index + 1}
                   </span>
-                  <p className="text-sm leading-relaxed text-foreground pt-1">{conseil}</p>
+                  <p className="leading-relaxed text-foreground pt-1 text-xl">{conseil}</p>
                 </div>
               ))}
             </div>
