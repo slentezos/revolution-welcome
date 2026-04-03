@@ -125,7 +125,7 @@ export default function APropos() {
                 repliaient sur eux-mêmes.
               </p>
 
-              <p data-reveal data-reveal-delay="850" className="font-sans text-xl text-[#676f7e] font-normal">
+              <p data-reveal data-reveal-delay="850" className="font-sans text-xl font-normal text-[#737987]">
                 Il fallait réagir.
               </p>
             </div>
