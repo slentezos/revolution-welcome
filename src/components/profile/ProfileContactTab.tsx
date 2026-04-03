@@ -53,7 +53,7 @@ export default function ProfileContactTab() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <Label className="text-lg font-medium text-foreground">Prénom</Label>
+                    <Label className="font-medium text-foreground text-xl">Prénom</Label>
                     <Input
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
@@ -62,7 +62,7 @@ export default function ProfileContactTab() {
                     
                   </div>
                   <div className="space-y-3">
-                    <Label className="text-lg font-medium text-foreground">Nom</Label>
+                    <Label className="font-medium text-foreground text-xl">Nom</Label>
                     <Input
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
@@ -72,7 +72,7 @@ export default function ProfileContactTab() {
                   </div>
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-lg font-medium text-foreground">Email</Label>
+                  <Label className="font-medium text-foreground text-xl">Email</Label>
                   <Input
                     type="email"
                     value={formData.email}
@@ -82,7 +82,7 @@ export default function ProfileContactTab() {
                   
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-lg font-medium text-foreground">Sujet</Label>
+                  <Label className="font-medium text-foreground text-xl">Sujet</Label>
                   <Input
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
@@ -91,7 +91,7 @@ export default function ProfileContactTab() {
                   
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-lg font-medium text-foreground">Message</Label>
+                  <Label className="font-medium text-foreground text-xl">Message</Label>
                   <Textarea
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
