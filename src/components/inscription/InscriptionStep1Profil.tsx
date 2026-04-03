@@ -64,7 +64,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
         <label className="block font-medium text-foreground mb-3 text-lg">Prénom *</label>
         <Input
           placeholder="Votre prénom"
-          className="h-14 text-lg rounded-xl"
+          className="h-14 text-xl rounded-xl"
           value={formData.firstName}
           onChange={(e) => update("firstName", e.target.value)}
           autoComplete="given-name"
@@ -77,36 +77,38 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
         <label className="block font-medium text-foreground mb-3 text-lg">Date de naissance *</label>
         <div className="grid grid-cols-3 gap-3">
           <Select value={formData.birthDay} onValueChange={(v) => update("birthDay", v)}>
-            <SelectTrigger className="h-14 text-base rounded-xl">
+            <SelectTrigger className="h-14 text-xl rounded-xl">
               <SelectValue placeholder="Jour" />
             </SelectTrigger>
-            <SelectContent className="max-h-[200px]">
+            <SelectContent className="max-h-[300px]">
               {days.map((d) => (
-                <SelectItem key={d} value={d}>
+                <SelectItem key={d} value={d} className="text-xl py-3 cursor-pointer">
                   {d}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+
           <Select value={formData.birthMonth} onValueChange={(v) => update("birthMonth", v)}>
-            <SelectTrigger className="h-14 text-base rounded-xl">
+            <SelectTrigger className="h-14 text-xl rounded-xl">
               <SelectValue placeholder="Mois" />
             </SelectTrigger>
-            <SelectContent className="max-h-[200px]">
+            <SelectContent className="max-h-[300px]">
               {months.map((m) => (
-                <SelectItem key={m.value} value={m.value}>
+                <SelectItem key={m.value} value={m.value} className="text-xl py-3 cursor-pointer">
                   {m.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+
           <Select value={formData.birthYear} onValueChange={(v) => update("birthYear", v)}>
-            <SelectTrigger className="h-14 text-base rounded-xl">
+            <SelectTrigger className="h-14 text-xl rounded-xl">
               <SelectValue placeholder="Année" />
             </SelectTrigger>
-            <SelectContent className="max-h-[200px]">
+            <SelectContent className="max-h-[300px]">
               {years.map((y) => (
-                <SelectItem key={y} value={String(y)}>
+                <SelectItem key={y} value={String(y)} className="text-xl py-3 cursor-pointer">
                   {y}
                 </SelectItem>
               ))}
@@ -116,7 +118,6 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
         {errors.birthDate && <p className="text-destructive text-lg mt-2">{errors.birthDate}</p>}
       </div>
 
-      {/* MODIFICATION ICI : On passe en flex-col au lieu de grid pour que les boutons prennent toute la largeur */}
       <div className="flex flex-col gap-8">
         <div>
           <label className="block font-medium text-foreground mb-3 text-lg">Je suis *</label>
@@ -129,7 +130,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 key={opt.value}
                 type="button"
                 onClick={() => update("gender", opt.value)}
-                className={`h-14 px-3 rounded-xl text-base font-medium border-2 whitespace-nowrap transition-all duration-300 ${
+                className={`h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300 ${
                   formData.gender === opt.value
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border bg-background text-foreground hover:border-primary/40"
@@ -153,7 +154,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 key={opt.value}
                 type="button"
                 onClick={() => update("lookingFor", opt.value)}
-                className={`h-14 px-3 rounded-xl text-base font-medium border-2 whitespace-nowrap transition-all duration-300 ${
+                className={`h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300 ${
                   formData.lookingFor === opt.value
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border bg-background text-foreground hover:border-primary/40"
