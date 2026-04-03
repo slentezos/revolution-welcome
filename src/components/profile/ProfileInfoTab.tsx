@@ -49,7 +49,7 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             <div className="space-y-8">
               <div className="space-y-3">
-                <Label htmlFor="first_name" className="text-lg font-medium text-foreground">Prénom</Label>
+                <Label htmlFor="first_name" className="font-medium text-foreground text-xl">Prénom</Label>
                 <Input
                   id="first_name"
                   value={formData.first_name}
@@ -58,7 +58,7 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
                 
               </div>
               <div className="space-y-3">
-                <Label htmlFor="last_name" className="text-lg font-medium text-foreground">Nom</Label>
+                <Label htmlFor="last_name" className="font-medium text-foreground text-xl">Nom</Label>
                 <Input
                   id="last_name"
                   value={formData.last_name}
@@ -74,7 +74,7 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
 
             <div className="space-y-8">
               <div className="space-y-3">
-                <Label className="text-lg font-medium text-foreground">Email</Label>
+                <Label className="font-medium text-foreground text-xl">Email</Label>
                 <Input value={userEmail} disabled className="h-14 text-lg bg-muted border-2 border-muted rounded-none" />
                 <button
                   onClick={onContactTab}
