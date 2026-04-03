@@ -405,7 +405,7 @@ export default function MatchProfileModal({
                       {matchPersonality.dimensions.map((dim, idx) =>
                     <span
                       key={idx}
-                      className="px-5 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 text-primary-foreground font-medium text-lg">
+                      className="px-5 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 text-primary-foreground font-medium text-2xl">
                       
                           {dim.label} <span className="font-bold text-[hsl(var(--gold))]">{dim.value}%</span>
                         </span>
