@@ -17,7 +17,7 @@ export default function LifeLoversSection() {
       {/* Content */}
       <div className="flex items-center justify-center p-10 md:p-16 lg:p-20 bg-background order-1 lg:order-2">
         <div className="max-w-lg">
-          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-lg">
+          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-xl">
             01 — Notre philosophie
           </span>
 
