@@ -326,7 +326,7 @@ function StepCard({
           ) : (
             <ArrowRight className="h-5 w-5" />
           )}
-          <span>{step.nextLabel}</span>
+          <span className="text-2xl">{step.nextLabel}</span>
         </div>
       </div>
     </section>
