@@ -436,7 +436,7 @@ export default function ReservationPromesse() {
               <ArrowRight className="h-5 w-5" />
             </button>
             <button
-              onClick={() => navigate("/onboarding")}
+              onClick={() => navigate("/onboarding?step=welcome&showPricing=true")}
               className="text-primary-foreground/60 hover:text-primary-foreground underline underline-offset-4 text-base transition-colors"
             >
               ← Revenir à l'option gratuite

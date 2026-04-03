@@ -322,13 +322,15 @@ function StepCard({ step, index, isLast }: { step: (typeof STEPS)[0]; index: num
 export default function WelcomeRoadmap({
   onStartAutonomous,
   onStartConcierge,
+  showPricingInitially = false,
   viewOnly = false,
 }: {
   onStartAutonomous: () => void;
   onStartConcierge: () => void;
+  showPricingInitially?: boolean;
   viewOnly?: boolean;
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(showPricingInitially);
   const [activeStep, setActiveStep] = useState(0);
 
   const heroRef = useRef<HTMLDivElement>(null);
