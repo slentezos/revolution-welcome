@@ -531,7 +531,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             </div>
             <div className="flex items-start gap-5 p-6 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <Sparkles className="h-8 w-8 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-lg md:text-xl">
+              <p className="text-foreground leading-relaxed text-xl md:text-xl">
                 Nous aimerions vous offrir{" "}
                 <span className="font-semibold text-primary">un mois supplémentaire totalement offert</span> pour vous
                 permettre de découvrir de nouveaux profils.
