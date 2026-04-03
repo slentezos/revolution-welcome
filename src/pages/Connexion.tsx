@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Mail, Phone } from "lucide-react";
+import { ArrowRight, Mail, Phone, RefreshCcw, Edit2 } from "lucide-react";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
 import { Button } from "@/components/ui/button";
 import { Input, PasswordInput } from "@/components/ui/input";
@@ -33,7 +33,9 @@ export default function Connexion() {
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session) {
         const { data: profile } = await supabase
           .from("profiles")
@@ -95,9 +97,10 @@ export default function Connexion() {
       console.error("Login error:", error);
       toast({
         title: "Erreur de connexion",
-        description: error.message === "Invalid login credentials"
-          ? "Email ou mot de passe incorrect"
-          : error.message || "Une erreur est survenue",
+        description:
+          error.message === "Invalid login credentials"
+            ? "Email ou mot de passe incorrect"
+            : error.message || "Une erreur est survenue",
         variant: "destructive",
       });
     } finally {
@@ -158,14 +161,28 @@ export default function Connexion() {
     }
   };
 
-  const RememberMeToggle = ({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) => (
-    <label className="flex items-center gap-4 cursor-pointer group">
+  // COMPOSANT TOGGLE AFFINÉ POUR PRENDRE MOINS DE PLACE
+  const RememberMeToggle = ({
+    checked,
+    onChange,
+    label,
+  }: {
+    checked: boolean;
+    onChange: (v: boolean) => void;
+    label: string;
+  }) => (
+    <label className="flex items-center gap-3 cursor-pointer group">
       <div className="relative flex items-center">
-        <input type="checkbox" className="sr-only peer" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-        <div className="w-14 h-8 bg-muted rounded-full peer-checked:bg-[hsl(var(--gold))] transition-colors duration-300 shadow-inner border border-border peer-checked:border-[hsl(var(--gold))]" />
-        <div className="absolute left-1 w-6 h-6 bg-white rounded-full shadow-md transform transition-transform duration-300 peer-checked:translate-x-6" />
+        <input
+          type="checkbox"
+          className="sr-only peer"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        <div className="w-12 h-7 bg-muted rounded-full peer-checked:bg-[hsl(var(--gold))] transition-colors duration-300 shadow-inner border border-border peer-checked:border-[hsl(var(--gold))]" />
+        <div className="absolute left-1 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 peer-checked:translate-x-5" />
       </div>
-      <span className="text-muted-foreground select-none group-hover:text-foreground transition-colors text-xl">
+      <span className="text-muted-foreground select-none group-hover:text-foreground transition-colors text-lg md:text-xl whitespace-nowrap">
         {label}
       </span>
     </label>
@@ -175,7 +192,7 @@ export default function Connexion() {
     <>
       <div className="min-h-screen flex">
         {/* Left - Form */}
-        <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 py-12">
+        <div className="flex-1 flex flex-col justify-center px-6 md:px-12 lg:px-24 py-12">
           <div className="max-w-md w-full mx-auto">
             <Link to="/" className="font-heading font-semibold text-primary mb-8 block text-4xl">
               Kalimera
@@ -190,7 +207,11 @@ export default function Connexion() {
             <div className="flex rounded-2xl bg-muted p-1.5 mb-8 gap-1">
               <button
                 type="button"
-                onClick={() => { setMethod("email"); setOtpSent(false); setOtp(""); }}
+                onClick={() => {
+                  setMethod("email");
+                  setOtpSent(false);
+                  setOtp("");
+                }}
                 className={`flex-1 flex items-center justify-center gap-3 py-4 rounded-xl font-medium transition-all duration-300 text-xl ${
                   method === "email"
                     ? "bg-background text-foreground shadow-md"
@@ -238,13 +259,19 @@ export default function Connexion() {
                     required
                   />
                 </div>
-                <div className="flex items-center justify-between text-sm">
+
+                {/* LA CORRECTION POUR L'ALIGNEMENT "SE SOUVENIR DE MOI" / "MOT DE PASSE OUBLIÉ" EST ICI */}
+                <div className="flex flex-row items-center justify-between gap-4 py-2">
                   <RememberMeToggle checked={rememberEmail} onChange={setRememberEmail} label="Se souvenir de moi" />
-                  <Link to="/mot-de-passe-oublie" className="text-primary hover:underline text-xl">
+                  <Link
+                    to="/mot-de-passe-oublie"
+                    className="text-[#1B2333] hover:underline text-lg md:text-xl font-medium whitespace-nowrap"
+                  >
                     Mot de passe oublié ?
                   </Link>
                 </div>
-                <Button type="submit" className="btn-primary w-full h-14 text-lg" disabled={loading}>
+
+                <Button type="submit" className="btn-primary w-full h-14 text-lg mt-2" disabled={loading}>
                   {loading ? "Connexion..." : "Se connecter"}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -276,11 +303,13 @@ export default function Connexion() {
                       </div>
                     </div>
 
-                    <RememberMeToggle
-                      checked={rememberPhone}
-                      onChange={setRememberPhone}
-                      label="Se souvenir de mon numéro"
-                    />
+                    <div className="py-2">
+                      <RememberMeToggle
+                        checked={rememberPhone}
+                        onChange={setRememberPhone}
+                        label="Se souvenir de mon numéro"
+                      />
+                    </div>
 
                     <Button
                       type="button"
@@ -301,15 +330,15 @@ export default function Connexion() {
                       </p>
                     </div>
 
-                    <div className="flex justify-center py-2">
+                    <div className="flex justify-center py-4">
                       <InputOTP maxLength={6} value={otp} onChange={setOtp}>
                         <InputOTPGroup>
-                          <InputOTPSlot index={0} className="w-14 h-16 text-2xl rounded-lg" />
-                          <InputOTPSlot index={1} className="w-14 h-16 text-2xl rounded-lg" />
-                          <InputOTPSlot index={2} className="w-14 h-16 text-2xl rounded-lg" />
-                          <InputOTPSlot index={3} className="w-14 h-16 text-2xl rounded-lg" />
-                          <InputOTPSlot index={4} className="w-14 h-16 text-2xl rounded-lg" />
-                          <InputOTPSlot index={5} className="w-14 h-16 text-2xl rounded-lg" />
+                          <InputOTPSlot index={0} />
+                          <InputOTPSlot index={1} />
+                          <InputOTPSlot index={2} />
+                          <InputOTPSlot index={3} />
+                          <InputOTPSlot index={4} />
+                          <InputOTPSlot index={5} />
                         </InputOTPGroup>
                       </InputOTP>
                     </div>
@@ -317,27 +346,36 @@ export default function Connexion() {
                     <Button
                       type="button"
                       onClick={handleVerifyOtp}
-                      className="btn-primary w-full h-14 text-lg"
+                      className="btn-primary w-full h-14 text-lg mt-4"
                       disabled={otp.length !== 6 || loading}
                     >
                       {loading ? "Vérification..." : "Vérifier le code"}
                       {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
                     </Button>
 
-                    <div className="flex justify-center gap-8 pt-2">
+                    {/* LA CORRECTION POUR L'ALIGNEMENT "RENVOYER LE CODE" / "MODIFIER LE NUMÉRO" EST ICI */}
+                    <div className="flex flex-row items-center justify-center gap-6 md:gap-8 pt-6">
                       <button
                         type="button"
-                        onClick={() => { setOtp(""); handleSendOtp(); }}
-                        className="text-primary font-medium hover:underline text-xl"
+                        onClick={() => {
+                          setOtp("");
+                          handleSendOtp();
+                        }}
+                        className="flex items-center gap-2 text-[#1B2333] font-medium hover:opacity-70 transition-opacity text-lg whitespace-nowrap"
                         disabled={sendingOtp}
                       >
+                        <RefreshCcw className="h-4 w-4" />
                         Renvoyer le code
                       </button>
                       <button
                         type="button"
-                        onClick={() => { setOtpSent(false); setOtp(""); }}
-                        className="text-primary font-medium hover:underline text-xl"
+                        onClick={() => {
+                          setOtpSent(false);
+                          setOtp("");
+                        }}
+                        className="flex items-center gap-2 text-[#1B2333] font-medium hover:opacity-70 transition-opacity text-lg whitespace-nowrap"
                       >
+                        <Edit2 className="h-4 w-4" />
                         Modifier le numéro
                       </button>
                     </div>
@@ -346,9 +384,9 @@ export default function Connexion() {
               </div>
             )}
 
-            <p className="mt-8 text-center text-muted-foreground text-xl">
+            <p className="mt-10 text-center text-muted-foreground text-xl">
               Vous n'avez pas de compte ?{" "}
-              <button onClick={() => setModalOpen(true)} className="text-primary font-medium hover:underline">
+              <button onClick={() => setModalOpen(true)} className="text-[#1B2333] font-bold hover:underline">
                 Rejoindre le Cercle
               </button>
             </p>
@@ -358,11 +396,11 @@ export default function Connexion() {
         {/* Right - Image with overlay */}
         <div className="hidden lg:block flex-1 relative overflow-hidden">
           <img src={heroCouple} alt="Couple heureux" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-primary/70" />
+          <div className="absolute inset-0 bg-[#1B2333]/70" />
           <div className="absolute inset-0 flex items-center justify-center p-16">
-            <div className="text-center text-primary-foreground relative z-10">
-              <h2 className="font-heading text-4xl font-semibold mb-6">Retrouvez l'amour à tout âge</h2>
-              <p className="text-primary-foreground/90 max-w-md mx-auto text-xl">
+            <div className="text-center text-white relative z-10">
+              <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6">Retrouvez l'amour à tout âge</h2>
+              <p className="text-white/90 max-w-md mx-auto text-2xl">
                 Des rencontres authentiques basées sur 75% d'affinités réciproques.
               </p>
             </div>
