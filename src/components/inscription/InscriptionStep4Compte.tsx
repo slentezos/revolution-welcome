@@ -121,7 +121,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
           onChange={(e) => update("email", e.target.value)}
           autoComplete="email" />
         
-        {errors.email && <p className="text-destructive text-sm mt-2">{errors.email}</p>}
+        {errors.email && <p className="text-destructive text-lg mt-2">{errors.email}</p>}
       </div>
 
       <div>
