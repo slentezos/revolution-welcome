@@ -43,7 +43,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
         <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/30 via-transparent to-transparent" />
 
         {match.verified && (
-          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-gold text-white text-sm font-semibold px-3 py-1.5 rounded-full shadow-md">
+          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-gold text-white text-lg font-semibold px-3 py-1.5 rounded-full shadow-md">
             <ShieldCheck className="h-4 w-4" />
             Vérifié
           </div>
