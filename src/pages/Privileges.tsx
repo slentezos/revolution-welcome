@@ -151,7 +151,7 @@ export default function Privileges() {
               className="group bg-white border border-slate-200/60 shadow-sm p-10 md:p-12 transition-all duration-500 hover:shadow-lg flex flex-col h-full z-20 relative"
             >
               {/* Badge Membre Fondateur */}
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 text-xs font-bold tracking-[0.2em] uppercase rounded-full shadow-md">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 text-base font-bold tracking-[0.2em] uppercase rounded-full shadow-md">
                 Invitation Privilège
               </div>
 
@@ -188,7 +188,7 @@ export default function Privileges() {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full bg-foreground text-white py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
+                className="w-full bg-foreground text-white py-4 text-lg uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
               >
                 Accepter mon invitation <ArrowRight className="w-4 h-4" />
               </button>
@@ -256,7 +256,7 @@ export default function Privileges() {
 
                 <button
                   tabIndex={-1}
-                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold"
+                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-lg uppercase tracking-widest font-bold"
                 >
                   Demander mon admission VIP
                 </button>

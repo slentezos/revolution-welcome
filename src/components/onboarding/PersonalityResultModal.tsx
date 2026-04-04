@@ -210,7 +210,7 @@ export default function PersonalityResultModal({ open, onClose, answers }: Perso
           </div>
 
           <DialogHeader className="space-y-1">
-            <p className="text-sm font-medium text-[hsl(var(--gold))] tracking-widest uppercase text-center">
+            <p className="text-lg font-medium text-[hsl(var(--gold))] tracking-widest uppercase text-center">
               Votre profil
             </p>
             <DialogTitle className="text-center font-heading text-2xl md:text-3xl font-bold text-[#1B2333]">
@@ -230,8 +230,8 @@ export default function PersonalityResultModal({ open, onClose, answers }: Perso
                 <div key={dim.id} className="p-4 rounded-2xl bg-gray-50/80 border border-gray-100">
                   <div className="flex items-center gap-2 mb-2">
                     <Icon className="w-4 h-4 text-[hsl(var(--gold))]" />
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{dim.dominant}</span>
-                    <span className="ml-auto text-sm font-bold text-[#1B2333]">{dim.letter}</span>
+                    <span className="text-base font-semibold text-gray-500 uppercase tracking-wider">{dim.dominant}</span>
+                    <span className="ml-auto text-lg font-bold text-[#1B2333]">{dim.letter}</span>
                   </div>
                   <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
@@ -239,7 +239,7 @@ export default function PersonalityResultModal({ open, onClose, answers }: Perso
                       style={{ width: `${dim.percent}%` }}
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-1.5">{dim.percent}%</p>
+                  <p className="text-base text-gray-500 mt-1.5">{dim.percent}%</p>
                 </div>
               );
             })}
@@ -258,8 +258,8 @@ export default function PersonalityResultModal({ open, onClose, answers }: Perso
               >
                 <span className="text-[hsl(var(--gold))] text-lg mt-0.5">{card.icon}</span>
                 <div>
-                  <h3 className="text-sm font-semibold text-[#1B2333] uppercase tracking-wider">{card.label}</h3>
-                  <p className="text-base text-foreground leading-relaxed mt-1">{card.text}</p>
+                  <h3 className="text-lg font-semibold text-[#1B2333] uppercase tracking-wider">{card.label}</h3>
+                  <p className="text-lg text-foreground leading-relaxed mt-1">{card.text}</p>
                 </div>
               </div>
             ))}

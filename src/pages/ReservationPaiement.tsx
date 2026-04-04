@@ -38,7 +38,7 @@ export default function ReservationPaiement() {
       <div className="max-w-lg w-full">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-4 text-sm font-medium">
+          <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-4 text-lg font-medium">
             Étape 3 sur 4
           </span>
           <h1 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">
@@ -56,7 +56,7 @@ export default function ReservationPaiement() {
           <div className="flex justify-between items-start mb-8 pb-8 border-b border-border">
             <div>
               <h3 className="font-heading text-xl text-foreground mb-1">Service Conciergerie</h3>
-              <p className="text-muted-foreground text-sm">Entretien privé de 45 minutes</p>
+              <p className="text-muted-foreground text-lg">Entretien privé de 45 minutes</p>
             </div>
             <span className="font-heading text-2xl text-foreground">89&nbsp;€</span>
           </div>
@@ -65,15 +65,15 @@ export default function ReservationPaiement() {
           <div className="space-y-4 mb-8">
             <div className="flex items-center gap-3">
               <Lock className="h-4 w-4 text-[hsl(var(--gold))]" />
-              <span className="text-sm text-muted-foreground">Chiffrement SSL 256 bits</span>
+              <span className="text-lg text-muted-foreground">Chiffrement SSL 256 bits</span>
             </div>
             <div className="flex items-center gap-3">
               <CreditCard className="h-4 w-4 text-[hsl(var(--gold))]" />
-              <span className="text-sm text-muted-foreground">Carte bancaire, Apple Pay, Google Pay</span>
+              <span className="text-lg text-muted-foreground">Carte bancaire, Apple Pay, Google Pay</span>
             </div>
             <div className="flex items-center gap-3">
               <ShieldCheck className="h-4 w-4 text-[hsl(var(--gold))]" />
-              <span className="text-sm text-muted-foreground">Garantie satisfait ou remboursé</span>
+              <span className="text-lg text-muted-foreground">Garantie satisfait ou remboursé</span>
             </div>
           </div>
 
@@ -86,7 +86,7 @@ export default function ReservationPaiement() {
             {loading ? "Redirection vers Stripe…" : "Payer 89 € →"}
           </button>
 
-          <p className="text-center text-muted-foreground text-xs mt-4">
+          <p className="text-center text-muted-foreground text-base mt-4">
             Vous serez redirigé vers notre partenaire de paiement Stripe.
           </p>
         </div>
@@ -95,7 +95,7 @@ export default function ReservationPaiement() {
         <div className="text-center mt-6">
           <button
             onClick={() => navigate("/reservation/calendrier")}
-            className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-sm transition-colors"
+            className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-lg transition-colors"
           >
             ← Retour au calendrier
           </button>

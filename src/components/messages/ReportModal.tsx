@@ -171,7 +171,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
                   key={i}
                   className="flex items-start gap-3 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 text-left"
                 >
-                  <span className="shrink-0 w-9 h-9 rounded-full bg-[#1B2333] text-white flex items-center justify-center text-sm font-bold">
+                  <span className="shrink-0 w-9 h-9 rounded-full bg-[#1B2333] text-white flex items-center justify-center text-xl font-bold">
                     {i + 1}
                   </span>
                   <p className="text-foreground font-medium text-xl mt-1">{text}</p>
@@ -301,7 +301,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
                   }`}
                   maxLength={1000}
                 />
-                <p className="text-gray-500 text-right text-sm mt-1">{reportText.length}/1000</p>
+                <p className="text-gray-500 text-right text-lg mt-1">{reportText.length}/1000</p>
               </div>
 
               <Button

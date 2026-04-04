@@ -87,11 +87,11 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
           {locationInfo && (
             <div className="mt-3 text-center animate-fade-in">
               <p className="text-[#1B2333] font-medium text-base">{locationInfo.cityName}</p>
-              <p className="text-gray-500 text-sm">{locationInfo.regionName}</p>
+              <p className="text-gray-500 text-lg">{locationInfo.regionName}</p>
             </div>
           )}
 
-          {error && <p className="text-red-600 text-sm mt-2 text-center">{error}</p>}
+          {error && <p className="text-red-600 text-lg mt-2 text-center">{error}</p>}
         </div>
 
         {/* Helper text */}

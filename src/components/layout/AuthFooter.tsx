@@ -48,7 +48,7 @@ export default function AuthFooter() {
         </div>
       </div>
       <div className="border-t border-primary-foreground/10">
-        <div className="container-main mx-auto px-6 md:px-12 py-6 text-primary-foreground/40 text-sm">
+        <div className="container-main mx-auto px-6 md:px-12 py-6 text-primary-foreground/40 text-lg">
           © 2026 Kalimera. Tous droits réservés.
         </div>
       </div>

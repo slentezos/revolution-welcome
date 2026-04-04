@@ -103,12 +103,12 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
                 </button>
               )}
               {filteredNationalities.length === 0 &&
-              <p className="text-sm text-muted-foreground text-center py-3">Aucun résultat</p>
+              <p className="text-lg text-muted-foreground text-center py-3">Aucun résultat</p>
               }
             </div>
           </PopoverContent>
         </Popover>
-        {errors.nationality && <p className="text-destructive text-sm mt-2">{errors.nationality}</p>}
+        {errors.nationality && <p className="text-destructive text-lg mt-2">{errors.nationality}</p>}
       </div>
 
       <div>
@@ -121,7 +121,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
           onChange={(e) => update("email", e.target.value)}
           autoComplete="email" />
         
-        {errors.email && <p className="text-destructive text-sm mt-2">{errors.email}</p>}
+        {errors.email && <p className="text-destructive text-lg mt-2">{errors.email}</p>}
       </div>
 
       <div>
@@ -135,7 +135,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
           autoComplete="new-password"
           minLength={6} />
         
-        {errors.password && <p className="text-destructive text-sm mt-2">{errors.password}</p>}
+        {errors.password && <p className="text-destructive text-lg mt-2">{errors.password}</p>}
         <p className="text-muted-foreground mt-2 text-lg">Au moins 6 caractères</p>
       </div>
 
@@ -157,7 +157,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
           </a>
         </label>
       </div>
-      {errors.acceptTerms && <p className="text-destructive text-sm -mt-4">{errors.acceptTerms}</p>}
+      {errors.acceptTerms && <p className="text-destructive text-lg -mt-4">{errors.acceptTerms}</p>}
 
       <div className="flex gap-4">
         <Button

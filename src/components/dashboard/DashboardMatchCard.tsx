@@ -55,12 +55,12 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
         {match.online && (
           <div className="absolute top-4 left-4 flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
-            <span className="text-sm font-medium text-white drop-shadow-md">En ligne</span>
+            <span className="text-lg font-medium text-white drop-shadow-md">En ligne</span>
           </div>
         )}
 
         {match.verified && (
-          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-gold text-white text-sm font-semibold px-3 py-1.5 rounded-full shadow-md">
+          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-gold text-white text-lg font-semibold px-3 py-1.5 rounded-full shadow-md">
             <ShieldCheck className="h-4 w-4" />
             Vérifié
           </div>
@@ -97,7 +97,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
               <Badge
                 key={tag}
                 variant="secondary"
-                className="text-sm px-4 py-1.5 bg-secondary text-secondary-foreground border border-border/50 font-medium"
+                className="text-lg px-4 py-1.5 bg-secondary text-secondary-foreground border border-border/50 font-medium"
               >
                 {tag}
               </Badge>

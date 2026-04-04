@@ -529,7 +529,7 @@ function NumericStepper({ value, onChange, min, max, unit, placeholder, variant 
           className="w-full bg-transparent text-center text-2xl font-semibold text-foreground placeholder:text-muted-foreground/40 focus:outline-none"
         />
 
-        <span className="absolute right-0 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground pointer-events-none">
+        <span className="absolute right-0 top-1/2 -translate-y-1/2 text-lg font-medium text-muted-foreground pointer-events-none">
           {unit}
         </span>
       </div>
