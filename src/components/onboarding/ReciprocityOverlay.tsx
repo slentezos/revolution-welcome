@@ -129,7 +129,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                     {dimensions.slice(0, 4).map((d) => (
                       <div
                         key={d.id}
-                        className="bg-white/10 border border-white/20 rounded-full px-3 py-1.5 text-xs font-medium"
+                        className="bg-white/10 border border-white/20 rounded-full px-3 py-1.5 text-base font-medium"
                       >
                         {d.dominant} <span className="text-[#D4AF37] ml-1">{d.percent}%</span>
                       </div>
