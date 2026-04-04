@@ -73,7 +73,7 @@ export default function ReservationPaiement() {
             </div>
             <div className="flex items-center gap-3">
               <ShieldCheck className="h-4 w-4 text-[hsl(var(--gold))]" />
-              <span className="text-sm text-muted-foreground">Garantie satisfait ou remboursé</span>
+              <span className="text-lg text-muted-foreground">Garantie satisfait ou remboursé</span>
             </div>
           </div>
 
