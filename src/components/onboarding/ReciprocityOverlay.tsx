@@ -166,7 +166,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                   </span>
                 </button>
               </div>
-              <p className="text-sm text-muted-foreground mt-6 italic">Choix modifiable à tout moment dans vos réglages.</p>
+              <p className="text-lg text-muted-foreground mt-6 italic">Choix modifiable à tout moment dans vos réglages.</p>
             </div>
           )}
         </div>

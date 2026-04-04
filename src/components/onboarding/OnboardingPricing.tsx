@@ -143,7 +143,7 @@ export default function OnboardingPricing({ onComplete, onSkip }: OnboardingPric
                     <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <Check className="h-3 w-3 text-primary" />
                     </div>
-                    <span className="text-sm">{feature}</span>
+                    <span className="text-lg">{feature}</span>
                   </li>
                 ))}
               </ul>

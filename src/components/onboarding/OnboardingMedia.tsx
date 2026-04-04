@@ -409,7 +409,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 )}
                 Payer et réserver (49€)
               </Button>
-              <p className="text-sm text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
+              <p className="text-lg text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
             </div>
             <button
               onClick={() => setShowStudioModal(false)}

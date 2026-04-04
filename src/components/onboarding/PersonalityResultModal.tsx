@@ -258,8 +258,8 @@ export default function PersonalityResultModal({ open, onClose, answers }: Perso
               >
                 <span className="text-[hsl(var(--gold))] text-lg mt-0.5">{card.icon}</span>
                 <div>
-                  <h3 className="text-sm font-semibold text-[#1B2333] uppercase tracking-wider">{card.label}</h3>
-                  <p className="text-base text-foreground leading-relaxed mt-1">{card.text}</p>
+                  <h3 className="text-lg font-semibold text-[#1B2333] uppercase tracking-wider">{card.label}</h3>
+                  <p className="text-lg text-foreground leading-relaxed mt-1">{card.text}</p>
                 </div>
               </div>
             ))}
