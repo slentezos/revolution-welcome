@@ -108,7 +108,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
             </div>
           </PopoverContent>
         </Popover>
-        {errors.nationality && <p className="text-destructive text-sm mt-2">{errors.nationality}</p>}
+        {errors.nationality && <p className="text-destructive text-lg mt-2">{errors.nationality}</p>}
       </div>
 
       <div>
