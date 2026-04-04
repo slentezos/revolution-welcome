@@ -239,7 +239,7 @@ export default function PersonalityResultModal({ open, onClose, answers }: Perso
                       style={{ width: `${dim.percent}%` }}
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-1.5">{dim.percent}%</p>
+                  <p className="text-base text-gray-500 mt-1.5">{dim.percent}%</p>
                 </div>
               );
             })}
