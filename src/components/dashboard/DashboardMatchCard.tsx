@@ -97,7 +97,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
               <Badge
                 key={tag}
                 variant="secondary"
-                className="text-sm px-4 py-1.5 bg-secondary text-secondary-foreground border border-border/50 font-medium"
+                className="text-lg px-4 py-1.5 bg-secondary text-secondary-foreground border border-border/50 font-medium"
               >
                 {tag}
               </Badge>

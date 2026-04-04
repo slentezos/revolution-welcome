@@ -61,7 +61,7 @@ export default function MembershipSteps() {
               <h3 className="font-heading text-xl font-semibold text-foreground mb-3">
                 {step.title}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-muted-foreground text-lg leading-relaxed">
                 {step.description}
               </p>
             </div>

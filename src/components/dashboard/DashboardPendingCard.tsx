@@ -52,7 +52,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
         {/* Affinity on photo */}
         <div className="absolute bottom-4 left-4 bg-emerald-700/90 backdrop-blur-sm text-white px-4 py-2 rounded-full">
           <span className="text-lg font-bold">{match.affinity}%</span>
-          <span className="text-sm font-medium ml-1.5 opacity-90">affinité</span>
+          <span className="text-lg font-medium ml-1.5 opacity-90">affinité</span>
         </div>
       </div>
 

@@ -92,7 +92,7 @@ export default function DashboardStatsCards({
                 </div>
                 {tab.count > 0 && (
                   <span
-                    className={`inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full text-sm font-bold ${tab.badgeClasses}`}
+                    className={`inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full text-base font-bold ${tab.badgeClasses}`}
                   >
                     {tab.count}
                   </span>

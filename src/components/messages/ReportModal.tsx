@@ -301,7 +301,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
                   }`}
                   maxLength={1000}
                 />
-                <p className="text-gray-500 text-right text-sm mt-1">{reportText.length}/1000</p>
+                <p className="text-gray-500 text-right text-lg mt-1">{reportText.length}/1000</p>
               </div>
 
               <Button
