@@ -153,7 +153,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
             {!verifying && <ArrowRight className="ml-2 h-5 w-5" />}
           </Button>
 
-          <div className="flex justify-center gap-6 text-sm">
+          <div className="flex justify-center gap-6 text-lg">
             <button
               type="button"
               onClick={handleResend}

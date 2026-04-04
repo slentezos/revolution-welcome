@@ -95,7 +95,7 @@ export default function ReservationPaiement() {
         <div className="text-center mt-6">
           <button
             onClick={() => navigate("/reservation/calendrier")}
-            className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-sm transition-colors"
+            className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-lg transition-colors"
           >
             ← Retour au calendrier
           </button>

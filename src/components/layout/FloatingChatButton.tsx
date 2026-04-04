@@ -41,7 +41,7 @@ export default function FloatingChatButton() {
             <p className="text-foreground text-lg">
               Bonjour ! 👋 Comment pouvons-nous vous aider aujourd'hui ?
             </p>
-            <span className="text-xs text-muted-foreground mt-1 block">
+            <span className="text-base text-muted-foreground mt-1 block">
               Équipe Toi & Moi
             </span>
           </div>

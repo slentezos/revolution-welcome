@@ -256,7 +256,7 @@ export default function Privileges() {
 
                 <button
                   tabIndex={-1}
-                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold"
+                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-lg uppercase tracking-widest font-bold"
                 >
                   Demander mon admission VIP
                 </button>

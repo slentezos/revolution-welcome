@@ -91,7 +91,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
             </div>
           )}
 
-          {error && <p className="text-red-600 text-sm mt-2 text-center">{error}</p>}
+          {error && <p className="text-red-600 text-lg mt-2 text-center">{error}</p>}
         </div>
 
         {/* Helper text */}

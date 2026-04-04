@@ -278,7 +278,7 @@ export default function Dashboard() {
                 {visibleSavedForLater.map((match) => (
                   <div key={match.id} className="relative">
                     <DashboardMatchCard match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
-                    <p className="text-sm text-muted-foreground mt-2 ml-4 italic">Consulté le {match.savedAt}</p>
+                    <p className="text-lg text-muted-foreground mt-2 ml-4 italic">Consulté le {match.savedAt}</p>
                   </div>
                 ))}
               </div>

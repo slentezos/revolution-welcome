@@ -157,7 +157,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
           </a>
         </label>
       </div>
-      {errors.acceptTerms && <p className="text-destructive text-sm -mt-4">{errors.acceptTerms}</p>}
+      {errors.acceptTerms && <p className="text-destructive text-lg -mt-4">{errors.acceptTerms}</p>}
 
       <div className="flex gap-4">
         <Button

@@ -83,7 +83,7 @@ export default function NotreMethode() {
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mb-16">
           <span
             data-reveal
-            className="text-sm font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block md:text-xl"
+            className="text-lg font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block md:text-xl"
           >
             Notre démarche
           </span>

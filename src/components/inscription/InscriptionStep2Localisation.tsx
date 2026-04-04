@@ -66,9 +66,9 @@ export default function InscriptionStep2Localisation({ formData, setFormData, on
           autoFocus
         />
 
-        {errors.postalCode && <p className="text-destructive text-sm mt-2 text-center">{errors.postalCode}</p>}
+        {errors.postalCode && <p className="text-destructive text-lg mt-2 text-center">{errors.postalCode}</p>}
 
-        <p className="text-sm text-muted-foreground mt-3 text-center">
+        <p className="text-lg text-muted-foreground mt-3 text-center">
           Actuellement disponible en Île-de-France.   Cliquez sur "Continuer" pour laisser votre e-mail et être
           informé(e) de notre arrivée, ou vous inscrire si vous êtes en Île-de-France.
         </p>
