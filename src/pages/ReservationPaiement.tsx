@@ -86,7 +86,7 @@ export default function ReservationPaiement() {
             {loading ? "Redirection vers Stripe…" : "Payer 89 € →"}
           </button>
 
-          <p className="text-center text-muted-foreground text-xs mt-4">
+          <p className="text-center text-muted-foreground text-base mt-4">
             Vous serez redirigé vers notre partenaire de paiement Stripe.
           </p>
         </div>
