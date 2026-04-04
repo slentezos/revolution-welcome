@@ -103,7 +103,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
                 </button>
               )}
               {filteredNationalities.length === 0 &&
-              <p className="text-sm text-muted-foreground text-center py-3">Aucun résultat</p>
+              <p className="text-lg text-muted-foreground text-center py-3">Aucun résultat</p>
               }
             </div>
           </PopoverContent>
