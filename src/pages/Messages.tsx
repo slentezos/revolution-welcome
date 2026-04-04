@@ -666,7 +666,7 @@ export default function Messages() {
                         <p className="text-muted-foreground text-lg text-center">
                           ✍️ Rédigez votre message au clavier ou utilisez le dictaphone pour dicter votre texte.
                         </p>
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1B2333]/10 text-[#1B2333] font-semibold text-sm">
+                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1B2333]/10 text-[#1B2333] font-semibold text-lg">
                           <Send className="h-4 w-4" />
                           Démarrer le chat
                         </span>
