@@ -479,7 +479,7 @@ export default function Messages() {
                         />
                       )}
                       {conv.unread > 0 && (
-                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#1B2333] text-white text-xs rounded-full flex items-center justify-center font-semibold">
+                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#1B2333] text-white text-base rounded-full flex items-center justify-center font-semibold">
                           {conv.unread}
                         </div>
                       )}
