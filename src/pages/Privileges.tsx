@@ -151,7 +151,7 @@ export default function Privileges() {
               className="group bg-white border border-slate-200/60 shadow-sm p-10 md:p-12 transition-all duration-500 hover:shadow-lg flex flex-col h-full z-20 relative"
             >
               {/* Badge Membre Fondateur */}
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 text-xs font-bold tracking-[0.2em] uppercase rounded-full shadow-md">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 text-base font-bold tracking-[0.2em] uppercase rounded-full shadow-md">
                 Invitation Privilège
               </div>
 
