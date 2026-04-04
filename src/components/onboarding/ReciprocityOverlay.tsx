@@ -55,7 +55,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
               }`}
             />
           ))}
-          <span className="ml-3 text-xs font-bold text-muted-foreground tracking-wider uppercase">
+          <span className="ml-3 text-base font-bold text-muted-foreground tracking-wider uppercase">
             {currentStep + 1}/{steps.length}
           </span>
         </div>
