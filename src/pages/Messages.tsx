@@ -654,7 +654,7 @@ export default function Messages() {
                           className="w-24 h-24 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
                           onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[0], e)}
                         />
-                        <p className="text-muted-foreground text-sm text-center italic">
+                        <p className="text-muted-foreground text-lg text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
                         </p>
                         <p className="text-foreground text-base font-medium text-center max-w-md leading-relaxed">
