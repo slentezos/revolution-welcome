@@ -38,7 +38,7 @@ export default function ReservationPaiement() {
       <div className="max-w-lg w-full">
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-4 text-sm font-medium">
+          <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-4 text-lg font-medium">
             Étape 3 sur 4
           </span>
           <h1 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">
