@@ -636,7 +636,7 @@ export default function Messages() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleReport(selectedChat.name)}
-                          className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-9 text-sm font-medium"
+                          className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-9 text-lg font-medium"
                         >
                           <Flag className="h-3.5 w-3.5" />
                           Signaler
