@@ -55,7 +55,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
         {match.online && (
           <div className="absolute top-4 left-4 flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" />
-            <span className="text-sm font-medium text-white drop-shadow-md">En ligne</span>
+            <span className="text-lg font-medium text-white drop-shadow-md">En ligne</span>
           </div>
         )}
 
