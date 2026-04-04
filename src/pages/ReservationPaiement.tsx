@@ -65,7 +65,7 @@ export default function ReservationPaiement() {
           <div className="space-y-4 mb-8">
             <div className="flex items-center gap-3">
               <Lock className="h-4 w-4 text-[hsl(var(--gold))]" />
-              <span className="text-sm text-muted-foreground">Chiffrement SSL 256 bits</span>
+              <span className="text-lg text-muted-foreground">Chiffrement SSL 256 bits</span>
             </div>
             <div className="flex items-center gap-3">
               <CreditCard className="h-4 w-4 text-[hsl(var(--gold))]" />
