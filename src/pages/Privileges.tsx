@@ -188,7 +188,7 @@ export default function Privileges() {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full bg-foreground text-white py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
+                className="w-full bg-foreground text-white py-4 text-lg uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
               >
                 Accepter mon invitation <ArrowRight className="w-4 h-4" />
               </button>
