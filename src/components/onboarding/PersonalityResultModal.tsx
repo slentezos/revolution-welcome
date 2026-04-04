@@ -230,8 +230,8 @@ export default function PersonalityResultModal({ open, onClose, answers }: Perso
                 <div key={dim.id} className="p-4 rounded-2xl bg-gray-50/80 border border-gray-100">
                   <div className="flex items-center gap-2 mb-2">
                     <Icon className="w-4 h-4 text-[hsl(var(--gold))]" />
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{dim.dominant}</span>
-                    <span className="ml-auto text-sm font-bold text-[#1B2333]">{dim.letter}</span>
+                    <span className="text-base font-semibold text-gray-500 uppercase tracking-wider">{dim.dominant}</span>
+                    <span className="ml-auto text-lg font-bold text-[#1B2333]">{dim.letter}</span>
                   </div>
                   <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
