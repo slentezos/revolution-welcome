@@ -95,7 +95,7 @@ export default function OnboardingPricing({ onComplete, onSkip }: OnboardingPric
             >
               {/* Badge */}
               {plan.badge && (
-                <div className="absolute -top-3 right-4 px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full">
+                <div className="absolute -top-3 right-4 px-3 py-1 bg-primary text-primary-foreground text-base font-semibold rounded-full">
                   {plan.badge}
                 </div>
               )}
