@@ -617,7 +617,7 @@ export default function Messages() {
                                 ) : (
                                   <Video className="h-3.5 w-3.5 text-[#1B2333]" />
                                 )}
-                                <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
+                                <span className="text-lg font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
                               </button>
                             </>
                           );
