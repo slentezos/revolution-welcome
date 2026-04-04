@@ -77,7 +77,7 @@ export default function OnboardingPricing({ onComplete, onSkip }: OnboardingPric
         {/* Mobile brand message */}
         <div className="lg:hidden bg-primary rounded-xl p-6 mb-8">
           <h3 className="font-heading text-xl font-bold text-primary-foreground mb-2">TOI & MOI</h3>
-          <p className="text-primary-foreground/90 text-sm">Une tarification transparente sans engagement</p>
+          <p className="text-primary-foreground/90 text-lg">Une tarification transparente sans engagement</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-3xl mx-auto">
