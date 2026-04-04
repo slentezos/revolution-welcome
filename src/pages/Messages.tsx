@@ -593,7 +593,7 @@ export default function Messages() {
                                 ) : (
                                   <Phone className="h-3.5 w-3.5 text-[#1B2333]" />
                                 )}
-                                <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
+                                <span className="text-lg font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
                               </button>
                               <button
                                 className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-1.5 transition-colors"
