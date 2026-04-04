@@ -87,7 +87,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                 <div className="bg-[hsl(var(--cream))] p-6 rounded-2xl border border-[#D4AF37]/10">
                   <div className="flex items-center gap-2 mb-5">
                     <Eye className="h-4 w-4 text-[#D4AF37]" />
-                    <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4AF37]">Visible</span>
+                    <span className="text-base font-bold tracking-[0.2em] uppercase text-[#D4AF37]">Visible</span>
                   </div>
                   <ul className="space-y-3">
                     {["Titre de personnalité", "Vos 4 scores", "Résumé de tempérament"].map((item) => (
