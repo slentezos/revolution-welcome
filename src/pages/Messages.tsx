@@ -903,7 +903,7 @@ export default function Messages() {
               Vous avez <span className="font-bold text-[#1B2333]">3 jours</span> pour répondre à ce premier message.
               Passé ce délai, la conversation sera automatiquement archivée.
             </p>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-muted-foreground text-lg leading-relaxed">
               Prenez le temps de découvrir le profil de votre correspondant(e) et n'hésitez pas à faire le premier pas !
             </p>
           </div>
