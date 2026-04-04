@@ -135,7 +135,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
           autoComplete="new-password"
           minLength={6} />
         
-        {errors.password && <p className="text-destructive text-sm mt-2">{errors.password}</p>}
+        {errors.password && <p className="text-destructive text-lg mt-2">{errors.password}</p>}
         <p className="text-muted-foreground mt-2 text-lg">Au moins 6 caractères</p>
       </div>
 
