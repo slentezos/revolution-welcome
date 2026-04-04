@@ -113,7 +113,7 @@ export default function OnboardingPricing({ onComplete, onSkip }: OnboardingPric
               <h4 className="font-heading text-2xl font-semibold text-foreground mb-3">offre spéciale</h4>
 
               {/* Description */}
-              <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+              <p className="text-muted-foreground text-lg leading-relaxed mb-6">
                 Un taux d'affinités réciproques d'au moins 75 % grâce à notre approche pluridisciplinaire et à nos
                 outils d'analyse.
               </p>
