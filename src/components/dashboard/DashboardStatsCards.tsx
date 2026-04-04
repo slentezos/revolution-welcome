@@ -69,7 +69,7 @@ export default function DashboardStatsCards({
               <MessageSquare className="h-5 w-5 text-primary" />
             </div>
               {unreadMessageCount > 0 && (
-                <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-primary text-primary-foreground text-sm font-bold">
+                <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-primary text-primary-foreground text-base font-bold">
                   {unreadMessageCount}
                 </span>
               )}
