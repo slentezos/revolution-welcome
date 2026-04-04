@@ -663,7 +663,7 @@ export default function Messages() {
                           <span className="font-heading font-bold text-[#1B2333]">{selectedChat.name}</span> sera
                           discrètement archivée pour laisser place à de nouvelles rencontres.
                         </p>
-                        <p className="text-muted-foreground text-sm text-center">
+                        <p className="text-muted-foreground text-lg text-center">
                           ✍️ Rédigez votre message au clavier ou utilisez le dictaphone pour dicter votre texte.
                         </p>
                         <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1B2333]/10 text-[#1B2333] font-semibold text-sm">
