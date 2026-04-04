@@ -141,7 +141,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
             </InputOTP>
           </div>
 
-          {codeError && <p className="text-destructive text-sm text-center">{codeError}</p>}
+          {codeError && <p className="text-destructive text-lg text-center">{codeError}</p>}
 
           <Button
             type="button"
