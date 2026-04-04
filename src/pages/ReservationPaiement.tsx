@@ -69,7 +69,7 @@ export default function ReservationPaiement() {
             </div>
             <div className="flex items-center gap-3">
               <CreditCard className="h-4 w-4 text-[hsl(var(--gold))]" />
-              <span className="text-sm text-muted-foreground">Carte bancaire, Apple Pay, Google Pay</span>
+              <span className="text-lg text-muted-foreground">Carte bancaire, Apple Pay, Google Pay</span>
             </div>
             <div className="flex items-center gap-3">
               <ShieldCheck className="h-4 w-4 text-[hsl(var(--gold))]" />
