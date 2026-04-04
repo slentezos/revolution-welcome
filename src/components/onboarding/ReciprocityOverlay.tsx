@@ -100,7 +100,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 opacity-60">
                   <div className="flex items-center gap-2 mb-5">
                     <ShieldCheck className="h-4 w-4 text-gray-400" />
-                    <span className="text-xs font-bold tracking-[0.2em] uppercase text-gray-400">Privé</span>
+                    <span className="text-base font-bold tracking-[0.2em] uppercase text-gray-400">Privé</span>
                   </div>
                   <ul className="space-y-3">
                     {["Analyse complète", "Forces & Fragilités", "Visions & Détails"].map((item) => (
