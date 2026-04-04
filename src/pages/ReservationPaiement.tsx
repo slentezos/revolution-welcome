@@ -56,7 +56,7 @@ export default function ReservationPaiement() {
           <div className="flex justify-between items-start mb-8 pb-8 border-b border-border">
             <div>
               <h3 className="font-heading text-xl text-foreground mb-1">Service Conciergerie</h3>
-              <p className="text-muted-foreground text-sm">Entretien privé de 45 minutes</p>
+              <p className="text-muted-foreground text-lg">Entretien privé de 45 minutes</p>
             </div>
             <span className="font-heading text-2xl text-foreground">89&nbsp;€</span>
           </div>
