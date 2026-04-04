@@ -121,7 +121,7 @@ export default function Editorial() {
                 setActiveCategory(null);
                 setVisibleCount(INITIAL_COUNT);
               }}
-              className={`px-5 py-2.5 text-sm tracking-wide transition-all duration-300 ${
+              className={`px-5 py-2.5 text-lg tracking-wide transition-all duration-300 ${
               !activeCategory ?
               "bg-primary text-primary-foreground" :
               "bg-secondary text-muted-foreground hover:text-foreground"}`
