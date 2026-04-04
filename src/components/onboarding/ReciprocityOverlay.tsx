@@ -117,7 +117,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
           {/* STEP 3: Preview card */}
           {currentStep === 2 && (
             <div className="flex-1 flex flex-col items-center justify-center px-10 py-20 animate-in fade-in zoom-in-95 duration-500">
-              <p className="text-muted-foreground text-sm uppercase tracking-[0.2em] font-bold mb-6">
+              <p className="text-muted-foreground text-lg uppercase tracking-[0.2em] font-bold mb-6">
                 Votre portrait Prestige
               </p>
               <div className="relative rounded-[24px] overflow-hidden shadow-2xl border border-white/20 max-w-sm w-full aspect-[3/4]">
