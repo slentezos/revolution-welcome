@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import VisualComfortToggle from "./VisualComfortToggle";
+import LanguageToggle from "./LanguageToggle";
 
 const publicNavLinks = [
   { href: "/", label: "Accueil" },
@@ -173,6 +174,7 @@ export default function Header() {
 
             {/* 3. CTA / Profile Buttons */}
             <div className="flex items-center gap-3">
+              <LanguageToggle />
               {user && (
                 <div className="hidden lg:block">
                   <VisualComfortToggle />
