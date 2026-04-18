@@ -79,18 +79,17 @@ export default function Dashboard() {
   }, [searchParams, loading]);
 
   useEffect(() => {
-    const checkAuth = async () => {
+    // DEV: auth bypass enabled — dashboard accessible without login
+    const loadProfile = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {navigate("/connexion");return;}
-      setUser(session.user);
-      const { data: profileData } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
-      if (!profileData || profileData.onboarding_step !== "completed") {navigate("/onboarding");return;}
-      setProfile(profileData);
+      if (session) {
+        setUser(session.user);
+        const { data: profileData } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+        if (profileData) setProfile(profileData);
+      }
       setLoading(false);
     };
-    checkAuth();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {if (!session) navigate("/connexion");});
-    return () => subscription.unsubscribe();
+    loadProfile();
   }, [navigate]);
 
   useEffect(() => {localStorage.setItem(SAVED_MATCHES_STORAGE_KEY, JSON.stringify(savedForLater));}, [savedForLater]);
