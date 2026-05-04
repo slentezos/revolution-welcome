@@ -150,7 +150,7 @@ export default function ReservationPromesse() {
             <p className="text-primary-foreground/70 mt-2 text-xl">Paiement unique · Sans abonnement</p>
           </div>
 
-          <div data-reveal data-reveal-delay="600">
+       <div data-reveal data-reveal-delay="600" className="flex flex-col items-center">
             <button
               onClick={() => navigate("/reservation/calendrier")}
               className="inline-flex items-center gap-3 bg-primary-foreground text-primary px-12 py-5 font-medium tracking-wide transition-all duration-500 hover:shadow-elevated hover:translate-y-[-2px] text-lg"
@@ -158,9 +158,13 @@ export default function ReservationPromesse() {
               Réserver mon créneau
               <ArrowRight className="h-5 w-5" />
             </button>
+            
+            {/* Mention de réassurance ajoutée ici */}
+            <div className="flex items-center gap-2 mt-4 text-primary-foreground/80 font-medium text-base md:text-lg">
+              <ShieldCheck className="h-5 w-5 text-[hsl(var(--gold-light))]" />
+              <span>Garantie 100% satisfait ou remboursé</span>
+            </div>
           </div>
-        </div>
-      </section>
 
       {/* Overview — what's included */}
       <section ref={overviewRef} className="section-luxury bg-background text-center pt-24 pb-20">
