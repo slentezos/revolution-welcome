@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
   Search,
@@ -197,12 +198,10 @@ export default function Messages() {
       // Max height set to 150px
       if (scrollHeight > 150) {
         ta.style.height = "150px";
-        ta.style.overflowY = "auto";
       } else {
         ta.style.height = `${scrollHeight}px`;
-        ta.style.overflowY = "hidden";
       }
-      // Force le scroll vers le bas pendant la dictée
+      // Force le scroll vers le bas pendant la dictée ou la frappe
       ta.scrollTop = ta.scrollHeight; 
     }
   }, []);
@@ -788,7 +787,7 @@ export default function Messages() {
                     )}
                   </div>
 
-                  {/* INPUT AREA (SCROLL VERTICAL AUTO SI TROP LONG) */}
+                  {/* INPUT AREA */}
                   <div className="p-4 lg:p-6 border-t border-amber-100/40 bg-white">
                     <div className="flex items-end gap-3 lg:gap-4">
                       <button
@@ -804,8 +803,8 @@ export default function Messages() {
                         <span className="hidden sm:inline">{isListening ? "Arrêter" : "Dicter"}</span>
                       </button>
                       <div className="flex-1 min-w-0">
-                        {/* BALISE NATIVE POUR GARANTIR LE STYLE INLINE (ZOOM) ET L'AUTO-EXPAND */}
-                        <textarea
+                        {/* UTILISATION DE TEXTAREA AVEC MAJUSCULE "T" */}
+                        <Textarea
                           id="chat-textarea"
                           ref={textareaRef}
                           placeholder="Écrivez votre message..."
