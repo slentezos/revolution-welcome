@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
 import { Send, Undo2, X, Sparkles, Clock } from "lucide-react";
@@ -31,6 +32,7 @@ const mockMatches = [
 export type MockMatch = typeof mockMatches[0];
 export type SavedMatch = MockMatch & {savedAt: string;};
 export type PendingMatch = MockMatch & {acceptedAt: string;};
+type DashboardProfile = { first_name?: string | null; onboarding_step?: string | null };
 
 // Mock data — En attente de sa réponse
 const mockPendingMatches: PendingMatch[] = [
@@ -53,8 +55,8 @@ const ACCEPTED_MATCHES_STORAGE_KEY = "kalimera_accepted_matches_v3";
 const PENDING_MATCHES_STORAGE_KEY = "kalimera_pending_matches_v3";
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<DashboardProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedMatch, setSelectedMatch] = useState<MockMatch | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -86,7 +88,7 @@ export default function Dashboard() {
       const found = mockMatches.find((m) => m.id === Number(matchId));
       if (found) {setSelectedMatch(found);setModalOpen(true);setSearchParams({}, { replace: true });}
     }
-  }, [searchParams, loading]);
+  }, [searchParams, loading, setSearchParams]);
 
   useEffect(() => {
     const checkAuth = async () => {
