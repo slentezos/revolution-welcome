@@ -1,28 +1,37 @@
 import { useEffect, useState } from "react";
+import { applyLanguage, getCurrentLang } from "@/lib/i18nRuntime";
 
 type Lang = "FR" | "EN";
 
 export default function LanguageToggle() {
   const [lang, setLang] = useState<Lang>("FR");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const stored = (localStorage.getItem("kalimera-lang") as Lang | null) ?? "FR";
-    setLang(stored);
-    document.documentElement.lang = stored.toLowerCase();
+    setLang(getCurrentLang());
+    const onChange = (e: any) => setLang(e.detail ?? getCurrentLang());
+    window.addEventListener("languagechange", onChange);
+    return () => window.removeEventListener("languagechange", onChange);
   }, []);
 
-  const switchTo = (next: Lang) => {
+  const switchTo = async (next: Lang) => {
+    if (next === lang) return;
     setLang(next);
-    localStorage.setItem("kalimera-lang", next);
-    document.documentElement.lang = next.toLowerCase();
+    setLoading(true);
     window.dispatchEvent(new CustomEvent("languagechange", { detail: next }));
+    try {
+      await applyLanguage(next);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div
       role="group"
       aria-label="Language selector"
-      className="inline-flex items-center rounded-full border border-amber-200/50 bg-white/70 backdrop-blur-sm p-0.5 shadow-sm"
+      data-no-translate
+      className="inline-flex items-center rounded-full border border-amber-200/50 bg-white/10 backdrop-blur-sm p-0.5 shadow-sm"
     >
       {(["FR", "EN"] as Lang[]).map((code) => {
         const active = lang === code;
@@ -32,11 +41,12 @@ export default function LanguageToggle() {
             type="button"
             onClick={() => switchTo(code)}
             aria-pressed={active}
-            className={`px-3 py-1 rounded-full text-[11px] uppercase tracking-widest font-semibold transition-all duration-300 ${
+            disabled={loading}
+            className={`px-3 py-1 rounded-full text-[12px] uppercase tracking-widest font-semibold transition-all duration-300 ${
               active
-                ? "bg-slate-900 text-amber-400 shadow-sm"
-                : "text-slate-500 hover:text-slate-900"
-            }`}
+                ? "bg-amber-500 text-slate-900 shadow-sm"
+                : "text-primary-foreground/70 hover:text-primary-foreground"
+            } ${loading ? "opacity-60 cursor-wait" : ""}`}
           >
             {code}
           </button>
