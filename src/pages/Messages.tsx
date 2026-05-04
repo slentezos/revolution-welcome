@@ -116,6 +116,8 @@ const initialConversations = [
   },
 ];
 
+type Conversation = (typeof initialConversations)[number];
+
 const mockMessages = [
   { id: 1, sender: "them", text: "Bonjour ! Comment allez-vous ?", time: "14:25", read: true },
   { id: 2, sender: "me", text: "Très bien merci ! Et vous ?", time: "14:27", read: true },
@@ -129,7 +131,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES = ["text-base", "text-lg", "text-xl", "text-2xl"];
+const FONT_SIZES = [18, 20, 22, 24]; // Zoom font sizes
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
@@ -138,7 +140,7 @@ export default function Messages() {
   const [message, setMessage] = useState("");
   const [showConseils, setShowConseils] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [profileToView, setProfileToView] = useState<(typeof initialConversations) | null>(null);
+  const [profileToView, setProfileToView] = useState<Conversation | null>(null);
   const [showNewConvPopup, setShowNewConvPopup] = useState(false);
   const [dismissedNewConv, setDismissedNewConv] = useState<Set<number>>(new Set());
   const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -407,13 +409,13 @@ export default function Messages() {
     setReportModalOpen(true);
   };
 
-  const handleAvatarClick = (conv: (typeof initialConversations), e: React.MouseEvent) => {
+  const handleAvatarClick = (conv: Conversation, e: React.MouseEvent) => {
     e.stopPropagation();
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
 
-  const handleViewProfile = (conv: (typeof initialConversations)) => {
+  const handleViewProfile = (conv: Conversation) => {
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
