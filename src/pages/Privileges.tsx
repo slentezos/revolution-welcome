@@ -170,7 +170,7 @@ export default function Privileges() {
                   </span>
                 </div>
                 <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl">
-                  Pendant 3 mois, sans carte.
+                  ACCÈS GRATUIT PENDANT 3 MOIS
                 </p>
                 <p className="text-muted-foreground tracking-widest uppercase text-lg">
                   Puis 50€/mois (ou 120€ / 3 mois)
@@ -238,7 +238,7 @@ export default function Privileges() {
                     </span>
                   </div>
                   <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
-                    Pendant 3 mois, sans carte.
+                    ACCÈS GRATUIT PENDANT 3 MOIS
                   </p>
                   <p className="text-[11px] text-white/50 tracking-widest uppercase">
                     Puis 65€/mois (ou 150€ / 3 mois)
