@@ -266,6 +266,19 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] pb-40">
+      {/* ===== MASQUER LA BARRE DE DÉFILEMENT GLOBALE ===== */}
+      <style>{`
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        ::-webkit-scrollbar {
+          display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        * {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+        }
+      `}</style>
+
       {/* Cooldown locked banner */}
       {isCooldownLocked && (
         <div className="bg-secondary border-b border-border px-6 py-4 text-center">
@@ -323,7 +336,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
             {/* Inputs */}
             <div className="space-y-4 md:ml-14">
-              {[0, 1, 2].map((index) => (
+              {.map((index) => (
                 <Input
                   key={index}
                   placeholder={`${currentCategory.placeholder} ${index + 1}`}
