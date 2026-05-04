@@ -155,7 +155,7 @@ export default function Messages() {
 
   const [speakingMsgId, setSpeakingMsgId] = useState<number | null>(null);
   const [isSent, setIsSent] = useState(false);
-  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(1); // Démarre à 18px
+  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(4); // Démarre à 18px
   const sendTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const prevConversationsRef = useRef(conversations);
