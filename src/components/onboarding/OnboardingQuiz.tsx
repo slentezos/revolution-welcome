@@ -105,7 +105,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   const { toast } = useToast();
 
   // ─── Voice Dictation State ───
-  const [isRecording, setIsRecording] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState("");
   const recognitionRef = useRef<any>(null);
 
@@ -134,26 +134,26 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
         setInterimText(interimSegment);
       };
 
-      recognition.onerror = () => setIsRecording(false);
-      recognition.onend = () => setIsRecording(false);
+      recognition.onerror = () => setIsListening(false);
+      recognition.onend = () => setIsListening(false);
       recognitionRef.current = recognition;
     }
     
     return () => {
-      if (recognitionRef.current && isRecording) {
+      if (recognitionRef.current && isListening) {
         recognitionRef.current.stop();
       }
     };
   }, []);
 
-  const toggleDictation = () => {
-    if (isRecording) {
+  const toggleListening = () => {
+    if (isListening) {
       stopRecording();
     } else {
       if (recognitionRef.current) {
         setWhyAlone((prev) => prev + (prev.endsWith(" ") || prev === "" ? "" : " "));
         recognitionRef.current.start();
-        setIsRecording(true);
+        setIsListening(true);
       } else {
         toast({ title: "Non supporté", description: "La dictée vocale n'est pas supportée sur ce navigateur.", variant: "destructive" });
       }
@@ -161,9 +161,9 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   const stopRecording = () => {
-    if (recognitionRef.current && isRecording) {
+    if (recognitionRef.current && isListening) {
       recognitionRef.current.stop();
-      setIsRecording(false);
+      setIsListening(false);
       if (interimText) setWhyAlone((prev) => prev + interimText + " ");
       setInterimText("");
     }
@@ -242,7 +242,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   const handleNext = () => {
-    if (isRecording) stopRecording(); // Arrêter la dictée si on change de page
+    if (isListening) stopRecording(); // Arrêter la dictée si on change de page
     if (isLastPage) {
       handleFinish();
     } else {
@@ -252,7 +252,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   const handleBack = () => {
-    if (isRecording) stopRecording(); // Arrêter la dictée si on change de page
+    if (isListening) stopRecording(); // Arrêter la dictée si on change de page
     if (currentPage > 0) {
       setCurrentPage((p) => p - 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -323,7 +323,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
             {/* Inputs */}
             <div className="space-y-4 md:ml-14">
-              {[0, 1, 2].map((index) => (
+              {.map((index) => (
                 <Input
                   key={index}
                   placeholder={`${currentCategory.placeholder} ${index + 1}`}
@@ -369,21 +369,21 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
                 non partagée)
               </span>
               
-              {/* ═══ BLOC TEXTAREA ET DICTÉE (ALIGNÉ SUR CHAT UI) ═══ */}
+              {/* ═══ BLOC TEXTAREA ET DICTÉE EXACTEMENT COMME LE CHAT ═══ */}
               <div className="flex flex-col">
-                <div className="flex items-start gap-3">
+                <div className="flex items-end gap-3">
                   <button
                     type="button"
-                    onClick={toggleDictation}
-                    className={`min-h-[48px] px-4 w-auto min-w-[120px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 mt-1 ${
-                      isRecording
+                    onClick={toggleListening}
+                    className={`min-h-[48px] px-4 w-auto min-w-[120px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 ${
+                      isListening
                         ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
                         : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
                     }`}
-                    aria-label={isRecording ? "Arrêter de dicter" : "Dictée vocale"}
+                    aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
                   >
-                    {isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-                    {isRecording ? "Arrêter de dicter" : "Dicter"}
+                    {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                    {isListening ? "Arrêter de dicter" : "Dicter"}
                   </button>
                   <div className="flex-1">
                     <Textarea
@@ -393,13 +393,13 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
                         setWhyAlone(e.target.value);
                         setInterimText("");
                       }}
-                      className="w-full min-h-[200px] text-2xl resize-none rounded-2xl border-amber-100 bg-white focus:ring-[hsl(var(--gold))] p-6 shadow-inner leading-relaxed"
+                      className="w-full min-h-[200px] text-2xl resize-none rounded-2xl border border-amber-100/60 bg-white focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 p-6 shadow-inner leading-relaxed"
                     />
                   </div>
                 </div>
                 
                 <div className="mt-2 min-h-[1.5rem]">
-                  {isRecording ? (
+                  {isListening ? (
                     <div className="flex items-center gap-3">
                       <p className="font-bold text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
                         Je vous écoute...
