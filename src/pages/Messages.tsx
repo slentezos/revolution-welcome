@@ -129,7 +129,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES =; // Tailles de police pour le zoom
+const FONT_SIZES = [13, 14, 15, 16, 18, 20, 22, 24, 26]; // Tailles de police pour le zoom
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
