@@ -599,7 +599,7 @@ export default function Messages() {
                         </p>
                       </div>
                       
-                      <div className="flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
+                      <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
                         {/* BOUTONS A- ET A+ QUI MARCHENT PARFAITEMENT */}
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.max(0, i - 1))}
