@@ -128,7 +128,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES = [18, 20, 22, 24]; // Tailles de police pour le zoom
+const FONT_SIZES = [13, 14, 15, 16, 18, 20, 22, 24, 26]; // Tailles de police pour le zoom (du plus petit au plus grand)
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
@@ -155,7 +155,7 @@ export default function Messages() {
 
   const [speakingMsgId, setSpeakingMsgId] = useState<number | null>(null);
   const [isSent, setIsSent] = useState(false);
-  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(1); // Démarre à 18px
+  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(4); // Démarre à 18px
   const sendTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const prevConversationsRef = useRef(conversations);
@@ -202,8 +202,10 @@ export default function Messages() {
       let interimSegment = "";
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i].transcript;
-        if (event.results[i].isFinal) finalSegment += transcript + " ";
+        const result = event.results[i];
+        const transcript = result?.[0]?.transcript || "";
+        if (!transcript) continue;
+        if (result.isFinal) finalSegment += transcript + " ";
         else interimSegment += transcript;
       }
 
@@ -597,7 +599,7 @@ export default function Messages() {
                         </p>
                       </div>
                       
-                      <div className="flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
+                      <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
                         {/* BOUTONS A- ET A+ QUI MARCHENT PARFAITEMENT */}
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.max(0, i - 1))}
