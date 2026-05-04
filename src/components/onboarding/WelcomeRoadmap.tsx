@@ -260,7 +260,7 @@ function StepCard({
   onStartClick,
   viewOnly,
 }: {
-  step: typeof STEPS;
+  step: (typeof STEPS)[number];
   isLast: boolean;
   onStartClick?: () => void;
   viewOnly?: boolean;
