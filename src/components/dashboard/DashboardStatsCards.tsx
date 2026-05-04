@@ -52,7 +52,7 @@ export default function DashboardStatsCards({
       count: savedCount,
       icon: Clock,
       colorClasses: "bg-amber-100 text-amber-700",
-      badgeClasses: "bg-amber-600 text-white",
+      badgeClasses: "bg-primary text-primary-foreground text-xl",
     },
   ];
 
