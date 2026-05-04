@@ -138,7 +138,7 @@ export default function Messages() {
   const [message, setMessage] = useState("");
   const [showConseils, setShowConseils] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [profileToView, setProfileToView] = useState<(typeof initialConversations)[number] | null>(null);
+  const [profileToView, setProfileToView] = useState<(typeof initialConversations)[number][number] | null>(null);
   const [showNewConvPopup, setShowNewConvPopup] = useState(false);
   const [dismissedNewConv, setDismissedNewConv] = useState<Set<number>>(new Set());
   const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -407,13 +407,13 @@ export default function Messages() {
     setReportModalOpen(true);
   };
 
-  const handleAvatarClick = (conv: (typeof initialConversations), e: React.MouseEvent) => {
+  const handleAvatarClick = (conv: (typeof initialConversations)[number], e: React.MouseEvent) => {
     e.stopPropagation();
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
 
-  const handleViewProfile = (conv: (typeof initialConversations)) => {
+  const handleViewProfile = (conv: (typeof initialConversations)[number]) => {
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
@@ -561,7 +561,7 @@ export default function Messages() {
                       </button>
                       <div
                         className="relative cursor-pointer group shrink-0"
-                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
+                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
                       >
                         <img
                           src={selectedChat.avatar}
@@ -646,7 +646,7 @@ export default function Messages() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations))}
+                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations)[number])}
                           className="gap-2 text-[#1B2333] hover:bg-amber-50 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
                           <Eye className="h-4 w-4" />
@@ -673,7 +673,7 @@ export default function Messages() {
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
                           className="w-28 h-28 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
-                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
+                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
                         />
                         <p className="text-muted-foreground text-xl text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
@@ -705,7 +705,7 @@ export default function Messages() {
                                 src={selectedChat.avatar}
                                 alt=""
                                 className="w-12 h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
-                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
+                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
                               />
                             )}
                             <div
