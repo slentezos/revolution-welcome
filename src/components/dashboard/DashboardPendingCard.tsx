@@ -66,7 +66,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
               </h4>
               <div className="flex items-center gap-2 mt-1.5">
                 <MapPin className="h-4 w-4 text-emerald-600" />
-                <span className="text-lg text-muted-foreground font-medium">{match.location}</span>
+                <span className="text-muted-foreground font-medium text-xl">{match.location}</span>
               </div>
             </div>
           </div>
