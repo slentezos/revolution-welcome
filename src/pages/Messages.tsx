@@ -110,7 +110,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES = [14, 16, 18, 20, 22];
+const FONT_SIZES =;
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
@@ -119,7 +119,7 @@ export default function Messages() {
   const [message, setMessage] = useState("");
   const [showConseils, setShowConseils] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [profileToView, setProfileToView] = useState<(typeof initialConversations)[0] | null>(null);
+  const [profileToView, setProfileToView] = useState<(typeof initialConversations) | null>(null);
   const [showNewConvPopup, setShowNewConvPopup] = useState(false);
   const [dismissedNewConv, setDismissedNewConv] = useState<Set<number>>(new Set());
   const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -128,7 +128,7 @@ export default function Messages() {
   const [unmatchTarget, setUnmatchTarget] = useState<string>("");
   const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
 
-  // === ÉTATS ET REFS DE LA DICTÉE ===
+  // ÉTATS ET REFS DE LA DICTÉE
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
   const manualStopRef = useRef(false);
@@ -138,7 +138,7 @@ export default function Messages() {
 
   const [speakingMsgId, setSpeakingMsgId] = useState<number | null>(null);
   const [isSent, setIsSent] = useState(false);
-  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(2); // Démarre à l'index 2 (18px = text-lg)
+  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(2);
   const sendTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -158,7 +158,6 @@ export default function Messages() {
 
   const chatFontSize = FONT_SIZES[chatFontSizeIndex];
 
-  // Garder la référence du message à jour pour la dictée
   useEffect(() => {
     messageRef.current = message;
   }, [message]);
@@ -176,15 +175,23 @@ export default function Messages() {
     prevConversationsRef.current = conversations;
   }, [conversations]);
 
+  // GESTION DU SCROLL DYNAMIQUE DU TEXTAREA
   useEffect(() => {
     const ta = textareaRef.current;
     if (ta) {
       ta.style.height = "auto";
-      ta.style.height = ta.scrollHeight + "px";
+      const scrollHeight = ta.scrollHeight;
+      if (scrollHeight > 150) {
+        ta.style.height = "150px";
+        ta.style.overflowY = "auto";
+      } else {
+        ta.style.height = scrollHeight + "px";
+        ta.style.overflowY = "hidden";
+      }
     }
   }, [message]);
 
-  // === MOTEUR DE DICTÉE VOCALE TEMPS RÉEL ===
+  // MOTEUR DE DICTÉE VOCALE
   const startDictation = useCallback(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -193,20 +200,20 @@ export default function Messages() {
     }
 
     manualStopRef.current = false;
-    baseTextRef.current = messageRef.current; // On part de ce qui est déjà écrit
+    baseTextRef.current = messageRef.current;
     sessionFinalRef.current = "";
 
     const recognition = new SpeechRecognition();
     recognition.lang = "fr-FR";
     recognition.continuous = true;
-    recognition.interimResults = true; // Crucial pour la vitesse d'affichage
+    recognition.interimResults = true;
 
     recognition.onresult = (event: any) => {
       let interim = "";
       let finalStr = "";
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
+        const transcript = event.results[i].transcript;
         if (event.results[i].isFinal) {
           finalStr += transcript + " ";
         } else {
@@ -219,7 +226,6 @@ export default function Messages() {
       }
 
       const fullText = (baseTextRef.current + " " + sessionFinalRef.current + interim).replace(/\s+/g, " ").trimStart();
-
       setMessage(fullText);
     };
 
@@ -328,7 +334,7 @@ export default function Messages() {
       }
       setMessage("");
       setIsSent(true);
-      if (isListening) forceStopDictation(); // Coupe la dictée quand on envoie
+      if (isListening) forceStopDictation();
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
       sendTimeoutRef.current = setTimeout(() => setIsSent(false), 1500);
       setTimeout(() => scrollToBottom(), 150);
@@ -338,13 +344,13 @@ export default function Messages() {
   useEffect(() => {
     return () => {
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
-      if (isListening) forceStopDictation(); // Nettoyage propre
+      if (isListening) forceStopDictation();
     };
   }, [isListening, forceStopDictation]);
 
   const handleSelectConversation = (convId: number) => {
     setSelectedConversation(convId);
-    if (isListening) forceStopDictation(); // Coupe la dictée si on change de contact
+    if (isListening) forceStopDictation();
     const conv = conversations.find((c) => c.id === convId);
     if (conv?.isNew && !dismissedNewConv.has(convId)) setShowNewConvPopup(true);
     if (!chatTooltipShown.has(convId)) setTimeout(() => setShowChatTooltip(true), 600);
@@ -374,18 +380,14 @@ export default function Messages() {
     setReportTarget(name);
     setReportModalOpen(true);
   };
-  const handleUnmatchClick = (name: string) => {
-    setUnmatchTarget(name);
-    setUnmatchModalOpen(true);
-  };
 
-  const handleAvatarClick = (conv: (typeof initialConversations)[0], e: React.MouseEvent) => {
+  const handleAvatarClick = (conv: (typeof initialConversations), e: React.MouseEvent) => {
     e.stopPropagation();
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
 
-  const handleViewProfile = (conv: (typeof initialConversations)[0]) => {
+  const handleViewProfile = (conv: (typeof initialConversations)) => {
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
@@ -416,14 +418,15 @@ export default function Messages() {
   return (
     <Layout>
       <div className="h-[calc(100vh-64px)] bg-secondary overflow-hidden flex flex-col">
-        <div className="max-w-6xl mx-auto w-full px-4 md:px-8 py-4 flex-1 overflow-hidden">
+        {/* LARGUEUR MAX AUGMENTÉE À 1400px ET PADDING VERTICAL AUGMENTÉ */}
+        <div className="max-w-[1400px] mx-auto w-full px-4 md:px-8 py-6 flex-1 overflow-hidden">
           <div className="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-amber-50/50 overflow-hidden flex h-full">
             {/* ===== PRIVATE LOUNGE SIDEBAR ===== */}
             <div
-              className={`w-full md:w-96 border-r border-amber-100/40 flex flex-col bg-white ${selectedConversation ? "hidden md:flex" : "flex"}`}
+              className={`w-full md:w-[400px] shrink-0 border-r border-amber-100/40 flex flex-col bg-white ${selectedConversation ? "hidden md:flex" : "flex"}`}
             >
-              <div className="p-5 border-b border-amber-100/40">
-                <div className="flex items-center justify-between mb-3">
+              <div className="p-6 border-b border-amber-100/40">
+                <div className="flex items-center justify-between mb-4">
                   <h2 className="font-heading text-2xl font-bold text-[#1B2333]">Mes conversations</h2>
                   <TooltipProvider>
                     <Tooltip>
@@ -436,7 +439,7 @@ export default function Messages() {
                       </TooltipTrigger>
                       <TooltipContent
                         side="bottom"
-                        className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-sm leading-relaxed"
+                        className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-xl leading-relaxed"
                       >
                         <p className="font-semibold text-[#1B2333] mb-1">Votre Cercle Privé</p>
                         <p className="text-muted-foreground">
@@ -460,7 +463,7 @@ export default function Messages() {
                   <button
                     key={conv.id}
                     onClick={() => handleSelectConversation(conv.id)}
-                    className={`w-full px-5 py-5 flex items-center gap-4 transition-all text-left border-b border-amber-50/60 ${
+                    className={`w-full px-6 py-5 flex items-center gap-4 transition-all text-left border-b border-amber-50/60 ${
                       selectedConversation === conv.id
                         ? "bg-amber-50/30 border-l-2 border-l-[hsl(var(--gold))]"
                         : "hover:bg-amber-50/20"
@@ -479,17 +482,17 @@ export default function Messages() {
                         />
                       )}
                       {conv.unread > 0 && (
-                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#1B2333] text-white text-xs rounded-full flex items-center justify-center font-semibold">
+                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#1B2333] text-white text-base rounded-full flex items-center justify-center font-semibold">
                           {conv.unread}
                         </div>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <h4 className="font-heading font-semibold text-[#1B2333] text-2xl">
+                        <h4 className="font-heading font-semibold text-[#1B2333] text-2xl truncate">
                           {conv.name}, {conv.age}
                         </h4>
-                        <span className="text-muted-foreground font-medium text-xl">{conv.time}</span>
+                        <span className="text-muted-foreground font-medium text-xl shrink-0 ml-2">{conv.time}</span>
                       </div>
                       <p className="text-muted-foreground truncate text-xl">{conv.lastMessage}</p>
                       {conv.myTurn && (
@@ -501,12 +504,12 @@ export default function Messages() {
                   </button>
                 ))}
               </div>
-              <div className="p-4 border-t border-amber-100/40 bg-amber-50/20">
+              <div className="p-5 border-t border-amber-100/40 bg-amber-50/20">
                 <button
                   onClick={() => setShowConseils(true)}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl hover:bg-amber-50/60 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl hover:bg-amber-50/60 transition-colors"
                 >
-                  <ShieldCheck className="h-4 w-4 text-[hsl(var(--gold))]" />
+                  <ShieldCheck className="h-5 w-5 text-[hsl(var(--gold))]" />
                   <span className="font-medium text-muted-foreground text-xl">9 conseils de sécurité</span>
                 </button>
               </div>
@@ -514,26 +517,27 @@ export default function Messages() {
 
             {/* ===== CHAT AREA ===== */}
             <div
-              className={`flex-1 flex flex-col bg-[hsl(var(--cream))]/20 ${selectedConversation ? "flex" : "hidden md:flex"}`}
+              className={`flex-1 flex flex-col bg-[hsl(var(--cream))]/20 min-w-0 ${selectedConversation ? "flex" : "hidden md:flex"}`}
             >
               {selectedChat ? (
                 <>
-                  <div className="px-5 py-3 border-b border-amber-100/40 bg-white">
+                  {/* HEADER PADDING AUGMENTÉ ET GESTION DU TRUNCATE */}
+                  <div className="px-8 py-5 border-b border-amber-100/40 bg-white">
                     <div className="flex items-center gap-4">
                       <button
                         onClick={() => setSelectedConversation(null)}
-                        className="md:hidden p-2 hover:bg-amber-50 rounded-xl transition-colors"
+                        className="md:hidden p-2 hover:bg-amber-50 rounded-xl transition-colors shrink-0"
                       >
-                        <ArrowLeft className="h-5 w-5 text-[#1B2333]" />
+                        <ArrowLeft className="h-6 w-6 text-[#1B2333]" />
                       </button>
                       <div
-                        className="relative cursor-pointer group"
-                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[0], e)}
+                        className="relative cursor-pointer group shrink-0"
+                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                       >
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
-                          className="w-12 h-12 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
+                          className="w-14 h-14 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
                         />
                         {conversations.find((c) => c.id === selectedConversation)?.online && (
                           <div
@@ -542,140 +546,125 @@ export default function Messages() {
                           />
                         )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-heading font-bold text-[#1B2333] leading-tight text-3xl">
+                      <div className="flex-1 min-w-0 pr-4">
+                        <h3 className="font-heading font-bold text-[#1B2333] leading-tight text-3xl truncate">
                           {selectedChat.name}, {selectedChat.age}
                         </h3>
-                        <p className="font-medium text-base" style={{ color: "hsl(142, 71%, 35%)" }}>
+                        <p className="font-medium text-lg mt-0.5" style={{ color: "hsl(142, 71%, 35%)" }}>
                           En ligne
                         </p>
                       </div>
-                      <div className="flex items-center gap-1.5">
+                      
+                      <div className="flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.max(0, i - 1))}
-                          className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors"
+                          className="h-10 px-3.5 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors shrink-0"
                           aria-label="Réduire la taille du texte"
                         >
-                          <span className="text-sm font-bold text-[#1B2333]">A−</span>
+                          <span className="text-base font-bold text-[#1B2333]">A−</span>
                         </button>
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.min(FONT_SIZES.length - 1, i + 1))}
-                          className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors"
+                          className="h-10 px-3.5 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors shrink-0"
                           aria-label="Augmenter la taille du texte"
                         >
-                          <span className="text-sm font-bold text-[#1B2333]">A+</span>
+                          <span className="text-base font-bold text-[#1B2333]">A+</span>
                         </button>
-                        <div className="w-px h-6 bg-amber-100/60 mx-1" />
+                        <div className="w-px h-6 bg-amber-100/60 mx-1 shrink-0" />
                         {(() => {
                           const messageCount = mockMessages.length;
                           const isLocked = messageCount < 5;
                           return (
                             <>
                               <button
-                                className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-1.5 transition-colors"
+                                className="h-10 px-4 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-2 transition-colors shrink-0"
                                 aria-label="Appel audio"
                                 onClick={() => {
                                   if (isLocked) {
                                     toast(
-                                      "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés (minimum 5).",
-                                      {
-                                        position: "bottom-left",
-                                        duration: 4000,
-                                      },
+                                      "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés.",
+                                      { position: "bottom-left", duration: 4000 }
                                     );
                                   } else {
                                     toast.info("Lancement de l'appel...");
                                   }
                                 }}
                               >
-                                {isLocked ? (
-                                  <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-                                ) : (
-                                  <Phone className="h-3.5 w-3.5 text-[#1B2333]" />
-                                )}
-                                <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
+                                {isLocked ? <Lock className="h-4 w-4 text-muted-foreground" /> : <Phone className="h-4 w-4 text-[#1B2333]" />}
+                                <span className="text-xl font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
                               </button>
                               <button
-                                className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-1.5 transition-colors"
+                                className="h-10 px-4 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-2 transition-colors shrink-0"
                                 aria-label="Appel vidéo"
                                 onClick={() => {
                                   if (isLocked) {
                                     toast(
-                                      "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés (minimum 5).",
-                                      {
-                                        position: "bottom-left",
-                                        duration: 4000,
-                                      },
+                                      "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés.",
+                                      { position: "bottom-left", duration: 4000 }
                                     );
                                   } else {
                                     toast.info("Lancement de l'appel vidéo...");
                                   }
                                 }}
                               >
-                                {isLocked ? (
-                                  <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-                                ) : (
-                                  <Video className="h-3.5 w-3.5 text-[#1B2333]" />
-                                )}
-                                <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
+                                {isLocked ? <Lock className="h-4 w-4 text-muted-foreground" /> : <Video className="h-4 w-4 text-[#1B2333]" />}
+                                <span className="text-xl font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
                               </button>
                             </>
                           );
                         })()}
-                        <div className="w-px h-6 bg-amber-100/60 mx-1" />
+                        <div className="w-px h-6 bg-amber-100/60 mx-1 shrink-0" />
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations)[0])}
-                          className="gap-1.5 text-[#1B2333] hover:bg-amber-50 rounded-lg h-9 text-lg font-medium"
+                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations))}
+                          className="gap-2 text-[#1B2333] hover:bg-amber-50 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
-                          <Eye className="h-3.5 w-3.5" />
+                          <Eye className="h-4 w-4" />
                           Voir le profil
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => handleReport(selectedChat.name)}
-                          className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-9 text-sm font-medium"
+                          className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
-                          <Flag className="h-3.5 w-3.5" />
+                          <Flag className="h-4 w-4" />
                           Signaler
                         </Button>
                       </div>
                     </div>
                   </div>
 
-                  <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-5 space-y-4 flex flex-col">
+                  {/* MESSAGES AREA - PADDING AUGMENTÉ */}
+                  <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-8 space-y-6 flex flex-col">
                     {selectedChat.isNew && !dismissedNewConv.has(selectedChat.id) ? (
-                      <div className="flex-1 flex flex-col items-center justify-center h-full gap-5 py-12 px-6">
+                      <div className="flex-1 flex flex-col items-center justify-center h-full gap-6 py-12 px-6">
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
-                          className="w-24 h-24 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
-                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[0], e)}
+                          className="w-28 h-28 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
+                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                         />
-                        <p className="text-muted-foreground text-sm text-center italic">
+                        <p className="text-muted-foreground text-xl text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
                         </p>
-                        <p className="text-foreground text-base font-medium text-center max-w-md leading-relaxed">
+                        <p className="text-foreground text-xl font-medium text-center max-w-lg leading-relaxed">
                           ⏳ Voici une nouvelle proposition. Le temps est précieux. Sans premier échange de votre part
                           d'ici <span className="font-bold text-[#1B2333]">6 jours</span>, votre mise en relation avec{" "}
                           <span className="font-heading font-bold text-[#1B2333]">{selectedChat.name}</span> sera
                           discrètement archivée pour laisser place à de nouvelles rencontres.
                         </p>
-                        <p className="text-muted-foreground text-sm text-center">
-                          ✍️ Rédigez votre message au clavier ou utilisez le dictaphone pour dicter votre texte.
-                        </p>
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1B2333]/10 text-[#1B2333] font-semibold text-sm">
-                          <Send className="h-4 w-4" />
+                        <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1B2333]/10 text-[#1B2333] font-semibold text-xl">
+                          <Send className="h-5 w-5" />
                           Démarrer le chat
                         </span>
                       </div>
                     ) : (
                       <>
-                        <div className="flex items-center gap-3 my-2">
+                        <div className="flex items-center gap-3 my-4">
                           <div className="flex-1 h-px bg-amber-100/50" />
-                          <span className="text-muted-foreground font-medium px-3 py-1 rounded-full bg-white border border-amber-100/40 text-lg">
+                          <span className="text-muted-foreground font-medium px-4 py-1.5 rounded-full bg-white border border-amber-100/40 text-lg">
                             Aujourd'hui
                           </span>
                           <div className="flex-1 h-px bg-amber-100/50" />
@@ -686,14 +675,13 @@ export default function Messages() {
                               <img
                                 src={selectedChat.avatar}
                                 alt=""
-                                className="w-10 h-10 rounded-full object-cover mr-3 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
-                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[0], e)}
+                                className="w-12 h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
+                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                               />
                             )}
                             <div
-                              className={`max-w-[70%] rounded-2xl px-4 py-3 shadow-sm ${msg.sender === "me" ? "bg-[#1B2333] text-white rounded-br-md" : "bg-white rounded-bl-md border border-amber-100/40"}`}
+                              className={`max-w-[75%] rounded-2xl px-5 py-4 shadow-sm ${msg.sender === "me" ? "bg-[#1B2333] text-white rounded-br-md" : "bg-white rounded-bl-md border border-amber-100/40"}`}
                             >
-                              {/* APPLICATION DYNAMIQUE DU A- / A+ SUR LE TEXTE */}
                               <p
                                 className={`leading-relaxed ${msg.sender === "them" ? "text-foreground" : "text-white"}`}
                                 style={{ fontSize: `${chatFontSize}px` }}
@@ -701,11 +689,9 @@ export default function Messages() {
                                 {msg.text}
                               </p>
                               <div
-                                className={`flex items-center gap-2 mt-1.5 ${msg.sender === "me" ? "justify-end" : ""}`}
+                                className={`flex items-center gap-2 mt-2 ${msg.sender === "me" ? "justify-end" : ""}`}
                               >
-                                <p
-                                  className={`text-base ${msg.sender === "me" ? "text-white/50" : "text-muted-foreground"}`}
-                                >
+                                <p className={`text-base ${msg.sender === "me" ? "text-white/50" : "text-muted-foreground"}`}>
                                   {msg.sender === "me"
                                     ? msg.read
                                       ? `Lu à ${msg.time}`
@@ -715,11 +701,11 @@ export default function Messages() {
                                 {msg.sender === "them" && (
                                   <button
                                     onClick={() => speakMessage(msg.id, msg.text)}
-                                    className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-full hover:bg-amber-50 transition-colors"
+                                    className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-amber-50 transition-colors"
                                     aria-label="Écouter le message"
                                   >
                                     <Volume2
-                                      className={`h-4 w-4 transition-colors ${speakingMsgId === msg.id ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`}
+                                      className={`h-5 w-5 transition-colors ${speakingMsgId === msg.id ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`}
                                     />
                                   </button>
                                 )}
@@ -731,23 +717,23 @@ export default function Messages() {
                     )}
                   </div>
 
-                  {/* INPUT AREA */}
-                  <div className="p-4 border-t border-amber-100/40 bg-white">
-                    <div className="flex items-end gap-3">
+                  {/* INPUT AREA - PADDING AUGMENTÉ */}
+                  <div className="p-6 border-t border-amber-100/40 bg-white">
+                    <div className="flex items-end gap-4">
                       <button
                         onClick={toggleListening}
-                        className={`min-h-[48px] px-4 w-auto min-w-[120px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 ${
+                        className={`min-h-[56px] px-5 w-auto min-w-[130px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 ${
                           isListening
                             ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
                             : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
                         }`}
                         aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
                       >
-                        {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                        {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
                         {isListening ? "Arrêter de dicter" : "Dicter"}
                       </button>
-                      <div className="flex-1">
-                        {/* APPLICATION DYNAMIQUE DU A- / A+ SUR LE TEXTAREA */}
+                      <div className="flex-1 min-w-0">
+                        {/* TEXTAREA AVEC GESTION DU SCROLL INTÉGRÉE */}
                         <Textarea
                           ref={textareaRef}
                           placeholder="Écrivez votre message..."
@@ -759,39 +745,30 @@ export default function Messages() {
                               handleSend();
                             }
                           }}
-                          rows={1}
-                          className="w-full min-h-[48px] max-h-[200px] resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 overflow-hidden py-3"
-                          style={{ height: "auto", fontSize: `${chatFontSize}px` }}
+                          className="w-full min-h-[56px] resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 px-4 py-4"
+                          style={{ fontSize: `${chatFontSize}px` }}
                         />
                       </div>
                       <Button
                         onClick={handleSend}
                         disabled={isSent || (!message.trim() && !isListening)}
-                        className="min-h-[48px] w-[120px] rounded-xl text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300"
+                        className="min-h-[56px] w-[140px] rounded-xl text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300"
                       >
-                        {isSent ? <Check className="h-5 w-5" /> : <Send className="h-5 w-5" />}
+                        {isSent ? <Check className="h-6 w-6" /> : <Send className="h-6 w-6" />}
                         {isSent ? "Envoyé" : "Envoyer"}
                       </Button>
                     </div>
-                    <div className="mt-2 min-h-[1.5rem]">
+                    
+                    <div className="mt-3 min-h-[1.5rem]">
                       {isListening ? (
                         <div className="flex items-center gap-3">
                           <p className="font-bold text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
                             Je vous écoute...
                           </p>
                           <div className="flex items-end gap-1 h-5">
-                            <span
-                              className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                              style={{ height: "60%", animationDelay: "0ms" }}
-                            />
-                            <span
-                              className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                              style={{ height: "100%", animationDelay: "150ms" }}
-                            />
-                            <span
-                              className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                              style={{ height: "40%", animationDelay: "300ms" }}
-                            />
+                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
+                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
+                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
                           </div>
                         </div>
                       ) : message.length > 0 ? (
@@ -803,14 +780,14 @@ export default function Messages() {
                   </div>
                 </>
               ) : (
-                <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-4">
-                  <div className="w-16 h-16 rounded-full bg-amber-50/60 flex items-center justify-center">
-                    <Send className="h-7 w-7 text-[hsl(var(--gold))]/40" />
+                <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground gap-6">
+                  <div className="w-20 h-20 rounded-full bg-amber-50/60 flex items-center justify-center">
+                    <Send className="h-10 w-10 text-[hsl(var(--gold))]/40" />
                   </div>
-                  <p className="font-heading text-[#1B2333] font-semibold text-center text-2xl">
+                  <p className="font-heading text-[#1B2333] font-semibold text-center text-3xl">
                     Reprenez le fil de vos belles rencontres
                   </p>
-                  <p className="text-muted-foreground text-xl">Cliquez sur un profil à gauche pour lui écrire.</p>
+                  <p className="text-muted-foreground text-2xl">Cliquez sur un profil à gauche pour lui écrire.</p>
                 </div>
               )}
             </div>
@@ -821,36 +798,36 @@ export default function Messages() {
       {showConseils && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/40" onClick={() => setShowConseils(false)} />
-          <div className="relative bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold))]/40 max-w-lg w-full p-0 overflow-hidden animate-in fade-in zoom-in-95 duration-300">
-            <div className="bg-[#1B2333] px-6 py-5 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Lightbulb className="h-6 w-6 text-[hsl(var(--gold-light))]" />
-                <h2 className="font-heading text-xl font-semibold text-white">9 conseils pour un bon départ</h2>
+          <div className="relative bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[hsl(var(--gold))]/40 max-w-2xl w-full p-0 overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+            <div className="bg-[#1B2333] px-8 py-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Lightbulb className="h-8 w-8 text-[hsl(var(--gold-light))]" />
+                <h2 className="font-heading font-semibold text-white text-3xl">9 conseils pour un bon départ</h2>
               </div>
               <button
                 onClick={() => setShowConseils(false)}
-                className="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors"
+                className="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors"
               >
-                <X className="h-5 w-5 text-white" />
+                <X className="h-6 w-6 text-white" />
               </button>
             </div>
-            <div className="px-6 py-5 max-h-[60vh] overflow-y-auto space-y-3">
+            <div className="px-8 py-6 max-h-[60vh] overflow-y-auto space-y-4">
               {conseils.map((conseil, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-3 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 text-left"
+                  className="flex items-start gap-4 p-5 rounded-2xl bg-gray-50/80 border border-gray-100 text-left"
                 >
-                  <span className="shrink-0 w-8 h-8 rounded-full bg-[#1B2333] text-white flex items-center justify-center text-sm font-semibold">
+                  <span className="shrink-0 w-10 h-10 rounded-full bg-[#1B2333] text-white flex items-center justify-center font-semibold text-xl">
                     {index + 1}
                   </span>
-                  <p className="text-sm leading-relaxed text-foreground pt-1">{conseil}</p>
+                  <p className="leading-relaxed text-foreground pt-1.5 text-2xl">{conseil}</p>
                 </div>
               ))}
             </div>
-            <div className="px-6 py-4 border-t border-amber-100/40 bg-amber-50/20">
+            <div className="px-8 py-5 border-t border-amber-100/40 bg-amber-50/20">
               <Button
                 onClick={() => setShowConseils(false)}
-                className="w-full h-12 rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium"
+                className="w-full h-14 rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium text-xl"
               >
                 J'ai compris, merci !
               </Button>
@@ -893,24 +870,24 @@ export default function Messages() {
           if (!open) handleDismissNewConv();
         }}
       >
-        <DialogContent className="max-w-md rounded-[24px] p-0 overflow-hidden">
-          <div className="bg-[#1B2333] px-6 py-5 flex items-center gap-3">
-            <Clock className="h-6 w-6 text-[hsl(var(--gold-light))]" />
-            <h2 className="font-heading text-xl font-semibold text-white">Nouvelle conversation</h2>
+        <DialogContent className="max-w-xl rounded-[24px] p-0 overflow-hidden">
+          <div className="bg-[#1B2333] px-8 py-6 flex items-center gap-4">
+            <Clock className="h-8 w-8 text-[hsl(var(--gold-light))]" />
+            <h2 className="font-heading text-3xl font-semibold text-white">Nouvelle conversation</h2>
           </div>
-          <div className="px-6 py-6 space-y-4">
-            <p className="text-foreground text-base leading-relaxed">
+          <div className="px-8 py-8 space-y-5">
+            <p className="text-foreground text-2xl leading-relaxed">
               Vous avez <span className="font-bold text-[#1B2333]">3 jours</span> pour répondre à ce premier message.
               Passé ce délai, la conversation sera automatiquement archivée.
             </p>
-            <p className="text-muted-foreground text-sm leading-relaxed">
+            <p className="text-muted-foreground text-xl leading-relaxed">
               Prenez le temps de découvrir le profil de votre correspondant(e) et n'hésitez pas à faire le premier pas !
             </p>
           </div>
-          <div className="px-6 py-4 border-t border-amber-100/40 bg-amber-50/20">
+          <div className="px-8 py-5 border-t border-amber-100/40 bg-amber-50/20">
             <Button
               onClick={handleDismissNewConv}
-              className="w-full h-12 rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium"
+              className="w-full h-14 rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium text-xl"
             >
               J'ai compris, merci !
             </Button>
