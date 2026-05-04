@@ -227,7 +227,7 @@ export default function Messages() {
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
-        const transcript = result?.?.transcript || "";
+        const transcript = result?.[0]?.transcript || "";
         if (!transcript) continue;
         if (result.isFinal) finalSegment += transcript + " ";
         else interimSegment += transcript;
