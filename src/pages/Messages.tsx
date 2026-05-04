@@ -810,7 +810,6 @@ export default function Messages() {
                           placeholder="Écrivez votre message..."
                           value={displayValue}
                           onChange={handleTextareaChange}
-                          onChange={handleTextareaChange}
                           className="w-full min-h-[56px] overflow-y-auto resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-4 py-4"
                           style={{ fontSize: `${chatFontSize}px` }}
                         />
