@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lock, Mic, MicOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import CriteriaEditWarningModal from "@/components/onboarding/CriteriaEditWarningModal";
@@ -104,9 +104,70 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   const [editUnlocked, setEditUnlocked] = useState(false);
   const { toast } = useToast();
 
+  // ─── Voice Dictation State ───
+  const [isRecording, setIsRecording] = useState(false);
+  const [interimText, setInterimText] = useState("");
+  const recognitionRef = useRef<any>(null);
+
   // Cooldown: if locked, show toast and block editing
   const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
   const isCooldownEditable = !cooldown || !cooldown.isCompleted || cooldown.canEdit || editUnlocked;
+
+  // ─── Native Dictation Logic ───
+  useEffect(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = "fr-FR";
+
+      recognition.onresult = (event: any) => {
+        let finalSegment = "";
+        let interimSegment = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i].transcript;
+          if (event.results[i].isFinal) finalSegment += transcript + " ";
+          else interimSegment += transcript;
+        }
+        if (finalSegment) setWhyAlone((prev) => prev + finalSegment);
+        setInterimText(interimSegment);
+      };
+
+      recognition.onerror = () => setIsRecording(false);
+      recognition.onend = () => setIsRecording(false);
+      recognitionRef.current = recognition;
+    }
+    
+    return () => {
+      if (recognitionRef.current && isRecording) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  const toggleDictation = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      if (recognitionRef.current) {
+        setWhyAlone((prev) => prev + (prev.endsWith(" ") || prev === "" ? "" : " "));
+        recognitionRef.current.start();
+        setIsRecording(true);
+      } else {
+        toast({ title: "Non supporté", description: "La dictée vocale n'est pas supportée sur ce navigateur.", variant: "destructive" });
+      }
+    }
+  };
+
+  const stopRecording = () => {
+    if (recognitionRef.current && isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+      if (interimText) setWhyAlone((prev) => prev + interimText + " ");
+      setInterimText("");
+    }
+  };
 
   const handleInputChange = (categoryId: string, index: number, value: string) => {
     if (!isCooldownEditable) {
@@ -181,6 +242,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   const handleNext = () => {
+    if (isRecording) stopRecording(); // Arrêter la dictée si on change de page
     if (isLastPage) {
       handleFinish();
     } else {
@@ -190,6 +252,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   const handleBack = () => {
+    if (isRecording) stopRecording(); // Arrêter la dictée si on change de page
     if (currentPage > 0) {
       setCurrentPage((p) => p - 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -260,7 +323,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
             {/* Inputs */}
             <div className="space-y-4 md:ml-14">
-              {[0, 1, 2].map((index) => (
+              {.map((index) => (
                 <Input
                   key={index}
                   placeholder={`${currentCategory.placeholder} ${index + 1}`}
@@ -294,24 +357,59 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
               <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-2xl">
                 11
               </span>
-              <h3 className="font-heading text-2xl font-bold text-[#1B2333] leading-snug md:text-2xl">
+              <h3 className="font-heading text-2xl font-bold text-[#1B2333] leading-snug md:text-3xl">
                 Pourquoi êtes-vous seul(e) aujourd'hui ?
               </h3>
             </div>
 
-            <div className="md:ml-14">
-              <span className="italic mb-6 block text-gray-600 text-xl">
+            <div className="md:ml-14 space-y-6">
+              <span className="italic block text-gray-600 text-xl leading-relaxed">
                 A cette étape de votre désir de nouvelle vie, ne serait-il pas utile de faire le point avec vous-même et
-                de vous demander en toute sincérité pourquoi vous êtes seule aujourd'hui. (information confidentielle
+                de vous demander en toute sincérité pourquoi vous êtes seul(e) aujourd'hui. (information confidentielle
                 non partagée)
               </span>
+              
               <Textarea
                 placeholder="Partagez votre histoire si vous le souhaitez..."
-                value={whyAlone}
-                onChange={(e) => setWhyAlone(e.target.value)}
-                rows={8}
-                className="bg-[hsl(35,15%,97%)] border-border/40 focus:border-primary/50 text-base resize-none placeholder:text-muted-foreground/40 placeholder:font-light"
+                value={whyAlone + interimText}
+                onChange={(e) => {
+                  setWhyAlone(e.target.value);
+                  setInterimText("");
+                }}
+                className="w-full min-h-[200px] text-2xl resize-none rounded-2xl border-amber-100 bg-white focus:ring-[hsl(var(--gold))] p-6 shadow-inner leading-relaxed"
               />
+
+              {/* ═══ CONTRÔLES VOCAUX (Même UX que CancellationFlow) ═══ */}
+              <div className="flex flex-col items-center gap-6 mt-8">
+                <div className="min-h-[3rem] flex items-center justify-center">
+                  {isRecording ? (
+                    <div className="flex items-center gap-4 px-6 py-3 rounded-full bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.2)]">
+                      <p className="font-bold text-2xl text-[#e2a036]">Je vous écoute...</p>
+                      <div className="flex items-end gap-1.5 h-6">
+                        <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
+                        <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
+                        <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
+                      </div>
+                    </div>
+                  ) : whyAlone.length > 0 ? (
+                    <p className="italic text-lg text-[hsl(var(--gold))] font-medium">✍️ Votre témoignage est sauvegardé</p>
+                  ) : null}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={toggleDictation}
+                  className={`min-h-[60px] px-10 flex items-center justify-center gap-4 rounded-2xl transition-all duration-300 text-xl font-bold shadow-lg ${
+                    isRecording
+                      ? "bg-[#E53935] text-white animate-pulse shadow-[0_0_20px_hsl(var(--gold)/0.4)]"
+                      : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
+                  }`}
+                >
+                  {isRecording ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
+                  {isRecording ? "Arrêter de dicter" : "Dicter mon histoire"}
+                </button>
+              </div>
+
             </div>
           </div>
         )}
