@@ -298,7 +298,7 @@ export default function ReservationPromesse() {
                   <div className="w-10 h-10 bg-[#1B2333] flex items-center justify-center rounded-md shadow-xl">
                     <Icon className="h-5 w-5 text-white" />
                   </div>
-                  <span className="font-bold tracking-[0.3em] uppercase text-muted-foreground/60 text-sm">
+                  <span className="font-bold tracking-[0.3em] uppercase text-muted-foreground/60 text-xl">
                     Étape {step.number}
                   </span>
                 </div>
