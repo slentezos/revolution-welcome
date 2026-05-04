@@ -156,7 +156,7 @@ export default function Onboarding() {
               <button
                 key={tab.id}
                 onClick={() => canClick && handleTabClick(tab.id)}
-                className={`flex-1 min-w-[200px] flex items-center justify-center gap-4 py-6 px-8 text-xl font-semibold transition-all duration-300 ${
+                className={`shrink-0 min-w-[200px] flex items-center justify-center gap-4 py-6 px-8 text-xl font-semibold transition-all duration-300 ${
                   isActive
                     ? "bg-[#1B2333] text-white border-b-4 border-[hsl(var(--gold))] shadow-md z-10"
                     : isCompleted
