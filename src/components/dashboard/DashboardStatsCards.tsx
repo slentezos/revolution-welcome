@@ -36,7 +36,7 @@ export default function DashboardStatsCards({
       count: newProposalsCount,
       icon: Sparkles,
       colorClasses: "bg-primary/10 text-primary",
-      badgeClasses: "bg-primary text-primary-foreground",
+      badgeClasses: "bg-primary text-primary-foreground text-xl",
     },
     {
       id: "section-attente",
@@ -44,7 +44,7 @@ export default function DashboardStatsCards({
       count: pendingCount,
       icon: Send,
       colorClasses: "bg-emerald-100 text-emerald-700",
-      badgeClasses: "bg-emerald-600 text-white",
+      badgeClasses: "bg-primary text-primary-foreground text-xl",
     },
     {
       id: "section-finaliser",
@@ -52,7 +52,7 @@ export default function DashboardStatsCards({
       count: savedCount,
       icon: Clock,
       colorClasses: "bg-amber-100 text-amber-700",
-      badgeClasses: "bg-amber-600 text-white",
+      badgeClasses: "bg-primary text-primary-foreground text-xl",
     },
   ];
 
@@ -69,7 +69,7 @@ export default function DashboardStatsCards({
               <MessageSquare className="h-5 w-5 text-primary" />
             </div>
               {unreadMessageCount > 0 && (
-                <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-primary text-primary-foreground text-sm font-bold">
+                <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-primary text-primary-foreground font-bold text-xl">
                   {unreadMessageCount}
                 </span>
               )}
@@ -92,7 +92,7 @@ export default function DashboardStatsCards({
                 </div>
                 {tab.count > 0 && (
                   <span
-                    className={`inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full text-sm font-bold ${tab.badgeClasses}`}
+                    className={`inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full font-bold ${tab.badgeClasses}`}
                   >
                     {tab.count}
                   </span>

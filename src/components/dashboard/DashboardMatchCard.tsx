@@ -68,7 +68,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
 
         <div className="absolute bottom-4 left-4 bg-primary/90 backdrop-blur-sm text-primary-foreground px-4 py-2 rounded-full">
           <span className="text-lg font-bold">{match.affinity}%</span>
-          <span className="font-medium ml-1.5 opacity-90 text-lg">affinité</span>
+          <span className="font-medium ml-1.5 opacity-90 text-xl">affinité</span>
         </div>
       </div>
 
