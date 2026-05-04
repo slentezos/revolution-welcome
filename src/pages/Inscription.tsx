@@ -121,11 +121,11 @@ export default function Inscription() {
           city_name: locationInfo?.cityName || null,
           region_name: locationInfo?.regionName || null,
           phone: formData.phone || null,
-          account_status: "pending_review",
+          account_status: "active",
         });
 
         if (profileError) console.error("Profile creation error:", profileError);
-        setPendingReview(true);
+        navigate("/onboarding");
       }
     } catch (error: any) {
       console.error("Signup error:", error);
