@@ -336,7 +336,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
             {/* Inputs */}
             <div className="space-y-4 md:ml-14">
-              {.map((index) => (
+              {[0, 1, 2].map((index) => (
                 <Input
                   key={index}
                   placeholder={`${currentCategory.placeholder} ${index + 1}`}
