@@ -323,7 +323,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
             {/* Inputs */}
             <div className="space-y-4 md:ml-14">
-              {[0, 1, 2].map((index) => (
+              {.map((index) => (
                 <Input
                   key={index}
                   placeholder={`${currentCategory.placeholder} ${index + 1}`}
@@ -369,47 +369,64 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
                 non partagée)
               </span>
               
-              <Textarea
-                placeholder="Partagez votre histoire si vous le souhaitez..."
-                value={whyAlone + interimText}
-                onChange={(e) => {
-                  setWhyAlone(e.target.value);
-                  setInterimText("");
-                }}
-                className="w-full min-h-[200px] text-2xl resize-none rounded-2xl border-amber-100 bg-white focus:ring-[hsl(var(--gold))] p-6 shadow-inner leading-relaxed"
-              />
-
-              {/* ═══ CONTRÔLES VOCAUX (Même UX que CancellationFlow) ═══ */}
-              <div className="flex flex-col items-center gap-6 mt-8">
-                <div className="min-h-[3rem] flex items-center justify-center">
+              {/* ═══ BLOC TEXTAREA ET DICTÉE (ALIGNÉ SUR CHAT UI) ═══ */}
+              <div className="flex flex-col">
+                <div className="flex items-start gap-3">
+                  <button
+                    type="button"
+                    onClick={toggleDictation}
+                    className={`min-h-[48px] px-4 w-auto min-w-[120px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 mt-1 ${
+                      isRecording
+                        ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
+                        : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
+                    }`}
+                    aria-label={isRecording ? "Arrêter de dicter" : "Dictée vocale"}
+                  >
+                    {isRecording ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                    {isRecording ? "Arrêter de dicter" : "Dicter"}
+                  </button>
+                  <div className="flex-1">
+                    <Textarea
+                      placeholder="Partagez votre histoire si vous le souhaitez..."
+                      value={whyAlone + interimText}
+                      onChange={(e) => {
+                        setWhyAlone(e.target.value);
+                        setInterimText("");
+                      }}
+                      className="w-full min-h-[200px] text-2xl resize-none rounded-2xl border-amber-100 bg-white focus:ring-[hsl(var(--gold))] p-6 shadow-inner leading-relaxed"
+                    />
+                  </div>
+                </div>
+                
+                <div className="mt-2 min-h-[1.5rem]">
                   {isRecording ? (
-                    <div className="flex items-center gap-4 px-6 py-3 rounded-full bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.2)]">
-                      <p className="font-bold text-2xl text-[#e2a036]">Je vous écoute...</p>
-                      <div className="flex items-end gap-1.5 h-6">
-                        <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
-                        <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
-                        <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
+                    <div className="flex items-center gap-3">
+                      <p className="font-bold text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
+                        Je vous écoute...
+                      </p>
+                      <div className="flex items-end gap-1 h-5">
+                        <span
+                          className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
+                          style={{ height: "60%", animationDelay: "0ms" }}
+                        />
+                        <span
+                          className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
+                          style={{ height: "100%", animationDelay: "150ms" }}
+                        />
+                        <span
+                          className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
+                          style={{ height: "40%", animationDelay: "300ms" }}
+                        />
                       </div>
                     </div>
                   ) : whyAlone.length > 0 ? (
-                    <p className="italic text-lg text-[hsl(var(--gold))] font-medium">✍️ Votre témoignage est sauvegardé</p>
+                    <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
+                      ✍️ Votre brouillon est sauvegardé
+                    </p>
                   ) : null}
                 </div>
-
-                <button
-                  type="button"
-                  onClick={toggleDictation}
-                  className={`min-h-[60px] px-10 flex items-center justify-center gap-4 rounded-2xl transition-all duration-300 text-xl font-bold shadow-lg ${
-                    isRecording
-                      ? "bg-[#E53935] text-white animate-pulse shadow-[0_0_20px_hsl(var(--gold)/0.4)]"
-                      : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
-                  }`}
-                >
-                  {isRecording ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
-                  {isRecording ? "Arrêter de dicter" : "Dicter mon histoire"}
-                </button>
               </div>
-
+              
             </div>
           </div>
         )}
