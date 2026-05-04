@@ -34,6 +34,25 @@ import ChatTooltipOverlay from "@/components/messages/ChatTooltipOverlay";
 import BenevolenceModal from "@/components/messages/BenevolenceModal";
 import { checkMessage } from "@/utils/wordFilter";
 
+// Parseur de ponctuation et de mise en forme pour le français
+const formatSpeech = (text: string) => {
+  if (!text) return "";
+  return text
+    .replace(/\bvirgule\b/gi, ",")
+    .replace(/\bpoint\b/gi, ".")
+    .replace(/\bpoint d'interrogation\b/gi, "?")
+    .replace(/\bpoint d'exclamation\b/gi, "!")
+    .replace(/\bpoints de suspension\b/gi, "...")
+    .replace(/\bà la ligne\b/gi, "\n")
+    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto après ponctuation
+};
+
+const capitalizeFirst = (str: string) => {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 const conseils = [
   "Prenez le temps de bien lire le profil de votre correspondant(e).",
   "Posez des questions ouvertes pour mieux connaître l'autre.",
@@ -110,7 +129,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES = ["text-base", "text-lg", "text-xl", "text-2xl"];
+const FONT_SIZES =; // <-- ERREUR CORRIGÉE ICI
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
@@ -119,7 +138,7 @@ export default function Messages() {
   const [message, setMessage] = useState("");
   const [showConseils, setShowConseils] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [profileToView, setProfileToView] = useState<(typeof initialConversations)[number] | null>(null);
+  const [profileToView, setProfileToView] = useState<(typeof initialConversations) | null>(null);
   const [showNewConvPopup, setShowNewConvPopup] = useState(false);
   const [dismissedNewConv, setDismissedNewConv] = useState<Set<number>>(new Set());
   const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -128,12 +147,10 @@ export default function Messages() {
   const [unmatchTarget, setUnmatchTarget] = useState<string>("");
   const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
 
-  // ÉTATS ET REFS DE LA DICTÉE
+  // ÉTATS DE LA DICTÉE INTELLIGENTE
   const [isListening, setIsListening] = useState(false);
+  const [interimText, setInterimText] = useState("");
   const recognitionRef = useRef<any>(null);
-  const manualStopRef = useRef(false);
-  const baseTextRef = useRef("");
-  const sessionFinalRef = useRef("");
   const messageRef = useRef(message);
 
   const [speakingMsgId, setSpeakingMsgId] = useState<number | null>(null);
@@ -183,88 +200,97 @@ export default function Messages() {
       const scrollHeight = ta.scrollHeight;
       if (scrollHeight > 150) {
         ta.style.height = "150px";
-        ta.style.overflowY = "auto";
       } else {
         ta.style.height = scrollHeight + "px";
-        ta.style.overflowY = "hidden";
       }
     }
-  }, [message]);
+  }, [message, interimText]);
 
-  // MOTEUR DE DICTÉE VOCALE
-  const startDictation = useCallback(() => {
+  // MOTEUR DE DICTÉE VOCALE (AVEC PONCTUATION ET ANTI-UNDEFINED)
+  useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      toast.error("La dictée vocale n'est pas supportée par votre navigateur.");
-      return;
-    }
-
-    manualStopRef.current = false;
-    baseTextRef.current = messageRef.current;
-    sessionFinalRef.current = "";
+    if (!SpeechRecognition) return;
 
     const recognition = new SpeechRecognition();
-    recognition.lang = "fr-FR";
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.lang = "fr-FR";
 
     recognition.onresult = (event: any) => {
-      let interim = "";
-      let finalStr = "";
+      let finalSegment = "";
+      let interimSegment = "";
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i].transcript;
-        if (event.results[i].isFinal) {
-          finalStr += transcript + " ";
-        } else {
-          interim += transcript;
+        if (event.results[i].isFinal) finalSegment += transcript + " ";
+        else interimSegment += transcript;
+      }
+
+      if (finalSegment) {
+        let currentVal = messageRef.current || "";
+        let formattedFinal = formatSpeech(finalSegment).trim();
+
+        // Majuscule si le champ est vide ou après un point
+        if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+          formattedFinal = capitalizeFirst(formattedFinal);
         }
+
+        const needsSpace = currentVal.length > 0 && !currentVal.endsWith(" ") && !currentVal.endsWith("\n") && !formattedFinal.startsWith(",") && !formattedFinal.startsWith(".");
+        const space = needsSpace ? " " : "";
+
+        setMessage(currentVal + space + formattedFinal);
       }
 
-      if (finalStr) {
-        sessionFinalRef.current += finalStr;
-      }
-
-      const fullText = (baseTextRef.current + " " + sessionFinalRef.current + interim).replace(/\s+/g, " ").trimStart();
-      setMessage(fullText);
+      setInterimText(formatSpeech(interimSegment));
     };
 
-    recognition.onerror = (event: any) => {
-      if (event.error === "not-allowed") forceStopDictation();
-    };
-
-    recognition.onend = () => {
-      if (!manualStopRef.current) {
-        baseTextRef.current = (baseTextRef.current + " " + sessionFinalRef.current).replace(/\s+/g, " ").trimStart();
-        sessionFinalRef.current = "";
-        try {
-          recognition.start();
-        } catch (e) {
-          setIsListening(false);
-        }
-      } else {
-        setIsListening(false);
-      }
-    };
-
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
     recognitionRef.current = recognition;
-    recognition.start();
-    setIsListening(true);
-  }, []);
 
-  const forceStopDictation = useCallback(() => {
-    manualStopRef.current = true;
-    if (recognitionRef.current) recognitionRef.current.stop();
-    setIsListening(false);
-  }, []);
+    return () => {
+      if (recognitionRef.current && isListening) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, [isListening]);
 
   const toggleListening = useCallback(() => {
     if (isListening) {
-      forceStopDictation();
+      if (recognitionRef.current) recognitionRef.current.stop();
+      setIsListening(false);
+
+      // Si on arrête, on valide le texte intermédiaire en cours
+      if (interimText) {
+        let currentVal = messageRef.current || "";
+        let finalInterim = interimText.trim();
+
+        if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+          finalInterim = capitalizeFirst(finalInterim);
+        }
+
+        const space = currentVal.length > 0 && !currentVal.endsWith(" ") ? " " : "";
+        setMessage(currentVal + space + finalInterim + " ");
+      }
+      setInterimText("");
     } else {
-      startDictation();
+      if (!recognitionRef.current) {
+        toast.error("La dictée vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
+      setInterimText(""); // Nettoyage de sécurité
+      let currentVal = messageRef.current || "";
+      if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
+        setMessage(currentVal + " "); // Espace pour préparer la reprise
+      }
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (e) {
+        setIsListening(false);
+      }
     }
-  }, [isListening, forceStopDictation, startDictation]);
+  }, [isListening, interimText]);
 
   const speakMessage = useCallback(
     (msgId: number, text: string) => {
@@ -329,12 +355,12 @@ export default function Messages() {
       const { isSafe } = checkMessage(message);
       if (!isSafe) {
         setBenevolenceModalOpen(true);
-        if (isListening) forceStopDictation();
+        if (isListening) toggleListening();
         return;
       }
       setMessage("");
       setIsSent(true);
-      if (isListening) forceStopDictation();
+      if (isListening) toggleListening();
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
       sendTimeoutRef.current = setTimeout(() => setIsSent(false), 1500);
       setTimeout(() => scrollToBottom(), 150);
@@ -344,13 +370,13 @@ export default function Messages() {
   useEffect(() => {
     return () => {
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
-      if (isListening) forceStopDictation();
+      if (isListening && recognitionRef.current) recognitionRef.current.stop();
     };
-  }, [isListening, forceStopDictation]);
+  }, [isListening]);
 
   const handleSelectConversation = (convId: number) => {
     setSelectedConversation(convId);
-    if (isListening) forceStopDictation();
+    if (isListening) toggleListening();
     const conv = conversations.find((c) => c.id === convId);
     if (conv?.isNew && !dismissedNewConv.has(convId)) setShowNewConvPopup(true);
     if (!chatTooltipShown.has(convId)) setTimeout(() => setShowChatTooltip(true), 600);
@@ -381,13 +407,13 @@ export default function Messages() {
     setReportModalOpen(true);
   };
 
-  const handleAvatarClick = (conv: (typeof initialConversations)[number], e: React.MouseEvent) => {
+  const handleAvatarClick = (conv: (typeof initialConversations), e: React.MouseEvent) => {
     e.stopPropagation();
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
 
-  const handleViewProfile = (conv: (typeof initialConversations)[number]) => {
+  const handleViewProfile = (conv: (typeof initialConversations)) => {
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
@@ -414,6 +440,10 @@ export default function Messages() {
       </div>
     );
   }
+
+  // Protection anti-undefined et fusion du texte tapé + texte en cours de dictée
+  const safeMessage = message === null || message === undefined ? "" : String(message);
+  const displayValue = isListening || interimText ? safeMessage + interimText : safeMessage;
 
   return (
     <Layout>
@@ -521,7 +551,6 @@ export default function Messages() {
             >
               {selectedChat ? (
                 <>
-                  {/* HEADER PADDING AUGMENTÉ ET GESTION DU TRUNCATE */}
                   <div className="px-8 py-5 border-b border-amber-100/40 bg-white">
                     <div className="flex items-center gap-4">
                       <button
@@ -532,7 +561,7 @@ export default function Messages() {
                       </button>
                       <div
                         className="relative cursor-pointer group shrink-0"
-                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                       >
                         <img
                           src={selectedChat.avatar}
@@ -617,7 +646,7 @@ export default function Messages() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations)[number])}
+                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations))}
                           className="gap-2 text-[#1B2333] hover:bg-amber-50 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
                           <Eye className="h-4 w-4" />
@@ -636,7 +665,7 @@ export default function Messages() {
                     </div>
                   </div>
 
-                  {/* MESSAGES AREA - PADDING AUGMENTÉ */}
+                  {/* MESSAGES AREA */}
                   <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-8 space-y-6 flex flex-col">
                     {selectedChat.isNew && !dismissedNewConv.has(selectedChat.id) ? (
                       <div className="flex-1 flex flex-col items-center justify-center h-full gap-6 py-12 px-6">
@@ -644,7 +673,7 @@ export default function Messages() {
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
                           className="w-28 h-28 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
-                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                         />
                         <p className="text-muted-foreground text-xl text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
@@ -676,7 +705,7 @@ export default function Messages() {
                                 src={selectedChat.avatar}
                                 alt=""
                                 className="w-12 h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
-                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                               />
                             )}
                             <div
@@ -717,7 +746,7 @@ export default function Messages() {
                     )}
                   </div>
 
-                  {/* INPUT AREA - PADDING AUGMENTÉ */}
+                  {/* INPUT AREA (SCROLL VERTICAL AUTO SI TROP LONG) */}
                   <div className="p-6 border-t border-amber-100/40 bg-white">
                     <div className="flex items-end gap-4">
                       <button
@@ -733,19 +762,22 @@ export default function Messages() {
                         {isListening ? "Arrêter de dicter" : "Dicter"}
                       </button>
                       <div className="flex-1 min-w-0">
-                        {/* TEXTAREA AVEC GESTION DU SCROLL INTÉGRÉE */}
-                        <Textarea
+                        <textarea
                           ref={textareaRef}
                           placeholder="Écrivez votre message..."
-                          value={message}
-                          onChange={(e) => setMessage(e.target.value)}
+                          value={displayValue}
+                          onChange={(e) => {
+                            setMessage(e.target.value);
+                            if (interimText) setInterimText(""); // Tue le buffer vocal si frappe manuelle (Anti-fantôme)
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
                               e.preventDefault();
                               handleSend();
                             }
                           }}
-                          className="w-full min-h-[56px] resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 px-4 py-4"
+                          // max-h-[150px] avec overflow-y-auto active la barre de scroll
+                          className="w-full min-h-[56px] max-h-[150px] overflow-y-auto resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-4 py-4"
                           style={{ fontSize: `${chatFontSize}px` }}
                         />
                       </div>
@@ -771,7 +803,7 @@ export default function Messages() {
                             <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
                           </div>
                         </div>
-                      ) : message.length > 0 ? (
+                      ) : safeMessage.length > 0 ? (
                         <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
                           ✍️ Votre brouillon est sauvegardé
                         </p>
