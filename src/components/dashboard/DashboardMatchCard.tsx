@@ -82,11 +82,11 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
               </h4>
               <div className="flex items-center gap-2 mt-1.5">
                 <MapPin className="h-4 w-4 text-gold" />
-                <span className="text-lg text-muted-foreground font-medium">{match.location}</span>
+                <span className="text-muted-foreground font-medium text-xl">{match.location}</span>
               </div>
             </div>
             <div className="hidden lg:flex flex-col items-end gap-1">
-              <span className="font-medium text-muted-foreground uppercase tracking-widest text-lg">
+              <span className="font-medium text-muted-foreground uppercase tracking-widest text-xl">
                 {affinityLabel}
               </span>
             </div>
@@ -97,7 +97,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
               <Badge
                 key={tag}
                 variant="secondary"
-                className="text-sm px-4 py-1.5 bg-secondary text-secondary-foreground border border-border/50 font-medium"
+                className="inline-flex items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-secondary/80 px-4 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/60 font-medium text-lg"
               >
                 {tag}
               </Badge>
@@ -119,7 +119,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
         <div className="flex items-center justify-between mt-5 pt-4 border-t border-border/30">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Calendar className="h-4 w-4 text-gold" />
-            <p className="text-lg">
+            <p className="text-xl">
               Matché le {matchDate.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}
             </p>
           </div>

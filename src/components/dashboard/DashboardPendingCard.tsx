@@ -66,7 +66,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
               </h4>
               <div className="flex items-center gap-2 mt-1.5">
                 <MapPin className="h-4 w-4 text-emerald-600" />
-                <span className="text-lg text-muted-foreground font-medium">{match.location}</span>
+                <span className="text-muted-foreground font-medium text-xl">{match.location}</span>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
           <div className="flex items-center gap-3 mt-4 bg-emerald-50 rounded-xl px-5 py-3">
             <Loader2 className="h-5 w-5 text-emerald-600 animate-spin" />
             <span className="text-emerald-800 font-semibold text-lg">En attente de sa réponse</span>
-            <span className="text-emerald-600/70 ml-auto text-lg">Accepté le {match.acceptedAt}</span>
+            <span className="text-emerald-600/70 ml-auto text-xl">Accepté le {match.acceptedAt}</span>
           </div>
 
           {/* Tags */}
@@ -84,7 +84,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
               <Badge
                 key={tag}
                 variant="secondary"
-                className="px-4 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/60 font-medium text-base"
+                className="inline-flex items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-secondary/80 px-4 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/60 font-medium text-lg"
               >
                 {tag}
               </Badge>
