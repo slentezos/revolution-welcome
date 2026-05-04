@@ -211,7 +211,7 @@ export default function ReservationPromesse() {
                   {/* Texte avec police Serif élégante */}
                   <span
                     className={cn(
-                      "font-heading text-sm md:text-xl text-center px-2 hidden sm:block transition-all duration-300 leading-tight max-w-[200px]",
+                      "font-heading text-xl md:text-xl text-center px-2 hidden xl:block transition-all duration-300 leading-tight max-w-[200px]",
                       isActive ? "text-foreground" : "text-muted-foreground/50 group-hover:text-foreground/70",
                     )}
                   >
@@ -276,10 +276,10 @@ export default function ReservationPromesse() {
               <div className="max-w-xl mx-auto w-full">
                 {/* En-tête de l'étape */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 bg-[#1B2333] flex items-center justify-center rounded-sm">
+                  <div className="w-8 h-8 bg-[#1B2333] flex items-center justify-center rounded-xl">
                     <Icon className="h-4 w-4 text-white" />
                   </div>
-                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-sm">
+                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-xl">
                     Étape {step.number}
                   </span>
                 </div>
@@ -289,22 +289,22 @@ export default function ReservationPromesse() {
 
                 {/* Blocs d'explications */}
                 <div className="space-y-6">
-                  <div className="border border-amber-100/60 p-6 rounded-sm bg-amber-50/10">
-                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-sm">
+                  <div className="border border-amber-100/60 p-6 rounded-xl bg-amber-50/10">
+                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
                       VOTRE SEULE PRÉPARATION :
                     </span>
                     <p className="text-muted-foreground leading-relaxed text-lg">{step.preparation}</p>
                   </div>
 
-                  <div className="border border-amber-100/60 p-6 rounded-sm bg-amber-50/10">
-                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-sm">
+                  <div className="border border-amber-100/60 p-6 rounded-xl bg-amber-50/10">
+                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
                       NOTRE ÉCHANGE :
                     </span>
                     <p className="text-muted-foreground leading-relaxed text-lg">{step.action}</p>
                   </div>
 
-                  <div className="bg-secondary/30 p-6 rounded-sm border border-secondary">
-                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-sm">
+                  <div className="bg-secondary/30 p-6 rounded-xl border border-secondary">
+                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
                       VOTRE PROFIL :
                     </span>
                     <p className="text-foreground font-medium leading-relaxed text-lg">{step.result}</p>
@@ -346,7 +346,7 @@ export default function ReservationPromesse() {
             {INCLUDED.map((item, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-white/5 border border-white/10 p-6 rounded-sm text-left"
+                className="flex items-start gap-4 bg-white/5 border border-white/10 p-6 rounded-xl text-left"
               >
                 <div className="w-6 h-6 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center shrink-0 mt-0.5">
                   <Check className="h-4 w-4 text-[#1B2333]" />
