@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea"; // On utilise le Textarea de base
 import { Button } from "@/components/ui/button";
 import {
   Search,
@@ -34,7 +34,7 @@ import ChatTooltipOverlay from "@/components/messages/ChatTooltipOverlay";
 import BenevolenceModal from "@/components/messages/BenevolenceModal";
 import { checkMessage } from "@/utils/wordFilter";
 
-// Parseur de ponctuation et de mise en forme pour le français
+// Parseur de ponctuation pour le français
 const formatSpeech = (text: string) => {
   if (!text) return "";
   return text
@@ -44,8 +44,8 @@ const formatSpeech = (text: string) => {
     .replace(/\bpoint d'exclamation\b/gi, "!")
     .replace(/\bpoints de suspension\b/gi, "...")
     .replace(/\bà la ligne\b/gi, "\n")
-    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
-    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto après ponctuation
+    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace avant la ponctuation
+    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`);
 };
 
 const capitalizeFirst = (str: string) => {
@@ -129,7 +129,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES = ["text-base", "text-lg", "text-xl", "text-2xl"];
+const FONT_SIZES =; // Zoom font sizes
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
@@ -138,7 +138,7 @@ export default function Messages() {
   const [message, setMessage] = useState("");
   const [showConseils, setShowConseils] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [profileToView, setProfileToView] = useState<(typeof initialConversations)[number] | null>(null);
+  const [profileToView, setProfileToView] = useState<(typeof initialConversations) | null>(null);
   const [showNewConvPopup, setShowNewConvPopup] = useState(false);
   const [dismissedNewConv, setDismissedNewConv] = useState<Set<number>>(new Set());
   const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -147,7 +147,7 @@ export default function Messages() {
   const [unmatchTarget, setUnmatchTarget] = useState<string>("");
   const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
 
-  // ÉTATS DE LA DICTÉE INTELLIGENTE
+  // === ÉTATS DE LA DICTÉE (Local à la page Messages) ===
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState("");
   const recognitionRef = useRef<any>(null);
@@ -192,7 +192,7 @@ export default function Messages() {
     prevConversationsRef.current = conversations;
   }, [conversations]);
 
-  // GESTION DU SCROLL DYNAMIQUE DU TEXTAREA
+  // SCROLL DYNAMIQUE DU TEXTAREA
   useEffect(() => {
     const ta = textareaRef.current;
     if (ta) {
@@ -200,13 +200,15 @@ export default function Messages() {
       const scrollHeight = ta.scrollHeight;
       if (scrollHeight > 150) {
         ta.style.height = "150px";
+        ta.style.overflowY = "auto";
       } else {
         ta.style.height = scrollHeight + "px";
+        ta.style.overflowY = "hidden";
       }
     }
-  }, [message, interimText]);
+  }, [message, interimText, chatFontSize]); // Update si la taille de police change
 
-  // MOTEUR DE DICTÉE VOCALE (AVEC PONCTUATION ET ANTI-UNDEFINED)
+  // === MOTEUR DE DICTÉE (LOCAL) ===
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -230,7 +232,6 @@ export default function Messages() {
         let currentVal = messageRef.current || "";
         let formattedFinal = formatSpeech(finalSegment).trim();
 
-        // Majuscule si le champ est vide ou après un point
         if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
           formattedFinal = capitalizeFirst(formattedFinal);
         }
@@ -260,7 +261,6 @@ export default function Messages() {
       if (recognitionRef.current) recognitionRef.current.stop();
       setIsListening(false);
 
-      // Si on arrête, on valide le texte intermédiaire en cours
       if (interimText) {
         let currentVal = messageRef.current || "";
         let finalInterim = interimText.trim();
@@ -278,10 +278,10 @@ export default function Messages() {
         toast.error("La dictée vocale n'est pas supportée par votre navigateur.");
         return;
       }
-      setInterimText(""); // Nettoyage de sécurité
+      setInterimText("");
       let currentVal = messageRef.current || "";
       if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
-        setMessage(currentVal + " "); // Espace pour préparer la reprise
+        setMessage(currentVal + " ");
       }
       try {
         recognitionRef.current.start();
@@ -407,13 +407,13 @@ export default function Messages() {
     setReportModalOpen(true);
   };
 
-  const handleAvatarClick = (conv: (typeof initialConversations)[number], e: React.MouseEvent) => {
+  const handleAvatarClick = (conv: (typeof initialConversations), e: React.MouseEvent) => {
     e.stopPropagation();
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
 
-  const handleViewProfile = (conv: (typeof initialConversations)[number]) => {
+  const handleViewProfile = (conv: (typeof initialConversations)) => {
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
@@ -441,19 +441,18 @@ export default function Messages() {
     );
   }
 
-  // Protection anti-undefined et fusion du texte tapé + texte en cours de dictée
-  const safeMessage = message === null || message === undefined ? "" : String(message);
-  const displayValue = isListening || interimText ? safeMessage + interimText : safeMessage;
+  // Fusion pour l'affichage visuel en temps réel (évite "undefined")
+  const displayValue = isListening || interimText ? (message || "") + interimText : message;
 
   return (
     <Layout>
       <div className="h-[calc(100vh-64px)] bg-secondary overflow-hidden flex flex-col">
-        {/* LARGUEUR MAX AUGMENTÉE À 1400px ET PADDING VERTICAL AUGMENTÉ */}
-        <div className="max-w-[1400px] mx-auto w-full px-4 md:px-8 py-6 flex-1 overflow-hidden">
+        {/* RETOUR À MAX-W-6XL POUR LE CONFORT VISUEL SENIOR */}
+        <div className="max-w-6xl mx-auto w-full px-4 md:px-8 py-6 flex-1 overflow-hidden">
           <div className="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-amber-50/50 overflow-hidden flex h-full">
             {/* ===== PRIVATE LOUNGE SIDEBAR ===== */}
             <div
-              className={`w-full md:w-[400px] shrink-0 border-r border-amber-100/40 flex flex-col bg-white ${selectedConversation ? "hidden md:flex" : "flex"}`}
+              className={`w-full md:w-96 shrink-0 border-r border-amber-100/40 flex flex-col bg-white ${selectedConversation ? "hidden md:flex" : "flex"}`}
             >
               <div className="p-6 border-b border-amber-100/40">
                 <div className="flex items-center justify-between mb-4">
@@ -551,7 +550,7 @@ export default function Messages() {
             >
               {selectedChat ? (
                 <>
-                  <div className="px-8 py-5 border-b border-amber-100/40 bg-white">
+                  <div className="px-6 py-5 border-b border-amber-100/40 bg-white">
                     <div className="flex items-center gap-4">
                       <button
                         onClick={() => setSelectedConversation(null)}
@@ -561,12 +560,12 @@ export default function Messages() {
                       </button>
                       <div
                         className="relative cursor-pointer group shrink-0"
-                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                       >
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
-                          className="w-14 h-14 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
+                          className="w-12 h-12 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
                         />
                         {conversations.find((c) => c.id === selectedConversation)?.online && (
                           <div
@@ -576,7 +575,7 @@ export default function Messages() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0 pr-4">
-                        <h3 className="font-heading font-bold text-[#1B2333] leading-tight text-3xl truncate">
+                        <h3 className="font-heading font-bold text-[#1B2333] leading-tight text-2xl truncate">
                           {selectedChat.name}, {selectedChat.age}
                         </h3>
                         <p className="font-medium text-lg mt-0.5" style={{ color: "hsl(142, 71%, 35%)" }}>
@@ -585,6 +584,7 @@ export default function Messages() {
                       </div>
                       
                       <div className="flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
+                        {/* BOUTONS A- ET A+ CORRIGÉS */}
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.max(0, i - 1))}
                           className="h-10 px-3.5 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors shrink-0"
@@ -646,11 +646,11 @@ export default function Messages() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations)[number])}
+                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations))}
                           className="gap-2 text-[#1B2333] hover:bg-amber-50 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
                           <Eye className="h-4 w-4" />
-                          Voir le profil
+                          <span className="hidden xl:inline">Voir profil</span>
                         </Button>
                         <Button
                           variant="ghost"
@@ -659,21 +659,21 @@ export default function Messages() {
                           className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
                           <Flag className="h-4 w-4" />
-                          Signaler
+                          <span className="hidden xl:inline">Signaler</span>
                         </Button>
                       </div>
                     </div>
                   </div>
 
                   {/* MESSAGES AREA */}
-                  <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-8 space-y-6 flex flex-col">
+                  <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col">
                     {selectedChat.isNew && !dismissedNewConv.has(selectedChat.id) ? (
                       <div className="flex-1 flex flex-col items-center justify-center h-full gap-6 py-12 px-6">
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
                           className="w-28 h-28 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
-                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                         />
                         <p className="text-muted-foreground text-xl text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
@@ -705,7 +705,7 @@ export default function Messages() {
                                 src={selectedChat.avatar}
                                 alt=""
                                 className="w-12 h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
-                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                               />
                             )}
                             <div
@@ -713,7 +713,7 @@ export default function Messages() {
                             >
                               <p
                                 className={`leading-relaxed ${msg.sender === "them" ? "text-foreground" : "text-white"}`}
-                                style={{ fontSize: `${chatFontSize}px` }}
+                                style={{ fontSize: `${chatFontSize}px` }} // L'APPLICATION DU ZOOM EST ICI
                               >
                                 {msg.text}
                               </p>
@@ -746,7 +746,7 @@ export default function Messages() {
                     )}
                   </div>
 
-                  {/* INPUT AREA (SCROLL VERTICAL AUTO SI TROP LONG) */}
+                  {/* INPUT AREA (AVEC LA DICTÉE LOCALE SANS UNDEFINED ET AVEC ZOOM) */}
                   <div className="p-6 border-t border-amber-100/40 bg-white">
                     <div className="flex items-end gap-4">
                       <button
@@ -765,10 +765,10 @@ export default function Messages() {
                         <textarea
                           ref={textareaRef}
                           placeholder="Écrivez votre message..."
-                          value={displayValue}
+                          value={displayValue} // Valeur protégée (sans undefined)
                           onChange={(e) => {
                             setMessage(e.target.value);
-                            if (interimText) setInterimText(""); // Tue le buffer vocal si frappe manuelle (Anti-fantôme)
+                            if (interimText) setInterimText(""); // Nettoyage buffer
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
@@ -776,9 +776,8 @@ export default function Messages() {
                               handleSend();
                             }
                           }}
-                          // max-h-[150px] avec overflow-y-auto active la barre de scroll
-                          className="w-full min-h-[56px] max-h-[150px] overflow-y-auto resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-4 py-4"
-                          style={{ fontSize: `${chatFontSize}px` }}
+                          className="w-full min-h-[56px] overflow-y-auto resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-4 py-4"
+                          style={{ fontSize: `${chatFontSize}px` }} // L'APPLICATION DU ZOOM EST ICI
                         />
                       </div>
                       <Button
@@ -791,6 +790,7 @@ export default function Messages() {
                       </Button>
                     </div>
                     
+                    {/* Feedback visuel de dictée */}
                     <div className="mt-3 min-h-[1.5rem]">
                       {isListening ? (
                         <div className="flex items-center gap-3">
@@ -803,7 +803,7 @@ export default function Messages() {
                             <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
                           </div>
                         </div>
-                      ) : safeMessage.length > 0 ? (
+                      ) : message.length > 0 ? (
                         <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
                           ✍️ Votre brouillon est sauvegardé
                         </p>
