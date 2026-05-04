@@ -210,7 +210,7 @@ export default function Dashboard() {
           {/* ── Section: Nouvelles Propositions ── */}
           <div id="section-nouvelles" data-reveal data-reveal-delay="200" className="scroll-mt-4">
             {/* Section Header */}
-            <div className="flex items-center gap-5 mb-8">
+            <div className="flex items-center gap-5 mb-8 py-[20px]">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
                 <Sparkles className="h-7 w-7 text-primary" />
               </div>
@@ -230,7 +230,7 @@ export default function Dashboard() {
             {filteredMatches.length === 0 && pendingMatches.length === 0 && visibleSavedForLater.length === 0 ? (
               <EmptyMatchState />
             ) : filteredMatches.length === 0 ? null : (
-              <div className="grid grid-cols-1 gap-5">
+              <div className="grid grid-cols-1 gap-5 my-0">
                 {filteredMatches.map((match) => (
                   <DashboardMatchCard key={match.id} match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
                 ))}
@@ -241,7 +241,7 @@ export default function Dashboard() {
           {/* ── Section: En Attente ── */}
           {pendingMatches.length > 0 && (
             <div id="section-attente" data-reveal data-reveal-delay="100" className="mt-12 scroll-mt-4">
-              <div className="flex items-center gap-5 mb-8">
+              <div className="flex items-center gap-5 mb-8 py-[20px]">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
                   <Send className="h-7 w-7 text-emerald-600" />
                 </div>
@@ -258,7 +258,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-5">
+              <div className="grid grid-cols-1 gap-5 my-0">
                 {pendingMatches.map((match) => (
                   <DashboardPendingCard key={match.id} match={match} onView={() => { setSelectedMatch(match); setViewingPending(true); setModalOpen(true); }} />
                 ))}
@@ -269,7 +269,7 @@ export default function Dashboard() {
           {/* ── Section: À Finaliser ── */}
           {visibleSavedForLater.length > 0 && (
             <div id="section-finaliser" data-reveal data-reveal-delay="100" className="mt-12 scroll-mt-4">
-              <div className="flex items-center gap-5 mb-8">
+              <div className="flex items-center gap-5 mb-8 py-[20px]">
                 <div className="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center">
                   <Clock className="h-7 w-7 text-amber-600" />
                 </div>
@@ -286,7 +286,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-5">
+              <div className="grid grid-cols-1 gap-5 my-0">
                 {visibleSavedForLater.map((match) => (
                   <div key={match.id} className="relative">
                     <DashboardMatchCard match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
