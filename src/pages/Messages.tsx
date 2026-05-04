@@ -129,7 +129,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES =; // Zoom font sizes
+const FONT_SIZES = ["text-base", "text-lg", "text-xl", "text-2xl"];
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
