@@ -779,7 +779,7 @@ export default function Messages() {
                         {/* BALISE NATIVE POUR GARANTIR LE STYLE INLINE (ZOOM) ET L'AUTO-EXPAND */}
                         <textarea
                           id="chat-textarea"
-                          ref={textareaRef}
+                          
                           placeholder="Écrivez votre message..."
                           value={displayValue}
                           onChange={handleTextareaChange}
