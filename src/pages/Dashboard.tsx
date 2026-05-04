@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
 import { Send, Undo2, X, Sparkles, Clock } from "lucide-react";
@@ -13,18 +14,25 @@ import DashboardGreeting from "@/components/dashboard/DashboardGreeting";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import EmptyMatchState from "@/components/dashboard/EmptyMatchState";
 
+const getIsoDateDaysAgo = (daysAgo: number) => {
+  const date = new Date();
+  date.setDate(date.getDate() - daysAgo);
+  return date.toISOString().split("T")[0];
+};
+
 // Mock data for matches — Nouvelles propositions
 const mockMatches = [
-  { id: 1, name: "Marie", age: 67, location: "75014 - Paris", affinity: 85, matchedAt: "2026-03-26", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Jazz", "Voyages", "Théâtre"], commonPoint: "Vous adorez tous les deux le Jazz et les voyages en Italie." },
-  { id: 2, name: "Sophie", age: 59, location: "93000 - Boulogne-Billancourt", affinity: 81, matchedAt: "2026-03-27", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", verified: true, online: false, tags: ["Cuisine", "Randonnée"], commonPoint: "Vous partagez la passion de la randonnée en montagne et des marchés provençaux." },
-  { id: 3, name: "Catherine", age: 71, location: "92430 - Marnes-la-Coquette", affinity: 80, matchedAt: "2026-03-28", avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Lecture", "Jardinage", "Opéra"], commonPoint: "Vous adorez tous les deux le jardinage et l'opéra italien." },
-  { id: 4, name: "Anne", age: 64, location: "67000 - Strasbourg", affinity: 84, matchedAt: "2026-03-29", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face", verified: true, online: false, tags: ["Musée", "Vélo", "Cuisine"], commonPoint: "Vous partagez l'amour des musées et des balades à vélo le long du Rhin." },
-  { id: 5, name: "Martine", age: 68, location: "35000 - Rennes", affinity: 78, matchedAt: "2026-03-30", avatar: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Tricot", "Cinéma", "Marche"], commonPoint: "Vous appréciez tous les deux les longues promenades et le cinéma indépendant." },
+  { id: 1, name: "Marie", age: 67, location: "75014 - Paris", affinity: 85, matchedAt: getIsoDateDaysAgo(0), avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face", verified: true, online: true, tags: ["Jazz", "Voyages", "Théâtre"], commonPoint: "Vous adorez tous les deux le Jazz et les voyages en Italie." },
+  { id: 2, name: "Sophie", age: 59, location: "93000 - Boulogne-Billancourt", affinity: 81, matchedAt: getIsoDateDaysAgo(1), avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", verified: true, online: false, tags: ["Cuisine", "Randonnée"], commonPoint: "Vous partagez la passion de la randonnée en montagne et des marchés provençaux." },
+  { id: 3, name: "Catherine", age: 71, location: "92430 - Marnes-la-Coquette", affinity: 80, matchedAt: getIsoDateDaysAgo(2), avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Lecture", "Jardinage", "Opéra"], commonPoint: "Vous adorez tous les deux le jardinage et l'opéra italien." },
+  { id: 4, name: "Anne", age: 64, location: "67000 - Strasbourg", affinity: 84, matchedAt: getIsoDateDaysAgo(3), avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face", verified: true, online: false, tags: ["Musée", "Vélo", "Cuisine"], commonPoint: "Vous partagez l'amour des musées et des balades à vélo le long du Rhin." },
+  { id: 5, name: "Martine", age: 68, location: "35000 - Rennes", affinity: 78, matchedAt: getIsoDateDaysAgo(4), avatar: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Tricot", "Cinéma", "Marche"], commonPoint: "Vous appréciez tous les deux les longues promenades et le cinéma indépendant." },
 ];
 
 export type MockMatch = typeof mockMatches[0];
 export type SavedMatch = MockMatch & {savedAt: string;};
 export type PendingMatch = MockMatch & {acceptedAt: string;};
+type DashboardProfile = { first_name?: string | null; onboarding_step?: string | null };
 
 // Mock data — En attente de sa réponse
 const mockPendingMatches: PendingMatch[] = [
@@ -42,13 +50,13 @@ const mockSavedMatches: SavedMatch[] = [
   { id: 24, name: "Sylvie", age: 70, location: "21000 - Dijon", affinity: 76, matchedAt: "2026-03-18", avatar: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Œnologie", "Patrimoine", "Cuisine"], commonPoint: "Vous appréciez tous les deux l'œnologie bourguignonne et la visite de châteaux.", savedAt: "22 mars 2026" },
 ];
 
-const SAVED_MATCHES_STORAGE_KEY = "kalimera_saved_matches_v2";
-const ACCEPTED_MATCHES_STORAGE_KEY = "kalimera_accepted_matches_v2";
-const PENDING_MATCHES_STORAGE_KEY = "kalimera_pending_matches_v2";
+const SAVED_MATCHES_STORAGE_KEY = "kalimera_saved_matches_v3";
+const ACCEPTED_MATCHES_STORAGE_KEY = "kalimera_accepted_matches_v3";
+const PENDING_MATCHES_STORAGE_KEY = "kalimera_pending_matches_v3";
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<DashboardProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedMatch, setSelectedMatch] = useState<MockMatch | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -80,7 +88,7 @@ export default function Dashboard() {
       const found = mockMatches.find((m) => m.id === Number(matchId));
       if (found) {setSelectedMatch(found);setModalOpen(true);setSearchParams({}, { replace: true });}
     }
-  }, [searchParams, loading]);
+  }, [searchParams, loading, setSearchParams]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -136,7 +144,7 @@ export default function Dashboard() {
 
   const filteredMatches = visibleMatches.filter(
     (m) => now - new Date(m.matchedAt).getTime() <= sixDaysInMs
-  );
+  ).slice(0, 5);
   const visibleSavedForLater = savedForLater.filter(
     (m) => !pendingMatches.some((p) => p.id === m.id) && !acceptedMatchIds.includes(m.id)
   );
