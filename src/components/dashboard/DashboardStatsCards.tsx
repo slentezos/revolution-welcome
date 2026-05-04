@@ -44,7 +44,7 @@ export default function DashboardStatsCards({
       count: pendingCount,
       icon: Send,
       colorClasses: "bg-emerald-100 text-emerald-700",
-      badgeClasses: "bg-emerald-600 text-white",
+      badgeClasses: "bg-primary text-primary-foreground text-xl",
     },
     {
       id: "section-finaliser",
