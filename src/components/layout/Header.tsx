@@ -213,7 +213,7 @@ export default function Header() {
                       <MessageCircle className="h-4 w-4 text-amber-600" /> Nous contacter
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={() => navigate("/profil?gift=true")}
+                      onClick={() => navigate("/parrainage")}
                       className="py-3 px-4 text-[14px] text-slate-700 cursor-pointer rounded-lg hover:bg-amber-50 transition-colors gap-3"
                     >
                       <Gift className="h-4 w-4 text-amber-600" /> Offrir un abonnement
