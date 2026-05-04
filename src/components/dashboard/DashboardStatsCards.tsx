@@ -36,7 +36,7 @@ export default function DashboardStatsCards({
       count: newProposalsCount,
       icon: Sparkles,
       colorClasses: "bg-primary/10 text-primary",
-      badgeClasses: "bg-primary text-primary-foreground",
+      badgeClasses: "bg-primary text-primary-foreground text-xl",
     },
     {
       id: "section-attente",
