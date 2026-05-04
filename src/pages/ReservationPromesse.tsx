@@ -5,7 +5,7 @@ import Layout from "@/components/layout/Layout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { cn } from "@/lib/utils";
 
-// Assets (Assurez-vous que les chemins sont corrects)
+// Assets
 import conciergeHero from "@/assets/concierge-hero.jpg";
 import promiseStep1 from "@/assets/promise-step1.jpg";
 import promiseStep2 from "@/assets/promise-step2.jpg";
@@ -110,7 +110,7 @@ export default function ReservationPromesse() {
   const scrollToStep = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      const yOffset = -140;
+      const yOffset = -180; // Ajusté pour la nouvelle hauteur de la barre
       const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
@@ -177,40 +177,46 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* 2. STICKY NAV TABS */}
-      <div className="sticky top-[64px] z-40 w-full bg-white/95 backdrop-blur-md border-b border-border/50 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4">
-          <div className="flex justify-between items-center h-20 md:h-24">
+      {/* 2. STICKY NAV TABS - CORRIGÉ POUR L'ÉLÉGANCE */}
+      <div className="sticky top-[64px] z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/50 shadow-sm py-4 md:py-6">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex justify-between items-start">
             {SERVICE_STEPS.map((step) => {
               const isActive = activeStep === step.number;
               return (
                 <button
                   key={step.number}
                   onClick={() => scrollToStep(step.id)}
-                  className="flex-1 flex flex-col items-center group transition-all duration-300"
+                  className="flex-1 flex flex-col items-center group transition-all duration-300 outline-none"
                 >
                   <span
                     className={cn(
-                      "font-heading text-2xl md:text-3xl transition-colors duration-300",
-                      isActive ? "text-[hsl(var(--gold))] font-bold scale-110" : "text-muted-foreground/60",
+                      "font-heading text-3xl md:text-5xl transition-colors duration-300",
+                      isActive
+                        ? "text-[hsl(var(--gold))]"
+                        : "text-muted-foreground/40 group-hover:text-muted-foreground/60",
                     )}
                   >
                     {step.number}
                   </span>
-                  <span
-                    className={cn(
-                      "text-[10px] md:text-xs uppercase tracking-widest font-bold mt-1 text-center px-2 hidden sm:block transition-colors duration-300",
-                      isActive ? "text-foreground" : "text-muted-foreground/40",
-                    )}
-                  >
-                    {step.title.split(" ") || step.title}
-                  </span>
+
+                  {/* Ligne sous le numéro (comme sur votre design) */}
                   <div
                     className={cn(
-                      "h-1 mt-2 rounded-full transition-all duration-500",
-                      isActive ? "w-12 md:w-20 bg-[hsl(var(--gold))]" : "w-0 bg-transparent",
+                      "h-[2px] mt-2 mb-3 transition-all duration-500",
+                      isActive ? "w-10 md:w-12 bg-[hsl(var(--gold))]" : "w-10 md:w-12 bg-transparent",
                     )}
                   />
+
+                  {/* Texte avec police Serif élégante */}
+                  <span
+                    className={cn(
+                      "font-heading text-sm md:text-xl text-center px-2 hidden sm:block transition-all duration-300 leading-tight max-w-[200px]",
+                      isActive ? "text-foreground" : "text-muted-foreground/50 group-hover:text-foreground/70",
+                    )}
+                  >
+                    {step.title}
+                  </span>
                 </button>
               );
             })}
@@ -229,7 +235,7 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* 4. DETAILED STEPS (Z-Pattern - Comme dans le design validé) */}
+      {/* 4. DETAILED STEPS (Z-Pattern) */}
       {SERVICE_STEPS.map((step, index) => {
         const Icon = step.icon;
         return (
@@ -239,7 +245,7 @@ export default function ReservationPromesse() {
             data-step-number={step.number}
             className="grid lg:grid-cols-2 border-t border-border/50 scroll-mt-24"
           >
-            {/* Image (Prend toute la moitié de l'écran) */}
+            {/* Image */}
             <div
               className={cn(
                 "relative min-h-[45vh] lg:h-[750px] overflow-hidden",
@@ -260,7 +266,7 @@ export default function ReservationPromesse() {
               </div>
             </div>
 
-            {/* Texte et Explications (L'autre moitié) */}
+            {/* Texte et Explications */}
             <div
               className={cn(
                 "flex flex-col justify-center p-8 md:p-16 lg:p-20 bg-background",
@@ -281,27 +287,27 @@ export default function ReservationPromesse() {
                 <h2 className="font-heading text-4xl text-foreground mb-2">{step.title}</h2>
                 <p className="text-[hsl(var(--gold))] font-medium mb-12 text-xl">{step.subtitle}</p>
 
-                {/* Blocs d'explications (Design encadré clair) */}
+                {/* Blocs d'explications */}
                 <div className="space-y-6">
                   <div className="border border-amber-100/60 p-6 rounded-sm bg-amber-50/10">
                     <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-sm">
                       VOTRE SEULE PRÉPARATION :
                     </span>
-                    <p className="text-muted-foreground leading-relaxed">{step.preparation}</p>
+                    <p className="text-muted-foreground leading-relaxed text-lg">{step.preparation}</p>
                   </div>
 
                   <div className="border border-amber-100/60 p-6 rounded-sm bg-amber-50/10">
                     <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-sm">
                       NOTRE ÉCHANGE :
                     </span>
-                    <p className="text-muted-foreground leading-relaxed">{step.action}</p>
+                    <p className="text-muted-foreground leading-relaxed text-lg">{step.action}</p>
                   </div>
 
                   <div className="bg-secondary/30 p-6 rounded-sm border border-secondary">
                     <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-sm">
                       VOTRE PROFIL :
                     </span>
-                    <p className="text-foreground font-medium leading-relaxed">{step.result}</p>
+                    <p className="text-foreground font-medium leading-relaxed text-lg">{step.result}</p>
                   </div>
                 </div>
               </div>
