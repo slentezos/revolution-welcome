@@ -22,17 +22,6 @@ import promiseStep4 from "@/assets/promise-step4.jpg";
 const SERVICE_STEPS = [
   {
     number: "01",
-    icon: ClipboardList,
-    title: "Mon profil & Son profil",
-    subtitle: "La fondation de vos rencontres",
-    preparation: "Installez-vous confortablement. Aucune préparation écrite n'est requise.",
-    action:
-      "Nous échangeons naturellement en vidéo autour de nos 50 questions pour comprendre votre parcours et la personne que vous recherchez.",
-    result: "Votre conseiller rédige l'intégralité de votre description mot pour mot, avec justesse et élégance.",
-    image: promiseStep1,
-  },
-  {
-    number: "02",
     icon: Brain,
     title: "Quiz des 3 préférences",
     subtitle: "Vos goûts, vos passions",
@@ -43,18 +32,7 @@ const SERVICE_STEPS = [
     image: promiseStep2,
   },
   {
-    number: "03",
-    icon: Sparkles,
-    title: "Ma personnalité",
-    subtitle: "Mieux vous comprendre",
-    preparation: "Soyez simplement vous-même, honnête et spontané.",
-    action: "Nous remplissons ensemble votre test de personnalité afin d'analyser votre dynamique relationnelle.",
-    result:
-      "Un portrait psychologique subtil qui permettra à notre algorithme de vous présenter les meilleures compatibilités.",
-    image: promiseStep3,
-  },
-  {
-    number: "04",
+    number: "02",
     icon: Camera,
     title: "Vos photos & vidéo",
     subtitle: "Votre image authentique",
@@ -63,6 +41,28 @@ const SERVICE_STEPS = [
       "Nous sélectionnons ensemble les meilleurs clichés et vous guidons pour enregistrer une courte présentation vidéo naturelle.",
     result: "Un profil visuel lumineux, rassurant et très attractif pour vos futurs contacts.",
     image: promiseStep4,
+  },
+  {
+    number: "03",
+    icon: ClipboardList,
+    title: "Mon profil & Son profil",
+    subtitle: "La fondation de vos rencontres",
+    preparation: "Installez-vous confortablement. Aucune préparation écrite n'est requise.",
+    action:
+      "Nous échangeons naturellement en vidéo autour de nos 50 questions pour comprendre votre parcours et la personne que vous recherchez.",
+    result: "Votre conseiller rédige l'intégralité de votre description mot pour mot, avec justesse et élégance.",
+    image: promiseStep1,
+  },
+  {
+    number: "04",
+    icon: Sparkles,
+    title: "Ma personnalité",
+    subtitle: "Mieux vous comprendre",
+    preparation: "Soyez simplement vous-même, honnête et spontané.",
+    action: "Nous remplissons ensemble votre test de personnalité afin d'analyser votre dynamique relationnelle.",
+    result:
+      "Un portrait psychologique subtil qui permettra à notre algorithme de vous présenter les meilleures compatibilités.",
+    image: promiseStep3,
   },
 ];
 
@@ -425,7 +425,8 @@ export default function ReservationPromesse() {
             data-reveal-delay="350"
             className="mb-14 max-w-2xl mx-auto text-xl leading-relaxed text-primary-foreground"
           >
-            Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre portrait sera prêt à séduire les membres qui vous correspondent.
+            Nous nous occupons de tout. Vous n'avez qu'à répondre à nos questions en vidéo, et votre portrait sera prêt
+            à séduire les membres qui vous correspondent.
           </p>
           <div data-reveal data-reveal-delay="450" className="flex flex-col items-center gap-6">
             <button
