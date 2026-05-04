@@ -138,7 +138,7 @@ export default function Messages() {
   const [message, setMessage] = useState("");
   const [showConseils, setShowConseils] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [profileToView, setProfileToView] = useState<(typeof initialConversations) | null>(null);
+  const [profileToView, setProfileToView] = useState<(typeof initialConversations)[number] | null>(null);
   const [showNewConvPopup, setShowNewConvPopup] = useState(false);
   const [dismissedNewConv, setDismissedNewConv] = useState<Set<number>>(new Set());
   const [reportModalOpen, setReportModalOpen] = useState(false);
