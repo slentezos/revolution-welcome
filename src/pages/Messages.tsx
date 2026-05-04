@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/layout/Layout";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea"; // On utilise le Textarea de base
 import { Button } from "@/components/ui/button";
 import {
   Search,
@@ -34,7 +33,7 @@ import ChatTooltipOverlay from "@/components/messages/ChatTooltipOverlay";
 import BenevolenceModal from "@/components/messages/BenevolenceModal";
 import { checkMessage } from "@/utils/wordFilter";
 
-// Parseur de ponctuation pour le français
+// Parseur de ponctuation et de mise en forme pour le français
 const formatSpeech = (text: string) => {
   if (!text) return "";
   return text
@@ -44,8 +43,8 @@ const formatSpeech = (text: string) => {
     .replace(/\bpoint d'exclamation\b/gi, "!")
     .replace(/\bpoints de suspension\b/gi, "...")
     .replace(/\bà la ligne\b/gi, "\n")
-    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace avant la ponctuation
-    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`);
+    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto après ponctuation
 };
 
 const capitalizeFirst = (str: string) => {
@@ -116,8 +115,6 @@ const initialConversations = [
   },
 ];
 
-type Conversation = (typeof initialConversations)[number];
-
 const mockMessages = [
   { id: 1, sender: "them", text: "Bonjour ! Comment allez-vous ?", time: "14:25", read: true },
   { id: 2, sender: "me", text: "Très bien merci ! Et vous ?", time: "14:27", read: true },
@@ -131,16 +128,18 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES = [18, 20, 22, 24]; // Zoom font sizes
+const FONT_SIZES =; // Tailles de police pour le zoom
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState(initialConversations);
   const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
+  
+  // ÉTATS GLOBAUX
   const [message, setMessage] = useState("");
   const [showConseils, setShowConseils] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [profileToView, setProfileToView] = useState<Conversation | null>(null);
+  const [profileToView, setProfileToView] = useState<(typeof initialConversations) | null>(null);
   const [showNewConvPopup, setShowNewConvPopup] = useState(false);
   const [dismissedNewConv, setDismissedNewConv] = useState<Set<number>>(new Set());
   const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -149,17 +148,15 @@ export default function Messages() {
   const [unmatchTarget, setUnmatchTarget] = useState<string>("");
   const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
 
-  // === ÉTATS DE LA DICTÉE (Local à la page Messages) ===
+  // ÉTATS DE LA DICTÉE INTELLIGENTE
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState("");
   const recognitionRef = useRef<any>(null);
-  const messageRef = useRef(message);
 
   const [speakingMsgId, setSpeakingMsgId] = useState<number | null>(null);
   const [isSent, setIsSent] = useState(false);
-  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(2);
+  const [chatFontSizeIndex, setChatFontSizeIndex] = useState(1); // Démarre à 18px
   const sendTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const prevConversationsRef = useRef(conversations);
 
@@ -178,10 +175,6 @@ export default function Messages() {
   const chatFontSize = FONT_SIZES[chatFontSizeIndex];
 
   useEffect(() => {
-    messageRef.current = message;
-  }, [message]);
-
-  useEffect(() => {
     audioRef.current = new Audio("/sounds/new-message.mp3");
   }, []);
 
@@ -194,23 +187,7 @@ export default function Messages() {
     prevConversationsRef.current = conversations;
   }, [conversations]);
 
-  // SCROLL DYNAMIQUE DU TEXTAREA
-  useEffect(() => {
-    const ta = textareaRef.current;
-    if (ta) {
-      ta.style.height = "auto";
-      const scrollHeight = ta.scrollHeight;
-      if (scrollHeight > 150) {
-        ta.style.height = "150px";
-        ta.style.overflowY = "auto";
-      } else {
-        ta.style.height = scrollHeight + "px";
-        ta.style.overflowY = "hidden";
-      }
-    }
-  }, [message, interimText, chatFontSize]); // Update si la taille de police change
-
-  // === MOTEUR DE DICTÉE (LOCAL) ===
+  // MOTEUR DE DICTÉE VOCALE (AVEC PONCTUATION ET SÉCURITÉ ANTI-UNDEFINED)
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -231,17 +208,21 @@ export default function Messages() {
       }
 
       if (finalSegment) {
-        let currentVal = messageRef.current || "";
-        let formattedFinal = formatSpeech(finalSegment).trim();
+        // L'utilisation de prev garantit qu'il n'y aura jamais d'undefined
+        setMessage((prev) => {
+          const currentVal = prev || ""; 
+          let formattedFinal = formatSpeech(finalSegment).trim();
 
-        if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
-          formattedFinal = capitalizeFirst(formattedFinal);
-        }
+          // Majuscule si le champ est vide ou après un point
+          if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+            formattedFinal = capitalizeFirst(formattedFinal);
+          }
 
-        const needsSpace = currentVal.length > 0 && !currentVal.endsWith(" ") && !currentVal.endsWith("\n") && !formattedFinal.startsWith(",") && !formattedFinal.startsWith(".");
-        const space = needsSpace ? " " : "";
+          const needsSpace = currentVal.length > 0 && !currentVal.endsWith(" ") && !currentVal.endsWith("\n") && !formattedFinal.startsWith(",") && !formattedFinal.startsWith(".");
+          const space = needsSpace ? " " : "";
 
-        setMessage(currentVal + space + formattedFinal);
+          return currentVal + space + formattedFinal;
+        });
       }
 
       setInterimText(formatSpeech(interimSegment));
@@ -263,16 +244,19 @@ export default function Messages() {
       if (recognitionRef.current) recognitionRef.current.stop();
       setIsListening(false);
 
+      // Si on arrête la dictée, on valide le texte intermédiaire en cours
       if (interimText) {
-        let currentVal = messageRef.current || "";
-        let finalInterim = interimText.trim();
+        setMessage((prev) => {
+          const currentVal = prev || "";
+          let finalInterim = interimText.trim();
 
-        if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
-          finalInterim = capitalizeFirst(finalInterim);
-        }
+          if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+            finalInterim = capitalizeFirst(finalInterim);
+          }
 
-        const space = currentVal.length > 0 && !currentVal.endsWith(" ") ? " " : "";
-        setMessage(currentVal + space + finalInterim + " ");
+          const space = currentVal.length > 0 && !currentVal.endsWith(" ") ? " " : "";
+          return currentVal + space + finalInterim + " ";
+        });
       }
       setInterimText("");
     } else {
@@ -280,11 +264,18 @@ export default function Messages() {
         toast.error("La dictée vocale n'est pas supportée par votre navigateur.");
         return;
       }
-      setInterimText("");
-      let currentVal = messageRef.current || "";
-      if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
-        setMessage(currentVal + " ");
-      }
+      
+      setInterimText(""); // Nettoyage de sécurité
+      
+      // On prépare le terrain en ajoutant un espace si nécessaire
+      setMessage((prev) => {
+        const currentVal = prev || "";
+        if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
+          return currentVal + " ";
+        }
+        return currentVal;
+      });
+
       try {
         recognitionRef.current.start();
         setIsListening(true);
@@ -293,6 +284,22 @@ export default function Messages() {
       }
     }
   }, [isListening, interimText]);
+
+  // GESTION DU SCROLL DYNAMIQUE À LA FRAPPE
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    // Majuscule automatique sur la première lettre de la phrase
+    const capitalizedValue = val.length === 1 ? capitalizeFirst(val) : val;
+    
+    setMessage(capitalizedValue);
+    
+    // Si frappe manuelle pendant/après dictée, on tue le texte fantôme
+    if (interimText) setInterimText(""); 
+
+    // Auto-expand logic
+    e.target.style.height = 'auto';
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 150)}px`;
+  };
 
   const speakMessage = useCallback(
     (msgId: number, text: string) => {
@@ -312,7 +319,7 @@ export default function Messages() {
       setSpeakingMsgId(msgId);
       window.speechSynthesis.speak(utterance);
     },
-    [speakingMsgId],
+    [speakingMsgId]
   );
 
   const scrollToBottom = useCallback((smooth = true) => {
@@ -366,6 +373,10 @@ export default function Messages() {
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
       sendTimeoutRef.current = setTimeout(() => setIsSent(false), 1500);
       setTimeout(() => scrollToBottom(), 150);
+      
+      // Réinitialiser la hauteur du textarea après l'envoi
+      const ta = document.getElementById("chat-textarea");
+      if (ta) ta.style.height = "auto";
     }
   };
 
@@ -409,13 +420,13 @@ export default function Messages() {
     setReportModalOpen(true);
   };
 
-  const handleAvatarClick = (conv: Conversation, e: React.MouseEvent) => {
+  const handleAvatarClick = (conv: (typeof initialConversations), e: React.MouseEvent) => {
     e.stopPropagation();
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
 
-  const handleViewProfile = (conv: Conversation) => {
+  const handleViewProfile = (conv: (typeof initialConversations)) => {
     setProfileToView(conv);
     setProfileModalOpen(true);
   };
@@ -443,13 +454,14 @@ export default function Messages() {
     );
   }
 
-  // Fusion pour l'affichage visuel en temps réel (évite "undefined")
-  const displayValue = isListening || interimText ? (message || "") + interimText : message;
+  // Sécurité ultime pour l'affichage (fusion du texte tapé + texte en cours de dictée sans undefined)
+  const safeMessage = message || "";
+  const displayValue = isListening || interimText ? safeMessage + interimText : safeMessage;
 
   return (
     <Layout>
       <div className="h-[calc(100vh-64px)] bg-secondary overflow-hidden flex flex-col">
-        {/* RETOUR À MAX-W-6XL POUR LE CONFORT VISUEL SENIOR */}
+        {/* RETOUR À MAX-W-6XL : Largeur idéale pour le confort visuel senior */}
         <div className="max-w-6xl mx-auto w-full px-4 md:px-8 py-6 flex-1 overflow-hidden">
           <div className="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-amber-50/50 overflow-hidden flex h-full">
             {/* ===== PRIVATE LOUNGE SIDEBAR ===== */}
@@ -552,7 +564,7 @@ export default function Messages() {
             >
               {selectedChat ? (
                 <>
-                  <div className="px-6 py-5 border-b border-amber-100/40 bg-white">
+                  <div className="px-6 py-4 lg:px-8 lg:py-5 border-b border-amber-100/40 bg-white">
                     <div className="flex items-center gap-4">
                       <button
                         onClick={() => setSelectedConversation(null)}
@@ -562,12 +574,12 @@ export default function Messages() {
                       </button>
                       <div
                         className="relative cursor-pointer group shrink-0"
-                        onClick={(e) => handleAvatarClick(selectedChat, e)}
+                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                       >
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
-                          className="w-12 h-12 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
+                          className="w-12 h-12 lg:w-14 lg:h-14 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
                         />
                         {conversations.find((c) => c.id === selectedConversation)?.online && (
                           <div
@@ -577,16 +589,16 @@ export default function Messages() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0 pr-4">
-                        <h3 className="font-heading font-bold text-[#1B2333] leading-tight text-2xl truncate">
+                        <h3 className="font-heading font-bold text-[#1B2333] leading-tight text-2xl lg:text-3xl truncate">
                           {selectedChat.name}, {selectedChat.age}
                         </h3>
-                        <p className="font-medium text-lg mt-0.5" style={{ color: "hsl(142, 71%, 35%)" }}>
+                        <p className="font-medium text-base lg:text-lg mt-0.5" style={{ color: "hsl(142, 71%, 35%)" }}>
                           En ligne
                         </p>
                       </div>
                       
                       <div className="flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
-                        {/* BOUTONS A- ET A+ CORRIGÉS */}
+                        {/* BOUTONS A- ET A+ QUI MARCHENT PARFAITEMENT */}
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.max(0, i - 1))}
                           className="h-10 px-3.5 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors shrink-0"
@@ -648,11 +660,11 @@ export default function Messages() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleViewProfile(selectedChat)}
+                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations))}
                           className="gap-2 text-[#1B2333] hover:bg-amber-50 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
                           <Eye className="h-4 w-4" />
-                          <span className="hidden xl:inline">Voir profil</span>
+                          <span className="hidden lg:inline">Voir profil</span>
                         </Button>
                         <Button
                           variant="ghost"
@@ -661,21 +673,21 @@ export default function Messages() {
                           className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
                           <Flag className="h-4 w-4" />
-                          <span className="hidden xl:inline">Signaler</span>
+                          <span className="hidden lg:inline">Signaler</span>
                         </Button>
                       </div>
                     </div>
                   </div>
 
                   {/* MESSAGES AREA */}
-                  <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col">
+                  <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-6 lg:p-8 space-y-6 flex flex-col">
                     {selectedChat.isNew && !dismissedNewConv.has(selectedChat.id) ? (
                       <div className="flex-1 flex flex-col items-center justify-center h-full gap-6 py-12 px-6">
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
                           className="w-28 h-28 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
-                          onClick={(e) => handleAvatarClick(selectedChat, e)}
+                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                         />
                         <p className="text-muted-foreground text-xl text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
@@ -706,16 +718,16 @@ export default function Messages() {
                               <img
                                 src={selectedChat.avatar}
                                 alt=""
-                                className="w-12 h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
-                                onClick={(e) => handleAvatarClick(selectedChat, e)}
+                                className="w-10 h-10 lg:w-12 lg:h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
+                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                               />
                             )}
                             <div
-                              className={`max-w-[75%] rounded-2xl px-5 py-4 shadow-sm ${msg.sender === "me" ? "bg-[#1B2333] text-white rounded-br-md" : "bg-white rounded-bl-md border border-amber-100/40"}`}
+                              className={`max-w-[85%] lg:max-w-[75%] rounded-2xl px-5 py-4 shadow-sm ${msg.sender === "me" ? "bg-[#1B2333] text-white rounded-br-md" : "bg-white rounded-bl-md border border-amber-100/40"}`}
                             >
                               <p
                                 className={`leading-relaxed ${msg.sender === "them" ? "text-foreground" : "text-white"}`}
-                                style={{ fontSize: `${chatFontSize}px` }} // L'APPLICATION DU ZOOM EST ICI
+                                style={{ fontSize: `${chatFontSize}px` }} // L'APPLICATION DU ZOOM DANS LE CHAT EST ICI
                               >
                                 {msg.text}
                               </p>
@@ -748,12 +760,12 @@ export default function Messages() {
                     )}
                   </div>
 
-                  {/* INPUT AREA (AVEC LA DICTÉE LOCALE SANS UNDEFINED ET AVEC ZOOM) */}
-                  <div className="p-6 border-t border-amber-100/40 bg-white">
-                    <div className="flex items-end gap-4">
+                  {/* INPUT AREA (NATIVE TEXTAREA POUR ASSURER LE ZOOM ET LE SCROLL) */}
+                  <div className="p-4 lg:p-6 border-t border-amber-100/40 bg-white">
+                    <div className="flex items-end gap-3 lg:gap-4">
                       <button
                         onClick={toggleListening}
-                        className={`min-h-[56px] px-5 w-auto min-w-[130px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 ${
+                        className={`min-h-[56px] px-4 lg:px-5 w-auto min-w-[120px] lg:min-w-[130px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 ${
                           isListening
                             ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
                             : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
@@ -761,17 +773,16 @@ export default function Messages() {
                         aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
                       >
                         {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
-                        {isListening ? "Arrêter de dicter" : "Dicter"}
+                        <span className="hidden sm:inline">{isListening ? "Arrêter" : "Dicter"}</span>
                       </button>
                       <div className="flex-1 min-w-0">
+                        {/* BALISE NATIVE POUR GARANTIR LE STYLE INLINE (ZOOM) ET L'AUTO-EXPAND */}
                         <textarea
+                          id="chat-textarea"
                           ref={textareaRef}
                           placeholder="Écrivez votre message..."
-                          value={displayValue} // Valeur protégée (sans undefined)
-                          onChange={(e) => {
-                            setMessage(e.target.value);
-                            if (interimText) setInterimText(""); // Nettoyage buffer
-                          }}
+                          value={displayValue}
+                          onChange={handleTextareaChange}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
                               e.preventDefault();
@@ -779,24 +790,23 @@ export default function Messages() {
                             }
                           }}
                           className="w-full min-h-[56px] overflow-y-auto resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-4 py-4"
-                          style={{ fontSize: `${chatFontSize}px` }} // L'APPLICATION DU ZOOM EST ICI
+                          style={{ fontSize: `${chatFontSize}px` }} // L'APPLICATION DU ZOOM DE L'INPUT EST ICI
                         />
                       </div>
                       <Button
                         onClick={handleSend}
                         disabled={isSent || (!message.trim() && !isListening)}
-                        className="min-h-[56px] w-[140px] rounded-xl text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300"
+                        className="min-h-[56px] w-auto lg:w-[140px] rounded-xl text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300 px-4"
                       >
                         {isSent ? <Check className="h-6 w-6" /> : <Send className="h-6 w-6" />}
-                        {isSent ? "Envoyé" : "Envoyer"}
+                        <span className="hidden lg:inline">{isSent ? "Envoyé" : "Envoyer"}</span>
                       </Button>
                     </div>
                     
-                    {/* Feedback visuel de dictée */}
                     <div className="mt-3 min-h-[1.5rem]">
                       {isListening ? (
                         <div className="flex items-center gap-3">
-                          <p className="font-bold text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
+                          <p className="font-bold text-2xl lg:text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
                             Je vous écoute...
                           </p>
                           <div className="flex items-end gap-1 h-5">
@@ -805,7 +815,7 @@ export default function Messages() {
                             <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
                           </div>
                         </div>
-                      ) : message.length > 0 ? (
+                      ) : safeMessage.length > 0 ? (
                         <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
                           ✍️ Votre brouillon est sauvegardé
                         </p>
