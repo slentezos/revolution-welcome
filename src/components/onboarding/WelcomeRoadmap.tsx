@@ -460,7 +460,7 @@ export default function WelcomeRoadmap({
             })}
           </div>
 
-          <button onClick={() => scrollTo(stepRefs)} className="inline-flex flex-col items-center gap-3 group">
+          <button onClick={() => scrollTo(stepRefs[0])} className="inline-flex flex-col items-center gap-3 group">
             <span className="text-gold font-medium tracking-wide group-hover:text-foreground transition-colors duration-500 text-xl sm:text-2xl">
               Découvrir chaque étape en détail
             </span>
