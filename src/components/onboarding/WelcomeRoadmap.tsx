@@ -43,7 +43,7 @@ function PricingModal({
         if (!v) setView("story");
       }}
     >
-      <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
+      <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-">
         {view === "story" ? (
           <div className="p-10 sm:p-20 text-center space-y-8 flex flex-col items-center justify-center min-h-[500px] animate-in fade-in duration-500">
             <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-xl">
@@ -252,18 +252,16 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
   );
 }
 
-/* ─── STEP CARD (Redesigned with built-in buttons) ─── */
+/* ─── STEP CARD ─── */
 
 function StepCard({
   step,
   isLast,
-  onNextClick,
   onStartClick,
   viewOnly,
 }: {
-  step: (typeof STEPS)[0];
+  step: typeof STEPS;
   isLast: boolean;
-  onNextClick?: () => void;
   onStartClick?: () => void;
   viewOnly?: boolean;
 }) {
@@ -307,19 +305,10 @@ function StepCard({
           ))}
         </div>
 
-        {/* BOUTONS INTÉGRÉS DIRECTEMENT DANS LA CARTE (Remplace le bug des boutons flottants) */}
+        {/* INDICATEUR D'ÉTAPE SUIVANTE OU BOUTON FINAL */}
         {!isLast ? (
-          <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-6">
-            <button
-              onClick={onNextClick}
-              className="flex items-center justify-center gap-3 bg-white border border-[#E5E0D8] px-8 py-4 rounded-full shadow-sm hover:shadow-md hover:border-[hsl(var(--gold))] transition-all group w-full sm:w-auto"
-            >
-              <span className="font-heading text-xl text-[#1B2333] font-semibold">Étape suivante</span>
-              <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:translate-y-1 transition-transform" />
-            </button>
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <span className="text-xl opacity-80 italic">{step.nextLabel}</span>
-            </div>
+          <div className="mt-12 flex items-center text-muted-foreground">
+            <span className="text-xl opacity-80 italic">{step.nextLabel}</span>
           </div>
         ) : (
           !viewOnly &&
@@ -355,7 +344,7 @@ export default function WelcomeRoadmap({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(showPricingInitially);
   const [activeStep, setActiveStep] = useState(0);
-  const [revealedSteps, setRevealedSteps] = useState<Set<number>>(new Set([0]));
+  const [revealedSteps, setRevealedSteps] = useState<Set<number>>(new Set());
 
   const heroRef = useRef<HTMLDivElement>(null);
   const stepRefs = [
@@ -371,7 +360,6 @@ export default function WelcomeRoadmap({
   };
 
   useEffect(() => {
-    // 1. Observer pour l'animation d'apparition (Déclenche tôt pour un bel effet)
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -387,7 +375,6 @@ export default function WelcomeRoadmap({
       { rootMargin: "0px 0px -10% 0px", threshold: 0 },
     );
 
-    // 2. Observer strict pour la barre de progression (L'élément doit être au milieu de l'écran)
     const spyObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -473,7 +460,7 @@ export default function WelcomeRoadmap({
             })}
           </div>
 
-          <button onClick={() => scrollTo(stepRefs[0])} className="inline-flex flex-col items-center gap-3 group">
+          <button onClick={() => scrollTo(stepRefs)} className="inline-flex flex-col items-center gap-3 group">
             <span className="text-gold font-medium tracking-wide group-hover:text-foreground transition-colors duration-500 text-xl sm:text-2xl">
               Découvrir chaque étape en détail
             </span>
@@ -500,13 +487,28 @@ export default function WelcomeRoadmap({
             <StepCard
               step={step}
               isLast={i === STEPS.length - 1}
-              onNextClick={() => scrollTo(stepRefs[i + 1])}
               onStartClick={() => setIsModalOpen(true)}
               viewOnly={viewOnly}
             />
           </div>
         ))}
       </div>
+
+      {/* ─── FLOATING NEXT BUTTON (UI Senior / CAC40) ─── */}
+      {activeStep > 0 && activeStep < STEPS.length && (
+        <div className="fixed top-1/2 right-0 -translate-y-1/2 z-50 animate-in slide-in-from-right-8 duration-500">
+          <button
+            onClick={() => scrollTo(stepRefs[activeStep])}
+            className="flex flex-col md:flex-row items-center justify-center gap-3 bg-[#1B2333] border-y-2 border-l-2 border-[hsl(var(--gold))] pl-5 md:pl-6 pr-3 md:pr-4 py-4 md:py-5 rounded-l-2xl shadow-[0_4px_24px_rgba(0,0,0,0.2)] hover:bg-[#1B2333]/90 transition-all hover:-translate-x-2 group cursor-pointer"
+            aria-label="Passer à l'étape suivante"
+          >
+            <span className="font-heading text-lg md:text-xl text-white font-semibold hidden md:inline">
+              Étape suivante
+            </span>
+            <ArrowDown className="h-6 w-6 md:h-7 md:w-7 text-[hsl(var(--gold))] group-hover:translate-y-1 transition-transform" />
+          </button>
+        </div>
+      )}
 
       {!viewOnly && (
         <PricingModal
