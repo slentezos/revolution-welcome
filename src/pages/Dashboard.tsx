@@ -241,7 +241,7 @@ export default function Dashboard() {
           {/* ── Section: En Attente ── */}
           {pendingMatches.length > 0 && (
             <div id="section-attente" data-reveal data-reveal-delay="100" className="mt-12 scroll-mt-4">
-              <div className="flex items-center gap-5 mb-8">
+              <div className="flex items-center gap-5 mb-8 py-[20px]">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
                   <Send className="h-7 w-7 text-emerald-600" />
                 </div>
