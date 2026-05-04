@@ -8,14 +8,14 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, onChange, value, showDictation = true, ...props }, ref) => {
+  ({ className, onChange, value, showDictation = false, ...props }, ref) => {
     const [isListening, setIsListening] = React.useState(false);
     const [interimText, setInterimText] = React.useState("");
     const recognitionRef = React.useRef<any>(null);
     const internalRef = React.useRef<HTMLTextAreaElement | null>(null);
     const { toast } = useToast();
 
-    // Fusion de la référence transmise par le parent et de notre référence interne
+    // Fusion des références (Celle du composant parent + la nôtre)
     const setRefs = React.useCallback(
       (node: HTMLTextAreaElement) => {
         internalRef.current = node;
@@ -46,11 +46,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           }
 
           if (finalSegment && internalRef.current) {
-            // Ajout du texte final à la valeur actuelle
-            const currentVal = internalRef.current.value;
-            const newVal = currentVal + (currentVal.endsWith(" ") || currentVal === "" ? "" : " ") + finalSegment;
+            // Sécurité anti-undefined
+            const currentVal = internalRef.current.value || "";
+            const space = currentVal.endsWith(" ") || currentVal === "" ? "" : " ";
+            const newVal = currentVal + space + finalSegment;
 
-            // Injection d'un événement natif pour que le "onChange" du composant parent s'active
+            // Déclenchement naturel de l'événement onChange pour React
             const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
               window.HTMLTextAreaElement.prototype,
               "value",
@@ -79,7 +80,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         if (recognitionRef.current) recognitionRef.current.stop();
         setIsListening(false);
         if (interimText && internalRef.current) {
-          const currentVal = internalRef.current.value;
+          const currentVal = internalRef.current.value || "";
           const newVal = currentVal + interimText + " ";
           const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
             window.HTMLTextAreaElement.prototype,
@@ -93,7 +94,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       } else {
         if (recognitionRef.current) {
           if (internalRef.current) {
-            const currentVal = internalRef.current.value;
+            const currentVal = internalRef.current.value || "";
             if (currentVal !== "" && !currentVal.endsWith(" ")) {
               const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
                 window.HTMLTextAreaElement.prototype,
@@ -117,7 +118,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      // Logique originale de majuscule automatique
       if (e.target.value.length > 0) {
         const textarea = e.target;
         const start = textarea.selectionStart;
@@ -140,7 +140,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       }
     };
 
-    // Si on n'a pas besoin de la dictée pour un composant précis, on renvoie juste le textarea normal
+    // Si on ne veut pas de dictée, on retourne le champ standard sans surcharger le DOM
     if (!showDictation) {
       return (
         <textarea
@@ -157,8 +157,9 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       );
     }
 
-    // Affichage en cours de dictée
-    const displayValue = value !== undefined ? String(value) + interimText : undefined;
+    // Protection anti-undefined pendant la frappe / dictée
+    const safeValue = value === null || value === undefined ? "" : String(value);
+    const displayValue = isListening || interimText ? safeValue + interimText : value;
 
     return (
       <div className="flex flex-col w-full">
@@ -193,7 +194,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           </div>
         </div>
 
-        {/* FEEDBACK ÉGALISEUR SOUS LE CHAMP DE TEXTE */}
+        {/* ÉGALISEUR DORÉ */}
         <div className="mt-2 min-h-[1.5rem]">
           {isListening ? (
             <div className="flex items-center gap-3">
@@ -215,7 +216,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                 />
               </div>
             </div>
-          ) : value && String(value).length > 0 ? (
+          ) : safeValue.length > 0 ? (
             <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
               ✍️ Votre brouillon est sauvegardé
             </p>
