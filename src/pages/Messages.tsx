@@ -202,8 +202,10 @@ export default function Messages() {
       let interimSegment = "";
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i].transcript;
-        if (event.results[i].isFinal) finalSegment += transcript + " ";
+        const result = event.results[i];
+        const transcript = result?.[0]?.transcript || "";
+        if (!transcript) continue;
+        if (result.isFinal) finalSegment += transcript + " ";
         else interimSegment += transcript;
       }
 
