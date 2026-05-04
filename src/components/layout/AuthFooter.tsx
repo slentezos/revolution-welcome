@@ -7,7 +7,7 @@ const authLinks = [
   { href: "/profil?tab=abonnement", label: "Mon abonnement", icon: CreditCard },
   { href: "/profil?tab=conditions", label: "Conditions générales", icon: FileText },
   { href: "/contact", label: "Nous contacter", icon: MessageCircle },
-  { href: "/profil?gift=true", label: "Offrir un abonnement", icon: Gift },
+  { href: "/parrainage", label: "Offrir un abonnement", icon: Gift },
 ];
 
 export default function AuthFooter() {
