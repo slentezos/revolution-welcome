@@ -119,7 +119,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
         <div className="flex items-center justify-between mt-5 pt-4 border-t border-border/30">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Calendar className="h-4 w-4 text-gold" />
-            <p className="text-lg">
+            <p className="text-xl">
               Matché le {matchDate.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}
             </p>
           </div>
