@@ -76,16 +76,14 @@ export default function ReservationPromesse() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState("01");
 
-  // Refs pour le scroll reveal
   const heroRef = useScrollReveal<HTMLElement>({ threshold: 0.08 });
   const overviewRef = useScrollReveal<HTMLElement>();
   const guaranteeRef = useScrollReveal<HTMLElement>();
 
-  // Logic pour détecter l'étape active au scroll
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: "-20% 0px -70% 0px",
+      rootMargin: "-25% 0px -65% 0px",
       threshold: 0,
     };
 
@@ -110,7 +108,7 @@ export default function ReservationPromesse() {
   const scrollToStep = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      const yOffset = -180; // Ajusté pour la nouvelle hauteur de la barre
+      const yOffset = -200;
       const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
@@ -177,9 +175,9 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* 2. STICKY NAV TABS - CORRIGÉ POUR L'ÉLÉGANCE */}
-      <div className="sticky top-[64px] z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/50 shadow-sm py-4 md:py-6">
-        <div className="max-w-6xl mx-auto px-4">
+      {/* 2. STICKY NAV TABS - TEXTE AUGMENTÉ À 2XL */}
+      <div className="sticky top-[64px] z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/50 shadow-sm py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-start">
             {SERVICE_STEPS.map((step) => {
               const isActive = activeStep === step.number;
@@ -187,32 +185,33 @@ export default function ReservationPromesse() {
                 <button
                   key={step.number}
                   onClick={() => scrollToStep(step.id)}
-                  className="flex-1 flex flex-col items-center group transition-all duration-300 outline-none"
+                  className="flex-1 flex flex-col items-center group transition-all duration-500 outline-none"
                 >
                   <span
                     className={cn(
-                      "font-heading text-3xl md:text-5xl transition-colors duration-300",
+                      "font-heading text-4xl md:text-6xl transition-all duration-500",
                       isActive
-                        ? "text-[hsl(var(--gold))]"
-                        : "text-muted-foreground/40 group-hover:text-muted-foreground/60",
+                        ? "text-[hsl(var(--gold))] scale-110"
+                        : "text-muted-foreground/30 group-hover:text-muted-foreground/50",
                     )}
                   >
                     {step.number}
                   </span>
 
-                  {/* Ligne sous le numéro (comme sur votre design) */}
                   <div
                     className={cn(
-                      "h-[2px] mt-2 mb-3 transition-all duration-500",
-                      isActive ? "w-10 md:w-12 bg-[hsl(var(--gold))]" : "w-10 md:w-12 bg-transparent",
+                      "h-[3px] mt-3 mb-4 transition-all duration-700",
+                      isActive ? "w-16 md:w-24 bg-[hsl(var(--gold))]" : "w-12 md:w-16 bg-transparent",
                     )}
                   />
 
-                  {/* Texte avec police Serif élégante */}
+                  {/* TEXTE AUGMENTÉ À 2XL ICI */}
                   <span
                     className={cn(
-                      "font-heading text-xl md:text-xl text-center px-2 hidden xl:block transition-all duration-300 leading-tight max-w-[200px]",
-                      isActive ? "text-foreground" : "text-muted-foreground/50 group-hover:text-foreground/70",
+                      "font-heading text-lg md:text-2xl text-center px-4 hidden xl:block transition-all duration-500 leading-tight max-w-[280px]",
+                      isActive
+                        ? "text-foreground font-medium"
+                        : "text-muted-foreground/40 group-hover:text-foreground/60",
                     )}
                   >
                     {step.title}
@@ -225,17 +224,17 @@ export default function ReservationPromesse() {
       </div>
 
       {/* 3. INTRO OVERVIEW */}
-      <section ref={overviewRef} className="bg-background text-center pt-20 pb-16">
+      <section ref={overviewRef} className="bg-background text-center pt-24 pb-20">
         <div className="container-main mx-auto px-6">
           <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl">
             Pendant notre appel vidéo
           </span>
-          <h2 className="font-heading text-4xl md:text-6xl text-foreground mb-8">Votre profil complet en 4 étapes</h2>
-          <div className="w-12 h-px bg-[hsl(var(--gold)/0.4)] mx-auto" />
+          <h2 className="font-heading text-5xl md:text-7xl text-foreground mb-8">Votre profil complet en 4 étapes</h2>
+          <div className="w-16 h-px bg-[hsl(var(--gold)/0.4)] mx-auto" />
         </div>
       </section>
 
-      {/* 4. DETAILED STEPS (Z-Pattern) */}
+      {/* 4. DETAILED STEPS (Z-Pattern) - TITRES H2 AUGMENTÉS À 5XL */}
       {SERVICE_STEPS.map((step, index) => {
         const Icon = step.icon;
         return (
@@ -245,69 +244,67 @@ export default function ReservationPromesse() {
             data-step-number={step.number}
             className="grid lg:grid-cols-2 border-t border-border/50 scroll-mt-24"
           >
-            {/* Image */}
+            {/* Image Block */}
             <div
               className={cn(
-                "relative min-h-[45vh] lg:h-[750px] overflow-hidden",
+                "relative min-h-[50vh] lg:h-[800px] overflow-hidden",
                 index % 2 === 0 ? "order-1" : "order-1 lg:order-2",
               )}
             >
               <img
                 src={step.image}
                 alt={step.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] hover:scale-110"
                 loading="lazy"
               />
-              {/* Le grand numéro transparent en filigrane */}
-              <div className="absolute top-10 left-10 md:top-16 md:left-16">
-                <span className="font-heading text-[8rem] md:text-[12rem] font-medium text-white/30 drop-shadow-md">
+              <div className="absolute top-10 left-10 md:top-20 md:left-20">
+                <span className="font-heading text-[10rem] md:text-[15rem] font-medium text-white/20 drop-shadow-2xl">
                   {step.number}
                 </span>
               </div>
             </div>
 
-            {/* Texte et Explications */}
+            {/* Text Block */}
             <div
               className={cn(
-                "flex flex-col justify-center p-8 md:p-16 lg:p-20 bg-background",
+                "flex flex-col justify-center p-10 md:p-20 lg:p-24 bg-background",
                 index % 2 === 0 ? "order-2" : "order-2 lg:order-1",
               )}
             >
               <div className="max-w-xl mx-auto w-full">
-                {/* En-tête de l'étape */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 bg-[#1B2333] flex items-center justify-center rounded-xl">
-                    <Icon className="h-4 w-4 text-white" />
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-10 h-10 bg-[#1B2333] flex items-center justify-center rounded-md shadow-xl">
+                    <Icon className="h-5 w-5 text-white" />
                   </div>
-                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-xl">
+                  <span className="font-bold tracking-[0.3em] uppercase text-muted-foreground/60 text-sm">
                     Étape {step.number}
                   </span>
                 </div>
 
-                <h2 className="font-heading text-4xl text-foreground mb-2">{step.title}</h2>
-                <p className="text-[hsl(var(--gold))] font-medium mb-12 text-xl">{step.subtitle}</p>
+                {/* TITRE AUGMENTÉ À 5XL ICI */}
+                <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-4 leading-[1.1]">{step.title}</h2>
+                <p className="text-[hsl(var(--gold))] font-medium mb-14 text-2xl italic">{step.subtitle}</p>
 
-                {/* Blocs d'explications */}
-                <div className="space-y-6">
-                  <div className="border border-amber-100/60 p-6 rounded-xl bg-amber-50/10">
-                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
+                <div className="space-y-8">
+                  <div className="border-l-4 border-amber-100 pl-8 py-2">
+                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
                       VOTRE SEULE PRÉPARATION :
                     </span>
-                    <p className="text-muted-foreground leading-relaxed text-lg">{step.preparation}</p>
+                    <p className="text-muted-foreground leading-relaxed text-xl">{step.preparation}</p>
                   </div>
 
-                  <div className="border border-amber-100/60 p-6 rounded-xl bg-amber-50/10">
-                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
-                      NOTRE ÉCHANGE :
+                  <div className="border-l-4 border-amber-100 pl-8 py-2">
+                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
+                      NOTRE ÉCHANGE EN DIRECT :
                     </span>
-                    <p className="text-muted-foreground leading-relaxed text-lg">{step.action}</p>
+                    <p className="text-muted-foreground leading-relaxed text-xl">{step.action}</p>
                   </div>
 
-                  <div className="bg-secondary/30 p-6 rounded-xl border border-secondary">
-                    <span className="font-bold tracking-widest uppercase text-[hsl(var(--gold))] mb-2 block text-xl">
-                      VOTRE PROFIL :
+                  <div className="bg-[#1B2333]/5 p-8 rounded-xl border border-border">
+                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
+                      VOTRE PROFIL FINAL :
                     </span>
-                    <p className="text-foreground font-medium leading-relaxed text-lg">{step.result}</p>
+                    <p className="text-foreground font-medium leading-relaxed text-xl">{step.result}</p>
                   </div>
                 </div>
               </div>
@@ -317,77 +314,74 @@ export default function ReservationPromesse() {
       })}
 
       {/* 5. POST-CALL SECTION */}
-      <section className="py-28 bg-secondary text-foreground text-center px-6">
-        <div className="max-w-3xl mx-auto">
-          <Mail className="w-16 h-16 text-[hsl(var(--gold))] mx-auto mb-8" />
-          <h2 className="font-heading text-4xl md:text-5xl mb-6">Et après notre appel ?</h2>
-          <p className="text-xl md:text-2xl text-foreground/90 leading-relaxed mb-6 font-medium">
+      <section className="py-32 bg-secondary/30 text-foreground text-center px-6">
+        <div className="max-w-4xl mx-auto">
+          <Mail className="w-20 h-20 text-[hsl(var(--gold))] mx-auto mb-10 opacity-80" />
+          <h2 className="font-heading text-5xl md:text-6xl mb-8">Et après notre appel ?</h2>
+          <p className="text-2xl md:text-3xl text-foreground/80 leading-relaxed mb-10 font-medium">
             Le travail est terminé de votre côté.
             <br />
             Nos experts prennent le relais en studio.
           </p>
-          <p className="text-muted-foreground leading-relaxed text-xl">
+          <p className="text-muted-foreground leading-relaxed text-xl max-w-2xl mx-auto">
             D'ici <strong>24 à 48 heures</strong>, vous recevrez un email contenant votre profil finalisé. Vous pourrez
-            tout vérifier sereinement avant l'activation.
+            tout vérifier sereinement avant l'activation officielle.
           </p>
         </div>
       </section>
 
       {/* 6. PRICING RECAP */}
-      <section className="relative py-28 lg:py-36 overflow-hidden bg-[#1B2333] text-white">
+      <section className="relative py-32 lg:py-40 overflow-hidden bg-[#1B2333] text-white">
         <div className="relative z-10 container-main mx-auto px-6 text-center">
-          <span className="inline-block px-5 py-2 bg-white/10 border border-white/20 rounded-full font-medium tracking-[0.2em] uppercase text-white/60 mb-8 text-sm">
-            VOTRE CONCIERGERIE.
-          </span>
-          <h2 className="font-heading text-5xl md:text-6xl mb-6">Tout est inclus pour 89 €</h2>
-          <p className="text-white/60 mb-16 text-xl">Un paiement unique, sans abonnement, sans surprise.</p>
+          <h2 className="font-heading text-5xl md:text-7xl mb-8">Tout est inclus pour 89 €</h2>
+          <p className="text-white/50 mb-20 text-2xl font-light">Un paiement unique, sans abonnement, sans surprise.</p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
             {INCLUDED.map((item, i) => (
               <div
                 key={i}
-                className="flex items-start gap-4 bg-white/5 border border-white/10 p-6 rounded-xl text-left"
+                className="flex items-center gap-5 bg-white/5 border border-white/10 p-8 rounded-2xl text-left backdrop-blur-md hover:bg-white/10 transition-colors"
               >
-                <div className="w-6 h-6 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="h-4 w-4 text-[#1B2333]" />
+                <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center shrink-0">
+                  <Check className="h-5 w-5 text-[#1B2333]" />
                 </div>
-                <span className="text-white/90 text-lg">{item}</span>
+                <span className="text-white/90 text-xl font-medium">{item}</span>
               </div>
             ))}
           </div>
 
           <button
             onClick={() => navigate("/reservation/calendrier")}
-            className="inline-flex items-center gap-4 bg-[hsl(var(--gold))] text-[#1B2333] px-12 py-5 font-bold tracking-wide transition-transform hover:scale-105 text-lg rounded-full"
+            className="inline-flex items-center gap-4 bg-[hsl(var(--gold))] text-[#1B2333] px-16 py-7 font-bold tracking-widest transition-all hover:scale-105 hover:brightness-110 text-2xl rounded-full shadow-[0_20px_50px_rgba(226,163,54,0.3)]"
           >
             Réserver mon créneau
-            <ArrowRight className="h-5 w-5" />
+            <ArrowRight className="h-6 w-6" />
           </button>
         </div>
       </section>
 
       {/* 7. GUARANTEE & FINAL CTA */}
-      <section ref={guaranteeRef} className="py-28 bg-background">
+      <section ref={guaranteeRef} className="py-32 bg-background">
         <div className="container-main mx-auto px-6 text-center">
-          <ShieldCheck className="h-16 w-16 text-[hsl(var(--gold))] mx-auto mb-8" />
-          <h2 className="font-heading text-4xl md:text-5xl mb-6">Garantie Sérénité Absolue</h2>
-          <p className="text-muted-foreground text-xl max-w-2xl mx-auto mb-16">
-            Si à la réception de votre profil, notre service ne répond pas à vos attentes, nous vous remboursons
-            intégralement. Sans condition.
+          <ShieldCheck className="h-24 w-24 text-[hsl(var(--gold))] mx-auto mb-10 opacity-90" />
+          <h2 className="font-heading text-4xl md:text-6xl mb-8">Garantie Sérénité Absolue</h2>
+          <p className="text-muted-foreground text-2xl max-w-3xl mx-auto mb-20 leading-relaxed">
+            Si à la réception de votre profil, notre service ne répond pas à 100% à vos attentes, nous vous remboursons
+            intégralement. Immédiatement et sans discussion.
           </p>
 
-          <div className="flex flex-col items-center gap-8">
-            <h3 className="font-heading text-2xl md:text-3xl">Prêt à écrire votre prochain chapitre ?</h3>
+          <div className="flex flex-col items-center gap-10">
+            <h3 className="font-heading text-3xl md:text-5xl">Prêt à écrire votre prochain chapitre ?</h3>
             <button
               onClick={() => navigate("/reservation/calendrier")}
-              className="bg-[#1B2333] text-white px-12 py-5 rounded-full text-lg font-bold hover:bg-slate-800 transition-colors flex items-center gap-3"
+              className="bg-[#1B2333] text-white px-16 py-7 rounded-full text-2xl font-bold hover:bg-slate-800 transition-all flex items-center gap-4 shadow-2xl"
             >
               Réserver maintenant
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-7 w-7" />
             </button>
             <button
               onClick={() => navigate("/onboarding")}
-              className="text-muted-foreground hover:text-foreground underline underline-offset-4"
+              className="text-muted-foreground hover:text-foreground underline underline-offset-8 text-lg"
             >
               ← Revenir à l'option gratuite
             </button>
