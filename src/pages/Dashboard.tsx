@@ -230,7 +230,7 @@ export default function Dashboard() {
             {filteredMatches.length === 0 && pendingMatches.length === 0 && visibleSavedForLater.length === 0 ? (
               <EmptyMatchState />
             ) : filteredMatches.length === 0 ? null : (
-              <div className="grid grid-cols-1 gap-5">
+              <div className="grid grid-cols-1 gap-5 my-0">
                 {filteredMatches.map((match) => (
                   <DashboardMatchCard key={match.id} match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
                 ))}
