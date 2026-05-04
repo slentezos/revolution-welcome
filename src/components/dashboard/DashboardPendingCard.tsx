@@ -84,7 +84,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
               <Badge
                 key={tag}
                 variant="secondary"
-                className="px-4 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/60 font-medium text-base"
+                className="inline-flex items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-secondary/80 px-4 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/60 font-medium text-lg"
               >
                 {tag}
               </Badge>
