@@ -162,20 +162,19 @@ export default function Privileges() {
                 <h3 className="font-heading text-2xl text-foreground md:text-4xl">Cercle Privé</h3>
               </div>
 
-              <div className="mb-10 pb-8 border-b border-slate-100">
+              <div className="mb-10 pb-8 border-b border-slate-100 py-0">
                 <div className="mb-4 text-center">
                   {/* CORRECTION ICI : Retrait du /30 sur la couleur de décoration */}
                   <span className="font-heading text-5xl text-foreground line-through decoration-[#1B2333] decoration-[3px] text-center">
                     50€
                   </span>
                 </div>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl text-left">
-                  ACCÈS GRATUIT<br />
+                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl text-center">
+                  3 MOIS OFFERTS<br />
                   SANS ENGAGEMENT<br />
-                  3 MOIS
                 </p>
-                <p className="text-muted-foreground tracking-widest uppercase text-lg text-left">
-                  Puis 50€/mois (ou 120€ / 3 mois)
+                <p className="text-lg text-center">
+                  50€/MOIS - 120€/3 MOIS<br /><br />
                 </p>
               </div>
 
@@ -239,13 +238,12 @@ export default function Privileges() {
                       65€
                     </span>
                   </div>
-                  <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
-                    ACCÈS GRATUIT<br />
+                  <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-center">
+                    3 MOIS OFFERTS<br />
                     SANS ENGAGEMENT<br />
-                    3 MOIS
                   </p>
-                  <p className="text-[11px] text-white/50 tracking-widest uppercase">
-                    Puis 65€/mois (ou 150€ / 3 mois)
+                  <p className="text-[11px] text-white/50 tracking-widest uppercase text-center">
+                    65€/MOIS - 150€/3 MOIS<br /><br />
                   </p>
                 </div>
 
