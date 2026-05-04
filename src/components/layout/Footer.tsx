@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
 import VisualComfortToggle from "./VisualComfortToggle";
-import LanguageToggle from "./LanguageToggle";
 
 const footerLinks = {
   discover: [
@@ -118,10 +117,7 @@ export default function Footer() {
         <div className="border-t border-primary-foreground/10">
           <div className="container-main mx-auto px-6 md:px-12 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-primary-foreground/40 text-lg">© 2026 Kalimera. Tous droits réservés.</p>
-            <div className="flex items-center gap-6">
-              <LanguageToggle />
-              <p className="text-primary-foreground/40 text-lg">Conçu avec amour pour les seniors</p>
-            </div>
+            <p className="text-primary-foreground/40 text-lg">Conçu avec amour pour les seniors</p>
           </div>
         </div>
       </footer>

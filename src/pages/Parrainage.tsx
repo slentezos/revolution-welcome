@@ -361,7 +361,7 @@ function FormSection() {
             </button>
           </div>
 
-          <div className="flex items-center justify-center gap-2 text-lg font-medium">
+          <div className="flex items-center justify-center gap-2 text-sm font-medium">
             <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))] animate-pulse" />
             <span className="opacity-60 uppercase tracking-widest text-xl">
               {invitesLeft} invitation{invitesLeft > 1 ? "s" : ""} restante{invitesLeft > 1 ? "s" : ""}

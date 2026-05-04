@@ -43,7 +43,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
         <div className="absolute inset-0 bg-gradient-to-t from-emerald-900/30 via-transparent to-transparent" />
 
         {match.verified && (
-          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-gold text-white text-lg font-semibold px-3 py-1.5 rounded-full shadow-md">
+          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-gold text-white text-sm font-semibold px-3 py-1.5 rounded-full shadow-md">
             <ShieldCheck className="h-4 w-4" />
             Vérifié
           </div>
@@ -52,7 +52,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
         {/* Affinity on photo */}
         <div className="absolute bottom-4 left-4 bg-emerald-700/90 backdrop-blur-sm text-white px-4 py-2 rounded-full">
           <span className="text-lg font-bold">{match.affinity}%</span>
-          <span className="text-lg font-medium ml-1.5 opacity-90">affinité</span>
+          <span className="text-sm font-medium ml-1.5 opacity-90">affinité</span>
         </div>
       </div>
 

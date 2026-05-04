@@ -338,7 +338,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               {confirmedAge && <Check className="text-white h-6 w-6" />}
             </div>
             <p className="text-xl font-medium text-[#1B2333] select-none">
-              Je certifie que mes photos ont été prises il y a{" "}
+              Je certifie sur l'honneur que mes photos ont été prises il y a{" "}
               <span className="font-bold underline text-[hsl(var(--gold))]">moins de 18 mois</span>.
             </p>
           </div>
@@ -409,7 +409,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 )}
                 Payer et réserver (49€)
               </Button>
-              <p className="text-lg text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
+              <p className="text-sm text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
             </div>
             <button
               onClick={() => setShowStudioModal(false)}

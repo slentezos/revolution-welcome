@@ -53,7 +53,7 @@ export default function MembershipSteps() {
                 <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                   <step.icon className="h-7 w-7 text-primary-foreground" />
                 </div>
-                <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gold text-primary text-base font-bold flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-gold text-primary text-sm font-bold flex items-center justify-center">
                   {step.number}
                 </span>
               </div>
@@ -61,7 +61,7 @@ export default function MembershipSteps() {
               <h3 className="font-heading text-xl font-semibold text-foreground mb-3">
                 {step.title}
               </h3>
-              <p className="text-muted-foreground text-lg leading-relaxed">
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 {step.description}
               </p>
             </div>

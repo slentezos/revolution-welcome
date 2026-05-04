@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ChevronLeft, ChevronRight, Lock, Mic, MicOff } from "lucide-react";
+import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import CriteriaEditWarningModal from "@/components/onboarding/CriteriaEditWarningModal";
@@ -104,70 +104,9 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   const [editUnlocked, setEditUnlocked] = useState(false);
   const { toast } = useToast();
 
-  // ─── Voice Dictation State ───
-  const [isListening, setIsListening] = useState(false);
-  const [interimText, setInterimText] = useState("");
-  const recognitionRef = useRef<any>(null);
-
   // Cooldown: if locked, show toast and block editing
   const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
   const isCooldownEditable = !cooldown || !cooldown.isCompleted || cooldown.canEdit || editUnlocked;
-
-  // ─── Native Dictation Logic ───
-  useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = "fr-FR";
-
-      recognition.onresult = (event: any) => {
-        let finalSegment = "";
-        let interimSegment = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const transcript = event.results[i].transcript;
-          if (event.results[i].isFinal) finalSegment += transcript + " ";
-          else interimSegment += transcript;
-        }
-        if (finalSegment) setWhyAlone((prev) => prev + finalSegment);
-        setInterimText(interimSegment);
-      };
-
-      recognition.onerror = () => setIsListening(false);
-      recognition.onend = () => setIsListening(false);
-      recognitionRef.current = recognition;
-    }
-    
-    return () => {
-      if (recognitionRef.current && isListening) {
-        recognitionRef.current.stop();
-      }
-    };
-  }, []);
-
-  const toggleListening = () => {
-    if (isListening) {
-      stopRecording();
-    } else {
-      if (recognitionRef.current) {
-        setWhyAlone((prev) => prev + (prev.endsWith(" ") || prev === "" ? "" : " "));
-        recognitionRef.current.start();
-        setIsListening(true);
-      } else {
-        toast({ title: "Non supporté", description: "La dictée vocale n'est pas supportée sur ce navigateur.", variant: "destructive" });
-      }
-    }
-  };
-
-  const stopRecording = () => {
-    if (recognitionRef.current && isListening) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-      if (interimText) setWhyAlone((prev) => prev + interimText + " ");
-      setInterimText("");
-    }
-  };
 
   const handleInputChange = (categoryId: string, index: number, value: string) => {
     if (!isCooldownEditable) {
@@ -242,7 +181,6 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   const handleNext = () => {
-    if (isListening) stopRecording(); // Arrêter la dictée si on change de page
     if (isLastPage) {
       handleFinish();
     } else {
@@ -252,7 +190,6 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   };
 
   const handleBack = () => {
-    if (isListening) stopRecording(); // Arrêter la dictée si on change de page
     if (currentPage > 0) {
       setCurrentPage((p) => p - 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -266,19 +203,6 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] pb-40">
-      {/* ===== MASQUER LA BARRE DE DÉFILEMENT GLOBALE ===== */}
-      <style>{`
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        ::-webkit-scrollbar {
-          display: none;
-        }
-        /* Hide scrollbar for IE, Edge and Firefox */
-        * {
-          -ms-overflow-style: none;  /* IE and Edge */
-          scrollbar-width: none;  /* Firefox */
-        }
-      `}</style>
-
       {/* Cooldown locked banner */}
       {isCooldownLocked && (
         <div className="bg-secondary border-b border-border px-6 py-4 text-center">
@@ -370,76 +294,24 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
               <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-2xl">
                 11
               </span>
-              <h3 className="font-heading text-2xl font-bold text-[#1B2333] leading-snug md:text-3xl">
+              <h3 className="font-heading text-2xl font-bold text-[#1B2333] leading-snug md:text-2xl">
                 Pourquoi êtes-vous seul(e) aujourd'hui ?
               </h3>
             </div>
 
-            <div className="md:ml-14 space-y-6">
-              <span className="italic block text-gray-600 text-xl leading-relaxed">
+            <div className="md:ml-14">
+              <span className="italic mb-6 block text-gray-600 text-xl">
                 A cette étape de votre désir de nouvelle vie, ne serait-il pas utile de faire le point avec vous-même et
-                de vous demander en toute sincérité pourquoi vous êtes seul(e) aujourd'hui. (information confidentielle
+                de vous demander en toute sincérité pourquoi vous êtes seule aujourd'hui. (information confidentielle
                 non partagée)
               </span>
-              
-              {/* ═══ BLOC TEXTAREA ET DICTÉE EXACTEMENT COMME LE CHAT ═══ */}
-              <div className="flex flex-col">
-                <div className="flex items-end gap-3">
-                  <button
-                    type="button"
-                    onClick={toggleListening}
-                    className={`min-h-[48px] px-4 w-auto min-w-[120px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 ${
-                      isListening
-                        ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
-                        : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
-                    }`}
-                    aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
-                  >
-                    {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-                    {isListening ? "Arrêter de dicter" : "Dicter"}
-                  </button>
-                  <div className="flex-1">
-                    <Textarea
-                      placeholder="Partagez votre histoire si vous le souhaitez..."
-                      value={whyAlone + interimText}
-                      onChange={(e) => {
-                        setWhyAlone(e.target.value);
-                        setInterimText("");
-                      }}
-                      className="w-full min-h-[200px] text-2xl resize-none rounded-2xl border border-amber-100/60 bg-white focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 p-6 shadow-inner leading-relaxed"
-                    />
-                  </div>
-                </div>
-                
-                <div className="mt-2 min-h-[1.5rem]">
-                  {isListening ? (
-                    <div className="flex items-center gap-3">
-                      <p className="font-bold text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
-                        Je vous écoute...
-                      </p>
-                      <div className="flex items-end gap-1 h-5">
-                        <span
-                          className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                          style={{ height: "60%", animationDelay: "0ms" }}
-                        />
-                        <span
-                          className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                          style={{ height: "100%", animationDelay: "150ms" }}
-                        />
-                        <span
-                          className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                          style={{ height: "40%", animationDelay: "300ms" }}
-                        />
-                      </div>
-                    </div>
-                  ) : whyAlone.length > 0 ? (
-                    <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
-                      ✍️ Votre brouillon est sauvegardé
-                    </p>
-                  ) : null}
-                </div>
-              </div>
-              
+              <Textarea
+                placeholder="Partagez votre histoire si vous le souhaitez..."
+                value={whyAlone}
+                onChange={(e) => setWhyAlone(e.target.value)}
+                rows={8}
+                className="bg-[hsl(35,15%,97%)] border-border/40 focus:border-primary/50 text-base resize-none placeholder:text-muted-foreground/40 placeholder:font-light"
+              />
             </div>
           </div>
         )}

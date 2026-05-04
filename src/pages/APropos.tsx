@@ -19,7 +19,7 @@ const testimonials = [
 {
   name: "Marie",
   quote:
-  "J'ai découvert sa liaison avec une plus jeune. Quand ça arrive aux autres, ça fait sourire. Mais quand ça vous arrive, tout s'effondre. On finit par douter de soi, de sa féminité, de sa capacité d'être aimée. Colère, déprime, confiance trahie. Plus jamais ça…"
+  "J'J'ai découvert sa liaison avec une plus jeune. Quand ça arrive aux autres, ça fait sourire. Mais quand ça vous arrive, tout s'effondre. On finit par douter de soi, de sa féminité, de sa capacité d'être aimée. Colère, déprime, confiance trahie. Plus jamais ça…"
 },
 {
   name: "Éric",

@@ -55,7 +55,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
               }`}
             />
           ))}
-          <span className="ml-3 text-base font-bold text-muted-foreground tracking-wider uppercase">
+          <span className="ml-3 text-xs font-bold text-muted-foreground tracking-wider uppercase">
             {currentStep + 1}/{steps.length}
           </span>
         </div>
@@ -87,7 +87,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                 <div className="bg-[hsl(var(--cream))] p-6 rounded-2xl border border-[#D4AF37]/10">
                   <div className="flex items-center gap-2 mb-5">
                     <Eye className="h-4 w-4 text-[#D4AF37]" />
-                    <span className="text-base font-bold tracking-[0.2em] uppercase text-[#D4AF37]">Visible</span>
+                    <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#D4AF37]">Visible</span>
                   </div>
                   <ul className="space-y-3">
                     {["Titre de personnalité", "Vos 4 scores", "Résumé de tempérament"].map((item) => (
@@ -100,7 +100,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 opacity-60">
                   <div className="flex items-center gap-2 mb-5">
                     <ShieldCheck className="h-4 w-4 text-gray-400" />
-                    <span className="text-base font-bold tracking-[0.2em] uppercase text-gray-400">Privé</span>
+                    <span className="text-xs font-bold tracking-[0.2em] uppercase text-gray-400">Privé</span>
                   </div>
                   <ul className="space-y-3">
                     {["Analyse complète", "Forces & Fragilités", "Visions & Détails"].map((item) => (
@@ -117,7 +117,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
           {/* STEP 3: Preview card */}
           {currentStep === 2 && (
             <div className="flex-1 flex flex-col items-center justify-center px-10 py-20 animate-in fade-in zoom-in-95 duration-500">
-              <p className="text-muted-foreground text-lg uppercase tracking-[0.2em] font-bold mb-6">
+              <p className="text-muted-foreground text-sm uppercase tracking-[0.2em] font-bold mb-6">
                 Votre portrait Prestige
               </p>
               <div className="relative rounded-[24px] overflow-hidden shadow-2xl border border-white/20 max-w-sm w-full aspect-[3/4]">
@@ -129,7 +129,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                     {dimensions.slice(0, 4).map((d) => (
                       <div
                         key={d.id}
-                        className="bg-white/10 border border-white/20 rounded-full px-3 py-1.5 text-base font-medium"
+                        className="bg-white/10 border border-white/20 rounded-full px-3 py-1.5 text-xs font-medium"
                       >
                         {d.dominant} <span className="text-[#D4AF37] ml-1">{d.percent}%</span>
                       </div>
@@ -166,7 +166,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                   </span>
                 </button>
               </div>
-              <p className="text-lg text-muted-foreground mt-6 italic">Choix modifiable à tout moment dans vos réglages.</p>
+              <p className="text-sm text-muted-foreground mt-6 italic">Choix modifiable à tout moment dans vos réglages.</p>
             </div>
           )}
         </div>

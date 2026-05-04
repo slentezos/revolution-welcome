@@ -31,8 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         onChange={handleChange}
         autoCapitalize="sentences"
         className={cn(
-          // CORRECTION ICI : placeholder:text-slate-300 pour un gris très clair
-          "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-xl shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-slate-300",
+          "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-xl shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground",
           className,
         )}
         ref={ref}
@@ -52,8 +51,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
         <input
           type={showPassword ? "text" : "password"}
           className={cn(
-            // CORRECTION ICI : passage en text-xl et placeholder:text-slate-300
-            "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-xl shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-slate-300 pr-12",
+            "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-lg shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground pr-12",
             className,
           )}
           ref={ref}
@@ -62,7 +60,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-[#1B2333] transition-colors p-1"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
           title={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
         >
           {showPassword ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
@@ -107,17 +105,12 @@ const DateInput = ({ value, onChange, error, className, label = "Date de naissan
       <div className="grid grid-cols-3 gap-3 md:gap-4">
         {/* JOUR */}
         <Select value={value.day} onValueChange={(v) => onChange("day", v)}>
-          <SelectTrigger
-            className={cn(
-              "h-14 text-xl rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors",
-              !value.day && "text-slate-300",
-            )}
-          >
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Jour" />
           </SelectTrigger>
           <SelectContent className="max-h-[250px]">
             {days.map((d) => (
-              <SelectItem key={d} value={d} className="text-lg">
+              <SelectItem key={d} value={d}>
                 {d}
               </SelectItem>
             ))}
@@ -126,17 +119,12 @@ const DateInput = ({ value, onChange, error, className, label = "Date de naissan
 
         {/* MOIS */}
         <Select value={value.month} onValueChange={(v) => onChange("month", v)}>
-          <SelectTrigger
-            className={cn(
-              "h-14 text-xl rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors",
-              !value.month && "text-slate-300",
-            )}
-          >
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Mois" />
           </SelectTrigger>
           <SelectContent className="max-h-[250px]">
             {months.map((m) => (
-              <SelectItem key={m.value} value={m.value} className="text-lg">
+              <SelectItem key={m.value} value={m.value}>
                 {m.label}
               </SelectItem>
             ))}
@@ -145,17 +133,12 @@ const DateInput = ({ value, onChange, error, className, label = "Date de naissan
 
         {/* ANNÉE */}
         <Select value={value.year} onValueChange={(v) => onChange("year", v)}>
-          <SelectTrigger
-            className={cn(
-              "h-14 text-xl rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors",
-              !value.year && "text-slate-300",
-            )}
-          >
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Année" />
           </SelectTrigger>
           <SelectContent className="max-h-[250px]">
             {years.map((y) => (
-              <SelectItem key={y} value={y} className="text-lg">
+              <SelectItem key={y} value={y}>
                 {y}
               </SelectItem>
             ))}

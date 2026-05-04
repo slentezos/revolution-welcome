@@ -107,7 +107,7 @@ export default function FeaturesSection() {
                   Connexion
                 </Link>
                 <br />
-                <button onClick={() => setModalOpen(true)} className="text-primary/70 text-lg hover:underline">
+                <button onClick={() => setModalOpen(true)} className="text-primary/70 text-sm hover:underline">
                   (devenir membre)
                 </button>
               </div>

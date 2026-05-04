@@ -22,7 +22,7 @@ export default function TagsSection() {
           {tags.map((tag, index) => (
             <span
               key={index}
-              className={`px-4 py-2 rounded-full text-lg font-medium transition-colors cursor-default ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-default ${
                 tag === "Senior +50 ans"
                   ? "bg-primary text-primary-foreground"
                   : "bg-card border border-border text-foreground hover:bg-accent"

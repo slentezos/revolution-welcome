@@ -151,7 +151,7 @@ export default function Privileges() {
               className="group bg-white border border-slate-200/60 shadow-sm p-10 md:p-12 transition-all duration-500 hover:shadow-lg flex flex-col h-full z-20 relative"
             >
               {/* Badge Membre Fondateur */}
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 text-base font-bold tracking-[0.2em] uppercase rounded-full shadow-md">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 text-xs font-bold tracking-[0.2em] uppercase rounded-full shadow-md">
                 Invitation Privilège
               </div>
 
@@ -162,19 +162,17 @@ export default function Privileges() {
                 <h3 className="font-heading text-2xl text-foreground md:text-4xl">Cercle Privé</h3>
               </div>
 
-              <div className="mb-10 pb-8 border-b border-slate-100 py-0">
-                <div className="mb-4 text-center">
-                  {/* CORRECTION ICI : Retrait du /30 sur la couleur de décoration */}
-                  <span className="font-heading text-5xl text-foreground line-through decoration-[#1B2333] decoration-[3px] text-center">
+              <div className="mb-10 pb-8 border-b border-slate-100">
+                <div className="mb-4">
+                  <span className="font-heading text-5xl text-foreground line-through decoration-foreground/30 decoration-2">
                     50€
                   </span>
                 </div>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl text-center">
-                  3 MOIS OFFERTS<br />
-                  SANS ENGAGEMENT<br />
+                <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
+                  Pendant 3 mois, sans carte.
                 </p>
-                <p className="text-lg text-center">
-                  50€/MOIS - 120€/3 MOIS<br /><br />
+                <p className="text-muted-foreground tracking-widest uppercase text-lg">
+                  Puis 50€/mois (ou 120€ / 3 mois)
                 </p>
               </div>
 
@@ -189,7 +187,7 @@ export default function Privileges() {
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full bg-foreground text-white py-4 text-lg uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
+                className="w-full bg-foreground text-white py-4 text-sm uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
               >
                 Accepter mon invitation <ArrowRight className="w-4 h-4" />
               </button>
@@ -238,12 +236,11 @@ export default function Privileges() {
                       65€
                     </span>
                   </div>
-                  <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-center">
-                    3 MOIS OFFERTS<br />
-                    SANS ENGAGEMENT<br />
+                  <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1">
+                    Pendant 3 mois, sans carte.
                   </p>
-                  <p className="text-[11px] text-white/50 tracking-widest uppercase text-center">
-                    65€/MOIS - 150€/3 MOIS<br /><br />
+                  <p className="text-[11px] text-white/50 tracking-widest uppercase">
+                    Puis 65€/mois (ou 150€ / 3 mois)
                   </p>
                 </div>
 
@@ -258,7 +255,7 @@ export default function Privileges() {
 
                 <button
                   tabIndex={-1}
-                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-lg uppercase tracking-widest font-bold"
+                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold"
                 >
                   Demander mon admission VIP
                 </button>

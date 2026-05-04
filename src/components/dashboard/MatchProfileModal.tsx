@@ -456,7 +456,7 @@ export default function MatchProfileModal({
                 {/* Compatibility note */}
                 <div className="bg-[hsl(var(--cream))] px-8 lg:px-16 py-10">
                   <div className="max-w-3xl mx-auto bg-background rounded-xl p-8 border border-border/20 shadow-[var(--shadow-soft)]">
-                    <p className="text-[hsl(var(--gold))] font-heading text-lg tracking-[3px] uppercase mb-3">
+                    <p className="text-[hsl(var(--gold))] font-heading text-sm tracking-[3px] uppercase mb-3">
                       Compatibilité
                     </p>
                     <p className="text-foreground text-lg leading-relaxed">

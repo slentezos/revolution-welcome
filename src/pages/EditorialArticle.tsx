@@ -49,7 +49,7 @@ export default function EditorialArticle() {
               <p className="font-medium text-foreground text-xl">
                 Rédigé par <span className="font-semibold">{article.author.name}</span>
               </p>
-              <div className="flex items-center gap-3 text-base text-muted-foreground mt-1">
+              <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
                 <span className="text-xl">{article.date}</span>
                 <span className="w-px h-3 bg-border" />
                 <span className="flex items-center gap-1 text-xl">

@@ -399,7 +399,7 @@ export default function Connexion() {
           <div className="absolute inset-0 bg-[#1B2333]/70" />
           <div className="absolute inset-0 flex items-center justify-center p-16">
             <div className="text-center text-white relative z-10">
-              <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6">Retrouvez l'amour <br /> à tout âge</h2>
+              <h2 className="font-heading text-4xl lg:text-5xl font-bold mb-6">Retrouvez l'amour à tout âge</h2>
               <p className="text-white/90 max-w-md mx-auto text-2xl">
                 Des rencontres authentiques basées sur 75% d'affinités réciproques.
               </p>

@@ -436,7 +436,7 @@ export default function Messages() {
                       </TooltipTrigger>
                       <TooltipContent
                         side="bottom"
-                        className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-xl leading-relaxed"
+                        className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-sm leading-relaxed"
                       >
                         <p className="font-semibold text-[#1B2333] mb-1">Votre Cercle Privé</p>
                         <p className="text-muted-foreground">
@@ -479,7 +479,7 @@ export default function Messages() {
                         />
                       )}
                       {conv.unread > 0 && (
-                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#1B2333] text-white text-base rounded-full flex items-center justify-center font-semibold">
+                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#1B2333] text-white text-xs rounded-full flex items-center justify-center font-semibold">
                           {conv.unread}
                         </div>
                       )}
@@ -593,7 +593,7 @@ export default function Messages() {
                                 ) : (
                                   <Phone className="h-3.5 w-3.5 text-[#1B2333]" />
                                 )}
-                                <span className="text-lg font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
+                                <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
                               </button>
                               <button
                                 className="h-9 px-3 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-1.5 transition-colors"
@@ -617,7 +617,7 @@ export default function Messages() {
                                 ) : (
                                   <Video className="h-3.5 w-3.5 text-[#1B2333]" />
                                 )}
-                                <span className="text-lg font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
+                                <span className="text-sm font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
                               </button>
                             </>
                           );
@@ -636,7 +636,7 @@ export default function Messages() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleReport(selectedChat.name)}
-                          className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-9 text-lg font-medium"
+                          className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg h-9 text-sm font-medium"
                         >
                           <Flag className="h-3.5 w-3.5" />
                           Signaler
@@ -654,7 +654,7 @@ export default function Messages() {
                           className="w-24 h-24 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
                           onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[0], e)}
                         />
-                        <p className="text-muted-foreground text-lg text-center italic">
+                        <p className="text-muted-foreground text-sm text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
                         </p>
                         <p className="text-foreground text-base font-medium text-center max-w-md leading-relaxed">
@@ -663,10 +663,10 @@ export default function Messages() {
                           <span className="font-heading font-bold text-[#1B2333]">{selectedChat.name}</span> sera
                           discrètement archivée pour laisser place à de nouvelles rencontres.
                         </p>
-                        <p className="text-muted-foreground text-lg text-center">
+                        <p className="text-muted-foreground text-sm text-center">
                           ✍️ Rédigez votre message au clavier ou utilisez le dictaphone pour dicter votre texte.
                         </p>
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1B2333]/10 text-[#1B2333] font-semibold text-lg">
+                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1B2333]/10 text-[#1B2333] font-semibold text-sm">
                           <Send className="h-4 w-4" />
                           Démarrer le chat
                         </span>
@@ -825,7 +825,7 @@ export default function Messages() {
             <div className="bg-[#1B2333] px-6 py-5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Lightbulb className="h-6 w-6 text-[hsl(var(--gold-light))]" />
-                <h2 className="font-heading font-semibold text-white text-2xl">9 conseils pour un bon départ</h2>
+                <h2 className="font-heading text-xl font-semibold text-white">9 conseils pour un bon départ</h2>
               </div>
               <button
                 onClick={() => setShowConseils(false)}
@@ -840,10 +840,10 @@ export default function Messages() {
                   key={index}
                   className="flex items-start gap-3 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 text-left"
                 >
-                  <span className="shrink-0 w-8 h-8 rounded-full bg-[#1B2333] text-white flex items-center justify-center font-semibold text-xl">
+                  <span className="shrink-0 w-8 h-8 rounded-full bg-[#1B2333] text-white flex items-center justify-center text-sm font-semibold">
                     {index + 1}
                   </span>
-                  <p className="leading-relaxed text-foreground pt-1 text-xl">{conseil}</p>
+                  <p className="text-sm leading-relaxed text-foreground pt-1">{conseil}</p>
                 </div>
               ))}
             </div>
@@ -903,7 +903,7 @@ export default function Messages() {
               Vous avez <span className="font-bold text-[#1B2333]">3 jours</span> pour répondre à ce premier message.
               Passé ce délai, la conversation sera automatiquement archivée.
             </p>
-            <p className="text-muted-foreground text-lg leading-relaxed">
+            <p className="text-muted-foreground text-sm leading-relaxed">
               Prenez le temps de découvrir le profil de votre correspondant(e) et n'hésitez pas à faire le premier pas !
             </p>
           </div>

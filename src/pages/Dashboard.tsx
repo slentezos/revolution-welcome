@@ -79,17 +79,18 @@ export default function Dashboard() {
   }, [searchParams, loading]);
 
   useEffect(() => {
-    // DEV: auth bypass enabled — dashboard accessible without login
-    const loadProfile = async () => {
+    const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        setUser(session.user);
-        const { data: profileData } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
-        if (profileData) setProfile(profileData);
-      }
+      if (!session) {navigate("/connexion");return;}
+      setUser(session.user);
+      const { data: profileData } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+      if (!profileData || profileData.onboarding_step !== "completed") {navigate("/onboarding");return;}
+      setProfile(profileData);
       setLoading(false);
     };
-    loadProfile();
+    checkAuth();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {if (!session) navigate("/connexion");});
+    return () => subscription.unsubscribe();
   }, [navigate]);
 
   useEffect(() => {localStorage.setItem(SAVED_MATCHES_STORAGE_KEY, JSON.stringify(savedForLater));}, [savedForLater]);
@@ -277,7 +278,7 @@ export default function Dashboard() {
                 {visibleSavedForLater.map((match) => (
                   <div key={match.id} className="relative">
                     <DashboardMatchCard match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
-                    <p className="text-lg text-muted-foreground mt-2 ml-4 italic">Consulté le {match.savedAt}</p>
+                    <p className="text-sm text-muted-foreground mt-2 ml-4 italic">Consulté le {match.savedAt}</p>
                   </div>
                 ))}
               </div>

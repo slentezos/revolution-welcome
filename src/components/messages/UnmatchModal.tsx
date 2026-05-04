@@ -44,7 +44,7 @@ export default function UnmatchModal({ open, onOpenChange, name, onConfirmUnmatc
             <Flag className="h-5 w-5 text-[#1B2333] shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold text-[#1B2333] text-base">Un comportement inapproprié</p>
-              <p className="text-gray-500 text-lg">Signalez-le à notre équipe</p>
+              <p className="text-gray-500 text-sm">Signalez-le à notre équipe</p>
             </div>
           </button>
 

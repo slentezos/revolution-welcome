@@ -145,7 +145,7 @@ export default function Onboarding() {
   return (
     <div className="min-h-screen bg-background">
       <nav className="bg-white border-b border-[#E5E0D8] sticky top-0 z-40 shadow-sm">
-        <div className="grid w-full grid-cols-5 overflow-visible">
+        <div className="flex overflow-x-auto scrollbar-none">
           {tabs.map((tab, index) => {
             const Icon = tab.icon;
             const isActive = tab.id === effectiveTab;
@@ -156,7 +156,7 @@ export default function Onboarding() {
               <button
                 key={tab.id}
                 onClick={() => canClick && handleTabClick(tab.id)}
-                className={`min-w-0 min-h-16 flex items-center justify-center gap-2 px-2 py-4 text-base md:text-lg xl:text-xl font-semibold transition-all duration-300 ${
+                className={`flex-1 min-w-[200px] flex items-center justify-center gap-4 py-6 px-8 text-xl font-semibold transition-all duration-300 ${
                   isActive
                     ? "bg-[#1B2333] text-white border-b-4 border-[hsl(var(--gold))] shadow-md z-10"
                     : isCompleted
@@ -164,8 +164,8 @@ export default function Onboarding() {
                       : "bg-gray-50 text-gray-400 border-b-4 border-transparent cursor-not-allowed opacity-60"
                 }`}
               >
-                <Icon className={`h-6 w-6 shrink-0 ${isActive || isCompleted ? "text-[hsl(var(--gold))]" : "text-gray-300"}`} />
-                <span className="hidden sm:inline min-w-0 text-center leading-tight whitespace-normal break-words">{tab.label}</span>
+                <Icon className={`h-6 w-6 ${isActive || isCompleted ? "text-[hsl(var(--gold))]" : "text-gray-300"}`} />
+                <span className="hidden sm:inline whitespace-nowrap">{tab.label}</span>
 
                 {/* CORRECTION : On retire 'hidden lg:block' pour que la coche soit TOUJOURS là */}
                 {isCompleted && <Check className="h-5 w-5 text-[hsl(var(--gold))] ml-1 shrink-0" />}

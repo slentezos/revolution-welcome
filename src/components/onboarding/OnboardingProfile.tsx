@@ -21,7 +21,7 @@ interface OnboardingProfileProps {
   cooldown?: CooldownInfo;
 }
 
-type Answers = Record<string, { mon: string[]; son: string[] }>;
+type Answers = Record<string, {mon: string[];son: string[];}>;
 
 const STORAGE_KEY_PREFIX = "profile_answers_";
 
@@ -43,12 +43,7 @@ type ScrollNode = {
   index?: number; // Index absolu pour les questions uniquement
 };
 
-export default function OnboardingProfile({
-  profileId,
-  onComplete,
-  readOnly = false,
-  cooldown,
-}: OnboardingProfileProps) {
+export default function OnboardingProfile({ profileId, onComplete, readOnly = false, cooldown }: OnboardingProfileProps) {
   const { toast } = useToast();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [editUnlocked, setEditUnlocked] = useState(false);
@@ -136,7 +131,7 @@ export default function OnboardingProfile({
           }
         });
       },
-      { rootMargin: "-15% 0px -50% 0px", threshold: 0 },
+      { rootMargin: "-15% 0px -50% 0px", threshold: 0 }
     );
 
     observerRef.current = observer;
@@ -187,7 +182,7 @@ export default function OnboardingProfile({
         return { ...prev, [questionId]: { ...prev[questionId], [column]: next } };
       });
     },
-    [readOnly],
+    [readOnly]
   );
 
   const handleFreeInput = useCallback(
@@ -215,11 +210,11 @@ export default function OnboardingProfile({
         }
         return {
           ...prev,
-          [questionId]: { mon: prev[questionId]?.mon || [], son: prev[questionId]?.son || [], [column]: next },
+          [questionId]: { mon: prev[questionId]?.mon || [], son: prev[questionId]?.son || [], [column]: next }
         };
       });
     },
-    [readOnly],
+    [readOnly]
   );
 
   // ── Logique de défilement fluide ──
@@ -241,7 +236,7 @@ export default function OnboardingProfile({
     setSaving(true);
     try {
       const {
-        data: { session },
+        data: { session }
       } = await supabase.auth.getSession();
       if (!session) throw new Error("Non authentifié");
 
@@ -250,9 +245,9 @@ export default function OnboardingProfile({
           user_id: session.user.id,
           profile_id: profileId,
           question_id: "profile_preferences",
-          answer_value: JSON.stringify(answers),
+          answer_value: JSON.stringify(answers)
         },
-        { onConflict: "profile_id,question_id" },
+        { onConflict: "profile_id,question_id" }
       );
       if (error) throw error;
       toast({ title: "Enregistré ✓", description: "Vos réponses ont été sauvegardées." });
@@ -269,8 +264,8 @@ export default function OnboardingProfile({
   };
 
   const setNodeRef = useCallback((id: string, el: HTMLDivElement | null) => {
-    if (el) nodeRefs.current.set(id, el);
-    else nodeRefs.current.delete(id);
+    if (el) nodeRefs.current.set(id, el);else
+    nodeRefs.current.delete(id);
   }, []);
 
   // Index actuel dans le flux global (Chapitres + Questions)
@@ -286,8 +281,7 @@ export default function OnboardingProfile({
         <div className="bg-secondary border-b border-border px-6 py-4 text-center">
           <p className="text-muted-foreground text-lg flex items-center justify-center gap-2">
             <Lock className="h-5 w-5" />
-            🔒 Les critères de recherche ("Son profil") sont en cours d'analyse. Vous pourrez les ajuster dans{" "}
-            {cooldown?.daysRemaining} jours.
+            🔒 Les critères de recherche ("Son profil") sont en cours d'analyse. Vous pourrez les ajuster dans {cooldown?.daysRemaining} jours.
           </p>
         </div>
       )}
@@ -306,22 +300,22 @@ export default function OnboardingProfile({
             <h2 className="font-heading text-3xl font-bold text-[#1B2333] transition-all duration-300">
               {CHAPTERS[currentChapter]}
             </h2>
-            <span className="text-gray-500 text-xl font-normal">
+            <span className="text-gray-500 font-medium text-base">
               {answeredCount} / {PROFILE_QUESTIONS.length} répondues
             </span>
           </div>
           <div className="flex gap-2">
-            {CHAPTERS.map((ch, i) => (
-              <button
-                key={i}
-                // Cliquer sur la barre emmène au titre du chapitre
-                onClick={() => scrollToNode(`chapter-${i}`)}
-                className={`h-1.5 flex-1 rounded-full transition-colors duration-500 cursor-pointer ${
-                  i === currentChapter ? "bg-[#D4AF37]" : i < currentChapter ? "bg-[#1B2333]" : "bg-gray-200"
-                }`}
-                title={ch}
-              />
-            ))}
+            {CHAPTERS.map((ch, i) =>
+            <button
+              key={i}
+              // Cliquer sur la barre emmène au titre du chapitre
+              onClick={() => scrollToNode(`chapter-${i}`)}
+              className={`h-1.5 flex-1 rounded-full transition-colors duration-500 cursor-pointer ${
+              i === currentChapter ? "bg-[#D4AF37]" : i < currentChapter ? "bg-[#1B2333]" : "bg-gray-200"}`
+              }
+              title={ch} />
+
+            )}
           </div>
         </div>
       </div>
@@ -335,12 +329,12 @@ export default function OnboardingProfile({
           return (
             <div key={chapterIdx}>
               {/* LIGNE DE SÉPARATION DISCRÈTE (affichée uniquement avant le titre, sauf le premier) */}
-              {chapterIdx > 0 && (
-                <div className="flex items-center gap-6 opacity-40" style={{ marginTop: "10vh", marginBottom: "5vh" }}>
+              {chapterIdx > 0 &&
+              <div className="flex items-center gap-6 opacity-40" style={{ marginTop: "10vh", marginBottom: "5vh" }}>
                   <div className="h-px bg-border flex-1" />
                   <div className="h-px bg-border flex-1" />
                 </div>
-              )}
+              }
 
               {/* ── NŒUD 1: TITRE DU CHAPITRE (Ne devient jamais flou) ── */}
               <div
@@ -355,9 +349,9 @@ export default function OnboardingProfile({
                   minHeight: "40vh",
                   marginTop: chapterIdx === 0 ? "5vh" : "10vh",
                   marginBottom: "35vh", // Espace avant la première question
-                  scrollMarginTop: "180px", // Marge pour s'arrêter parfaitement sous le header
-                }}
-              >
+                  scrollMarginTop: "180px" // Marge pour s'arrêter parfaitement sous le header
+                }}>
+                
                 <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-4 block text-2xl">
                   Partie {chapterIdx + 1}
                 </span>
@@ -371,8 +365,8 @@ export default function OnboardingProfile({
                     e.stopPropagation();
                     scrollToNode(scrollNodes[scrollNodes.findIndex((n) => n.id === chapterId) + 1]?.id);
                   }}
-                  className="flex flex-col items-center gap-4 group transition-all duration-500"
-                >
+                  className="flex flex-col items-center gap-4 group transition-all duration-500">
+                  
                   <span className="font-medium text-muted-foreground group-hover:text-[#D4AF37] transition-colors text-2xl">
                     Cliquez pour continuer vers les questions
                   </span>
@@ -399,18 +393,18 @@ export default function OnboardingProfile({
                       // Style inline stricte pour forcer les marges de séparation et d'alignement
                       style={{ marginBottom: "45vh", scrollMarginTop: "180px" }}
                       className={`rounded-[24px] border p-6 md:p-10 transition-all duration-700 ease-out relative ${
-                        isActive
-                          ? "opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card scale-[1.01]"
-                          : "opacity-40 cursor-pointer hover:opacity-80 border-border bg-[hsl(var(--cream))]/30 scale-100"
-                      }`}
-                    >
+                      isActive ?
+                      "opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card scale-[1.01]" :
+                      "opacity-40 cursor-pointer hover:opacity-80 border-border bg-[hsl(var(--cream))]/30 scale-100"}`
+                      }>
+                      
                       <div className="flex items-center justify-between mb-5">
                         <div className="flex items-center gap-4">
                           <span
                             className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold shrink-0 transition-colors duration-500 ${
-                              isActive ? "bg-[#D4AF37] text-white" : "bg-gray-100 text-[#1B2333]"
-                            }`}
-                          >
+                            isActive ? "bg-[#D4AF37] text-white" : "bg-gray-100 text-[#1B2333]"}`
+                            }>
+                            
                             {q.id.replace("R", "")}
                           </span>
                           <h3 className="font-heading text-2xl md:text-3xl font-bold text-[#1B2333] leading-snug">
@@ -420,67 +414,67 @@ export default function OnboardingProfile({
                       </div>
 
                       <div
-                        className={`transition-all duration-700 ${isActive ? "opacity-100" : "pointer-events-none"}`}
-                      >
-                        {q.type === "free_input" ? (
-                          <FreeInputQuestion question={q} answer={answers[q.id]} onInput={handleFreeInput} />
-                        ) : (
-                          <PillsQuestion question={q} answer={answers[q.id]} onSelect={handlePillSelect} />
-                        )}
+                        className={`transition-all duration-700 ${isActive ? "opacity-100" : "pointer-events-none"}`}>
+                        
+                        {q.type === "free_input" ?
+                        <FreeInputQuestion question={q} answer={answers[q.id]} onInput={handleFreeInput} /> :
+
+                        <PillsQuestion question={q} answer={answers[q.id]} onSelect={handlePillSelect} />
+                        }
                       </div>
-                    </div>
-                  );
+                    </div>);
+
                 })}
               </div>
-            </div>
-          );
+            </div>);
+
         })}
       </div>
 
       {/* ── Fixed Bottom Action Bar ── */}
       <div
         className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] py-3"
-        style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
-      >
+        style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
+        
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-[60px] flex items-center justify-between">
-          <div className="text-lg font-medium text-gray-500 hidden sm:block">
-            {activeNode?.type === "chapter"
-              ? `Partie ${parseInt(activeNode.id.split("-")[1]) + 1} sur ${CHAPTERS.length}`
-              : `Question ${(activeNode?.index ?? 0) + 1} sur ${PROFILE_QUESTIONS.length}`}
+          <div className="text-sm font-medium text-gray-500 hidden sm:block">
+            {activeNode?.type === "chapter" ?
+            `Partie ${parseInt(activeNode.id.split("-")[1]) + 1} sur ${CHAPTERS.length}` :
+            `Question ${(activeNode?.index ?? 0) + 1} sur ${PROFILE_QUESTIONS.length}`}
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-            {currentNodeIdx > 0 && (
-              <Button
-                variant="outline"
-                onClick={() => scrollToNode(scrollNodes[currentNodeIdx - 1]?.id)}
-                className="h-11 px-5 rounded-lg border-gray-300 text-[#1B2333] hover:bg-gray-50 font-medium"
-              >
+            {currentNodeIdx > 0 &&
+            <Button
+              variant="outline"
+              onClick={() => scrollToNode(scrollNodes[currentNodeIdx - 1]?.id)}
+              className="h-11 px-5 rounded-lg border-gray-300 text-[#1B2333] hover:bg-gray-50 font-medium">
+              
                 <ChevronLeft className="h-4 w-4 mr-2" /> Précédent
               </Button>
-            )}
+            }
 
-            {currentNodeIdx === scrollNodes.length - 1 ? (
-              <Button
-                onClick={handleContinue}
-                disabled={saving}
-                className="h-11 px-8 rounded-lg bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium"
-              >
+            {currentNodeIdx === scrollNodes.length - 1 ?
+            <Button
+              onClick={handleContinue}
+              disabled={saving}
+              className="h-11 px-8 rounded-lg bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium">
+              
                 {saving ? "Enregistrement..." : "Terminer et valider"}
-              </Button>
-            ) : (
-              <Button
-                onClick={() => scrollToNode(scrollNodes[currentNodeIdx + 1]?.id)}
-                className="h-11 px-6 rounded-lg bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium"
-              >
+              </Button> :
+
+            <Button
+              onClick={() => scrollToNode(scrollNodes[currentNodeIdx + 1]?.id)}
+              className="h-11 px-6 rounded-lg bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium">
+              
                 Suivant <ChevronRight className="h-4 w-4 ml-2" />
               </Button>
-            )}
+            }
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 // ══════════════════════════════════════════════
@@ -492,19 +486,19 @@ function NumericStepper({ value, onChange, min, max, unit, placeholder, variant 
   const increment = () => onChange(String(Math.min(max, numVal + 1)));
   const decrement = () => onChange(String(Math.max(min, numVal - 1)));
   const borderClass =
-    variant === "primary"
-      ? "border-primary/20 bg-primary/5 focus-within:ring-primary/30"
-      : "border-border bg-[hsl(var(--cream))] focus-within:ring-[hsl(var(--gold))]/50";
+  variant === "primary" ?
+  "border-primary/20 bg-primary/5 focus-within:ring-primary/30" :
+  "border-border bg-[hsl(var(--cream))] focus-within:ring-[hsl(var(--gold))]/50";
 
   return (
     <div
-      className={`flex items-center gap-2 rounded-xl border min-h-[56px] px-2 transition-all focus-within:ring-2 ${borderClass}`}
-    >
+      className={`flex items-center gap-2 rounded-xl border min-h-[56px] px-2 transition-all focus-within:ring-2 ${borderClass}`}>
+      
       <button
         type="button"
         onClick={decrement}
-        className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold bg-black/5 hover:bg-black/10 shrink-0 text-foreground"
-      >
+        className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold bg-black/5 hover:bg-black/10 shrink-0 text-foreground">
+        
         −
       </button>
       <div className="relative flex-1 text-center">
@@ -521,27 +515,26 @@ function NumericStepper({ value, onChange, min, max, unit, placeholder, variant 
           onBlur={() => {
             if (value !== "") {
               const n = parseInt(value, 10);
-              if (n < min) onChange(String(min));
-              else if (n > max) onChange(String(max));
+              if (n < min) onChange(String(min));else
+              if (n > max) onChange(String(max));
             }
           }}
           placeholder={placeholder}
-          className="w-full bg-transparent text-center text-2xl font-semibold text-foreground placeholder:text-muted-foreground/40 focus:outline-none"
-        />
-
-        <span className="absolute right-0 top-1/2 -translate-y-1/2 text-lg font-medium text-muted-foreground pointer-events-none">
+          className="w-full bg-transparent text-center text-2xl font-semibold text-foreground placeholder:text-muted-foreground/40 focus:outline-none" />
+        
+        <span className="absolute right-0 top-1/2 -translate-y-1/2 text-sm font-medium text-muted-foreground pointer-events-none">
           {unit}
         </span>
       </div>
       <button
         type="button"
         onClick={increment}
-        className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold bg-black/5 hover:bg-black/10 shrink-0 text-foreground"
-      >
+        className="w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold bg-black/5 hover:bg-black/10 shrink-0 text-foreground">
+        
         +
       </button>
-    </div>
-  );
+    </div>);
+
 }
 
 function FreeInputQuestion({ question, answer, onInput, disabled = false }: any) {
@@ -563,8 +556,8 @@ function FreeInputQuestion({ question, answer, onInput, disabled = false }: any)
           min={min}
           max={max}
           unit={unit}
-          placeholder={isAge ? "65" : "170"}
-        />
+          placeholder={isAge ? "65" : "170"} />
+        
       </div>
       <div>
         <label className="block font-semibold text-primary mb-3 uppercase tracking-wider text-xl">Lui / Elle</label>
@@ -579,8 +572,8 @@ function FreeInputQuestion({ question, answer, onInput, disabled = false }: any)
                 max={max}
                 unit={unit}
                 placeholder={isAge ? "60" : "150"}
-                variant="primary"
-              />
+                variant="primary" />
+              
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -593,14 +586,14 @@ function FreeInputQuestion({ question, answer, onInput, disabled = false }: any)
                 max={max}
                 unit={unit}
                 placeholder={isAge ? "85" : "190"}
-                variant="primary"
-              />
+                variant="primary" />
+              
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 function PillsQuestion({ question, answer, onSelect, disabled = false }: any) {
@@ -628,17 +621,17 @@ function PillsQuestion({ question, answer, onSelect, disabled = false }: any) {
                 onClick={() => onSelect(question.id, "mon", opt, question.monMax)}
                 disabled={isDisabled}
                 className={`w-full min-h-[56px] rounded-xl px-5 text-left text-base font-medium border transition-all duration-200 flex items-center justify-between gap-3 ${
-                  selected
-                    ? "bg-[hsl(var(--gold))] text-white border-[hsl(var(--gold))] shadow-md"
-                    : isDisabled
-                      ? "opacity-50 border-border/30 text-muted-foreground cursor-not-allowed bg-muted/30"
-                      : "border-border/50 text-foreground hover:border-[hsl(var(--gold))]/40 hover:bg-[hsl(var(--cream))] bg-card"
-                }`}
-              >
+                selected ?
+                "bg-[hsl(var(--gold))] text-white border-[hsl(var(--gold))] shadow-md" :
+                isDisabled ?
+                "opacity-50 border-border/30 text-muted-foreground cursor-not-allowed bg-muted/30" :
+                "border-border/50 text-foreground hover:border-[hsl(var(--gold))]/40 hover:bg-[hsl(var(--cream))] bg-card"}`
+                }>
+                
                 <span className="leading-snug text-xl text-[#0e172a] font-semibold">{opt}</span>
                 {selected && <Check className="h-5 w-5 shrink-0" />}
-              </button>
-            );
+              </button>);
+
           })}
         </div>
       </div>
@@ -659,22 +652,22 @@ function PillsQuestion({ question, answer, onSelect, disabled = false }: any) {
                 onClick={() => onSelect(question.id, "son", opt, question.sonMax)}
                 disabled={isDisabled}
                 className={`w-full min-h-[56px] rounded-xl px-5 text-left text-base font-medium border transition-all duration-200 flex items-center justify-between gap-3 ${
-                  selected
-                    ? "bg-primary text-primary-foreground border-primary shadow-md"
-                    : isDisabled
-                      ? "opacity-50 border-border/30 text-muted-foreground cursor-not-allowed bg-muted/30"
-                      : "border-border/50 text-foreground hover:border-primary/30 hover:bg-primary/5 bg-card"
-                }`}
-              >
+                selected ?
+                "bg-primary text-primary-foreground border-primary shadow-md" :
+                isDisabled ?
+                "opacity-50 border-border/30 text-muted-foreground cursor-not-allowed bg-muted/30" :
+                "border-border/50 text-foreground hover:border-primary/30 hover:bg-primary/5 bg-card"}`
+                }>
+                
                 <span className="leading-snug text-xl font-medium">{opt}</span>
                 {selected && <Check className="h-5 w-5 shrink-0" />}
-              </button>
-            );
+              </button>);
+
           })}
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 function isQuestionAnswered(q: ProfileQuestion, answers: Answers): boolean {
