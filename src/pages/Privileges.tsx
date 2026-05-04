@@ -169,10 +169,12 @@ export default function Privileges() {
                     50€
                   </span>
                 </div>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl">
-                  ACCÈS GRATUIT PENDANT 3 MOIS SANS ENGAGEMENT
+                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl text-left">
+                  ACCÈS GRATUIT<br />
+                  SANS ENGAGEMENT<br />
+                  3 MOIS
                 </p>
-                <p className="text-muted-foreground tracking-widest uppercase text-lg">
+                <p className="text-muted-foreground tracking-widest uppercase text-lg text-left">
                   Puis 50€/mois (ou 120€ / 3 mois)
                 </p>
               </div>
