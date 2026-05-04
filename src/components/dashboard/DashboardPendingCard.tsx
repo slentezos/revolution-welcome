@@ -75,7 +75,7 @@ export default function DashboardPendingCard({ match, onView }: DashboardPending
           <div className="flex items-center gap-3 mt-4 bg-emerald-50 rounded-xl px-5 py-3">
             <Loader2 className="h-5 w-5 text-emerald-600 animate-spin" />
             <span className="text-emerald-800 font-semibold text-lg">En attente de sa réponse</span>
-            <span className="text-emerald-600/70 ml-auto text-lg">Accepté le {match.acceptedAt}</span>
+            <span className="text-emerald-600/70 ml-auto text-xl">Accepté le {match.acceptedAt}</span>
           </div>
 
           {/* Tags */}
