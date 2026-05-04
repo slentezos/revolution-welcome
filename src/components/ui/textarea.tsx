@@ -7,6 +7,25 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
   showDictation?: boolean;
 }
 
+// Parseur de ponctuation et de mise en forme pour le français
+const formatSpeech = (text: string) => {
+  if (!text) return "";
+  return text
+    .replace(/\bvirgule\b/gi, ",")
+    .replace(/\bpoint\b/gi, ".")
+    .replace(/\bpoint d'interrogation\b/gi, "?")
+    .replace(/\bpoint d'exclamation\b/gi, "!")
+    .replace(/\bpoints de suspension\b/gi, "...")
+    .replace(/\bà la ligne\b/gi, "\n")
+    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace avant la ponctuation
+    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto après ponctuation
+};
+
+const capitalizeFirst = (str: string) => {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, onChange, value, showDictation = false, ...props }, ref) => {
     const [isListening, setIsListening] = React.useState(false);
@@ -15,7 +34,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const internalRef = React.useRef<HTMLTextAreaElement | null>(null);
     const { toast } = useToast();
 
-    // Fusion des références (Celle du composant parent + la nôtre)
+    // Fusion de la référence transmise par le parent et de notre référence interne
     const setRefs = React.useCallback(
       (node: HTMLTextAreaElement) => {
         internalRef.current = node;
@@ -39,6 +58,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         recognition.onresult = (event: any) => {
           let finalSegment = "";
           let interimSegment = "";
+
           for (let i = event.resultIndex; i < event.results.length; i++) {
             const transcript = event.results[i].transcript;
             if (event.results[i].isFinal) finalSegment += transcript + " ";
@@ -46,12 +66,26 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           }
 
           if (finalSegment && internalRef.current) {
-            // Sécurité anti-undefined
-            const currentVal = internalRef.current.value || "";
-            const space = currentVal.endsWith(" ") || currentVal === "" ? "" : " ";
-            const newVal = currentVal + space + finalSegment;
+            let currentVal = internalRef.current.value || "";
+            let formattedFinal = formatSpeech(finalSegment).trim();
 
-            // Déclenchement naturel de l'événement onChange pour React
+            // Auto-majuscule si le champ est vide ou si on suit une ponctuation de fin de phrase
+            if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+              formattedFinal = capitalizeFirst(formattedFinal);
+            }
+
+            // Gestion intelligente de l'espace de liaison
+            const needsSpace =
+              currentVal.length > 0 &&
+              !currentVal.endsWith(" ") &&
+              !currentVal.endsWith("\n") &&
+              !formattedFinal.startsWith(",") &&
+              !formattedFinal.startsWith(".");
+            const space = needsSpace ? " " : "";
+
+            const newVal = currentVal + space + formattedFinal;
+
+            // Injection native pour déclencher le onChange de React
             const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
               window.HTMLTextAreaElement.prototype,
               "value",
@@ -60,7 +94,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             const ev = new Event("input", { bubbles: true });
             internalRef.current.dispatchEvent(ev);
           }
-          setInterimText(interimSegment);
+
+          setInterimText(formatSpeech(interimSegment));
         };
 
         recognition.onerror = () => setIsListening(false);
@@ -79,9 +114,18 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       if (isListening) {
         if (recognitionRef.current) recognitionRef.current.stop();
         setIsListening(false);
+
         if (interimText && internalRef.current) {
-          const currentVal = internalRef.current.value || "";
-          const newVal = currentVal + interimText + " ";
+          let currentVal = internalRef.current.value || "";
+          let finalInterim = interimText.trim();
+
+          if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+            finalInterim = capitalizeFirst(finalInterim);
+          }
+
+          const space = currentVal.length > 0 && !currentVal.endsWith(" ") ? " " : "";
+          const newVal = currentVal + space + finalInterim + " ";
+
           const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
             window.HTMLTextAreaElement.prototype,
             "value",
@@ -93,9 +137,10 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         setInterimText("");
       } else {
         if (recognitionRef.current) {
+          setInterimText(""); // Sécurité : On vide toujours le buffer avant de démarrer
           if (internalRef.current) {
             const currentVal = internalRef.current.value || "";
-            if (currentVal !== "" && !currentVal.endsWith(" ")) {
+            if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
               const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
                 window.HTMLTextAreaElement.prototype,
                 "value",
@@ -123,7 +168,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         const start = textarea.selectionStart;
         const end = textarea.selectionEnd;
         const currentValue = textarea.value;
-        const capitalizedValue = currentValue.charAt(0).toUpperCase() + currentValue.slice(1);
+        const capitalizedValue = capitalizeFirst(currentValue);
 
         if (currentValue !== capitalizedValue) {
           textarea.value = capitalizedValue;
@@ -131,6 +176,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
       }
 
+      // Si l'utilisateur efface ou tape du texte manuellement, on tue le buffer vocal
+      // pour éviter l'effet "Texte Fantôme"
       if (interimText) {
         setInterimText("");
       }
@@ -140,7 +187,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       }
     };
 
-    // Si on ne veut pas de dictée, on retourne le champ standard sans surcharger le DOM
     if (!showDictation) {
       return (
         <textarea
@@ -148,7 +194,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           value={value}
           autoCapitalize="sentences"
           className={cn(
-            "flex min-h-[120px] w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-xl resize-y",
+            "flex w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-xl resize-y min-h-[120px] max-h-[300px] overflow-y-auto",
             className,
           )}
           ref={setRefs}
@@ -157,9 +203,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       );
     }
 
-    // Protection anti-undefined pendant la frappe / dictée
     const safeValue = value === null || value === undefined ? "" : String(value);
-    const displayValue = isListening || interimText ? safeValue + interimText : value;
+    const displayValue = isListening || interimText ? safeValue + interimText : safeValue;
 
     return (
       <div className="flex flex-col w-full">
@@ -185,7 +230,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               value={displayValue}
               autoCapitalize="sentences"
               className={cn(
-                "flex min-h-[120px] w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-xl resize-y",
+                "flex w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:border-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 text-xl resize-y min-h-[120px] max-h-[300px] overflow-y-auto",
                 className,
               )}
               ref={setRefs}
@@ -194,7 +239,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           </div>
         </div>
 
-        {/* ÉGALISEUR DORÉ */}
+        {/* FEEDBACK ÉGALISEUR SOUS LE CHAMP DE TEXTE */}
         <div className="mt-2 min-h-[1.5rem]">
           {isListening ? (
             <div className="flex items-center gap-3">
