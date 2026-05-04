@@ -514,7 +514,8 @@ export default function Messages() {
                       >
                         <p className="font-semibold text-[#1B2333] mb-1">Votre Cercle Privé</p>
                         <p className="text-muted-foreground">
-                        Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés peuvent vous écrire. La confidentialité est absolue : vos messages sont strictement personnels et ne peuvent être lus par nos équipes, administrateurs inclus.
+                        Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés peuvent vous écrire. 
+                        La confidentialité est absolue : vos messages sont strictement personnels et ne peuvent être lus par nos équipes, administrateurs inclus.
                         </p>
                       </TooltipContent>
                     </Tooltip>
