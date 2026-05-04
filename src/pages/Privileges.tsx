@@ -163,14 +163,14 @@ export default function Privileges() {
               </div>
 
               <div className="mb-10 pb-8 border-b border-slate-100">
-                <div className="mb-4">
+                <div className="mb-4 text-center">
                   {/* CORRECTION ICI : Retrait du /30 sur la couleur de décoration */}
-                  <span className="font-heading text-5xl text-foreground line-through decoration-[#1B2333] decoration-[3px]">
+                  <span className="font-heading text-5xl text-foreground line-through decoration-[#1B2333] decoration-[3px] text-center">
                     50€
                   </span>
                 </div>
                 <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 text-xl">
-                  ACCÈS GRATUIT PENDANT 3 MOIS
+                  ACCÈS GRATUIT PENDANT 3 MOIS SANS ENGAGEMENT
                 </p>
                 <p className="text-muted-foreground tracking-widest uppercase text-lg">
                   Puis 50€/mois (ou 120€ / 3 mois)
