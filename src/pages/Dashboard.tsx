@@ -277,7 +277,7 @@ export default function Dashboard() {
                   <h2 className="font-heading text-3xl lg:text-4xl text-foreground tracking-tight">
                     Propositions à finaliser
                   </h2>
-                  <p className="text-lg text-muted-foreground mt-1">
+                  <p className="text-muted-foreground font-medium text-xl mt-1">
                     Des profils que vous souhaitez revoir à votre rythme
                   </p>
                 </div>
