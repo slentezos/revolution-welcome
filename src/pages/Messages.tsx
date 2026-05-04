@@ -128,7 +128,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES = [13, 14, 15, 16, 18, 20, 22, 24, 26]; // Tailles de police pour le zoom (du plus petit au plus grand)
+const FONT_SIZES =; // Tailles de police pour le zoom
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
@@ -158,6 +158,7 @@ export default function Messages() {
   const [chatFontSizeIndex, setChatFontSizeIndex] = useState(4); // Démarre à 18px
   const sendTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const prevConversationsRef = useRef(conversations);
 
   const [chatTooltipShown, setChatTooltipShown] = useState<Set<number>>(() => {
@@ -187,6 +188,30 @@ export default function Messages() {
     prevConversationsRef.current = conversations;
   }, [conversations]);
 
+  // FONCTION DE REDIMENSIONNEMENT DU TEXTAREA
+  const adjustTextareaHeight = useCallback(() => {
+    const ta = textareaRef.current;
+    if (ta) {
+      ta.style.height = "auto";
+      const scrollHeight = ta.scrollHeight;
+      // Max height set to 150px
+      if (scrollHeight > 150) {
+        ta.style.height = "150px";
+        ta.style.overflowY = "auto";
+      } else {
+        ta.style.height = `${scrollHeight}px`;
+        ta.style.overflowY = "hidden";
+      }
+      // Force le scroll vers le bas pendant la dictée
+      ta.scrollTop = ta.scrollHeight; 
+    }
+  }, []);
+
+  // Ajustement quand le message ou le texte intermédiaire (dictée) change
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [message, interimText, chatFontSize, adjustTextareaHeight]);
+
   // MOTEUR DE DICTÉE VOCALE (AVEC PONCTUATION ET SÉCURITÉ ANTI-UNDEFINED)
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -203,7 +228,7 @@ export default function Messages() {
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
-        const transcript = result?.[0]?.transcript || "";
+        const transcript = result?.?.transcript || "";
         if (!transcript) continue;
         if (result.isFinal) finalSegment += transcript + " ";
         else interimSegment += transcript;
@@ -228,6 +253,9 @@ export default function Messages() {
       }
 
       setInterimText(formatSpeech(interimSegment));
+      
+      // Force le redimensionnement du champ pendant que la personne parle
+      setTimeout(adjustTextareaHeight, 0); 
     };
 
     recognition.onerror = () => setIsListening(false);
@@ -239,7 +267,7 @@ export default function Messages() {
         recognitionRef.current.stop();
       }
     };
-  }, [isListening]);
+  }, [isListening, adjustTextareaHeight]);
 
   const toggleListening = useCallback(() => {
     if (isListening) {
@@ -287,7 +315,7 @@ export default function Messages() {
     }
   }, [isListening, interimText]);
 
-  // GESTION DU SCROLL DYNAMIQUE À LA FRAPPE
+  // GESTION DU SCROLL DYNAMIQUE À LA FRAPPE MANUELLE
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
     // Majuscule automatique sur la première lettre de la phrase
@@ -297,10 +325,8 @@ export default function Messages() {
     
     // Si frappe manuelle pendant/après dictée, on tue le texte fantôme
     if (interimText) setInterimText(""); 
-
-    // Auto-expand logic
-    e.target.style.height = 'auto';
-    e.target.style.height = `${Math.min(e.target.scrollHeight, 150)}px`;
+    
+    adjustTextareaHeight();
   };
 
   const speakMessage = useCallback(
@@ -377,8 +403,9 @@ export default function Messages() {
       setTimeout(() => scrollToBottom(), 150);
       
       // Réinitialiser la hauteur du textarea après l'envoi
-      const ta = document.getElementById("chat-textarea");
-      if (ta) ta.style.height = "auto";
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto";
+      }
     }
   };
 
@@ -576,7 +603,7 @@ export default function Messages() {
                       </button>
                       <div
                         className="relative cursor-pointer group shrink-0"
-                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                       >
                         <img
                           src={selectedChat.avatar}
@@ -599,8 +626,7 @@ export default function Messages() {
                         </p>
                       </div>
                       
-                      <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
-                        {/* BOUTONS A- ET A+ QUI MARCHENT PARFAITEMENT */}
+                      <div className="flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.max(0, i - 1))}
                           className="h-10 px-3.5 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center justify-center transition-colors shrink-0"
@@ -662,7 +688,7 @@ export default function Messages() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations)[number])}
+                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations))}
                           className="gap-2 text-[#1B2333] hover:bg-amber-50 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
                           <Eye className="h-4 w-4" />
@@ -689,7 +715,7 @@ export default function Messages() {
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
                           className="w-28 h-28 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
-                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                         />
                         <p className="text-muted-foreground text-xl text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
@@ -721,7 +747,7 @@ export default function Messages() {
                                 src={selectedChat.avatar}
                                 alt=""
                                 className="w-10 h-10 lg:w-12 lg:h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
-                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations)[number], e)}
+                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
                               />
                             )}
                             <div
@@ -729,7 +755,7 @@ export default function Messages() {
                             >
                               <p
                                 className={`leading-relaxed ${msg.sender === "them" ? "text-foreground" : "text-white"}`}
-                                style={{ fontSize: `${chatFontSize}px` }} // L'APPLICATION DU ZOOM DANS LE CHAT EST ICI
+                                style={{ fontSize: `${chatFontSize}px` }}
                               >
                                 {msg.text}
                               </p>
@@ -762,7 +788,7 @@ export default function Messages() {
                     )}
                   </div>
 
-                  {/* INPUT AREA (NATIVE TEXTAREA POUR ASSURER LE ZOOM ET LE SCROLL) */}
+                  {/* INPUT AREA (SCROLL VERTICAL AUTO SI TROP LONG) */}
                   <div className="p-4 lg:p-6 border-t border-amber-100/40 bg-white">
                     <div className="flex items-end gap-3 lg:gap-4">
                       <button
@@ -781,7 +807,7 @@ export default function Messages() {
                         {/* BALISE NATIVE POUR GARANTIR LE STYLE INLINE (ZOOM) ET L'AUTO-EXPAND */}
                         <textarea
                           id="chat-textarea"
-                          
+                          ref={textareaRef}
                           placeholder="Écrivez votre message..."
                           value={displayValue}
                           onChange={handleTextareaChange}
@@ -792,7 +818,7 @@ export default function Messages() {
                             }
                           }}
                           className="w-full min-h-[56px] overflow-y-auto resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-4 py-4"
-                          style={{ fontSize: `${chatFontSize}px` }} // L'APPLICATION DU ZOOM DE L'INPUT EST ICI
+                          style={{ fontSize: `${chatFontSize}px` }}
                         />
                       </div>
                       <Button
