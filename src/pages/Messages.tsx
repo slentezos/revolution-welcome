@@ -129,7 +129,7 @@ const mockMessages = [
   { id: 4, sender: "them", text: "Aimez-vous voyager ?", time: "14:30", read: false },
 ];
 
-const FONT_SIZES =; // Tailles de police pour le zoom
+const FONT_SIZES = [13, 14, 15, 16, 18, 20, 22, 24, 26]; // Tailles de police pour le zoom
 
 export default function Messages() {
   const [loading, setLoading] = useState(true);
@@ -227,7 +227,7 @@ export default function Messages() {
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
-        const transcript = result?.?.transcript || "";
+        const transcript = result?.[0]?.transcript || "";
         if (!transcript) continue;
         if (result.isFinal) finalSegment += transcript + " ";
         else interimSegment += transcript;
@@ -602,7 +602,7 @@ export default function Messages() {
                       </button>
                       <div
                         className="relative cursor-pointer group shrink-0"
-                        onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
+                        onClick={(e) => handleAvatarClick(selectedChat, e)}
                       >
                         <img
                           src={selectedChat.avatar}
@@ -687,7 +687,7 @@ export default function Messages() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleViewProfile(selectedChat as (typeof initialConversations))}
+                          onClick={() => handleViewProfile(selectedChat)}
                           className="gap-2 text-[#1B2333] hover:bg-amber-50 rounded-lg h-10 text-xl font-medium shrink-0"
                         >
                           <Eye className="h-4 w-4" />
@@ -714,7 +714,7 @@ export default function Messages() {
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
                           className="w-28 h-28 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
-                          onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
+                          onClick={(e) => handleAvatarClick(selectedChat, e)}
                         />
                         <p className="text-muted-foreground text-xl text-center italic">
                           Cliquez sur la photo pour en savoir plus sur {selectedChat.name}.
@@ -746,7 +746,7 @@ export default function Messages() {
                                 src={selectedChat.avatar}
                                 alt=""
                                 className="w-10 h-10 lg:w-12 lg:h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
-                                onClick={(e) => handleAvatarClick(selectedChat as (typeof initialConversations), e)}
+                                onClick={(e) => handleAvatarClick(selectedChat, e)}
                               />
                             )}
                             <div
