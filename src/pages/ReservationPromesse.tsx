@@ -141,7 +141,7 @@ export default function ReservationPromesse() {
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto mt-12">
           <span
             data-reveal
-            className="text-lg font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block"
+            className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl"
           >
             Service Conciergerie
           </span>
