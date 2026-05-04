@@ -48,9 +48,9 @@ const mockSavedMatches: SavedMatch[] = [
   { id: 24, name: "Sylvie", age: 70, location: "21000 - Dijon", affinity: 76, matchedAt: "2026-03-18", avatar: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=150&h=150&fit=crop&crop=face", verified: false, online: true, tags: ["Œnologie", "Patrimoine", "Cuisine"], commonPoint: "Vous appréciez tous les deux l'œnologie bourguignonne et la visite de châteaux.", savedAt: "22 mars 2026" },
 ];
 
-const SAVED_MATCHES_STORAGE_KEY = "kalimera_saved_matches_v2";
-const ACCEPTED_MATCHES_STORAGE_KEY = "kalimera_accepted_matches_v2";
-const PENDING_MATCHES_STORAGE_KEY = "kalimera_pending_matches_v2";
+const SAVED_MATCHES_STORAGE_KEY = "kalimera_saved_matches_v3";
+const ACCEPTED_MATCHES_STORAGE_KEY = "kalimera_accepted_matches_v3";
+const PENDING_MATCHES_STORAGE_KEY = "kalimera_pending_matches_v3";
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
@@ -142,7 +142,7 @@ export default function Dashboard() {
 
   const filteredMatches = visibleMatches.filter(
     (m) => now - new Date(m.matchedAt).getTime() <= sixDaysInMs
-  );
+  ).slice(0, 5);
   const visibleSavedForLater = savedForLater.filter(
     (m) => !pendingMatches.some((p) => p.id === m.id) && !acceptedMatchIds.includes(m.id)
   );
