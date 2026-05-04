@@ -76,9 +76,16 @@ export default function ReservationPromesse() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState("01");
 
+  // Déclaration statique des hooks pour éviter l'erreur React (Hooks inside a loop)
   const heroRef = useScrollReveal<HTMLElement>({ threshold: 0.08 });
   const overviewRef = useScrollReveal<HTMLElement>();
   const guaranteeRef = useScrollReveal<HTMLElement>();
+
+  const step1Ref = useScrollReveal<HTMLElement>();
+  const step2Ref = useScrollReveal<HTMLElement>();
+  const step3Ref = useScrollReveal<HTMLElement>();
+  const step4Ref = useScrollReveal<HTMLElement>();
+  const stepRefs = [step1Ref, step2Ref, step3Ref, step4Ref];
 
   useEffect(() => {
     const observerOptions = {
@@ -109,7 +116,7 @@ export default function ReservationPromesse() {
     const el = document.getElementById(id);
     if (el) {
       const yOffset = -200;
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
@@ -122,7 +129,12 @@ export default function ReservationPromesse() {
         className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       >
         <div className="absolute inset-0">
-          <img src={conciergeHero} alt="Conciergerie" className="w-full h-full object-cover" />
+          {/* Animation douce et lente (2 secondes) */}
+          <img
+            src={conciergeHero}
+            alt="Conciergerie"
+            className="w-full h-full object-cover animate-in fade-in zoom-in-[1.03] duration-[2000ms] ease-out"
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/95" />
         </div>
 
@@ -175,7 +187,7 @@ export default function ReservationPromesse() {
         </div>
       </section>
 
-      {/* 2. STICKY NAV TABS - TEXTE AUGMENTÉ À 2XL */}
+      {/* 2. STICKY NAV TABS */}
       <div className="sticky top-[64px] z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/50 shadow-sm py-6 md:py-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-start">
@@ -205,7 +217,6 @@ export default function ReservationPromesse() {
                     )}
                   />
 
-                  {/* TEXTE AUGMENTÉ À 2XL ICI */}
                   <span
                     className={cn(
                       "font-heading text-lg md:text-2xl text-center px-4 hidden xl:block transition-all duration-500 leading-tight max-w-[280px]",
@@ -226,19 +237,24 @@ export default function ReservationPromesse() {
       {/* 3. INTRO OVERVIEW */}
       <section ref={overviewRef} className="bg-background text-center pt-24 pb-20">
         <div className="container-main mx-auto px-6">
-          <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl">
+          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-6 block text-xl">
             Pendant notre appel vidéo
           </span>
-          <h2 className="font-heading text-5xl md:text-7xl text-foreground mb-8">Votre profil complet en 4 étapes</h2>
-          <div className="w-16 h-px bg-[hsl(var(--gold)/0.4)] mx-auto" />
+          <h2 data-reveal data-reveal-delay="150" className="font-heading text-5xl md:text-7xl text-foreground mb-8">
+            Votre profil complet en 4 étapes
+          </h2>
+          <div data-reveal data-reveal-delay="300" className="w-16 h-px bg-[hsl(var(--gold)/0.4)] mx-auto" />
         </div>
       </section>
 
-      {/* 4. DETAILED STEPS (Z-Pattern) - TITRES H2 AUGMENTÉS À 5XL */}
+      {/* 4. DETAILED STEPS (Z-Pattern) */}
       {SERVICE_STEPS.map((step, index) => {
         const Icon = step.icon;
+        const currentRef = stepRefs[index]; // Utilisation de la référence statique
+
         return (
           <section
+            ref={currentRef}
             id={step.id}
             key={step.number}
             data-step-number={step.number}
@@ -251,14 +267,20 @@ export default function ReservationPromesse() {
                 index % 2 === 0 ? "order-1" : "order-1 lg:order-2",
               )}
             >
-              <img
-                src={step.image}
-                alt={step.title}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] hover:scale-110"
-                loading="lazy"
-              />
-              <div className="absolute top-10 left-10 md:top-20 md:left-20">
-                <span className="font-heading text-[10rem] md:text-[15rem] font-medium text-white/20 drop-shadow-2xl">
+              <div data-reveal className="absolute inset-0 w-full h-full">
+                <img
+                  src={step.image}
+                  alt={step.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-[3s] ease-out hover:scale-105 animate-in fade-in zoom-in-[1.03]"
+                  loading="lazy"
+                />
+              </div>
+              <div className="absolute top-10 left-10 md:top-20 md:left-20 pointer-events-none">
+                <span
+                  data-reveal
+                  data-reveal-delay="200"
+                  className="font-heading text-[10rem] md:text-[15rem] font-medium text-white/20 drop-shadow-2xl"
+                >
                   {step.number}
                 </span>
               </div>
@@ -272,7 +294,7 @@ export default function ReservationPromesse() {
               )}
             >
               <div className="max-w-xl mx-auto w-full">
-                <div className="flex items-center gap-4 mb-6">
+                <div data-reveal className="flex items-center gap-4 mb-6">
                   <div className="w-10 h-10 bg-[#1B2333] flex items-center justify-center rounded-md shadow-xl">
                     <Icon className="h-5 w-5 text-white" />
                   </div>
@@ -281,26 +303,42 @@ export default function ReservationPromesse() {
                   </span>
                 </div>
 
-                {/* TITRE AUGMENTÉ À 5XL ICI */}
-                <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-4 leading-[1.1]">{step.title}</h2>
-                <p className="text-[hsl(var(--gold))] font-medium mb-14 text-2xl italic">{step.subtitle}</p>
+                <h2
+                  data-reveal
+                  data-reveal-delay="100"
+                  className="font-heading text-4xl md:text-5xl text-foreground mb-4 leading-[1.1]"
+                >
+                  {step.title}
+                </h2>
+
+                <p
+                  data-reveal
+                  data-reveal-delay="200"
+                  className="text-[hsl(var(--gold))] font-medium mb-14 text-2xl italic"
+                >
+                  {step.subtitle}
+                </p>
 
                 <div className="space-y-8">
-                  <div className="border-l-4 border-amber-100 pl-8 py-2">
+                  <div data-reveal data-reveal-delay="300" className="border-l-4 border-amber-100 pl-8 py-2">
                     <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
                       VOTRE SEULE PRÉPARATION :
                     </span>
                     <p className="text-muted-foreground leading-relaxed text-xl">{step.preparation}</p>
                   </div>
 
-                  <div className="border-l-4 border-amber-100 pl-8 py-2">
+                  <div data-reveal data-reveal-delay="400" className="border-l-4 border-amber-100 pl-8 py-2">
                     <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
                       NOTRE ÉCHANGE EN DIRECT :
                     </span>
                     <p className="text-muted-foreground leading-relaxed text-xl">{step.action}</p>
                   </div>
 
-                  <div className="bg-[#1B2333]/5 p-8 rounded-xl border border-border">
+                  <div
+                    data-reveal
+                    data-reveal-delay="500"
+                    className="bg-[#1B2333]/5 p-8 rounded-xl border border-border"
+                  >
                     <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
                       VOTRE PROFIL FINAL :
                     </span>
@@ -316,14 +354,26 @@ export default function ReservationPromesse() {
       {/* 5. POST-CALL SECTION */}
       <section className="py-32 bg-secondary/30 text-foreground text-center px-6">
         <div className="max-w-4xl mx-auto">
-          <Mail className="w-20 h-20 text-[hsl(var(--gold))] mx-auto mb-10 opacity-80" />
-          <h2 className="font-heading text-5xl md:text-6xl mb-8">Et après notre appel ?</h2>
-          <p className="text-2xl md:text-3xl text-foreground/80 leading-relaxed mb-10 font-medium">
+          <div data-reveal>
+            <Mail className="w-20 h-20 text-[hsl(var(--gold))] mx-auto mb-10 opacity-80" />
+          </div>
+          <h2 data-reveal data-reveal-delay="100" className="font-heading text-5xl md:text-6xl mb-8">
+            Et après notre appel ?
+          </h2>
+          <p
+            data-reveal
+            data-reveal-delay="200"
+            className="text-2xl md:text-3xl text-foreground/80 leading-relaxed mb-10 font-medium"
+          >
             Le travail est terminé de votre côté.
             <br />
             Nos experts prennent le relais en studio.
           </p>
-          <p className="text-muted-foreground leading-relaxed text-xl max-w-2xl mx-auto">
+          <p
+            data-reveal
+            data-reveal-delay="300"
+            className="text-muted-foreground leading-relaxed text-xl max-w-2xl mx-auto"
+          >
             D'ici <strong>24 à 48 heures</strong>, vous recevrez un email contenant votre profil finalisé. Vous pourrez
             tout vérifier sereinement avant l'activation officielle.
           </p>
@@ -333,13 +383,19 @@ export default function ReservationPromesse() {
       {/* 6. PRICING RECAP */}
       <section className="relative py-32 lg:py-40 overflow-hidden bg-[#1B2333] text-white">
         <div className="relative z-10 container-main mx-auto px-6 text-center">
-          <h2 className="font-heading text-5xl md:text-7xl mb-8">Tout est inclus pour 89 €</h2>
-          <p className="text-white/50 mb-20 text-2xl font-light">Un paiement unique, sans abonnement, sans surprise.</p>
+          <h2 data-reveal className="font-heading text-5xl md:text-7xl mb-8">
+            Tout est inclus pour 89 €
+          </h2>
+          <p data-reveal data-reveal-delay="100" className="text-white/50 mb-20 text-2xl font-light">
+            Un paiement unique, sans abonnement, sans surprise.
+          </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
             {INCLUDED.map((item, i) => (
               <div
                 key={i}
+                data-reveal
+                data-reveal-delay={String(150 + i * 50)}
                 className="flex items-center gap-5 bg-white/5 border border-white/10 p-8 rounded-2xl text-left backdrop-blur-md hover:bg-white/10 transition-colors"
               >
                 <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center shrink-0">
@@ -351,6 +407,8 @@ export default function ReservationPromesse() {
           </div>
 
           <button
+            data-reveal
+            data-reveal-delay="400"
             onClick={() => navigate("/reservation/calendrier")}
             className="inline-flex items-center gap-4 bg-[hsl(var(--gold))] text-[#1B2333] px-16 py-7 font-bold tracking-widest transition-all hover:scale-105 hover:brightness-110 text-2xl rounded-full shadow-[0_20px_50px_rgba(226,163,54,0.3)]"
           >
@@ -363,16 +421,26 @@ export default function ReservationPromesse() {
       {/* 7. GUARANTEE & FINAL CTA */}
       <section ref={guaranteeRef} className="py-32 bg-background">
         <div className="container-main mx-auto px-6 text-center">
-          <ShieldCheck className="h-24 w-24 text-[hsl(var(--gold))] mx-auto mb-10 opacity-90" />
-          <h2 className="font-heading text-4xl md:text-6xl mb-8">Garantie Sérénité Absolue</h2>
-          <p className="text-muted-foreground text-2xl max-w-3xl mx-auto mb-20 leading-relaxed">
+          <ShieldCheck data-reveal className="h-24 w-24 text-[hsl(var(--gold))] mx-auto mb-10 opacity-90" />
+          <h2 data-reveal data-reveal-delay="100" className="font-heading text-4xl md:text-6xl mb-8">
+            Garantie Sérénité Absolue
+          </h2>
+          <p
+            data-reveal
+            data-reveal-delay="200"
+            className="text-muted-foreground text-2xl max-w-3xl mx-auto mb-20 leading-relaxed"
+          >
             Si à la réception de votre profil, notre service ne répond pas à 100% à vos attentes, nous vous remboursons
             intégralement. Immédiatement et sans discussion.
           </p>
 
           <div className="flex flex-col items-center gap-10">
-            <h3 className="font-heading text-3xl md:text-5xl">Prêt à écrire votre prochain chapitre ?</h3>
+            <h3 data-reveal data-reveal-delay="300" className="font-heading text-3xl md:text-5xl">
+              Prêt à écrire votre prochain chapitre ?
+            </h3>
             <button
+              data-reveal
+              data-reveal-delay="400"
               onClick={() => navigate("/reservation/calendrier")}
               className="bg-[#1B2333] text-white px-16 py-7 rounded-full text-2xl font-bold hover:bg-slate-800 transition-all flex items-center gap-4 shadow-2xl"
             >
@@ -380,6 +448,8 @@ export default function ReservationPromesse() {
               <ArrowRight className="h-7 w-7" />
             </button>
             <button
+              data-reveal
+              data-reveal-delay="500"
               onClick={() => navigate("/onboarding")}
               className="text-muted-foreground hover:text-foreground underline underline-offset-8 text-lg"
             >
