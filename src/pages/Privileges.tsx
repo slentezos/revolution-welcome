@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Lock, Shield, Clock, Sparkles, Crown, Check, Gift, ArrowRight, CreditCard } from "lucide-react";
+import { Lock, Shield, Clock, Sparkles, Crown, Check, Gift, ArrowRight, CreditCard, PhoneCall, Video } from "lucide-react";
 import Layout from "@/components/layout/Layout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
