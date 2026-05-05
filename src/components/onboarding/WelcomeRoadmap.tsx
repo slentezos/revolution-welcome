@@ -336,9 +336,7 @@ function StepCard({
               aria-label={`Aller à l'étape ${stepIndex + 2}`}
               className="flex items-center justify-center gap-4 bg-[hsl(var(--gold))] text-white px-10 h-16 rounded-full shadow-xl hover:bg-[hsl(var(--gold))]/90 hover:shadow-2xl transition-all group w-full sm:w-auto sm:ml-auto"
             >
-              <span className="font-heading text-2xl font-bold tracking-wide">
-                Étape {stepIndex + 2}
-              </span>
+              <span className="font-heading text-2xl font-bold tracking-wide">Étape {stepIndex + 2}</span>
               <ArrowDown className="h-6 w-6 text-white group-hover:translate-y-1 transition-transform" />
             </button>
           </div>
@@ -479,7 +477,7 @@ export default function WelcomeRoadmap({
                     <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
                   </div>
                   <div className="flex-grow">
-                    <span className="text-gold text-xl sm:text-xl font-semibold tracking-wide block mb-2">
+                    <span className="text-gold text-2xl sm:text-2xl font-semibold tracking-wide block mb-2">
                       Étape {step.number}
                     </span>
                     <span className="text-foreground font-heading text-2xl sm:text-3xl leading-snug block mb-4">
