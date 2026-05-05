@@ -1,26 +1,33 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Mic, MicOff, Send } from "lucide-react";
+import { Mic, MicOff, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   showDictation?: boolean;
-  recipientName?: string;
-  recipientAvatar?: string;
+  onConfirm?: () => void;
+  onClose?: () => void;
 }
 
 // Parseur de ponctuation et de mise en forme pour le français
 const formatSpeech = (text: string) => {
   if (!text) return "";
-  return text
-    .replace(/\bvirgule\b/gi, ",")
-    .replace(/\bpoint\b/gi, ".")
-    .replace(/\bpoint d'interrogation\b/gi, "?")
-    .replace(/\bpoint d'exclamation\b/gi, "!")
-    .replace(/\bpoints de suspension\b/gi, "...")
-    .replace(/\bà la ligne\b/gi, "\n")
-    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace avant la ponctuation
-    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto
+  return (
+    text
+      // Ordre important : on remplace d'abord les expressions complexes
+      .replace(/\bpoints? d['']interrogation\b/gi, "?")
+      .replace(/\bpoints? d['']exclamation\b/gi, "!")
+      .replace(/\bpoints de suspension\b/gi, "...")
+      .replace(/\bnouveau paragraphe\b/gi, "\n\n")
+      .replace(/\b(à|a) la ligne\b/gi, "\n")
+      .replace(/\bretour (à|a) la ligne\b/gi, "\n")
+      .replace(/\bvirgule\b/gi, ",")
+      .replace(/\bpoint-virgule\b/gi, ";")
+      .replace(/\bdeux points\b/gi, ":")
+      .replace(/\bpoint\b/gi, ".")
+      .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+      .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`)
+  ); // Majuscule auto après ponctuation
 };
 
 const capitalizeFirst = (str: string) => {
@@ -29,18 +36,7 @@ const capitalizeFirst = (str: string) => {
 };
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  (
-    {
-      className,
-      onChange,
-      value,
-      showDictation = false,
-      recipientName = "Sophie",
-      recipientAvatar = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=256&h=256&auto=format&fit=crop", // UX 2026: Placeholder Premium
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, onChange, value, showDictation = false, onConfirm, onClose, ...props }, ref) => {
     const [isListening, setIsListening] = React.useState(false);
     const [interimText, setInterimText] = React.useState("");
     const recognitionRef = React.useRef<any>(null);
@@ -60,70 +56,117 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       [ref],
     );
 
-    React.useEffect(() => {
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      if (SpeechRecognition) {
-        const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = "fr-FR";
-
-        recognition.onresult = (event: any) => {
-          let finalSegment = "";
-          let interimSegment = "";
-
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            const transcript = event.results[i].transcript;
-            if (event.results[i].isFinal) finalSegment += transcript + " ";
-            else interimSegment += transcript;
-          }
-
-          if (finalSegment && internalRef.current) {
-            let currentVal = internalRef.current.value || "";
-            let formattedFinal = formatSpeech(finalSegment).trim();
-
-            if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
-              formattedFinal = capitalizeFirst(formattedFinal);
-            }
-
-            const needsSpace =
-              currentVal.length > 0 &&
-              !currentVal.endsWith(" ") &&
-              !currentVal.endsWith("\n") &&
-              !formattedFinal.startsWith(",") &&
-              !formattedFinal.startsWith(".");
-            const space = needsSpace ? " " : "";
-
-            const newVal = currentVal + space + formattedFinal;
-
-            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-              window.HTMLTextAreaElement.prototype,
-              "value",
-            )?.set;
-            nativeInputValueSetter?.call(internalRef.current, newVal);
-            const ev = new Event("input", { bubbles: true });
-            internalRef.current.dispatchEvent(ev);
-          }
-
-          setInterimText(formatSpeech(interimSegment));
-        };
-
-        recognition.onerror = () => setIsListening(false);
-        recognition.onend = () => setIsListening(false);
-        recognitionRef.current = recognition;
-      }
-
-      return () => {
-        if (recognitionRef.current && isListening) {
-          recognitionRef.current.stop();
+    // Fonction d'auto-expand fluide (Ne cache jamais le texte)
+    const adjustTextareaHeight = React.useCallback(() => {
+      const ta = internalRef.current;
+      if (ta) {
+        ta.style.height = "auto";
+        const scrollHeight = ta.scrollHeight;
+        if (scrollHeight > 300) {
+          ta.style.height = "300px";
+        } else {
+          ta.style.height = `${scrollHeight}px`;
         }
-      };
+        // Force le scroll en bas pour toujours voir ce qui est dicté
+        ta.scrollTop = ta.scrollHeight;
+      }
+    }, []);
+
+    React.useEffect(() => {
+      adjustTextareaHeight();
+    }, [value, interimText, adjustTextareaHeight]);
+
+    // Ref miroir pour éviter les bugs de closure avec isListening
+    const listeningRef = React.useRef(false);
+    React.useEffect(() => {
+      listeningRef.current = isListening;
     }, [isListening]);
 
-    const toggleListening = () => {
-      if (isListening) {
-        if (recognitionRef.current) recognitionRef.current.stop();
+    React.useEffect(() => {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
+
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = "fr-FR";
+
+      recognition.onresult = (event: any) => {
+        if (!listeningRef.current) return;
+
+        let finalSegment = "";
+        let interimSegment = "";
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i];
+          const transcript = result?.[0]?.transcript || "";
+          if (!transcript) continue;
+          if (result.isFinal) finalSegment += transcript + " ";
+          else interimSegment += transcript;
+        }
+
+        if (finalSegment && internalRef.current) {
+          let currentVal = internalRef.current.value || "";
+          let formattedFinal = formatSpeech(finalSegment).trim();
+
+          if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+            formattedFinal = capitalizeFirst(formattedFinal);
+          }
+
+          const needsSpace =
+            currentVal.length > 0 &&
+            !currentVal.endsWith(" ") &&
+            !currentVal.endsWith("\n") &&
+            !formattedFinal.startsWith(",") &&
+            !formattedFinal.startsWith(".");
+          const space = needsSpace ? " " : "";
+
+          const newVal = currentVal + space + formattedFinal;
+
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLTextAreaElement.prototype,
+            "value",
+          )?.set;
+          nativeInputValueSetter?.call(internalRef.current, newVal);
+          const ev = new Event("input", { bubbles: true });
+          internalRef.current.dispatchEvent(ev);
+        }
+
+        setInterimText(formatSpeech(interimSegment));
+        setTimeout(adjustTextareaHeight, 0);
+      };
+
+      recognition.onerror = () => {
+        listeningRef.current = false;
         setIsListening(false);
+        setInterimText("");
+      };
+      recognition.onend = () => {
+        listeningRef.current = false;
+        setIsListening(false);
+      };
+      recognitionRef.current = recognition;
+
+      return () => {
+        try {
+          recognition.stop();
+        } catch {}
+        try {
+          recognition.abort?.();
+        } catch {}
+      };
+    }, [adjustTextareaHeight]);
+
+    const toggleListening = () => {
+      if (listeningRef.current) {
+        listeningRef.current = false;
+        setIsListening(false);
+        try {
+          recognitionRef.current?.stop();
+        } catch {}
+        try {
+          recognitionRef.current?.abort?.();
+        } catch {}
 
         if (interimText && internalRef.current) {
           let currentVal = internalRef.current.value || "";
@@ -146,28 +189,37 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
         setInterimText("");
       } else {
-        if (recognitionRef.current) {
-          setInterimText("");
-          if (internalRef.current) {
-            const currentVal = internalRef.current.value || "";
-            if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
-              const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-                window.HTMLTextAreaElement.prototype,
-                "value",
-              )?.set;
-              nativeInputValueSetter?.call(internalRef.current, currentVal + " ");
-              const ev = new Event("input", { bubbles: true });
-              internalRef.current.dispatchEvent(ev);
-            }
-          }
-          recognitionRef.current.start();
-          setIsListening(true);
-        } else {
+        if (!recognitionRef.current) {
           toast({
             title: "Non supporté",
             description: "La dictée vocale n'est pas supportée sur ce navigateur.",
             variant: "destructive",
           });
+          return;
+        }
+
+        setInterimText("");
+
+        if (internalRef.current) {
+          const currentVal = internalRef.current.value || "";
+          if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
+            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+              window.HTMLTextAreaElement.prototype,
+              "value",
+            )?.set;
+            nativeInputValueSetter?.call(internalRef.current, currentVal + " ");
+            const ev = new Event("input", { bubbles: true });
+            internalRef.current.dispatchEvent(ev);
+          }
+        }
+
+        try {
+          recognitionRef.current.start();
+          listeningRef.current = true;
+          setIsListening(true);
+        } catch {
+          listeningRef.current = false;
+          setIsListening(false);
         }
       }
     };
@@ -193,6 +245,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       if (onChange) {
         onChange(e);
       }
+
+      adjustTextareaHeight();
     };
 
     if (!showDictation) {
@@ -202,7 +256,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           value={value}
           autoCapitalize="sentences"
           className={cn(
-            "flex w-full rounded-2xl border border-input bg-background/50 px-5 py-4 text-xl backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 min-h-[140px] resize-y",
+            "flex w-full rounded-2xl border border-input bg-background/50 px-5 py-4 text-xl backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 min-h-[140px] resize-y overflow-y-auto",
             className,
           )}
           ref={setRefs}
@@ -215,100 +269,91 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const displayValue = isListening || interimText ? safeValue + interimText : safeValue;
 
     return (
-      <div className="w-full max-w-3xl mx-auto flex flex-col bg-white rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden transition-all duration-500">
-        {/* En-tête Contextuel (UX 2026 : Intégration de l'Avatar) */}
-        <div className="flex items-center gap-4 px-6 pt-6 pb-2">
-          <div className="relative">
-            <img
-              src={recipientAvatar}
-              alt={`Avatar de ${recipientName}`}
-              className="w-14 h-14 rounded-full object-cover border-2 border-transparent ring-2 ring-[hsl(var(--gold))/0.2]"
-            />
-            {isListening && (
-              <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
-            )}
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Nouveau Message</p>
-            <p className="text-xl font-bold text-[#1B2333]">Écrire à {recipientName}</p>
-          </div>
-        </div>
-
-        {/* Zone de Texte Principale */}
-        <div className="relative px-6 py-2 flex-1">
+      <div className="w-full flex flex-col transition-all duration-500">
+        {/* Zone de Texte Principale avec Auto-Expand */}
+        <div className="relative flex-1">
           <textarea
             onChange={handleChange}
             value={displayValue}
             autoCapitalize="sentences"
-            placeholder={`Bonjour ${recipientName}...`}
             className={cn(
-              "w-full bg-transparent text-xl leading-relaxed text-[#1B2333] placeholder:text-gray-300 resize-none min-h-[160px] focus:outline-none focus:ring-0",
+              "w-full bg-[hsl(var(--cream))]/60 border-2 rounded-2xl text-xl leading-relaxed text-[#1B2333] placeholder:text-gray-400 resize-none min-h-[160px] max-h-[300px] overflow-y-auto focus:outline-none focus:ring-0 px-6 py-5 transition-all shadow-sm",
+              isListening
+                ? "border-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--gold)/0.12)]"
+                : "border-amber-100/80 focus:border-[hsl(var(--gold))]",
               className,
             )}
             ref={setRefs}
             {...props}
           />
 
-          {/* Overlay de Dictée (Feedback Visuel 2026) */}
+          {/* Feedback Visuel En Écoute */}
           {isListening && (
-            <div className="absolute inset-0 pointer-events-none rounded-xl border border-[hsl(var(--gold))/0.3] bg-[hsl(var(--gold))/0.02] transition-opacity duration-300"></div>
+            <div className="absolute top-4 right-4 flex items-center gap-2 bg-[hsl(var(--gold))]/15 px-3 py-1.5 rounded-full pointer-events-none">
+              <div className="flex items-end gap-0.5 h-4">
+                <span
+                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:0ms]"
+                  style={{ height: "60%" }}
+                />
+                <span
+                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:150ms]"
+                  style={{ height: "100%" }}
+                />
+                <span
+                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:300ms]"
+                  style={{ height: "40%" }}
+                />
+              </div>
+              <span className="text-sm font-semibold text-[hsl(var(--gold))]">En écoute</span>
+            </div>
           )}
         </div>
 
-        {/* Panneau de Contrôle Inférieur */}
-        <div className="px-6 pb-6 pt-2 flex items-center justify-between bg-gray-50/50 mt-auto rounded-b-[32px]">
-          {/* Indicateur d'état & Égaliseur */}
-          <div className="flex items-center min-w-[150px] h-10">
-            {isListening ? (
-              <div className="flex items-center gap-3 bg-[hsl(var(--gold))/0.1] px-4 py-2 rounded-full">
-                <div className="flex items-end gap-1 h-4">
-                  <span
-                    className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:0ms]"
-                    style={{ height: "60%" }}
-                  />
-                  <span
-                    className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:150ms]"
-                    style={{ height: "100%" }}
-                  />
-                  <span
-                    className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:300ms]"
-                    style={{ height: "40%" }}
-                  />
-                  <span
-                    className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:450ms]"
-                    style={{ height: "80%" }}
-                  />
-                </div>
-                <span className="text-sm font-semibold text-[hsl(var(--gold))] animate-pulse">Écoute en cours...</span>
-              </div>
-            ) : safeValue.length > 0 ? (
-              <span className="text-sm font-medium text-gray-400">Brouillon sauvegardé</span>
-            ) : null}
-          </div>
+        {/* Astuce dictée exacte */}
+        <p className="mt-3 px-2 text-base text-muted-foreground leading-relaxed">
+          💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
+          <span className="font-semibold text-foreground">« point »</span>,{" "}
+          <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
+          <span className="font-semibold text-foreground">« point d'interrogation »</span>.
+        </p>
 
-          {/* Actions : Dictée & Envoi */}
-          <div className="flex items-center gap-3">
+        {/* Panneau de Contrôle Inférieur (Boutons Modulables) */}
+        <div className="mt-5 flex flex-col sm:flex-row gap-3">
+          <button
+            type="button"
+            onClick={toggleListening}
+            className={cn(
+              "min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-lg lg:text-xl font-semibold transition-all duration-300 shadow-sm",
+              isListening
+                ? "bg-[hsl(var(--gold))] text-white shadow-[0_8px_24px_-8px_hsl(var(--gold)/0.6)] hover:brightness-105"
+                : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--cream))]/50",
+            )}
+          >
+            {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6 text-[hsl(var(--gold))]" />}
+            {isListening ? "Arrêter la dictée" : "Dicter à voix haute"}
+          </button>
+
+          {onClose && (
             <button
               type="button"
-              onClick={toggleListening}
-              className={cn(
-                "flex items-center justify-center gap-2 h-12 px-6 rounded-full transition-all duration-300 text-lg font-semibold shadow-sm",
-                isListening
-                  ? "bg-white text-red-500 border border-red-100 hover:bg-red-50"
-                  : "bg-white text-[#1B2333] border border-gray-200 hover:bg-gray-50",
-              )}
+              onClick={onClose}
+              className="min-h-[60px] sm:w-auto px-6 rounded-2xl text-lg lg:text-xl font-semibold bg-white border-2 border-gray-200 text-gray-700 hover:bg-gray-50 transition-all"
             >
-              {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5 text-[hsl(var(--gold))]" />}
-              {isListening ? "Arrêter" : "Dicter"}
+              Fermer
             </button>
+          )}
 
+          {onConfirm && (
             <button
               type="button"
-              className="flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-[#1B2333] text-white hover:bg-[#1B2333]/90 transition-all text-lg font-semibold shadow-md"
+              onClick={onConfirm}
+              disabled={!safeValue.trim() && !isListening}
+              className="min-h-[60px] sm:min-w-[180px] rounded-2xl text-lg lg:text-xl font-semibold flex items-center justify-center gap-2 bg-[#1B2333] text-white hover:bg-[#1B2333]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[0_8px_24px_-8px_rgba(27,35,51,0.5)]"
             >
-              Envoyer <Send className="h-4 w-4" />
+              <Check className="h-5 w-5" />
+              Confirmer
             </button>
-          </div>
+          )}
         </div>
       </div>
     );
