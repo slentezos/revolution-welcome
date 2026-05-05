@@ -38,13 +38,18 @@ import { checkMessage } from "@/utils/wordFilter";
 const formatSpeech = (text: string) => {
   if (!text) return "";
   return text
-    .replace(/\bvirgule\b/gi, ",")
-    .replace(/\bpoint\b/gi, ".")
-    .replace(/\bpoint d'interrogation\b/gi, "?")
-    .replace(/\bpoint d'exclamation\b/gi, "!")
+    // Ordre important : expressions longues d'abord
+    .replace(/\bpoints? d['']interrogation\b/gi, "?")
+    .replace(/\bpoints? d['']exclamation\b/gi, "!")
     .replace(/\bpoints de suspension\b/gi, "...")
-    .replace(/\bà la ligne\b/gi, "\n")
-    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+    .replace(/\bnouveau paragraphe\b/gi, "\n\n")
+    .replace(/\b(à|a) la ligne\b/gi, "\n")
+    .replace(/\bretour (à|a) la ligne\b/gi, "\n")
+    .replace(/\bvirgule\b/gi, ",")
+    .replace(/\bpoint-virgule\b/gi, ";")
+    .replace(/\bdeux points\b/gi, ":")
+    .replace(/\bpoint\b/gi, ".")
+    .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
     .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto après ponctuation
 };
 
