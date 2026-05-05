@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Lock, Shield, Clock, Sparkles, Crown, Check, Gift, ArrowRight, CreditCard, PhoneCall, Video } from "lucide-react";
+import { Lock, Shield, Clock, Sparkles, Crown, Check, Gift, ArrowRight, CreditCard, PhoneCall, Video, CalendarCheck } from "lucide-react";
+import { toast } from "sonner";
 import Layout from "@/components/layout/Layout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
 import PrivilegeBadge from "@/components/location/PrivilegeBadge";
+import VIPWaitlistModal from "@/components/privileges/VIPWaitlistModal";
+import { supabase } from "@/integrations/supabase/client";
 import privilegesHero from "@/assets/privileges-hero.jpg";
 import giftBannerPrivileges from "@/assets/gift-banner-privileges.jpg";
 
