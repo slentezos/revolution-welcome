@@ -378,13 +378,13 @@ export const PROFILE_QUESTIONS: ProfileQuestion[] = [
   },
   {
     id: "R23",
-    question: "Engagement politique",
+    question: "Politique",
     type: "pills",
     ...ch(3),
     monMax: 1,
     sonMax: 2,
-    monOptions: ["Plutôt à gauche", "Plutôt à droite", "Très écolo", "C'est important de militer", "Aucun engagement"],
-    sonOptions: ["Plutôt à gauche", "Plutôt à droite", "Très écolo", "C'est important de militer", "Aucun engagement"],
+    monOptions: ["Plutôt à gauche", "Plutôt à droite", "Très écolo", "C'est important de militer", "Apolitique"],
+    sonOptions: ["Plutôt à gauche", "Plutôt à droite", "Très écolo", "C'est important de militer", "Apolitique"],
   },
   {
     id: "R24",
