@@ -453,7 +453,7 @@ export default function ContactMemberContent() {
               </div>
 
               {/* Astuce dictée */}
-              <p className="mt-1 text-base text-muted-foreground leading-relaxed">
+              <p className="mt-1 text-muted-foreground leading-relaxed text-lg">
                 💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
                 <span className="font-semibold text-foreground">« point »</span>,{" "}
                 <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
