@@ -188,20 +188,20 @@ export default function ReservationPromesse() {
       </section>
 
       {/* 2. STICKY NAV TABS */}
-      <div className="sticky top-[64px] z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/50 shadow-sm py-6 md:py-8">
+      <div className="sticky top-[64px] z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/50 shadow-sm py-3 md:py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start gap-2 overflow-x-auto no-scrollbar">
             {SERVICE_STEPS.map((step) => {
               const isActive = activeStep === step.number;
               return (
                 <button
                   key={step.number}
                   onClick={() => scrollToStep(step.id)}
-                  className="flex-1 flex flex-col items-center group transition-all duration-500 outline-none"
+                  className="flex-1 min-w-[64px] min-h-[48px] flex flex-col items-center group transition-all duration-500 outline-none"
                 >
                   <span
                     className={cn(
-                      "font-heading text-4xl md:text-6xl transition-all duration-500",
+                      "font-heading text-3xl md:text-6xl transition-all duration-500",
                       isActive
                         ? "text-[hsl(var(--gold))] scale-110"
                         : "text-muted-foreground/30 group-hover:text-muted-foreground/50",
@@ -212,8 +212,8 @@ export default function ReservationPromesse() {
 
                   <div
                     className={cn(
-                      "h-[3px] mt-3 mb-4 transition-all duration-700",
-                      isActive ? "w-16 md:w-24 bg-[hsl(var(--gold))]" : "w-12 md:w-16 bg-transparent",
+                      "h-[3px] mt-2 md:mt-3 mb-2 md:mb-4 transition-all duration-700",
+                      isActive ? "w-10 md:w-24 bg-[hsl(var(--gold))]" : "w-8 md:w-16 bg-transparent",
                     )}
                   />
 

@@ -312,4 +312,13 @@
   .link-underline:hover::after {
     @apply scale-x-100 origin-left;
   }
+
+  /* Hide scrollbar utility (used for horizontal scroll rows) */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -789,10 +789,10 @@ export default function Messages() {
 
                   {/* INPUT AREA */}
                   <div className="p-4 lg:p-6 border-t border-amber-100/40 bg-white">
-                    <div className="flex items-end gap-3 lg:gap-4">
+                    <div className="flex items-end gap-2 sm:gap-3 lg:gap-4">
                       <button
                         onClick={toggleListening}
-                        className={`min-h-[56px] px-4 lg:px-5 w-auto min-w-[120px] lg:min-w-[130px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0 ${
+                        className={`min-h-[56px] min-w-[56px] px-3 sm:px-4 lg:px-5 sm:min-w-[120px] lg:min-w-[130px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-lg sm:text-xl font-semibold shrink-0 ${
                           isListening
                             ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
                             : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
@@ -817,7 +817,7 @@ export default function Messages() {
                       <Button
                         onClick={handleSend}
                         disabled={isSent || (!message.trim() && !isListening)}
-                        className="min-h-[56px] w-auto lg:w-[140px] rounded-xl text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300 px-4"
+                        className="min-h-[56px] min-w-[56px] w-auto lg:w-[140px] rounded-xl text-lg sm:text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300 px-3 sm:px-4"
                       >
                         {isSent ? <Check className="h-6 w-6" /> : <Send className="h-6 w-6" />}
                         <span className="hidden lg:inline">{isSent ? "Envoyé" : "Envoyer"}</span>
