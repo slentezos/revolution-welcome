@@ -344,7 +344,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
             </button>
 
             {/* Reassurance */}
-            <p className="text-center text-muted-foreground text-base leading-relaxed">
+            <p className="text-center text-muted-foreground leading-relaxed text-xl">
               Désactivation libre · Aucun frais caché · Paiement sécurisé
             </p>
 
