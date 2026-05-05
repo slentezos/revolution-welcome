@@ -14,20 +14,20 @@ const formatSpeech = (text: string) => {
   if (!text) return "";
   return (
     text
-      // Ordre important : on remplace d'abord les expressions complexes
-      .replace(/\bpoints? d['']interrogation\b/gi, "?")
-      .replace(/\bpoints? d['']exclamation\b/gi, "!")
-      .replace(/\bpoints de suspension\b/gi, "...")
-      .replace(/\bnouveau paragraphe\b/gi, "\n\n")
-      .replace(/\b(à|a) la ligne\b/gi, "\n")
-      .replace(/\bretour (à|a) la ligne\b/gi, "\n")
+      // Ordre strictement respecté : les expressions longues d'abord
+      .replace(/\bpoints?\s+d['’]interrogation\b/gi, "?")
+      .replace(/\bpoints?\s+d['’]exclamation\b/gi, "!")
+      .replace(/\bpoints?\s+de\s+suspension\b/gi, "...")
+      .replace(/\bnouveau\s+paragraphe\b/gi, "\n\n")
+      .replace(/\b(à|a)\s+la\s+ligne\b/gi, "\n")
+      .replace(/\bretour\s+(à|a)\s+la\s+ligne\b/gi, "\n")
       .replace(/\bvirgule\b/gi, ",")
       .replace(/\bpoint-virgule\b/gi, ";")
-      .replace(/\bdeux points\b/gi, ":")
+      .replace(/\bdeux\s+points\b/gi, ":")
       .replace(/\bpoint\b/gi, ".")
       .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
       .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`)
-  ); // Majuscule auto après ponctuation
+  ); // Majuscule auto
 };
 
 const capitalizeFirst = (str: string) => {
@@ -41,6 +41,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const [interimText, setInterimText] = React.useState("");
     const recognitionRef = React.useRef<any>(null);
     const internalRef = React.useRef<HTMLTextAreaElement | null>(null);
+
+    // Règle le bug du "Double Typing" : on sépare la valeur visuelle de la valeur réelle en mémoire
+    const valueRef = React.useRef(value);
+    React.useEffect(() => {
+      valueRef.current = value;
+    }, [value]);
+
     const { toast } = useToast();
 
     // Fusion de la référence transmise par le parent et de notre référence interne
@@ -56,7 +63,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       [ref],
     );
 
-    // Fonction d'auto-expand fluide (Ne cache jamais le texte)
+    // Auto-expand fluide qui scrolle toujours en bas
     const adjustTextareaHeight = React.useCallback(() => {
       const ta = internalRef.current;
       if (ta) {
@@ -67,8 +74,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         } else {
           ta.style.height = `${scrollHeight}px`;
         }
-        // Force le scroll en bas pour toujours voir ce qui est dicté
-        ta.scrollTop = ta.scrollHeight;
+        ta.scrollTop = ta.scrollHeight; // Garantit qu'on voit toujours la dernière ligne
       }
     }, []);
 
@@ -76,7 +82,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       adjustTextareaHeight();
     }, [value, interimText, adjustTextareaHeight]);
 
-    // Ref miroir pour éviter les bugs de closure avec isListening
     const listeningRef = React.useRef(false);
     React.useEffect(() => {
       listeningRef.current = isListening;
@@ -106,7 +111,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
 
         if (finalSegment && internalRef.current) {
-          let currentVal = internalRef.current.value || "";
+          // On se base strictement sur la référence parente pour éviter les doublons
+          let currentVal = String(valueRef.current || "");
           let formattedFinal = formatSpeech(finalSegment).trim();
 
           if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
@@ -122,6 +128,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           const space = needsSpace ? " " : "";
 
           const newVal = currentVal + space + formattedFinal;
+          valueRef.current = newVal; // Mise à jour instantanée de la mémoire interne
 
           const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
             window.HTMLTextAreaElement.prototype,
@@ -169,7 +176,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         } catch {}
 
         if (interimText && internalRef.current) {
-          let currentVal = internalRef.current.value || "";
+          let currentVal = String(valueRef.current || "");
           let finalInterim = interimText.trim();
 
           if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
@@ -178,6 +185,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
           const space = currentVal.length > 0 && !currentVal.endsWith(" ") ? " " : "";
           const newVal = currentVal + space + finalInterim + " ";
+          valueRef.current = newVal;
 
           const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
             window.HTMLTextAreaElement.prototype,
@@ -201,7 +209,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         setInterimText("");
 
         if (internalRef.current) {
-          const currentVal = internalRef.current.value || "";
+          const currentVal = String(valueRef.current || "");
           if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
             const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
               window.HTMLTextAreaElement.prototype,
@@ -238,8 +246,16 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
       }
 
+      // Si l'utilisateur commence à taper manuellement, on coupe l'écoute proprement pour ne pas doubler le texte
       if (interimText) {
         setInterimText("");
+        if (listeningRef.current) {
+          try {
+            recognitionRef.current?.abort();
+          } catch {}
+          setIsListening(false);
+          listeningRef.current = false;
+        }
       }
 
       if (onChange) {
@@ -286,31 +302,33 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             ref={setRefs}
             {...props}
           />
-
-          {/* Feedback Visuel En Écoute */}
-          {isListening && (
-            <div className="absolute top-4 right-4 flex items-center gap-2 bg-[hsl(var(--gold))]/15 px-3 py-1.5 rounded-full pointer-events-none">
-              <div className="flex items-end gap-0.5 h-4">
-                <span
-                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:0ms]"
-                  style={{ height: "60%" }}
-                />
-                <span
-                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:150ms]"
-                  style={{ height: "100%" }}
-                />
-                <span
-                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:300ms]"
-                  style={{ height: "40%" }}
-                />
-              </div>
-              <span className="text-sm font-semibold text-[hsl(var(--gold))]">En écoute</span>
-            </div>
-          )}
         </div>
 
-        {/* Astuce dictée exacte */}
-        <p className="mt-3 px-2 text-base text-muted-foreground leading-relaxed">
+        {/* FEEDBACK VISUEL LARGE ET LISIBLE (NE SUPERPOSE JAMAIS LE TEXTE) */}
+        {isListening && (
+          <div className="mt-4 flex items-center justify-center gap-4 bg-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/30 px-6 py-5 rounded-2xl transition-all animate-in slide-in-from-top-2">
+            <div className="flex items-end gap-1.5 h-6">
+              <span
+                className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:0ms]"
+                style={{ height: "60%" }}
+              />
+              <span
+                className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:150ms]"
+                style={{ height: "100%" }}
+              />
+              <span
+                className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:300ms]"
+                style={{ height: "40%" }}
+              />
+            </div>
+            <span className="text-xl lg:text-2xl font-bold text-[hsl(var(--gold))] animate-pulse tracking-wide">
+              En écoute... Parlez distinctement
+            </span>
+          </div>
+        )}
+
+        {/* Astuce dictée claire et lisible */}
+        <p className="mt-4 px-2 text-base text-muted-foreground leading-relaxed">
           💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
           <span className="font-semibold text-foreground">« point »</span>,{" "}
           <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
