@@ -156,7 +156,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     }
 
     const preview = URL.createObjectURL(file);
-    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s))));
+    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
     if (fileInputRef.current) fileInputRef.current.value = "";
     setActiveSlotId(null);
   };
