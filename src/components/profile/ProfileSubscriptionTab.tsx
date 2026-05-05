@@ -72,11 +72,11 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 <h4 className="font-medium text-foreground mb-5 text-2xl">Inclus dans votre offre :</h4>
                 <ul className="space-y-4 mb-10 flex-1">
                   {[
-                    "Espace personnel",
+                    "Tableau de bord",
                     "Compte vérifié",
-                    "Messagerie illimitée",
+                    "Messagerie",
                     "Test de personnalité",
-                    "Quiz de vos préférences",
+                    "Satisfait ou remboursé",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-4">
                       <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
@@ -84,6 +84,39 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                     </li>
                   ))}
                 </ul>
+
+                {/* Options souscrites */}
+                <div className="mb-8 pt-6 border-t border-secondary">
+                  <h4 className="font-medium text-foreground mb-5 text-2xl">Options souscrites :</h4>
+                  <ul className="space-y-4">
+                    {[
+                      {
+                        title: "Conciergerie — Création de profil",
+                        desc: "Accompagnement personnalisé par notre équipe",
+                        price: "89€",
+                      },
+                      {
+                        title: "Studio Vidéo Professionnel",
+                        desc: "Tournage de votre vidéo de présentation",
+                        price: "49€",
+                      },
+                    ].map((opt) => (
+                      <li
+                        key={opt.title}
+                        className="flex items-start justify-between gap-4 p-4 rounded-2xl bg-secondary/30 border border-secondary"
+                      >
+                        <div className="flex items-start gap-4 flex-1">
+                          <Sparkles className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-foreground font-semibold text-xl leading-snug">{opt.title}</p>
+                            <p className="text-muted-foreground text-lg mt-1 leading-relaxed">{opt.desc}</p>
+                          </div>
+                        </div>
+                        <span className="font-heading text-2xl text-foreground shrink-0">{opt.price}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 {/* Bouton d'action */}
                 <button className="w-full bg-[#1B2333] text-white py-5 text-base uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-3 shadow-md rounded-2xl">
