@@ -260,8 +260,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold text-xl leading-tight">Intimidé(e) ?</p>
-                        <p className="text-lg opacity-80 underline">Nous vous filmons en visio (49€)</p>
+                        <p className="font-bold text-xl leading-tight">Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé. (49€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -489,8 +488,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <Headphones className="h-5 w-5 text-[hsl(var(--gold))] animate-pulse" />
                       </div>
                       <div>
-                        <p className="font-bold text-[hsl(var(--gold))] leading-tight text-xl">Intimidé(e) ?</p>
-                        <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (49€)</p>
+                        <p className="font-bold text-[hsl(var(--gold))] leading-tight text-xl">Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé. (49€)</p>
                       </div>
                     </div>
                     <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
