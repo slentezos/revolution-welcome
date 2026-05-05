@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Check, Pause, EyeOff, Heart, Bell, Sparkles, ArrowRight } from "lucide-react";
+import { Check, Pause, EyeOff, Heart, Bell, Sparkles, ArrowRight, Crown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import CancellationFlow from "./CancellationFlow";
 import profileSubscriptionImg from "@/assets/profile-subscription.jpg";
@@ -13,6 +13,8 @@ interface ProfileSubscriptionTabProps {
 export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptionTabProps) {
   const [pauseOpen, setPauseOpen] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
+  const [changeOpen, setChangeOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<"trimestrielle" | "mensuelle" | "vip">("trimestrielle");
 
   return (
     <div>
@@ -50,21 +52,21 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                     <div className="w-14 h-14 border border-secondary flex items-center justify-center rounded-2xl bg-secondary/20">
                       <Sparkles className="h-6 w-6 text-[hsl(var(--gold))]" />
                     </div>
-                    <h3 className="font-heading text-3xl text-foreground md:text-4xl">Offre Découverte</h3>
+                    <h3 className="font-heading text-3xl text-foreground md:text-4xl">Cercle Privé</h3>
                   </div>
                 </div>
 
                 {/* Badge Statut & Prix */}
                 <div className="mb-8 pb-8 border-b border-secondary">
                   <div className="inline-flex items-center justify-center bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] px-4 py-1.5 font-bold tracking-[0.15em] uppercase rounded-lg mb-6 text-lg">
-                    Offre Active
+                    Adhésion trimestrielle · Active
                   </div>
                   <div className="flex items-baseline gap-3 mb-2">
-                    <span className="font-heading text-5xl md:text-6xl text-foreground">60€</span>
+                    <span className="font-heading text-5xl md:text-6xl text-foreground">120€</span>
                     <span className="text-muted-foreground font-medium text-2xl">/ 3 mois</span>
                   </div>
                   <p className="text-muted-foreground tracking-widest uppercase font-medium mt-3 text-xl">
-                    Expire le 12 juin 2026
+                    Soit 40€/mois · Prochain prélèvement le 12 juin 2026
                   </p>
                 </div>
 
@@ -72,11 +74,10 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 <h4 className="font-medium text-foreground mb-5 text-2xl">Inclus dans votre offre :</h4>
                 <ul className="space-y-4 mb-10 flex-1">
                   {[
-                    "Tableau de bord",
-                    "Compte vérifié",
-                    "Messagerie",
-                    "Test de personnalité",
-                    "Satisfait ou remboursé",
+                    "Messagerie illimitée",
+                    "Appels Audio & Vidéo illimités",
+                    "Profils vérifiés manuellement",
+                    "Anonymat garanti",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-4">
                       <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
@@ -119,7 +120,10 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 </div>
 
                 {/* Bouton d'action */}
-                <button className="w-full bg-[#1B2333] text-white py-5 text-base uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-3 shadow-md rounded-2xl">
+                <button
+                  onClick={() => setChangeOpen(true)}
+                  className="w-full bg-[#1B2333] text-white py-5 text-base uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-3 shadow-md rounded-2xl"
+                >
                   Changer d'offre <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
@@ -228,6 +232,141 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               </Button>
               <button
                 onClick={() => setPauseOpen(false)}
+                className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Change Plan Modal */}
+      <Dialog open={changeOpen} onOpenChange={setChangeOpen}>
+        <DialogContent className="sm:max-w-2xl md:max-w-4xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl bg-white max-h-[90vh] overflow-y-auto">
+          <div className="px-6 sm:px-10 py-10 space-y-8">
+            {/* Header */}
+            <div className="text-center space-y-3">
+              <div className="mx-auto w-16 h-16 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
+                <Sparkles className="h-8 w-8 text-[hsl(var(--gold))]" />
+              </div>
+              <h2 className="font-heading text-foreground text-3xl md:text-4xl leading-tight">
+                Changer d'offre
+              </h2>
+              <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto">
+                Choisissez la formule qui vous correspond le mieux.
+              </p>
+            </div>
+
+            {/* Plans */}
+            <div className="grid md:grid-cols-2 gap-5">
+              {/* Trimestrielle */}
+              <button
+                type="button"
+                onClick={() => setSelectedPlan("trimestrielle")}
+                className={`text-left p-6 rounded-3xl border-2 transition-all relative ${
+                  selectedPlan === "trimestrielle"
+                    ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5 shadow-md"
+                    : "border-secondary bg-white hover:border-[hsl(var(--gold))]/40"
+                }`}
+              >
+                <div className="absolute -top-3 right-6 bg-[hsl(var(--gold))] text-primary px-3 py-1 text-xs font-bold tracking-[0.15em] uppercase rounded-full">
+                  Recommandé
+                </div>
+                <p className="font-medium tracking-[0.15em] uppercase text-muted-foreground mb-3 text-base">
+                  Adhésion trimestrielle
+                </p>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="font-heading text-4xl md:text-5xl text-foreground">120€</span>
+                  <span className="text-lg text-muted-foreground">/ 3 mois</span>
+                </div>
+                <p className="text-muted-foreground text-lg mb-4">Soit 40€/mois — économisez 30€.</p>
+                {selectedPlan === "trimestrielle" && (
+                  <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg">
+                    <Check className="h-5 w-5" /> Sélectionnée
+                  </div>
+                )}
+              </button>
+
+              {/* Mensuelle */}
+              <button
+                type="button"
+                onClick={() => setSelectedPlan("mensuelle")}
+                className={`text-left p-6 rounded-3xl border-2 transition-all ${
+                  selectedPlan === "mensuelle"
+                    ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5 shadow-md"
+                    : "border-secondary bg-white hover:border-[hsl(var(--gold))]/40"
+                }`}
+              >
+                <p className="font-medium tracking-[0.15em] uppercase text-muted-foreground mb-3 text-base">
+                  Adhésion mensuelle
+                </p>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="font-heading text-4xl md:text-5xl text-foreground">50€</span>
+                  <span className="text-lg text-muted-foreground">/ mois</span>
+                </div>
+                <p className="text-muted-foreground text-lg mb-4">Liberté totale, mois par mois.</p>
+                {selectedPlan === "mensuelle" && (
+                  <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg">
+                    <Check className="h-5 w-5" /> Sélectionnée
+                  </div>
+                )}
+              </button>
+            </div>
+
+            {/* VIP add-on */}
+            <button
+              type="button"
+              onClick={() => setSelectedPlan("vip")}
+              className={`w-full text-left p-6 rounded-3xl border-2 transition-all relative ${
+                selectedPlan === "vip"
+                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5 shadow-md"
+                  : "border-secondary bg-white hover:border-[hsl(var(--gold))]/40"
+              }`}
+            >
+              <div className="absolute -top-3 right-6 bg-foreground text-white px-3 py-1 text-xs font-bold tracking-[0.15em] uppercase rounded-full">
+                Bientôt disponible
+              </div>
+              <div className="flex items-center gap-3 mb-2">
+                <Crown className="h-6 w-6 text-[hsl(var(--gold))]" />
+                <p className="font-medium tracking-[0.15em] uppercase text-foreground text-base">
+                  Ajouter le Carré VIP
+                </p>
+              </div>
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="font-heading text-3xl md:text-4xl text-foreground">+12€</span>
+                <span className="text-lg text-muted-foreground">/ mois</span>
+              </div>
+              <p className="text-muted-foreground text-lg">
+                Mode Invisible, accusés de lecture, alertes Conciergerie.
+              </p>
+            </button>
+
+            {/* Reassurance */}
+            <p className="text-center text-muted-foreground text-base leading-relaxed">
+              Désactivation libre · Aucun frais caché · Paiement sécurisé
+            </p>
+
+            {/* Actions */}
+            <div className="flex flex-col gap-3 pt-2">
+              <Button
+                className="w-full h-16 rounded-2xl text-primary-foreground text-xl font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all shadow-md"
+                onClick={() => {
+                  setChangeOpen(false);
+                  toast({
+                    title: "Demande enregistrée",
+                    description:
+                      selectedPlan === "vip"
+                        ? "Vous serez informé(e) dès l'ouverture du Carré VIP."
+                        : "Votre nouvelle formule sera appliquée à la prochaine échéance.",
+                  });
+                }}
+              >
+                <Check className="h-6 w-6 mr-3" />
+                Confirmer mon choix
+              </Button>
+              <button
+                onClick={() => setChangeOpen(false)}
                 className="w-full h-12 rounded-2xl text-muted-foreground hover:text-foreground font-medium transition-colors text-xl"
               >
                 Annuler
