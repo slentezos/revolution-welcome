@@ -306,11 +306,12 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
                 non partagée)
               </span>
               <Textarea
+                showDictation
+                recipientName="vous-même"
                 placeholder="Partagez votre histoire si vous le souhaitez..."
                 value={whyAlone}
                 onChange={(e) => setWhyAlone(e.target.value)}
                 rows={8}
-                className="bg-[hsl(35,15%,97%)] border-border/40 focus:border-primary/50 text-base resize-none placeholder:text-muted-foreground/40 placeholder:font-light"
               />
             </div>
           </div>
