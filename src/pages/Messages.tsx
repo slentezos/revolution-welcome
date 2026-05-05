@@ -20,10 +20,12 @@ import {
   MicOff,
   Volume2,
   Check,
+  CheckCheck,
   Phone,
   Video,
   Info,
 } from "lucide-react";
+import { canUseReadReceipts } from "@/config/features";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
