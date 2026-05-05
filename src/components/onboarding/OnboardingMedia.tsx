@@ -248,7 +248,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <div className="w-20 h-20 rounded-full bg-white shadow-sm border border-[#E5E0D8] flex items-center justify-center mb-4">
                         <Video className="h-10 w-10 text-[hsl(var(--gold))]" />
                       </div>
-                      <span className="text-2xl text-[#1B2333] font-semibold">Ajouter ma vidéo</span>
+                      <span className="text-2xl text-[#1B2333] font-semibold">+ Ajouter ma vidéo</span>
                     </div>
 
                     <button
