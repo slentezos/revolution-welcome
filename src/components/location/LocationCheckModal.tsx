@@ -75,7 +75,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
         {/* Postal code input */}
         <div className="max-w-xs mx-auto mb-6">
           <Input
-            placeholder="Votre code postal"
+            placeholder="Entrer votre code postal"
             value={postalCode}
             onChange={(e) => handleChange(e.target.value)}
             inputMode="numeric"
