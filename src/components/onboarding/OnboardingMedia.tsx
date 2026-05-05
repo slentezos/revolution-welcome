@@ -435,7 +435,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-xl"
               >
                 {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
-                Réserver ma séance
+                Réserver ma séance (35€)
               </Button>
               <button
                 onClick={() => setShowStudioModal(false)}
