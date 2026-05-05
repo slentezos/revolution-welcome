@@ -54,7 +54,7 @@ export default function DashboardStatsCards({
   ];
 
   return (
-    <div className="sticky top-[64px] z-40 w-full bg-background/95 backdrop-blur-md border-b border-border/40 shadow-sm py-4 overflow-hidden">
+    <div className="sticky top-[64px] z-40 w-full backdrop-blur-md border-b border-border/40 shadow-sm py-4 overflow-hidden bg-transparent">
       {/* BOÎTE PARENTE : Gère uniquement le scroll (overflow-x-auto) avec le padding global */}
       <div className="w-full overflow-x-auto no-scrollbar px-4 md:px-8">
         {/* BOÎTE ENFANT : w-max force les éléments à rester sur une ligne sans se compresser */}
