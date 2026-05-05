@@ -486,7 +486,7 @@ export default function WelcomeRoadmap({
                       {step.title}
                     </span>
                   </div>
-                  <span className="text-muted-foreground text-xl flex items-center gap-2 mt-auto pt-4 border-t border-border/50">
+                  <span className="text-muted-foreground flex items-center gap-2 mt-auto pt-4 border-t border-border/50 text-2xl">
                     <span className="text-2xl">⏱️</span> {step.duration}
                   </span>
                 </button>
