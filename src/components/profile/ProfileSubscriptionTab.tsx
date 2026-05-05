@@ -327,7 +327,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                   : "border-secondary bg-white hover:border-[hsl(var(--gold))]/40"
               }`}
             >
-              <div className="absolute -top-3 right-6 bg-foreground text-white px-3 py-1 text-xs font-bold tracking-[0.15em] uppercase rounded-full">
+              <div className="absolute -top-3 right-6 bg-foreground text-white px-3 py-1 font-bold tracking-[0.15em] uppercase rounded-full text-base">
                 Bientôt disponible
               </div>
               <div className="flex items-center gap-3 mb-2">
@@ -338,7 +338,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               </div>
               <div className="flex items-baseline gap-2 mb-2">
                 <span className="font-heading text-3xl md:text-4xl text-foreground">+12€</span>
-                <span className="text-lg text-muted-foreground">/ mois</span>
+                <span className="text-muted-foreground text-xl">/ mois</span>
               </div>
               <p className="text-muted-foreground text-lg">Mode Invisible, accusés de lecture, alertes Conciergerie.</p>
             </button>
