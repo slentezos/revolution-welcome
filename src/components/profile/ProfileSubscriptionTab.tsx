@@ -308,6 +308,30 @@ export default function ProfileSubscriptionTab({
               </p>
             </div>
 
+            {/* Current subscription summary */}
+            <div className="rounded-3xl border-2 border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-[hsl(var(--gold))]/15 flex items-center justify-center shrink-0">
+                  <Check className="h-6 w-6 text-[hsl(var(--gold))]" />
+                </div>
+                <div>
+                  <p className="font-medium tracking-[0.15em] uppercase text-muted-foreground text-base mb-1">
+                    Votre offre actuelle
+                  </p>
+                  <p className="font-heading text-2xl md:text-3xl text-foreground leading-tight">{planLabel}</p>
+                  <p className="text-muted-foreground text-lg mt-2">
+                    {hasFreeTrial ? "Période offerte jusqu'au" : "Expire le"}{" "}
+                    <span className="text-foreground font-semibold">{formatFrenchDate(expiryDate)}</span>
+                  </p>
+                </div>
+              </div>
+              {hasFreeTrial && (
+                <div className="inline-flex items-center justify-center bg-[hsl(var(--gold))] text-primary px-4 py-2 font-bold tracking-[0.15em] uppercase rounded-lg text-base shrink-0">
+                  3 mois offerts
+                </div>
+              )}
+            </div>
+
             {/* Plans */}
             <div className="grid md:grid-cols-2 gap-5">
               {/* Trimestrielle */}
