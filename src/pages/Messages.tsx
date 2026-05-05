@@ -20,12 +20,10 @@ import {
   MicOff,
   Volume2,
   Check,
-  CheckCheck,
   Phone,
   Video,
   Info,
 } from "lucide-react";
-import { canUseReadReceipts } from "@/config/features";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
@@ -45,9 +43,9 @@ const formatSpeech = (text: string) => {
       .replace(/\bpoints? d['']interrogation\b/gi, "?")
       .replace(/\bpoints? d['']exclamation\b/gi, "!")
       .replace(/\bpoints de suspension\b/gi, "...")
-      .replace(/(^|\s)nouveau paragraphe(?=\s|$|[,.!?;:])/gi, "\n\n")
-      .replace(/(^|\s)retour (?:à|a) la ligne(?=\s|$|[,.!?;:])/gi, "\n")
-      .replace(/(^|\s)(?:à|a) la ligne(?=\s|$|[,.!?;:])/gi, "\n")
+      .replace(/\bnouveau paragraphe\b/gi, "\n\n")
+      .replace(/\b(à|a) la ligne\b/gi, "\n")
+      .replace(/\bretour (à|a) la ligne\b/gi, "\n")
       .replace(/\bvirgule\b/gi, ",")
       .replace(/\bpoint-virgule\b/gi, ";")
       .replace(/\bdeux points\b/gi, ":")
@@ -531,28 +529,7 @@ export default function Messages() {
               <div className="p-6 border-b border-amber-100/40">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="font-heading text-2xl font-bold text-[#1B2333]">Mes conversations</h2>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50/50 border border-amber-100/40 cursor-help">
-                          <Lock className="h-3 w-3 text-[hsl(var(--gold))]" />
-                          <span className="font-medium text-[hsl(var(--gold))] text-xl">Cercle privé</span>
-                          <Info className="h-3.5 w-3.5 text-[hsl(var(--gold))]" />
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="bottom"
-                        className="max-w-xs bg-white text-foreground border border-amber-100 shadow-xl rounded-xl p-4 text-xl leading-relaxed"
-                      >
-                        <p className="font-semibold text-[#1B2333] mb-1">Votre Cercle Privé</p>
-                        <p className="text-muted-foreground">
-                          Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés
-                          peuvent vous écrire. La confidentialité est absolue : vos messages sont strictement personnels
-                          et ne peuvent être lus par nos équipes, administrateurs inclus.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  {/* Le Tooltip Cercle privé a été retiré d'ici pour être placé en bas */}
                 </div>
                 <div className="relative">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -608,7 +585,7 @@ export default function Messages() {
                   </button>
                 ))}
               </div>
-              <div className="p-5 border-t border-amber-100/40 bg-amber-50/20">
+              <div className="p-5 border-t border-amber-100/40 bg-amber-50/20 flex flex-col gap-3">
                 <button
                   onClick={() => setShowConseils(true)}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl hover:bg-amber-50/60 transition-colors"
@@ -616,6 +593,38 @@ export default function Messages() {
                   <ShieldCheck className="h-5 w-5 text-[hsl(var(--gold))]" />
                   <span className="font-medium text-muted-foreground text-xl">9 conseils de sécurité</span>
                 </button>
+
+                {/* TOOLTIP CERCLE PRIVÉ (Déplacé en bas et relooké) */}
+                <TooltipProvider delayDuration={200}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button className="w-full flex items-center justify-center gap-2 py-2 rounded-xl cursor-help opacity-80 hover:opacity-100 transition-opacity">
+                        <Lock className="h-4 w-4 text-[hsl(var(--gold))]" />
+                        <span className="font-medium text-[#1B2333] text-lg">Cercle privé</span>
+                        <Info className="h-4 w-4 text-muted-foreground/50" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      className="max-w-[320px] bg-[#1B2333] text-white border border-[hsl(var(--gold))]/30 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] rounded-2xl p-6 z-50 animate-in fade-in zoom-in-95"
+                    >
+                      <div className="flex items-center gap-2 mb-3">
+                        <Lock className="h-5 w-5 text-[hsl(var(--gold-light))]" />
+                        <p className="font-heading font-semibold text-[hsl(var(--gold-light))] text-xl">
+                          Votre Cercle Privé
+                        </p>
+                      </div>
+                      <p className="text-white/90 text-lg leading-relaxed mb-3">
+                        Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés peuvent
+                        vous écrire.
+                      </p>
+                      <p className="text-white/70 text-base leading-relaxed italic">
+                        La confidentialité est absolue : vos messages sont strictement personnels et ne peuvent être lus
+                        par nos équipes, administrateurs inclus.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
 
@@ -806,26 +815,11 @@ export default function Messages() {
                                   className={`text-base ${msg.sender === "me" ? "text-white/50" : "text-muted-foreground"}`}
                                 >
                                   {msg.sender === "me"
-                                    ? canUseReadReceipts()
-                                      ? msg.read
-                                        ? `Lu à ${msg.time}`
-                                        : `Remis à ${msg.time}`
-                                      : msg.time
+                                    ? msg.read
+                                      ? `Lu à ${msg.time}`
+                                      : `Remis à ${msg.time}`
                                     : msg.time}
                                 </p>
-                                {msg.sender === "me" && canUseReadReceipts() && (
-                                  msg.read ? (
-                                    <CheckCheck
-                                      className="h-4 w-4 text-[hsl(var(--gold))]"
-                                      aria-label="Lu"
-                                    />
-                                  ) : (
-                                    <Check
-                                      className="h-4 w-4 text-white/50"
-                                      aria-label="Remis"
-                                    />
-                                  )
-                                )}
                                 {msg.sender === "them" && (
                                   <button
                                     onClick={() => speakMessage(msg.id, msg.text)}
@@ -886,7 +880,7 @@ export default function Messages() {
         }}
       >
         <DialogContent className="max-w-3xl w-[calc(100%-2rem)] p-0 gap-0 bg-white border-0 rounded-[28px] shadow-[0_30px_80px_-20px_rgba(27,35,51,0.35)] overflow-hidden">
-          {/* En-tête avec avatar Sophie */}
+          {/* En-tête avec avatar */}
           <div className="relative bg-gradient-to-br from-[#1B2333] via-[#1B2333] to-[#2a3348] px-8 py-6 flex items-center gap-5">
             <div
               className="absolute inset-0 opacity-[0.07] pointer-events-none"
@@ -920,7 +914,7 @@ export default function Messages() {
               <Textarea
                 autoFocus
                 ref={textareaRef}
-                placeholder="Écrivez votre message ou appuyez sur « Dicter à voix haute » pour l'écrire vocalement."
+                placeholder={`Bonjour ${selectedChat?.name ?? ""}, …`}
                 value={displayValue}
                 onChange={handleTextareaChange}
                 className={`w-full min-h-[240px] resize-none bg-[hsl(var(--cream))]/60 border-2 rounded-2xl font-medium text-foreground placeholder:text-muted-foreground/60 focus:ring-0 focus:outline-none focus:ring-offset-0 px-6 py-5 leading-relaxed transition-all ${
@@ -952,12 +946,11 @@ export default function Messages() {
             </div>
 
             {/* Astuce dictée */}
-            <p className="mt-3 text-muted-foreground leading-relaxed text-lg">
+            <p className="mt-3 text-base text-muted-foreground leading-relaxed">
               💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
               <span className="font-semibold text-foreground">« point »</span>,{" "}
-              <span className="font-semibold text-foreground">« à la ligne »</span>,{" "}
-              <span className="font-semibold text-foreground">« point d'interrogation »</span> ou{" "}
-              <span className="font-semibold text-foreground">« point d'exclamation »</span>
+              <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
+              <span className="font-semibold text-foreground">« point d'interrogation »</span>.
             </p>
           </div>
 
