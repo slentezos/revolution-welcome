@@ -148,6 +148,7 @@ export default function Messages() {
   const [unmatchModalOpen, setUnmatchModalOpen] = useState(false);
   const [unmatchTarget, setUnmatchTarget] = useState<string>("");
   const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
+  const [composerOpen, setComposerOpen] = useState(false);
 
   // ÉTATS DE LA DICTÉE INTELLIGENTE
   const [isListening, setIsListening] = useState(false);
