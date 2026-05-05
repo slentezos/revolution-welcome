@@ -74,11 +74,10 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 <h4 className="font-medium text-foreground mb-5 text-2xl">Inclus dans votre offre :</h4>
                 <ul className="space-y-4 mb-10 flex-1">
                   {[
-                    "Tableau de bord",
-                    "Compte vérifié",
-                    "Messagerie",
-                    "Test de personnalité",
-                    "Satisfait ou remboursé",
+                    "Messagerie illimitée",
+                    "Appels Audio & Vidéo illimités",
+                    "Profils vérifiés manuellement",
+                    "Anonymat garanti",
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-4">
                       <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
