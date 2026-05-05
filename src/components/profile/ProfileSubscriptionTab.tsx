@@ -120,7 +120,10 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 </div>
 
                 {/* Bouton d'action */}
-                <button className="w-full bg-[#1B2333] text-white py-5 text-base uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-3 shadow-md rounded-2xl">
+                <button
+                  onClick={() => setChangeOpen(true)}
+                  className="w-full bg-[#1B2333] text-white py-5 text-base uppercase tracking-widest font-medium transition-all duration-300 hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-3 shadow-md rounded-2xl"
+                >
                   Changer d'offre <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
