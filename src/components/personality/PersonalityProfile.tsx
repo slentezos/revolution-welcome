@@ -1,12 +1,7 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, X, ArrowDown } from "lucide-react";
-import {
-  getProfile,
-  genderize,
-  type Gender,
-  type PersonalityProfileData,
-} from "@/data/personalityDatabase";
+import { getProfile, genderize, type Gender, type PersonalityProfileData } from "@/data/personalityDatabase";
 
 // Fallback imagery (existing assets). Real per-profile images can be dropped at
 // /public/assets/personalities/{gender}/{slug}-hero.jpg etc. and will be picked up automatically.
@@ -40,9 +35,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
 
   if (!profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-xl">
-        Profil de personnalité introuvable.
-      </div>
+      <div className="min-h-screen flex items-center justify-center text-xl">Profil de personnalité introuvable.</div>
     );
   }
 
@@ -145,7 +138,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
       <section ref={introRef} className="bg-[hsl(var(--cream))]">
         <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 md:py-24 text-center">
           <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto mb-12" />
-          <p className="font-heading text-xl md:text-2xl text-foreground leading-relaxed italic">
+          <p className="font-heading text-2xl md:text-4xl text-foreground leading-relaxed italic">
             « {profile.signature} »
           </p>
         </div>
@@ -199,9 +192,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
               <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
                 {section.subtitle}
               </p>
-              <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">
-                {section.title}
-              </h2>
+              <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">{section.title}</h2>
               <div className="w-12 h-px bg-[hsl(var(--gold))] mb-8" />
               {section.paragraphs.map((p, i) => (
                 <p key={i} className="text-xl text-muted-foreground leading-relaxed mb-6 last:mb-0">
