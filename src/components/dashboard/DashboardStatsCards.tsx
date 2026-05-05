@@ -54,7 +54,7 @@ export default function DashboardStatsCards({
   ];
 
   return (
-    <div className="sticky top-[64px] z-40 w-full bg-background/95 backdrop-blur-md border-b border-border/40 shadow-sm py-4">
+    <div className="sticky top-[64px] z-40 w-full backdrop-blur-md border-b border-border/40 shadow-sm py-4 bg-transparent">
       {/* CORRECTION VITALE ICI : 
         - Suppression stricte de justify-center
         - Utilisation de justify-start pour garantir que le scroll gauche n'est jamais coupé
