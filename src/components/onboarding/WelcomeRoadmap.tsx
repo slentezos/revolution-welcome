@@ -296,7 +296,7 @@ function StepCard({
 
         <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
           <span className="text-2xl leading-none">⏱️</span>
-          <span className="text-2xl lg:text-2xl font-medium text-foreground">Durée : {step.duration}</span>
+          <span className="text-2xl lg:text-2xl text-foreground font-semibold">Durée : {step.duration}</span>
         </div>
 
         <p className="text-xl sm:text-2xl leading-relaxed text-muted-foreground max-w-2xl mb-12">{step.description}</p>
