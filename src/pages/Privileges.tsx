@@ -52,9 +52,26 @@ export default function Privileges() {
 
   // État unique pour la demande d'admission (plus besoin de l'état expertModal)
   const [modalOpen, setModalOpen] = useState(false);
+  const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const subscriptionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setIsLoggedIn(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setIsLoggedIn(!!session));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  const scrollToSubscriptions = () => {
+    subscriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const handleVIPWaitlist = () => {
-    setModalOpen(true);
+    if (isLoggedIn) {
+      toast.success("Vous êtes déjà sur la liste prioritaire.");
+      return;
+    }
+    setShowWaitlistModal(true);
   };
 
   return (
