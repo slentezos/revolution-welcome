@@ -920,7 +920,7 @@ export default function Messages() {
               <Textarea
                 autoFocus
                 ref={textareaRef}
-                placeholder={`Bonjour ${selectedChat?.name ?? ""}, …`}
+                placeholder="Écrivez votre message ou appuyez sur « Dicter à voix haute » pour l'écrire vocalement."
                 value={displayValue}
                 onChange={handleTextareaChange}
                 className={`w-full min-h-[240px] resize-none bg-[hsl(var(--cream))]/60 border-2 rounded-2xl font-medium text-foreground placeholder:text-muted-foreground/60 focus:ring-0 focus:outline-none focus:ring-offset-0 px-6 py-5 leading-relaxed transition-all ${
