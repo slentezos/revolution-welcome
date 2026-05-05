@@ -16,7 +16,7 @@ export default function NoTimeToLoseSection() {
           <div className="max-w-lg">
             <span
               data-reveal
-              className="font-medium tracking-[0.3em] uppercase text-primary-foreground/60 mb-8 block text-xl"
+              className="text-center font-medium tracking-[0.2em] uppercase text-primary-foreground/60 mb-6 text-xl"
             >
               02 — Le constat
             </span>
