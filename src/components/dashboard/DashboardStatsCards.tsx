@@ -54,7 +54,7 @@ export default function DashboardStatsCards({
   ];
 
   return (
-    <div className="sticky top-16 md:top-20 z-30 -mx-4 md:-mx-8 px-4 md:px-8 py-3 backdrop-blur-md border-b border-border/40 shadow-sm bg-transparent">
+    <div className="sticky top-16 md:top-20 z-30 -mx-4 px-4 py-3 backdrop-blur-md border-b border-border/40 shadow-sm bg-transparent md:px-0 md:mx-[3px]">
       <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-x-auto no-scrollbar">
         <button
           onClick={onMessagesClick}
