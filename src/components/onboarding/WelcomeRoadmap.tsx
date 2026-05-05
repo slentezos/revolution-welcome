@@ -511,8 +511,11 @@ export default function WelcomeRoadmap({
           >
             <StepCard
               step={step}
+              stepIndex={i}
+              totalSteps={STEPS.length}
               isLast={i === STEPS.length - 1}
               onNextClick={() => scrollTo(stepRefs[i + 1])}
+              onPrevClick={() => scrollTo(stepRefs[i - 1])}
               onStartClick={() => setIsModalOpen(true)}
               viewOnly={viewOnly}
             />
