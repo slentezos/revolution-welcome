@@ -473,15 +473,6 @@ export default function WelcomeRoadmap({
             })}
           </div>
 
-          <button onClick={() => scrollTo(stepRefs[0])} className="inline-flex flex-col items-center gap-3 group">
-            <span className="text-gold font-medium tracking-wide group-hover:text-foreground transition-colors duration-500 text-xl sm:text-2xl">
-              Découvrir chaque étape en détail
-            </span>
-            <div className="w-14 h-14 rounded-full border-2 border-gold/50 flex items-center justify-center group-hover:bg-gold group-hover:border-gold transition-all duration-500">
-              <ArrowDown className="h-6 w-6 text-gold group-hover:text-white" />
-            </div>
-          </button>
-        </div>
       </section>
 
       {/* ─── PROGRESS BAR ─── */}
