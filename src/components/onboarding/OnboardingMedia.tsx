@@ -378,88 +378,71 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* MODAL STUDIO EXPERT (COMPACT 1 SCREEN, NO SCROLL) */}
+      {/* MODAL STUDIO EXPERT — Senior 60+, fits one screen, no scroll */}
       <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
-        <DialogContent className="max-w-3xl border-0 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] rounded-[24px] bg-white p-0 z-[9999] overflow-hidden">
+        <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl max-h-[92vh] border-0 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] rounded-[24px] bg-white p-0 z-[9999] overflow-hidden gap-0">
           <div className="h-2 w-full bg-[hsl(var(--gold))]" />
 
-          <div className="px-6 py-6 lg:px-8 space-y-5 flex flex-col justify-center h-full">
-            <div className="flex justify-center shrink-0">
-              <div className="w-16 h-16 rounded-full bg-[hsl(var(--cream))] flex items-center justify-center border-2 border-[hsl(var(--gold))/0.3]">
-                <Video className="h-8 w-8 text-[#1B2333]" />
+          <div className="px-6 py-5 sm:px-8 sm:py-6 flex flex-col gap-4">
+            <div className="flex flex-col items-center gap-3 text-center">
+              <div className="w-14 h-14 rounded-full bg-[hsl(var(--cream))] flex items-center justify-center border-2 border-[hsl(var(--gold))]/40 shrink-0">
+                <Video className="h-7 w-7 text-[#1B2333]" />
               </div>
-            </div>
-
-            <div className="text-center space-y-2 shrink-0">
-              <DialogTitle className="font-heading text-2xl lg:text-3xl font-bold text-[#1B2333] leading-tight">
-                Votre voix, votre regard, votre présence… tout commence par là.
+              <DialogTitle className="font-heading text-2xl sm:text-3xl font-bold text-[#1B2333] leading-tight">
+                Votre voix, votre regard, votre présence
               </DialogTitle>
-              <p className="text-lg lg:text-xl text-gray-600 italic">
-                « Quelques secondes suffisent pour créer un premier lien : une intonation, un sourire, une façon d’être.
-                »
+              <p className="text-lg text-[#1B2333]/80 leading-snug">
+                Pour vous accompagner, Kalimera vous propose une aide personnalisée.
               </p>
             </div>
 
-            <div className="text-lg text-gray-700 leading-snug shrink-0 text-center px-4">
-              <p>Inutile de jouer un rôle — soyez simplement vous-même.</p>
-              <p className="font-semibold text-[#1B2333] mt-2">
-                Pour vous accompagner, Kalimera vous propose une aide personnalisée :
-              </p>
-            </div>
-
-            {/* GRILLE CÔTE À CÔTE POUR GAGNER DE LA HAUTEUR */}
-            <div className="bg-[#1B2333]/5 rounded-2xl p-5 border border-[#1B2333]/10 grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 shrink-0">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-3">
-                  <div className="bg-[hsl(var(--gold))] rounded-full p-1.5 shrink-0">
-                    <ShieldCheck className="h-5 w-5 text-white" />
-                  </div>
-                  <p className="text-xl font-bold text-[#1B2333] leading-tight">Accompagnement</p>
+            <div className="bg-[#1B2333]/5 rounded-2xl p-4 sm:p-5 border border-[#1B2333]/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-start gap-3">
+                <div className="bg-[hsl(var(--gold))] rounded-full p-2 shrink-0">
+                  <ShieldCheck className="h-5 w-5 text-white" />
                 </div>
-                <p className="text-gray-600 text-lg leading-snug">
-                  Un expert vous guide pour vos photos et vidéo : conseils, réglages et mise en confiance.
-                </p>
+                <div>
+                  <p className="text-lg font-bold text-[#1B2333] leading-tight">Accompagnement</p>
+                  <p className="text-[#1B2333]/70 text-base leading-snug mt-1">
+                    Un expert vous guide pour vos photos et vidéo.
+                  </p>
+                </div>
               </div>
-
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-3">
-                  <div className="bg-[hsl(var(--gold))] rounded-full p-1.5 shrink-0">
-                    <MonitorOff className="h-5 w-5 text-white" />
-                  </div>
-                  <p className="text-xl font-bold text-[#1B2333] leading-tight">Confidentialité</p>
+              <div className="flex items-start gap-3">
+                <div className="bg-[hsl(var(--gold))] rounded-full p-2 shrink-0">
+                  <MonitorOff className="h-5 w-5 text-white" />
                 </div>
-                <p className="text-gray-600 text-lg leading-snug">
-                  Rendez-vous via Google Meet.{" "}
-                  <span className="font-medium text-[#1B2333]">Aucun accès à votre ordinateur</span> n'est requis.
-                </p>
+                <div>
+                  <p className="text-lg font-bold text-[#1B2333] leading-tight">Confidentialité</p>
+                  <p className="text-[#1B2333]/70 text-base leading-snug mt-1">
+                    Via Google Meet. Aucun accès à votre ordinateur.
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* FUSION PRIX + BOUTONS SUR LA MÊME LIGNE */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-2 shrink-0 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-              <div className="text-center sm:text-left shrink-0">
-                <div className="inline-block bg-amber-50 px-4 py-1.5 rounded-full border border-amber-100 mb-1">
-                  <span className="text-[#1B2333] font-bold text-xl">Offre : 35 €</span>
-                </div>
-                <p className="text-gray-500 text-sm font-medium">(puis 70€ au 01/10/2026)</p>
-              </div>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <span className="inline-flex items-baseline gap-2 bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
+                <span className="text-[#1B2333] font-bold text-xl">35 €</span>
+                <span className="text-[#1B2333]/60 text-base">puis 70 € au 01/10/2026</span>
+              </span>
+            </div>
 
-              <div className="flex flex-col gap-2 w-full sm:w-auto shrink-0">
-                <Button
-                  onClick={handleStudioPayment}
-                  disabled={isProcessingPayment}
-                  className="h-14 w-full sm:w-auto px-6 rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-lg font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2"
-                >
-                  {isProcessingPayment ? <Loader2 className="animate-spin h-5 w-5" /> : <Check className="h-5 w-5" />}
-                  Réserver ma séance
-                </Button>
-                <button
-                  onClick={() => setShowStudioModal(false)}
-                  className="text-gray-400 hover:text-gray-600 text-base font-medium transition-colors"
-                >
-                  Essayer seul(e) d'abord
-                </button>
-              </div>
+            <div className="flex flex-col gap-3">
+              <Button
+                onClick={handleStudioPayment}
+                disabled={isProcessingPayment}
+                className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-lg font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2"
+              >
+                {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
+                Réserver ma séance
+              </Button>
+              <button
+                onClick={() => setShowStudioModal(false)}
+                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 text-lg font-medium transition-colors"
+              >
+                Essayer seul(e) d'abord
+              </button>
             </div>
           </div>
         </DialogContent>
