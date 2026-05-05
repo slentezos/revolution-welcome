@@ -395,15 +395,17 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 Votre voix, votre regard, votre présence… tout commence par là.
               </DialogTitle>
               <p className="text-xl text-gray-600 leading-relaxed italic">
-                « Quelques secondes suffisent pour créer un premier lien : une intonation, un sourire, une façon d’être. »
+                « Quelques secondes suffisent pour créer un premier lien : une intonation, un sourire, une façon d’être.
+                »
               </p>
             </div>
 
             <div className="space-y-5 text-lg text-gray-700 leading-relaxed">
               <p>
-                Inutile de jouer un rôle — soyez simplement vous-même. Offrez une image sincère, naturelle et vivante, qui laisse entrevoir votre personnalité.
+                Inutile de jouer un rôle — soyez simplement vous-même. Offrez une image sincère, naturelle et vivante,
+                qui laisse entrevoir votre personnalité.
               </p>
-              
+
               <p className="font-semibold text-[#1B2333]">
                 Pour vous accompagner en toute simplicité, Kalimera vous propose désormais une aide personnalisée :
               </p>
@@ -417,7 +419,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <div>
                   <p className="text-xl font-bold text-[#1B2333]">Accompagnement en direct</p>
                   <p className="text-gray-600 text-lg mt-1">
-                    Un expert vous guide pour réaliser vos photos et votre vidéo : conseils clairs, réglages techniques, mise en confiance et contrôle du résultat.
+                    Un expert vous guide pour réaliser vos photos et votre vidéo : conseils clairs, réglages techniques,
+                    mise en confiance et contrôle du résultat.
                   </p>
                 </div>
               </div>
@@ -429,7 +432,9 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <div>
                   <p className="text-xl font-bold text-[#1B2333]">Confidentialité totale</p>
                   <p className="text-gray-600 text-lg mt-1">
-                    Rendez-vous d’une heure via Google Meet. <span className="font-medium text-[#1B2333]">Aucun accès à votre ordinateur</span> n'est requis de notre part.
+                    Rendez-vous d’une heure via Google Meet.{" "}
+                    <span className="font-medium text-[#1B2333]">Aucun accès à votre ordinateur</span> n'est requis de
+                    notre part.
                   </p>
                 </div>
               </div>
@@ -439,13 +444,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <div className="inline-block bg-amber-50 px-6 py-3 rounded-full border border-amber-100">
                 <span className="text-[#1B2333] font-bold text-2xl">Offre de lancement : 35 €</span>
               </div>
-              <p className="text-gray-500 text-sm mt-3 font-medium">
-                (puis 70€ à partir du 1er octobre 2026)
-              </p>
+              <p className="text-gray-500 text-sm mt-3 font-medium">(puis 70€ à partir du 1er octobre 2026)</p>
             </div>
 
             <div className="flex flex-col gap-4">
-              <Button 
+              <Button
                 onClick={handleStudioPayment}
                 disabled={isProcessingPayment}
                 className="h-16 w-full rounded-2xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl font-bold shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-3"
@@ -453,8 +456,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
                 Réserver ma séance
               </Button>
-              
-              <button 
+
+              <button
                 onClick={() => setShowStudioModal(false)}
                 className="h-12 text-gray-400 hover:text-gray-600 text-lg font-medium transition-colors"
               >
@@ -474,79 +477,82 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         <DialogContent className="max-w-5xl p-0 h-[85vh] max-h-[800px] overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-white z-[9999] outline-none">
           <button
             onClick={() => setShowVideoTutorial(false)}
-            className="absolute right-8 top-8 z-[10000] p-3 rounded-full bg-white/90 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-md group"
+            className="absolute right-6 top-6 md:right-8 md:top-8 z-[10000] p-3 rounded-full bg-white/90 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-md group shrink-0"
           >
             <X className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
           </button>
 
-          <div className="flex flex-col lg:flex-row h-full">
-            <div className="flex-1 p-10 lg:p-14 bg-white relative flex flex-col justify-between h-full min-h-0">
+          <div className="flex flex-col lg:flex-row h-full overflow-y-auto lg:overflow-hidden no-scrollbar">
+            <div className="flex-1 p-8 lg:p-14 bg-white relative flex flex-col justify-between h-full min-h-0">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
 
               <div className="relative z-10 flex flex-col h-full">
-                <header className="mb-6">
+                <header className="mb-6 shrink-0">
                   <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-4">
                     <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-lg">
+                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-sm md:text-lg">
                       Guide Privé
                     </span>
                   </div>
-                  <DialogTitle className="font-heading text-4xl lg:text-5xl text-[#1B2333] leading-[1.1] mb-2">
+                  <DialogTitle className="font-heading text-3xl md:text-4xl lg:text-5xl text-[#1B2333] leading-[1.1] mb-2">
                     L'art de se <br /> <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
                   </DialogTitle>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-auto overflow-y-auto no-scrollbar py-2">
                   {[
                     { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
                     { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
                     { icon: Heart, title: "L'Émotion", desc: "Parlez de vos vraies passions." },
                     { icon: Volume2, title: "La Sérénité", desc: "Le silence pour être écouté(e)." },
                   ].map((item, idx) => (
-                    <div key={idx} className="flex flex-col gap-2">
-                      <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
+                    <div key={idx} className="flex flex-row md:flex-col items-center md:items-start gap-4 md:gap-2">
+                      <div className="w-12 h-12 shrink-0 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
                         <item.icon className="h-6 w-6 text-[#1B2333]" />
                       </div>
                       <div>
-                        <h4 className="font-bold text-[#1B2333] mb-1 text-3xl">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 leading-snug text-xl">{item.desc}</p>
+                        <h4 className="font-bold text-[#1B2333] mb-1 text-xl md:text-3xl">{item.title}</h4>
+                        <p className="text-[#1B2333]/60 leading-snug text-base md:text-xl">{item.desc}</p>
                       </div>
                     </div>
                   ))}
                 </div>
 
-                <div className="flex flex-col gap-4 mt-6 max-w-sm">
+                <div className="flex flex-col gap-4 mt-8 max-w-lg shrink-0">
                   <Button
                     onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-xl hover:scale-[1.02] transition-transform text-xl"
+                    className="h-14 md:h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-xl hover:scale-[1.02] transition-transform text-lg md:text-xl shrink-0"
                   >
                     J'ai compris, je commence seul(e)
                   </Button>
 
+                  {/* BOUTON D'ACCOMPAGNEMENT POP-UP - RENDU RESPONSIVE ET LISIBLE */}
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowVideoTutorial(false);
                       setShowStudioModal(true);
                     }}
-                    className="w-full flex items-center justify-between gap-4 p-4 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)]"
+                    className="w-full flex items-center gap-4 p-4 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)] text-left shrink-0"
                   >
-                    <div className="flex items-center gap-4 text-left">
-                      <div className="w-10 h-10 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
-                        <Headphones className="h-5 w-5 text-[hsl(var(--gold))] animate-pulse" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-[hsl(var(--gold))] leading-tight text-xl">Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé</p>
-                        <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
-                      </div>
+                    <div className="shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
+                      <Headphones className="h-5 w-5 md:h-6 md:w-6 text-[hsl(var(--gold))] animate-pulse" />
                     </div>
-                    <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
+                    <div className="flex-1 min-w-0 flex flex-col gap-1">
+                      <p className="font-bold text-[hsl(var(--gold))] leading-snug text-base md:text-lg whitespace-normal break-words">
+                        Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé.
+                      </p>
+                      <p className="text-[hsl(var(--gold))] opacity-80 text-sm md:text-base">
+                        On vous filme en visio (35€)
+                      </p>
+                    </div>
+                    <ArrowRight className="h-5 w-5 md:h-6 md:w-6 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="hidden lg:block w-[400px] relative h-full">
+            <div className="hidden lg:block w-[400px] shrink-0 relative h-full">
               <img
                 decoding="async"
                 src={coupleGarden}
