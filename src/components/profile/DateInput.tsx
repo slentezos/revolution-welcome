@@ -48,9 +48,18 @@ export default function DateInput({ value, onChange, className, disabled = false
 
   return (
     <div className={cn("space-y-4 w-full text-left", className)}>
-      <Label className="text-xl font-medium text-[#1B2333] block mb-3">Date de naissance</Label>
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <Label className="text-xl font-medium text-[#1B2333] block">Date de naissance</Label>
+        {disabled && (
+          <span className="inline-flex items-center gap-2 text-base text-muted-foreground">
+            <Lock className="h-4 w-4" />
+            Non modifiable
+          </span>
+        )}
+      </div>
 
-      <div className="grid grid-cols-3 gap-3 md:gap-4">
+      <div className={cn("grid grid-cols-3 gap-3 md:gap-4", disabled && "opacity-70")}>
+
         {/* --- JOUR --- */}
         <div className="space-y-2">
           <Label className="text-lg text-muted-foreground ml-1">Jour</Label>
