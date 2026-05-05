@@ -8,13 +8,50 @@ import profileSubscriptionImg from "@/assets/profile-subscription.jpg";
 
 interface ProfileSubscriptionTabProps {
   firstName?: string | null;
+  /** Plan currently active */
+  currentPlan?: "trimestrielle" | "mensuelle" | "vip";
+  /** Date the user subscribed (ISO). Defaults to today. */
+  subscribedAt?: string;
+  /** True if the user benefits from the 3 free months offer from the home page */
+  hasFreeTrial?: boolean;
 }
 
-export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptionTabProps) {
+const PLAN_LABELS: Record<"trimestrielle" | "mensuelle" | "vip", string> = {
+  trimestrielle: "Cercle Privé — Trimestrielle",
+  mensuelle: "Cercle Privé — Mensuelle",
+  vip: "Carré VIP",
+};
+
+const PLAN_PRICE: Record<"trimestrielle" | "mensuelle" | "vip", { amount: string; period: string; note: string }> = {
+  trimestrielle: { amount: "120€", period: "/ 3 mois", note: "Soit 40€/mois" },
+  mensuelle: { amount: "50€", period: "/ mois", note: "Sans engagement" },
+  vip: { amount: "62€", period: "/ mois", note: "Cercle Privé + Carré VIP" },
+};
+
+function formatFrenchDate(d: Date) {
+  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+}
+
+export default function ProfileSubscriptionTab({
+  firstName,
+  currentPlan = "trimestrielle",
+  subscribedAt,
+  hasFreeTrial = true,
+}: ProfileSubscriptionTabProps) {
   const [pauseOpen, setPauseOpen] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
   const [changeOpen, setChangeOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<"trimestrielle" | "mensuelle" | "vip">("trimestrielle");
+  const [selectedPlan, setSelectedPlan] = useState<"trimestrielle" | "mensuelle" | "vip">(currentPlan);
+
+  // Compute next renewal / expiration date
+  const startDate = subscribedAt ? new Date(subscribedAt) : new Date();
+  const expiryDate = new Date(startDate);
+  if (hasFreeTrial) expiryDate.setMonth(expiryDate.getMonth() + 3);
+  if (currentPlan === "trimestrielle") expiryDate.setMonth(expiryDate.getMonth() + 3);
+  else expiryDate.setMonth(expiryDate.getMonth() + 1);
+
+  const planLabel = PLAN_LABELS[currentPlan];
+  const planPrice = PLAN_PRICE[currentPlan];
 
   return (
     <div>
