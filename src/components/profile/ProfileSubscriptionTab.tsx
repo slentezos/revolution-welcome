@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Check, Pause, EyeOff, Heart, Bell, Sparkles, ArrowRight } from "lucide-react";
+import { Check, Pause, EyeOff, Heart, Bell, Sparkles, ArrowRight, Crown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import CancellationFlow from "./CancellationFlow";
 import profileSubscriptionImg from "@/assets/profile-subscription.jpg";
