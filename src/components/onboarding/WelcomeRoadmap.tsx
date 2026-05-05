@@ -9,6 +9,7 @@ import {
   ClipboardList,
   Brain,
   ArrowDown,
+  ArrowUp,
   ArrowRight,
   ChevronRight,
 } from "lucide-react";
@@ -256,18 +257,25 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
 
 function StepCard({
   step,
+  stepIndex,
+  totalSteps,
   isLast,
   onNextClick,
+  onPrevClick,
   onStartClick,
   viewOnly,
 }: {
   step: (typeof STEPS)[0];
+  stepIndex: number;
+  totalSteps: number;
   isLast: boolean;
   onNextClick?: () => void;
+  onPrevClick?: () => void;
   onStartClick?: () => void;
   viewOnly?: boolean;
 }) {
   const Icon = step.icon;
+  const showPrev = stepIndex > 0 && !isLast;
 
   return (
     <section className="relative w-full flex items-center py-16 md:py-24 pb-0">
@@ -288,7 +296,7 @@ function StepCard({
 
         <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
           <span className="text-2xl leading-none">⏱️</span>
-          <span className="text-2xl lg:text-2xl font-medium text-foreground">Durée : {step.duration}</span>
+          <span className="text-2xl lg:text-2xl text-foreground font-semibold">Durée : {step.duration}</span>
         </div>
 
         <p className="text-xl sm:text-2xl leading-relaxed text-muted-foreground max-w-2xl mb-12">{step.description}</p>
@@ -307,29 +315,42 @@ function StepCard({
           ))}
         </div>
 
-        {/* BOUTONS INTÉGRÉS DIRECTEMENT DANS LA CARTE (Remplace le bug des boutons flottants) */}
         {!isLast ? (
-          <div className="mt-12 flex flex-col sm:flex-row sm:items-center gap-6">
+          <div className="mt-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {showPrev ? (
+              <button
+                onClick={onPrevClick}
+                className="flex items-center justify-center gap-3 bg-white border-2 border-[#E5E0D8] px-8 h-16 rounded-full shadow-sm hover:shadow-md hover:border-[hsl(var(--gold))] transition-all group w-full sm:w-auto"
+              >
+                <ArrowUp className="h-6 w-6 text-[hsl(var(--gold))] group-hover:-translate-y-1 transition-transform" />
+                <span className="font-heading text-[#1B2333] font-semibold text-2xl">
+                  Revenir à l'étape {stepIndex}
+                </span>
+              </button>
+            ) : (
+              <span className="hidden sm:block" />
+            )}
+
             <button
               onClick={onNextClick}
-              className="flex items-center justify-center gap-3 bg-white border border-[#E5E0D8] px-8 py-4 rounded-full shadow-sm hover:shadow-md hover:border-[hsl(var(--gold))] transition-all group w-full sm:w-auto"
+              aria-label={`Aller à l'étape ${stepIndex + 2}`}
+              className="flex items-center justify-center gap-4 bg-[hsl(var(--gold))] text-white px-10 h-16 rounded-full shadow-xl hover:bg-[hsl(var(--gold))]/90 hover:shadow-2xl transition-all group w-full sm:w-auto sm:ml-auto"
             >
-              <span className="font-heading text-xl text-[#1B2333] font-semibold">Étape suivante</span>
-              <ArrowDown className="h-5 w-5 text-[hsl(var(--gold))] group-hover:translate-y-1 transition-transform" />
+              <span className="font-heading text-2xl font-bold tracking-wide">
+                Étape {stepIndex + 2}
+              </span>
+              <ArrowDown className="h-6 w-6 text-white group-hover:translate-y-1 transition-transform" />
             </button>
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <span className="text-xl opacity-80 italic">{step.nextLabel}</span>
-            </div>
           </div>
         ) : (
           !viewOnly &&
           onStartClick && (
-            <div className="mt-14">
+            <div className="mt-14 flex justify-center">
               <button
                 onClick={onStartClick}
-                className="flex items-center justify-center gap-4 bg-[#1B2333] text-white px-12 py-5 rounded-full shadow-xl hover:bg-[#1B2333]/90 transition-all group w-full md:w-auto"
+                className="animate-float flex items-center justify-center gap-4 bg-[#1B2333] text-white px-12 py-5 rounded-full shadow-xl hover:bg-[#1B2333]/90 transition-all group"
               >
-                <span className="font-heading text-xl sm:text-3xl font-bold tracking-wide">Commencer mon parcours</span>
+                <span className="font-heading text-xl font-bold tracking-wide sm:text-3xl">Commencer mon parcours</span>
                 <ChevronRight className="h-6 w-6 text-[hsl(var(--gold))] group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -490,8 +511,11 @@ export default function WelcomeRoadmap({
           >
             <StepCard
               step={step}
+              stepIndex={i}
+              totalSteps={STEPS.length}
               isLast={i === STEPS.length - 1}
               onNextClick={() => scrollTo(stepRefs[i + 1])}
+              onPrevClick={() => scrollTo(stepRefs[i - 1])}
               onStartClick={() => setIsModalOpen(true)}
               viewOnly={viewOnly}
             />
