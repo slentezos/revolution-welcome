@@ -806,11 +806,26 @@ export default function Messages() {
                                   className={`text-base ${msg.sender === "me" ? "text-white/50" : "text-muted-foreground"}`}
                                 >
                                   {msg.sender === "me"
-                                    ? msg.read
-                                      ? `Lu à ${msg.time}`
-                                      : `Remis à ${msg.time}`
+                                    ? canUseReadReceipts()
+                                      ? msg.read
+                                        ? `Lu à ${msg.time}`
+                                        : `Remis à ${msg.time}`
+                                      : msg.time
                                     : msg.time}
                                 </p>
+                                {msg.sender === "me" && canUseReadReceipts() && (
+                                  msg.read ? (
+                                    <CheckCheck
+                                      className="h-4 w-4 text-[hsl(var(--gold))]"
+                                      aria-label="Lu"
+                                    />
+                                  ) : (
+                                    <Check
+                                      className="h-4 w-4 text-white/50"
+                                      aria-label="Remis"
+                                    />
+                                  )
+                                )}
                                 {msg.sender === "them" && (
                                   <button
                                     onClick={() => speakMessage(msg.id, msg.text)}
