@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   CreditCard,
   Loader2,
+  MonitorOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -127,7 +128,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const handleRemoveSlot = (slotId: string) => {
     const initial = getInitialSlots().find((s) => s.id === slotId);
     if (initial) {
-      setSlots((prev) => prev.map((s) => (s.id === slotId ? initial : s)));
+      setSlots((prev) => prev.map((s) => (s.id === slotId ? initial : s))));
     }
   };
 
@@ -155,7 +156,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     }
 
     const preview = URL.createObjectURL(file);
-    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
+    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s))));
     if (fileInputRef.current) fileInputRef.current.value = "";
     setActiveSlotId(null);
   };
@@ -207,7 +208,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     );
 
   return (
-    // RETOUR À LA STRUCTURE INITIALE QUI FONCTIONNAIT PARFAITEMENT POUR VOTRE LAYOUT
     <div className="h-[calc(100vh-140px)] flex flex-col overflow-hidden bg-white">
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-0 min-h-0">
         <div className="flex-1 min-h-0 p-4 lg:p-10 flex flex-col gap-6 text-left">
@@ -378,60 +378,99 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* MODAL STUDIO 40€ */}
+      {/* MODAL STUDIO EXPERT */}
       <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
-        <DialogContent className="max-w-2xl p-14 rounded-[3rem] border-0 shadow-3xl bg-white z-[9999]">
-          <div className="text-center space-y-8">
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))/0.2]">
-              <Headphones className="h-12 w-12 text-[hsl(var(--gold))]" />
+        <DialogContent className="max-w-2xl border-0 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] rounded-[24px] bg-white p-0 z-[9999] overflow-hidden">
+          <div className="h-2 w-full bg-[hsl(var(--gold))]" />
+
+          <div className="px-8 py-6 lg:py-8 space-y-6 lg:space-y-8 max-h-[85vh] overflow-y-auto no-scrollbar">
+            <div className="flex justify-center">
+              <div className="w-20 h-20 rounded-full bg-[hsl(var(--cream))] flex items-center justify-center border-2 border-[hsl(var(--gold))/0.3]">
+                <Video className="h-10 w-10 text-[#1B2333]" />
+              </div>
             </div>
-            <DialogHeader>
-              <DialogTitle className="font-heading text-4xl text-[#1B2333] font-bold leading-tight text-center">
-                Laissons parler votre charme.
+
+            <div className="text-center space-y-4">
+              <DialogTitle className="font-heading text-3xl font-bold text-[#1B2333] leading-tight">
+                Votre voix, votre regard, votre présence… tout commence par là.
               </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-6 text-left">
-              <div className="flex items-start gap-4 p-6 rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))] shrink-0" />
-                <p className="text-xl text-[#1B2333]">
-                  Coaching de <span className="font-bold">15 min en visio</span> pour vous guider.
-                </p>
+              <p className="text-xl text-gray-600 leading-relaxed italic">
+                « Quelques secondes suffisent pour créer un premier lien : une intonation, un sourire, une façon d’être. »
+              </p>
+            </div>
+
+            <div className="space-y-5 text-lg text-gray-700 leading-relaxed">
+              <p>
+                Inutile de jouer un rôle — soyez simplement vous-même. Offrez une image sincère, naturelle et vivante, qui laisse entrevoir votre personnalité.
+              </p>
+              
+              <p className="font-semibold text-[#1B2333]">
+                Pour vous accompagner en toute simplicité, Kalimera vous propose désormais une aide personnalisée :
+              </p>
+            </div>
+
+            <div className="bg-[#1B2333]/5 rounded-[24px] p-6 border border-[#1B2333]/10 space-y-5">
+              <div className="flex items-start gap-4">
+                <div className="mt-1 bg-[hsl(var(--gold))] rounded-full p-1.5 shrink-0">
+                  <ShieldCheck className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-[#1B2333]">Accompagnement en direct</p>
+                  <p className="text-gray-600 text-lg mt-1">
+                    Un expert vous guide pour réaliser vos photos et votre vidéo : conseils clairs, réglages techniques, mise en confiance et contrôle du résultat.
+                  </p>
+                </div>
               </div>
-              <div className="flex items-start gap-4 p-6 rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                <Check className="h-7 w-7 text-[hsl(var(--gold))] shrink-0" />
-                <p className="text-xl text-[#1B2333]">
-                  Montage professionnel inclus pour un <span className="font-bold">profil parfait</span>.
-                </p>
+
+              <div className="flex items-start gap-4">
+                <div className="mt-1 bg-[hsl(var(--gold))] rounded-full p-1.5 shrink-0">
+                  <MonitorOff className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-xl font-bold text-[#1B2333]">Confidentialité totale</p>
+                  <p className="text-gray-600 text-lg mt-1">
+                    Rendez-vous d’une heure via Google Meet. <span className="font-medium text-[#1B2333]">Aucun accès à votre ordinateur</span> n'est requis de notre part.
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="space-y-4">
-              <Button
-                disabled={isProcessingPayment}
+
+            <div className="text-center py-2">
+              <div className="inline-block bg-amber-50 px-6 py-3 rounded-full border border-amber-100">
+                <span className="text-[#1B2333] font-bold text-2xl">Offre de lancement : 35 €</span>
+              </div>
+              <p className="text-gray-500 text-sm mt-3 font-medium">
+                (puis 70€ à partir du 1er octobre 2026)
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <Button 
                 onClick={handleStudioPayment}
-                className="h-16 w-full rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-2xl flex items-center justify-center gap-3"
+                disabled={isProcessingPayment}
+                className="h-16 w-full rounded-2xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl font-bold shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-3"
               >
-                {isProcessingPayment ? (
-                  <Loader2 className="animate-spin h-6 w-6" />
-                ) : (
-                  <CreditCard className="h-6 w-6" />
-                )}
-                Payer et réserver (49€)
+                {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
+                Réserver ma séance
               </Button>
-              <p className="text-sm text-muted-foreground">Paiement 100% sécurisé via Stripe</p>
+              
+              <button 
+                onClick={() => setShowStudioModal(false)}
+                className="h-12 text-gray-400 hover:text-gray-600 text-lg font-medium transition-colors"
+              >
+                Je vais essayer seul(e) d'abord
+              </button>
             </div>
-            <button
-              onClick={() => setShowStudioModal(false)}
-              className="text-muted-foreground hover:text-[#1B2333] font-medium transition-colors text-lg"
-            >
-              Je vais essayer seul(e) d'abord
-            </button>
+
+            <div className="text-center">
+              <p className="text-xs text-gray-400 uppercase tracking-widest">Paiement 100% sécurisé via Stripe</p>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* TUTORIAL MODAL - FREEZE AU NIVEAU DE LA MODALE */}
+      {/* TUTORIAL MODAL */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        {/* On fixe la hauteur à 85vh pour qu'elle tienne sur l'écran sans déborder et on met le X en absolute à l'intérieur */}
         <DialogContent className="max-w-5xl p-0 h-[85vh] max-h-[800px] overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-white z-[9999] outline-none">
           <button
             onClick={() => setShowVideoTutorial(false)}
@@ -498,7 +537,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       </div>
                       <div>
                         <p className="font-bold text-[hsl(var(--gold))] leading-tight text-xl">Intimidé(e) ?</p>
-                        <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (49€)</p>
+                        <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
                       </div>
                     </div>
                     <ArrowRight className="h-5 w-5 text-[hsl(var(--gold))] group-hover/btn:translate-x-2 transition-transform" />
