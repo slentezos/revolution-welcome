@@ -560,6 +560,21 @@ export default function Privileges() {
 
       {/* Modale d'admission classique (Unique point d'entrée) */}
       <LocationCheckModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <VIPWaitlistModal
+        open={showWaitlistModal}
+        onClose={() => setShowWaitlistModal(false)}
+        onSuccess={scrollToSubscriptions}
+      />
+
+      {/* Bouton flottant Conciergerie */}
+      <a
+        href="tel:0800000000"
+        className="fixed bottom-6 right-6 z-40 bg-foreground text-white px-6 py-4 rounded-full shadow-xl hover:bg-[hsl(var(--gold))] transition-all flex items-center gap-3 min-h-[56px] text-lg font-medium"
+        aria-label="Contacter la conciergerie Kalimera"
+      >
+        <PhoneCall className="h-6 w-6" />
+        <span className="hidden sm:inline">Besoin d'aide ? Appel non surtaxé</span>
+      </a>
     </Layout>
   );
 }
