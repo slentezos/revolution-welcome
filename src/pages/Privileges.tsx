@@ -165,7 +165,7 @@ export default function Privileges() {
           </div>
 
           {/* Bloc Cercle Privé : 2 formules + VIP */}
-          <div className="max-w-6xl mx-auto">
+          <div ref={subscriptionRef} className="max-w-6xl mx-auto scroll-mt-24">
             {/* Wrapper Cercle Privé */}
             <div
               data-reveal
