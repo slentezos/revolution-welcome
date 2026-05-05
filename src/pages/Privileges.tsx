@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Lock, Shield, Clock, Sparkles, Crown, Check, Gift, ArrowRight, CreditCard } from "lucide-react";
+import { Lock, Shield, Clock, Sparkles, Crown, Check, Gift, ArrowRight, CreditCard, PhoneCall, Video } from "lucide-react";
 import Layout from "@/components/layout/Layout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
@@ -49,6 +49,10 @@ export default function Privileges() {
 
   // État unique pour la demande d'admission (plus besoin de l'état expertModal)
   const [modalOpen, setModalOpen] = useState(false);
+
+  const handleVIPWaitlist = () => {
+    setModalOpen(true);
+  };
 
   return (
     <Layout>
@@ -223,73 +227,59 @@ export default function Privileges() {
               </div>
             </div>
 
-            {/* Carré VIP - FLOUTÉ / TEASING */}
+            {/* Carré VIP */}
             <div
               data-reveal
               data-reveal-delay="300"
-              className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 flex flex-col min-h-[420px] z-10 overflow-hidden max-w-3xl mx-auto"
+              className="relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 flex flex-col max-w-3xl mx-auto rounded-sm"
             >
-              {/* LE MESSAGE D'ATTENTE NET (Par-dessus le flou) */}
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-8 bg-primary/20 backdrop-blur-[1px]">
-                <div className="w-16 h-16 bg-primary/80 border border-[hsl(var(--gold)/0.5)] flex items-center justify-center rounded-full mb-6 shadow-xl">
-                  <Crown className="h-8 w-8 text-[hsl(var(--gold))]" />
+              {/* Badge "Bientôt disponible" */}
+              <div className="absolute -top-4 right-8 bg-white/10 text-white px-5 py-1.5 text-base font-medium tracking-[0.2em] uppercase rounded-full backdrop-blur-sm border border-white/20">
+                Bientôt disponible
+              </div>
+
+              {/* Header */}
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                  <Crown className="h-6 w-6 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-3xl md:text-4xl text-white mb-4">Le Carré VIP</h3>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-6 border-b border-[hsl(var(--gold)/0.3)] pb-2 text-lg">
-                  Bientôt ouvert
-                </p>
-                <p className="text-white/90 leading-relaxed max-w-[280px] text-xl">
-                  Afin de garantir l'excellence absolue de nos mises en relation, ce service d'exception ouvrira ses
-                  portes très prochainement.
+                <h3 className="font-heading text-3xl text-white md:text-4xl">Le Carré VIP</h3>
+              </div>
+
+              {/* Pricing */}
+              <div className="mb-4 pb-8 border-b border-white/10">
+                <div className="flex items-baseline gap-3 mb-3">
+                  <span className="font-heading text-5xl md:text-6xl text-white">12€</span>
+                  <span className="font-heading text-3xl text-white/50 line-through">24€</span>
+                  <span className="text-xl text-white/70">/ mois</span>
+                </div>
+                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-lg">
+                  Sans engagement
                 </p>
               </div>
 
-              {/* LE CONTENU INITIAL FLOUTÉ ET INCLIQUABLE */}
-              <div
-                className="flex-1 flex flex-col blur-[6px] opacity-30 select-none pointer-events-none"
-                aria-hidden="true"
+              {/* Features */}
+              <ul className="space-y-5 mb-10 mt-8 flex-1">
+                {[
+                  "Inclus dans les deux formules +",
+                  "Mode Invisible — Vous choisissez qui vous voit",
+                  "Confirmation de lecture — Savoir si on a lu votre message",
+                  "Alertes Conciergerie — Notifications par SMS discrets",
+                ].map((feature) => (
+                  <li key={feature} className="flex items-start gap-4">
+                    <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                    <span className="text-white/90 leading-relaxed text-xl">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={handleVIPWaitlist}
+                className="w-full bg-[hsl(var(--gold))] text-primary py-5 text-lg uppercase tracking-widest font-bold transition-all hover:bg-[hsl(var(--gold-light))] min-h-[64px] flex items-center justify-center gap-2"
               >
-                <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 font-bold tracking-[0.2em] uppercase rounded-b-sm text-base">
-                  Privilège
-                </div>
-
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
-                    <Crown className="h-5 w-5 text-[hsl(var(--gold))]" />
-                  </div>
-                  <h3 className="font-heading text-2xl text-white md:text-4xl">Discrétion Absolue</h3>
-                </div>
-
-                <div className="mb-10 pb-8 border-b border-white/10">
-                  <div className="mb-4">
-                    <span className="font-heading text-5xl text-white line-through decoration-white decoration-2">
-                      65€
-                    </span>
-                  </div>
-                  <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 whitespace-pre-line">
-                    3 MOIS OFFERTS{"\n"}SANS ENGAGEMENT
-                  </p>
-                  <p className="text-[11px] text-white/50 tracking-widest uppercase">
-                    Puis 65€/mois (ou 150€ / 3 mois)
-                  </p>
-                </div>
-
-                <ul className="space-y-5 mb-12 flex-1">
-                  {discretionFeatures.map((feature) => (
-                    <li key={feature} className="flex items-start gap-4">
-                      <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                      <span className="text-white/90 leading-relaxed text-xl">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <button
-                  tabIndex={-1}
-                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold"
-                >
-                  Demander mon admission VIP
-                </button>
-              </div>
+                Rejoindre la liste d'attente VIP
+                <ArrowRight className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
@@ -316,34 +306,79 @@ export default function Privileges() {
               data-reveal-delay="150"
               className="font-heading text-4xl md:text-5xl lg:text-6xl text-primary-foreground mb-8 leading-tight"
             >
-              L'Accompagnement Signature
+              Services Optionnels
             </h2>
 
             <p
               data-reveal
               data-reveal-delay="350"
-              className="text-lg text-primary-foreground/80 leading-relaxed mb-6 max-w-4xl mx-auto md:text-2xl"
+              className="text-lg text-primary-foreground/80 leading-relaxed mb-12 max-w-4xl mx-auto md:text-2xl"
             >
-              Allez au-delà de l'algorithme. Profitez d'une expertise humaine sur-mesure pour décrypter votre test de
-              personnalité ou confier la création de votre profil à notre conciergerie.
+              Allez au-delà de l'algorithme. Profitez d'une expertise humaine sur-mesure pour vous accompagner dans la création de votre profil.
             </p>
+          </div>
 
-            <p
+          {/* Grille 2 cartes Services Optionnels */}
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto text-left">
+            {/* Card 1 — Pack Clé en main */}
+            <div
               data-reveal
-              data-reveal-delay="400"
-              className="text-lg text-primary-foreground/60 italic mb-12 md:text-2xl"
+              data-reveal-delay="200"
+              className="bg-white/5 border border-[hsl(var(--gold)/0.3)] backdrop-blur-sm p-10 flex flex-col rounded-sm shadow-xl"
             >
-              Un service exclusif et facultatif pour nos membres les plus exigeants.
-            </p>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                  <PhoneCall className="h-6 w-6 text-[hsl(var(--gold))]" />
+                </div>
+                <h3 className="font-heading text-3xl text-primary-foreground md:text-4xl">Pack "Clé en main"</h3>
+              </div>
 
-            <div data-reveal data-reveal-delay="450">
-              {/* Le bouton déclenche maintenant directement l'admission (modalOpen) */}
+              <p className="text-primary-foreground/80 text-xl leading-relaxed mb-8 flex-1">
+                Notre équipe vous appelle et remplit l'intégralité de votre profil pour vous (questionnaire de personnalité + infos). Coaching vidéo inclus.
+              </p>
+
+              <div className="flex items-baseline gap-3 mb-8 pb-8 border-b border-white/10">
+                <span className="font-heading text-5xl md:text-6xl text-primary-foreground">89€</span>
+                <span className="font-heading text-3xl text-primary-foreground/50 line-through">129€</span>
+              </div>
+
               <button
                 onClick={() => setModalOpen(true)}
-                className="inline-flex items-center gap-3 border border-primary-foreground/30 text-primary-foreground px-10 py-5 text-base font-medium tracking-wide transition-all duration-500 hover:bg-primary-foreground hover:text-primary group"
+                className="w-full bg-[hsl(var(--gold))] text-primary py-5 text-lg uppercase tracking-widest font-bold transition-all hover:bg-[hsl(var(--gold-light))] min-h-[64px] flex items-center justify-center gap-2"
               >
-                Demander mon admission
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                Ajouter le pack
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Card 2 — Coaching Vidéo */}
+            <div
+              data-reveal
+              data-reveal-delay="350"
+              className="bg-white/5 border border-[hsl(var(--gold)/0.3)] backdrop-blur-sm p-10 flex flex-col rounded-sm shadow-xl"
+            >
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                  <Video className="h-6 w-6 text-[hsl(var(--gold))]" />
+                </div>
+                <h3 className="font-heading text-3xl text-primary-foreground md:text-4xl">Coaching Vidéo</h3>
+              </div>
+
+              <p className="text-primary-foreground/80 text-xl leading-relaxed mb-8 flex-1">
+                Un expert vous guide en direct via Google Meet (sans accès à votre ordinateur) pour réaliser des photos et une vidéo d'une qualité optimale.
+              </p>
+
+              <div className="flex items-baseline gap-3 mb-8 pb-8 border-b border-white/10">
+                <span className="font-heading text-5xl md:text-6xl text-primary-foreground">35€</span>
+                <span className="font-heading text-3xl text-primary-foreground/50 line-through">70€</span>
+              </div>
+
+              <button
+                onClick={() => setModalOpen(true)}
+                className="w-full bg-[hsl(var(--gold))] text-primary py-5 text-lg uppercase tracking-widest font-bold transition-all hover:bg-[hsl(var(--gold-light))] min-h-[64px] flex items-center justify-center gap-2"
+              >
+                Ajouter le coaching
+                <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           </div>
