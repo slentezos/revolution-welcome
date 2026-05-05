@@ -9,6 +9,7 @@ import {
   ClipboardList,
   Brain,
   ArrowDown,
+  ArrowUp,
   ArrowRight,
   ChevronRight,
 } from "lucide-react";
