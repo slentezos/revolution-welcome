@@ -55,7 +55,7 @@ export default function ProfileQuestionnairesTab({ onContactTab }: ProfileQuesti
           </p>
         </div>
         <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:min-h-[60vh] order-1 lg:order-2">
-          <img src={profileQuestionnairesImg} alt="Vos questionnaires" className="w-full h-full object-cover" />
+          <img decoding="async" src={profileQuestionnairesImg} alt="Vos questionnaires" className="w-full h-full object-cover" />
         </div>
       </section>
 

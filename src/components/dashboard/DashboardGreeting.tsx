@@ -55,7 +55,7 @@ export default function DashboardGreeting({ firstName }: DashboardGreetingProps)
   return (
     <div data-reveal className="relative mb-8 rounded-2xl overflow-hidden shadow-luxury h-[220px] md:h-[150px]">
       {/* Background image */}
-      <img src={config.image} alt="" className="absolute inset-0 w-full h-full object-cover" />
+      <img decoding="async" src={config.image} alt="" className="absolute inset-0 w-full h-full object-cover" />
 
       {/* Gradient overlay */}
       <div className={`absolute inset-0 bg-gradient-to-r ${config.accent}`} />

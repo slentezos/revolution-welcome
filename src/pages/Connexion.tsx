@@ -395,7 +395,7 @@ export default function Connexion() {
 
         {/* Right - Image with overlay */}
         <div className="hidden lg:block flex-1 relative overflow-hidden">
-          <img src={heroCouple} alt="Couple heureux" className="absolute inset-0 w-full h-full object-cover" />
+          <img decoding="async" src={heroCouple} alt="Couple heureux" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-[#1B2333]/70" />
           <div className="absolute inset-0 flex items-center justify-center p-16">
             <div className="text-center text-white relative z-10">

@@ -75,7 +75,7 @@ export default function NotreMethode() {
         className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       >
         <div className="absolute inset-0">
-          <img src={coupleGarden} alt="Couple heureux" className="w-full h-full object-cover" />
+          <img decoding="async" src={coupleGarden} alt="Couple heureux" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/90" />
         </div>
 

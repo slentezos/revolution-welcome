@@ -121,7 +121,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
                 Votre portrait Prestige
               </p>
               <div className="relative rounded-[24px] overflow-hidden shadow-2xl border border-white/20 max-w-sm w-full aspect-[3/4]">
-                <img src={personalityHero} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                <img decoding="async" src={personalityHero} alt="" className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-[#1B2333]/85 backdrop-blur-[2px]" />
                 <div className="relative z-10 flex flex-col items-center justify-center h-full p-8 text-white text-center">
                   <h3 className="font-heading text-2xl font-bold mb-6">{profile.title}</h3>

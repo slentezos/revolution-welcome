@@ -17,7 +17,7 @@ export default function GiftBannerSection({ image }: GiftBannerSectionProps) {
     <section ref={revealRef} className="relative overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0">
-        <img src={image || giftBannerDefault} alt="Couple senior s'offrant un cadeau" className="w-full h-full object-cover" />
+        <img decoding="async" src={image || giftBannerDefault} alt="Couple senior s'offrant un cadeau" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/70 to-primary/50" />
       </div>
 

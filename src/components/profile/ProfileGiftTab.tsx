@@ -36,7 +36,7 @@ export default function ProfileGiftTab() {
           </p>
         </div>
         <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:min-h-[60vh] order-1 lg:order-2">
-          <img src={profileGiftImg} alt="Offrir un abonnement" className="w-full h-full object-cover" />
+          <img decoding="async" src={profileGiftImg} alt="Offrir un abonnement" className="w-full h-full object-cover" />
         </div>
       </section>
 
