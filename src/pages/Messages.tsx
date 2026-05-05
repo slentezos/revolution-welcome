@@ -952,7 +952,7 @@ export default function Messages() {
             </div>
 
             {/* Astuce dictée */}
-            <p className="mt-3 text-base text-muted-foreground leading-relaxed">
+            <p className="mt-3 text-muted-foreground leading-relaxed text-lg">
               💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
               <span className="font-semibold text-foreground">« point »</span>,{" "}
               <span className="font-semibold text-foreground">« à la ligne »</span>,{" "}
