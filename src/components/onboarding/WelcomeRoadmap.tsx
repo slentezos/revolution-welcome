@@ -67,66 +67,94 @@ function PricingModal({
           </div>
         ) : (
           <div className="flex flex-col flex-1 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center px-6 pt-8 pb-4">
-              <h2 className="font-heading text-3xl sm:text-4xl text-foreground">Comment souhaitez-vous débuter ?</h2>
-              <p className="text-muted-foreground mt-2 text-2xl">
+            <div className="text-center px-8 pt-12 pb-8 border-b border-border/60">
+              <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-lg">
+                Votre accueil
+              </span>
+              <h2 className="font-heading text-4xl sm:text-5xl text-foreground mt-4 leading-tight">
+                Comment souhaitez-vous débuter ?
+              </h2>
+              <div className="divider-gold mx-auto mt-6" />
+              <p className="text-muted-foreground mt-6 text-xl sm:text-2xl max-w-2xl mx-auto leading-relaxed">
                 Deux chemins, une même destination : votre épanouissement.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 pb-6 flex-1 overflow-y-auto">
-              <div className="bg-card border border-border p-8 flex flex-col h-full">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-10 h-10 bg-secondary flex items-center justify-center">
-                    <Star className="h-5 w-5 text-gold" />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 sm:px-12 py-10 flex-1 overflow-y-auto bg-[hsl(var(--cream))]/40">
+              {/* ─── Mode Autonome ─── */}
+              <div className="bg-card border border-border p-10 flex flex-col h-full shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-luxury)] transition-shadow rounded-sm">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-14 h-14 bg-secondary flex items-center justify-center rounded-sm">
+                    <Star className="h-7 w-7 text-gold" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-muted-foreground text-2xl">
+                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-xl">
                     Mode Autonome
                   </span>
                 </div>
-                <h3 className="font-heading mb-2 text-4xl">Vos premières impressions</h3>
-                <div className="divider-gold mb-6" />
-                <p className="text-muted-foreground leading-relaxed flex-grow mb-8 text-2xl">
-                  Profitez de vos 3 mois d'accès offerts en complétant votre portrait à votre rythme : commencez par
-                  notre <strong>quiz ludique</strong>, ajoutez vos plus belles <strong>photos</strong>, suivez notre{" "}
-                  <strong>tutoriel pour réussir votre vidéo</strong>, enregistrez votre <strong>son</strong>, puis
-                  complétez votre <strong>profil</strong> et votre test de <strong>personnalité</strong> en toute
-                  sérénité.
+
+                <h3 className="font-heading text-3xl sm:text-4xl text-foreground mb-3 leading-tight">
+                  À votre rythme
+                </h3>
+                <p className="text-gold font-medium text-xl mb-6">Inclus dans vos 3 mois offerts</p>
+                <div className="divider-gold mb-8" />
+
+                <p className="text-foreground/80 leading-relaxed flex-grow mb-10 text-xl">
+                  Vous complétez votre portrait sereinement, étape par étape : un <strong>quiz ludique</strong>, vos
+                  plus belles <strong>photos</strong>, une courte <strong>vidéo</strong> guidée, votre{" "}
+                  <strong>profil</strong> et votre <strong>test de personnalité</strong>.
                 </p>
-                <button onClick={onStartAutonomous} className="w-full btn-outline py-4 font-medium text-xl">
-                  Je débute à mon rythme (Inclus)
+
+                <button
+                  onClick={onStartAutonomous}
+                  className="w-full btn-outline min-h-[64px] py-5 font-medium text-xl rounded-sm"
+                >
+                  Je débute à mon rythme
                 </button>
               </div>
-              <div className="bg-primary text-primary-foreground p-8 flex flex-col h-full relative shadow-2xl">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
-                    <Phone className="h-5 w-5 text-gold-light" />
+
+              {/* ─── Service Conciergerie ─── */}
+              <div className="bg-primary text-primary-foreground p-10 flex flex-col h-full relative shadow-[var(--shadow-luxury)] rounded-sm overflow-hidden">
+                <div className="absolute top-0 right-0 bg-gold text-white text-base font-medium tracking-[0.15em] uppercase px-5 py-2">
+                  Recommandé
+                </div>
+
+                <div className="flex items-center gap-4 mb-8 mt-4">
+                  <div className="w-14 h-14 bg-white/10 flex items-center justify-center rounded-sm">
+                    <Phone className="h-7 w-7 text-gold-light" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-white/70 hidden sm:inline text-lg">
-                    Service Conciergerie
+                  <span className="font-medium tracking-[0.2em] uppercase text-white/80 text-xl">
+                    Conciergerie
                   </span>
                 </div>
-                <h3 className="font-bold text-primary-foreground text-2xl mb-2">L'Accompagnement Privé</h3>
-                <div className="divider-gold mb-6 border-white/20" />
-                <ul className="space-y-4 mb-8 flex-grow">
+
+                <h3 className="font-heading text-3xl sm:text-4xl text-primary-foreground mb-3 leading-tight">
+                  L'Accompagnement Privé
+                </h3>
+                <p className="text-gold-light font-medium text-xl mb-6">89 € — une fois</p>
+                <div className="h-px w-16 bg-white/30 mb-8" />
+
+                <ul className="space-y-5 mb-10 flex-grow">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-gold-light shrink-0 mt-0.5" />
-                      <span className="text-white/90 leading-snug text-2xl">{benefit}</span>
+                    <li key={i} className="flex items-start gap-4">
+                      <Check className="h-6 w-6 text-gold-light shrink-0 mt-1" />
+                      <span className="text-white/95 leading-relaxed text-xl">{benefit}</span>
                     </li>
                   ))}
                 </ul>
+
                 <button
                   onClick={onStartConcierge}
-                  className="w-full bg-gold text-white py-4 font-bold hover:brightness-110 transition-all shadow-lg text-xl"
+                  className="w-full bg-gold text-white min-h-[64px] py-5 font-semibold hover:brightness-110 transition-all shadow-lg text-xl rounded-sm"
                 >
-                  Découvrir l'accompagnement Privé (89 €)
+                  Choisir l'accompagnement privé
                 </button>
               </div>
             </div>
-            <div className="text-center py-4">
+
+            <div className="text-center py-6 border-t border-border/60 bg-background">
               <button
                 onClick={() => setView("story")}
-                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-2xl"
+                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-xl min-h-[56px] px-6"
               >
                 ← Revoir notre engagement de sérénité
               </button>
