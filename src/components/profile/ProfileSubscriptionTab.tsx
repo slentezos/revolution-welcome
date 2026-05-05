@@ -21,7 +21,12 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
       {/* Hero split */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-0">
         <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:min-h-[60vh]">
-          <img decoding="async" src={profileSubscriptionImg} alt="Votre abonnement" className="w-full h-full object-cover" />
+          <img
+            decoding="async"
+            src={profileSubscriptionImg}
+            alt="Votre abonnement"
+            className="w-full h-full object-cover"
+          />
         </div>
         <div className="flex flex-col justify-center bg-secondary px-8 md:px-16 lg:px-20 xl:px-28 py-16 lg:py-24">
           <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-4 block text-lg md:text-xl">
@@ -243,16 +248,14 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
 
       {/* Change Plan Modal */}
       <Dialog open={changeOpen} onOpenChange={setChangeOpen}>
-        <DialogContent className="sm:max-w-2xl md:max-w-4xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl bg-white max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-2xl md:max-w-4xl p-0 overflow-hidden rounded-[2.5rem] border-0 shadow-2xl bg-white">
           <div className="px-6 sm:px-10 py-10 space-y-8">
             {/* Header */}
             <div className="text-center space-y-3">
               <div className="mx-auto w-16 h-16 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-2">
                 <Sparkles className="h-8 w-8 text-[hsl(var(--gold))]" />
               </div>
-              <h2 className="font-heading text-foreground text-3xl md:text-4xl leading-tight">
-                Changer d'offre
-              </h2>
+              <h2 className="font-heading text-foreground text-3xl md:text-4xl leading-tight">Changer d'offre</h2>
               <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto">
                 Choisissez la formule qui vous correspond le mieux.
               </p>
@@ -337,9 +340,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 <span className="font-heading text-3xl md:text-4xl text-foreground">+12€</span>
                 <span className="text-lg text-muted-foreground">/ mois</span>
               </div>
-              <p className="text-muted-foreground text-lg">
-                Mode Invisible, accusés de lecture, alertes Conciergerie.
-              </p>
+              <p className="text-muted-foreground text-lg">Mode Invisible, accusés de lecture, alertes Conciergerie.</p>
             </button>
 
             {/* Reassurance */}
