@@ -341,7 +341,7 @@ export default function Privileges() {
       </section>
 
       {/* Bloc 3 — La Conciergerie Kalimera */}
-      <section ref={expertRef} className="relative py-40 lg:py-48 overflow-hidden bg-[#FCF9F5]">
+      <section ref={expertRef} className="relative py-40 overflow-hidden bg-[#FCF9F5] lg:py-[20px]">
         <div className="relative z-10 container-main mx-auto px-6 md:px-12">
           <div className="max-w-4xl mx-auto text-center">
             <span
