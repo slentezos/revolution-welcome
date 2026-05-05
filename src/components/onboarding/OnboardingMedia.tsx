@@ -128,7 +128,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const handleRemoveSlot = (slotId: string) => {
     const initial = getInitialSlots().find((s) => s.id === slotId);
     if (initial) {
-      setSlots((prev) => prev.map((s) => (s.id === slotId ? initial : s))));
+      setSlots((prev) => prev.map((s) => (s.id === slotId ? initial : s)));
     }
   };
 
@@ -156,7 +156,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     }
 
     const preview = URL.createObjectURL(file);
-    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s))));
+    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
     if (fileInputRef.current) fileInputRef.current.value = "";
     setActiveSlotId(null);
   };
