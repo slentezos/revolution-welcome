@@ -542,7 +542,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <p className="font-bold text-[hsl(var(--gold))] leading-snug text-base md:text-lg whitespace-normal break-words">
                         Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé.
                       </p>
-                      <p className="text-[hsl(var(--gold))] opacity-80 text-sm md:text-base">
+                      <p className="text-[hsl(var(--gold))] opacity-80 md:text-base text-lg">
                         On vous filme en visio (35€)
                       </p>
                     </div>
