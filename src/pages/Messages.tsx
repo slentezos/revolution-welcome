@@ -906,6 +906,12 @@ export default function Messages() {
         open={profileModalOpen}
         onOpenChange={setProfileModalOpen}
         hideActions
+        onReport={() => {
+          if (matchProfileData) {
+            setProfileModalOpen(false);
+            handleReport(matchProfileData.name);
+          }
+        }}
       />
 
       <ReportModal

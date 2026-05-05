@@ -212,6 +212,17 @@ export default function MatchProfileModal({
           <X className="h-5 w-5 text-foreground" />
         </button>
 
+        {/* Report button (top-left) */}
+        {onReport && (
+          <button
+            onClick={() => onReport()}
+            aria-label={`Signaler ${match.name}`}
+            className="absolute left-5 top-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full bg-background/95 hover:bg-destructive hover:text-destructive-foreground transition-colors shadow-md border border-border/30 text-foreground font-medium text-base">
+            <Flag className="h-5 w-5" />
+            <span className="hidden sm:inline">Signaler</span>
+          </button>
+        )}
+
         <div className="flex flex-col h-full">
           {/* ═══ TAB BAR — Elegant gold underline style ═══ */}
           <div className="flex border-b border-border/30 bg-secondary flex-shrink-0">
