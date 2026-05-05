@@ -39,7 +39,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const recognitionRef = React.useRef<any>(null);
     const internalRef = React.useRef<HTMLTextAreaElement | null>(null);
 
-    // Valeur de référence pour éviter les doublons
+    // Valeur de référence pour éviter les doublons lors de la dictée
     const valueRef = React.useRef(value);
     React.useEffect(() => {
       valueRef.current = value;
@@ -60,7 +60,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       [ref],
     );
 
-    // Auto-expand fluide qui scrolle toujours en bas
+    // Auto-expand fluide qui scrolle toujours en bas pour ne rien cacher
     const adjustTextareaHeight = React.useCallback(() => {
       const ta = internalRef.current;
       if (ta) {
@@ -142,7 +142,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
       recognition.onerror = (event: any) => {
         // Si c'est un problème de permission ou de matériel, on arrête vraiment.
-        // Les autres erreurs (comme un silence temporaire) seront relancées via onend.
         if (event.error === "not-allowed" || event.error === "audio-capture") {
           listeningRef.current = false;
           setIsListening(false);
@@ -151,18 +150,15 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       };
 
       recognition.onend = () => {
-        // LA MAGIE EST ICI : Le navigateur a coupé le micro.
-        // Si l'utilisateur n'a pas cliqué sur "Arrêter" (listeningRef est toujours true), on redémarre instantanément.
+        // Le navigateur coupe le micro. Si l'utilisateur n'a pas cliqué sur Arrêter, on relance.
         if (listeningRef.current) {
           try {
             recognition.start();
           } catch (error) {
-            // Si le redémarrage échoue, on coupe proprement
             listeningRef.current = false;
             setIsListening(false);
           }
         } else {
-          // L'utilisateur a vraiment cliqué sur Arrêter
           setIsListening(false);
         }
       };
@@ -264,7 +260,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
       }
 
-      // Interruption manuelle : l'utilisateur tape, on coupe le micro
+      // Interruption manuelle : l'utilisateur tape, on coupe le micro proprement
       if (interimText) {
         setInterimText("");
         if (listeningRef.current) {
