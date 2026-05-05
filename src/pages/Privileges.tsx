@@ -143,136 +143,153 @@ export default function Privileges() {
           </div>
 
           {/* Bloc Cercle Privé : 2 formules + VIP */}
-          <div className="max-w-7xl mx-auto">
-            {/* Header Cercle Privé */}
-            <div data-reveal data-reveal-delay="200" className="text-center mb-10 relative">
-              <div className="inline-block bg-foreground text-white px-6 py-1.5 text-xs font-bold tracking-[0.2em] uppercase rounded-full shadow-md mb-4">
+          <div className="max-w-6xl mx-auto">
+            {/* Wrapper Cercle Privé */}
+            <div
+              data-reveal
+              data-reveal-delay="200"
+              className="bg-white border border-slate-200/60 shadow-sm p-8 md:p-12 mb-10 relative"
+            >
+              {/* Badge */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 text-xs font-bold tracking-[0.2em] uppercase rounded-full shadow-md">
                 Invitation Privilège
               </div>
-              <div className="flex items-center justify-center gap-4 mb-3">
-                <div className="w-12 h-12 border border-slate-200 flex items-center justify-center rounded-sm bg-white">
+
+              <div className="flex items-center justify-center gap-4 mb-3 mt-2">
+                <div className="w-12 h-12 border border-slate-200 flex items-center justify-center rounded-sm">
                   <Sparkles className="h-5 w-5 text-[hsl(var(--gold))]" />
                 </div>
                 <h3 className="font-heading text-3xl text-foreground md:text-4xl">Cercle Privé</h3>
               </div>
-              <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-base md:text-lg">
+              <p className="text-center text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-base md:text-lg mb-10">
                 3 mois offerts — sans engagement
               </p>
-            </div>
 
-            {/* Les 3 boxes côte à côte */}
-            <div data-reveal data-reveal-delay="250" className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-10 items-stretch">
-              {/* Formule Mensuelle */}
-              <div className="bg-white border-2 border-slate-200 p-8 flex flex-col rounded-sm transition-all hover:border-[hsl(var(--gold)/0.5)]">
-                <p className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-4 text-base">
-                  Adhésion mensuelle
-                </p>
-                <div className="flex items-baseline gap-2 mb-1">
-                  <span className="font-heading text-5xl text-primary line-through decoration-primary decoration-[3px]">50€</span>
-                  <span className="text-lg text-muted-foreground">/ mois</span>
-                </div>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-sm mb-2">
-                  Offert 3 mois
-                </p>
-                <p className="text-muted-foreground text-base mb-8">Liberté totale, mois par mois.</p>
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="mt-auto w-full bg-white border-2 border-foreground text-foreground py-4 text-sm uppercase tracking-widest font-medium transition-all hover:bg-foreground hover:text-white flex items-center justify-center gap-2"
-                >
-                  Choisir <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Formule Trimestrielle (recommandée) */}
-              <div className="relative bg-white border-2 border-[hsl(var(--gold))] p-8 flex flex-col rounded-sm bg-[hsl(var(--gold)/0.04)] shadow-md">
-                <div className="absolute -top-3 right-6 bg-[hsl(var(--gold))] text-primary px-4 py-1 text-xs font-bold tracking-[0.2em] uppercase rounded-full">
-                  Recommandé
-                </div>
-                <p className="font-medium tracking-[0.2em] uppercase text-[hsl(var(--gold))] mb-4 text-base">
-                  Adhésion trimestrielle
-                </p>
-                <div className="flex items-baseline gap-2 mb-1">
-                  <span className="font-heading text-5xl text-primary line-through decoration-primary decoration-[3px]">120€</span>
-                  <span className="text-lg text-muted-foreground">/ 3 mois</span>
-                </div>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-sm mb-2">
-                  Offert 3 mois
-                </p>
-                <p className="text-muted-foreground text-base mb-8">Soit 40€/mois — économisez 30€.</p>
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="mt-auto w-full bg-foreground text-white py-4 text-sm uppercase tracking-widest font-medium transition-all hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
-                >
-                  Choisir <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Carré VIP - FLOUTÉ / TEASING */}
-              <div className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-8 flex flex-col z-10 overflow-hidden rounded-sm min-h-[420px]">
-                {/* LE MESSAGE D'ATTENTE NET (Par-dessus le flou) */}
-                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-6 bg-primary/20 backdrop-blur-[1px]">
-                  <div className="w-14 h-14 bg-primary/80 border border-[hsl(var(--gold)/0.5)] flex items-center justify-center rounded-full mb-4 shadow-xl">
-                    <Crown className="h-7 w-7 text-[hsl(var(--gold))]" />
-                  </div>
-                  <h3 className="font-heading text-2xl md:text-3xl text-white mb-3">Le Carré VIP</h3>
-                  <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-4 border-b border-[hsl(var(--gold)/0.3)] pb-2 text-base">
-                    Bientôt ouvert
+              {/* Les 2 formules */}
+              <div className="grid md:grid-cols-2 gap-6 lg:gap-8 mb-10">
+                {/* Formule Mensuelle */}
+                <div className="border-2 border-slate-200 p-8 md:p-10 flex flex-col rounded-sm transition-all hover:border-[hsl(var(--gold)/0.5)]">
+                  <p className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-4 text-base md:text-lg">
+                    Adhésion mensuelle
                   </p>
-                  <p className="text-white/90 leading-relaxed text-base">
-                    Un service d'exception qui ouvrira ses portes très prochainement.
-                  </p>
-                </div>
-
-                {/* LE CONTENU INITIAL FLOUTÉ ET INCLIQUABLE */}
-                <div
-                  className="flex-1 flex flex-col blur-[6px] opacity-30 select-none pointer-events-none"
-                  aria-hidden="true"
-                >
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
-                      <Crown className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    </div>
-                    <h3 className="font-heading text-xl text-white">Discrétion Absolue</h3>
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="font-heading text-5xl md:text-6xl text-foreground">50€</span>
+                    <span className="text-xl text-muted-foreground">/ mois</span>
                   </div>
-
-                  <div className="mb-6">
-                    <span className="font-heading text-4xl text-white line-through decoration-white decoration-2">
-                      65€
-                    </span>
-                  </div>
-
-                  <ul className="space-y-3 mb-6 flex-1">
-                    {discretionFeatures.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3">
-                        <Check className="h-4 w-4 text-[hsl(var(--gold))] shrink-0 mt-1" />
-                        <span className="text-white/90 leading-relaxed text-base">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
+                  <p className="text-muted-foreground text-lg mb-8">Liberté totale, mois par mois.</p>
                   <button
-                    tabIndex={-1}
-                    className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold"
+                    onClick={() => setModalOpen(true)}
+                    className="mt-auto w-full bg-white border-2 border-foreground text-foreground py-5 text-base uppercase tracking-widest font-medium transition-all hover:bg-foreground hover:text-white flex items-center justify-center gap-2"
                   >
-                    Demander mon admission VIP
+                    Choisir la mensuelle <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Formule Trimestrielle (recommandée) */}
+                <div className="relative border-2 border-[hsl(var(--gold))] p-8 md:p-10 flex flex-col rounded-sm bg-[hsl(var(--gold)/0.04)] shadow-md">
+                  <div className="absolute -top-3 right-6 bg-[hsl(var(--gold))] text-primary px-4 py-1 text-xs font-bold tracking-[0.2em] uppercase rounded-full">
+                    Recommandé · -30€
+                  </div>
+                  <p className="font-medium tracking-[0.2em] uppercase text-[hsl(var(--gold))] mb-4 text-base md:text-lg">
+                    Adhésion trimestrielle
+                  </p>
+                  <div className="flex items-baseline gap-2 mb-2">
+                    <span className="font-heading text-5xl md:text-6xl text-foreground">120€</span>
+                    <span className="text-xl text-muted-foreground">/ 3 mois</span>
+                  </div>
+                  <p className="text-muted-foreground text-lg mb-8">Soit 40€/mois — économisez 30€.</p>
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="mt-auto w-full bg-foreground text-white py-5 text-base uppercase tracking-widest font-medium transition-all hover:bg-[hsl(var(--gold))] hover:text-white flex items-center justify-center gap-2 shadow-md"
+                  >
+                    Choisir la trimestrielle <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
+
+              {/* Avantages communs */}
+              <div className="border-t border-slate-100 pt-8">
+                <p className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-base">
+                  Inclus dans les deux formules
+                </p>
+                <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-4 max-w-3xl mx-auto">
+                  {cerclePriveFeatures.map((feature) => (
+                    <li key={feature} className="flex items-start gap-3">
+                      <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-1" />
+                      <span className="text-foreground/80 leading-relaxed text-xl">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
-            {/* Avantages communs */}
-            <div data-reveal data-reveal-delay="350" className="bg-white border border-slate-200/60 shadow-sm p-8 md:p-10">
-              <p className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-base">
-                Inclus dans toutes les formules Cercle Privé
-              </p>
-              <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4 max-w-5xl mx-auto">
-                {cerclePriveFeatures.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-1" />
-                    <span className="text-foreground/80 leading-relaxed text-lg">{feature}</span>
-                  </li>
-                ))}
-              </ul>
+            {/* Carré VIP - FLOUTÉ / TEASING */}
+            <div
+              data-reveal
+              data-reveal-delay="300"
+              className="group relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 flex flex-col min-h-[420px] z-10 overflow-hidden max-w-3xl mx-auto"
+            >
+              {/* LE MESSAGE D'ATTENTE NET (Par-dessus le flou) */}
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-8 bg-primary/20 backdrop-blur-[1px]">
+                <div className="w-16 h-16 bg-primary/80 border border-[hsl(var(--gold)/0.5)] flex items-center justify-center rounded-full mb-6 shadow-xl">
+                  <Crown className="h-8 w-8 text-[hsl(var(--gold))]" />
+                </div>
+                <h3 className="font-heading text-3xl md:text-4xl text-white mb-4">Le Carré VIP</h3>
+                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-6 border-b border-[hsl(var(--gold)/0.3)] pb-2 text-lg">
+                  Bientôt ouvert
+                </p>
+                <p className="text-white/90 leading-relaxed max-w-[280px] text-xl">
+                  Afin de garantir l'excellence absolue de nos mises en relation, ce service d'exception ouvrira ses
+                  portes très prochainement.
+                </p>
+              </div>
+
+              {/* LE CONTENU INITIAL FLOUTÉ ET INCLIQUABLE */}
+              <div
+                className="flex-1 flex flex-col blur-[6px] opacity-30 select-none pointer-events-none"
+                aria-hidden="true"
+              >
+                <div className="absolute top-0 right-8 bg-[hsl(var(--gold))] text-primary px-4 py-2 font-bold tracking-[0.2em] uppercase rounded-b-sm text-base">
+                  Privilège
+                </div>
+
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                    <Crown className="h-5 w-5 text-[hsl(var(--gold))]" />
+                  </div>
+                  <h3 className="font-heading text-2xl text-white md:text-4xl">Discrétion Absolue</h3>
+                </div>
+
+                <div className="mb-10 pb-8 border-b border-white/10">
+                  <div className="mb-4">
+                    <span className="font-heading text-5xl text-white line-through decoration-white decoration-2">
+                      65€
+                    </span>
+                  </div>
+                  <p className="text-[12px] text-[hsl(var(--gold))] font-bold tracking-widest uppercase mb-1 whitespace-pre-line">
+                    3 MOIS OFFERTS{"\n"}SANS ENGAGEMENT
+                  </p>
+                  <p className="text-[11px] text-white/50 tracking-widest uppercase">
+                    Puis 65€/mois (ou 150€ / 3 mois)
+                  </p>
+                </div>
+
+                <ul className="space-y-5 mb-12 flex-1">
+                  {discretionFeatures.map((feature) => (
+                    <li key={feature} className="flex items-start gap-4">
+                      <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                      <span className="text-white/90 leading-relaxed text-xl">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  tabIndex={-1}
+                  className="w-full bg-[hsl(var(--gold))] text-primary py-4 text-sm uppercase tracking-widest font-bold"
+                >
+                  Demander mon admission VIP
+                </button>
+              </div>
             </div>
           </div>
         </div>
