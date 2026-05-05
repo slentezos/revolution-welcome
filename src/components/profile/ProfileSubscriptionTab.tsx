@@ -273,7 +273,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                     : "border-secondary bg-white hover:border-[hsl(var(--gold))]/40"
                 }`}
               >
-                <div className="absolute -top-3 right-6 bg-[hsl(var(--gold))] text-primary px-3 py-1 text-xs font-bold tracking-[0.15em] uppercase rounded-full">
+                <div className="absolute -top-3 right-6 bg-[hsl(var(--gold))] text-primary px-3 py-1 font-bold tracking-[0.15em] uppercase rounded-full text-base">
                   Recommandé
                 </div>
                 <p className="font-medium tracking-[0.15em] uppercase text-muted-foreground mb-3 text-base">
@@ -281,7 +281,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 </p>
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="font-heading text-4xl md:text-5xl text-foreground">120€</span>
-                  <span className="text-lg text-muted-foreground">/ 3 mois</span>
+                  <span className="text-muted-foreground text-xl">/ 3 mois</span>
                 </div>
                 <p className="text-muted-foreground text-lg mb-4">Soit 40€/mois — économisez 30€.</p>
                 {selectedPlan === "trimestrielle" && (
@@ -306,7 +306,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 </p>
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="font-heading text-4xl md:text-5xl text-foreground">50€</span>
-                  <span className="text-lg text-muted-foreground">/ mois</span>
+                  <span className="text-muted-foreground text-xl">/ mois</span>
                 </div>
                 <p className="text-muted-foreground text-lg mb-4">Liberté totale, mois par mois.</p>
                 {selectedPlan === "mensuelle" && (
@@ -327,7 +327,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                   : "border-secondary bg-white hover:border-[hsl(var(--gold))]/40"
               }`}
             >
-              <div className="absolute -top-3 right-6 bg-foreground text-white px-3 py-1 text-xs font-bold tracking-[0.15em] uppercase rounded-full">
+              <div className="absolute -top-3 right-6 bg-foreground text-white px-3 py-1 font-bold tracking-[0.15em] uppercase rounded-full text-base">
                 Bientôt disponible
               </div>
               <div className="flex items-center gap-3 mb-2">
@@ -338,13 +338,13 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
               </div>
               <div className="flex items-baseline gap-2 mb-2">
                 <span className="font-heading text-3xl md:text-4xl text-foreground">+12€</span>
-                <span className="text-lg text-muted-foreground">/ mois</span>
+                <span className="text-muted-foreground text-xl">/ mois</span>
               </div>
               <p className="text-muted-foreground text-lg">Mode Invisible, accusés de lecture, alertes Conciergerie.</p>
             </button>
 
             {/* Reassurance */}
-            <p className="text-center text-muted-foreground text-base leading-relaxed">
+            <p className="text-center text-muted-foreground leading-relaxed text-xl">
               Désactivation libre · Aucun frais caché · Paiement sécurisé
             </p>
 
