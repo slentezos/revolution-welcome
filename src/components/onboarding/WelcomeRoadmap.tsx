@@ -114,7 +114,7 @@ function PricingModal({
 
               {/* ─── Service Conciergerie ─── */}
               <div className="bg-primary text-primary-foreground p-10 flex flex-col h-full relative shadow-[var(--shadow-luxury)] rounded-sm overflow-hidden">
-                <div className="absolute top-0 right-0 bg-gold text-white text-base font-medium tracking-[0.15em] uppercase px-5 py-2">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 font-bold tracking-[0.2em] uppercase rounded-full shadow-md text-lg">
                   Recommandé
                 </div>
 
