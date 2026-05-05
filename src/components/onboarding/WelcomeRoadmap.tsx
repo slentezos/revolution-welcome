@@ -350,7 +350,7 @@ function StepCard({
                 onClick={onStartClick}
                 className="animate-float flex items-center justify-center gap-4 bg-[#1B2333] text-white px-12 py-5 rounded-full shadow-xl hover:bg-[#1B2333]/90 transition-all group"
               >
-                <span className="font-heading text-xl sm:text-2xl font-bold tracking-wide">Commencer mon parcours</span>
+                <span className="font-heading text-xl font-bold tracking-wide sm:text-3xl">Commencer mon parcours</span>
                 <ChevronRight className="h-6 w-6 text-[hsl(var(--gold))] group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
