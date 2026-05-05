@@ -63,6 +63,7 @@ interface MatchProfile {
   religion?: string;
   availability?: string;
   lookingFor?: string;
+  politics?: string;
   matchedAt?: string;
   quizPreferences?: {
     drinks?: string[];
