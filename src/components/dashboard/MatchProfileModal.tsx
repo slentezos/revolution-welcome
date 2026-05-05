@@ -23,6 +23,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Flag,
+  Landmark,
 } from "lucide-react";
 import personalityHero from "@/assets/personality-hero.jpg";
 
