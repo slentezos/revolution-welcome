@@ -413,8 +413,8 @@ export default function Messages() {
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
       sendTimeoutRef.current = setTimeout(() => setIsSent(false), 1500);
       setTimeout(() => scrollToBottom(), 150);
-      
-      // Réinitialiser la hauteur du textarea après l'envoi
+      setComposerOpen(false);
+
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";
       }
