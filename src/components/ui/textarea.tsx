@@ -12,22 +12,19 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 // Parseur de ponctuation et de mise en forme pour le français
 const formatSpeech = (text: string) => {
   if (!text) return "";
-  return (
-    text
-      // Ordre strictement respecté : les expressions longues d'abord
-      .replace(/\bpoints?\s+d['’]interrogation\b/gi, "?")
-      .replace(/\bpoints?\s+d['’]exclamation\b/gi, "!")
-      .replace(/\bpoints?\s+de\s+suspension\b/gi, "...")
-      .replace(/\bnouveau\s+paragraphe\b/gi, "\n\n")
-      .replace(/\b(à|a)\s+la\s+ligne\b/gi, "\n")
-      .replace(/\bretour\s+(à|a)\s+la\s+ligne\b/gi, "\n")
-      .replace(/\bvirgule\b/gi, ",")
-      .replace(/\bpoint-virgule\b/gi, ";")
-      .replace(/\bdeux\s+points\b/gi, ":")
-      .replace(/\bpoint\b/gi, ".")
-      .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
-      .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`)
-  ); // Majuscule auto
+  return text
+    .replace(/\bpoints?\s+d['’]interrogation\b/gi, "?")
+    .replace(/\bpoints?\s+d['’]exclamation\b/gi, "!")
+    .replace(/\bpoints?\s+de\s+suspension\b/gi, "...")
+    .replace(/\bnouveau\s+paragraphe\b/gi, "\n\n")
+    .replace(/\b(à|a)\s+la\s+ligne\b/gi, "\n")
+    .replace(/\bretour\s+(à|a)\s+la\s+ligne\b/gi, "\n")
+    .replace(/\bvirgule\b/gi, ",")
+    .replace(/\bpoint-virgule\b/gi, ";")
+    .replace(/\bdeux\s+points\b/gi, ":")
+    .replace(/\bpoint\b/gi, ".")
+    .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto
 };
 
 const capitalizeFirst = (str: string) => {
@@ -42,7 +39,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const recognitionRef = React.useRef<any>(null);
     const internalRef = React.useRef<HTMLTextAreaElement | null>(null);
 
-    // Règle le bug du "Double Typing" : on sépare la valeur visuelle de la valeur réelle en mémoire
+    // Valeur de référence pour éviter les doublons
     const valueRef = React.useRef(value);
     React.useEffect(() => {
       valueRef.current = value;
@@ -50,7 +47,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const { toast } = useToast();
 
-    // Fusion de la référence transmise par le parent et de notre référence interne
+    // Fusion des références
     const setRefs = React.useCallback(
       (node: HTMLTextAreaElement) => {
         internalRef.current = node;
@@ -74,7 +71,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         } else {
           ta.style.height = `${scrollHeight}px`;
         }
-        ta.scrollTop = ta.scrollHeight; // Garantit qu'on voit toujours la dernière ligne
+        ta.scrollTop = ta.scrollHeight;
       }
     }, []);
 
@@ -82,6 +79,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       adjustTextareaHeight();
     }, [value, interimText, adjustTextareaHeight]);
 
+    // L'indicateur d'intention de l'utilisateur (crucial pour le redémarrage automatique)
     const listeningRef = React.useRef(false);
     React.useEffect(() => {
       listeningRef.current = isListening;
@@ -111,7 +109,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
 
         if (finalSegment && internalRef.current) {
-          // On se base strictement sur la référence parente pour éviter les doublons
           let currentVal = String(valueRef.current || "");
           let formattedFinal = formatSpeech(finalSegment).trim();
 
@@ -128,7 +125,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           const space = needsSpace ? " " : "";
 
           const newVal = currentVal + space + formattedFinal;
-          valueRef.current = newVal; // Mise à jour instantanée de la mémoire interne
+          valueRef.current = newVal;
 
           const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
             window.HTMLTextAreaElement.prototype,
@@ -143,18 +140,37 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         setTimeout(adjustTextareaHeight, 0);
       };
 
-      recognition.onerror = () => {
-        listeningRef.current = false;
-        setIsListening(false);
-        setInterimText("");
+      recognition.onerror = (event: any) => {
+        // Si c'est un problème de permission ou de matériel, on arrête vraiment.
+        // Les autres erreurs (comme un silence temporaire) seront relancées via onend.
+        if (event.error === "not-allowed" || event.error === "audio-capture") {
+          listeningRef.current = false;
+          setIsListening(false);
+          setInterimText("");
+        }
       };
+
       recognition.onend = () => {
-        listeningRef.current = false;
-        setIsListening(false);
+        // LA MAGIE EST ICI : Le navigateur a coupé le micro.
+        // Si l'utilisateur n'a pas cliqué sur "Arrêter" (listeningRef est toujours true), on redémarre instantanément.
+        if (listeningRef.current) {
+          try {
+            recognition.start();
+          } catch (error) {
+            // Si le redémarrage échoue, on coupe proprement
+            listeningRef.current = false;
+            setIsListening(false);
+          }
+        } else {
+          // L'utilisateur a vraiment cliqué sur Arrêter
+          setIsListening(false);
+        }
       };
+
       recognitionRef.current = recognition;
 
       return () => {
+        listeningRef.current = false;
         try {
           recognition.stop();
         } catch {}
@@ -166,6 +182,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const toggleListening = () => {
       if (listeningRef.current) {
+        // Arrêt intentionnel par l'utilisateur
         listeningRef.current = false;
         setIsListening(false);
         try {
@@ -197,6 +214,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
         setInterimText("");
       } else {
+        // Démarrage par l'utilisateur
         if (!recognitionRef.current) {
           toast({
             title: "Non supporté",
@@ -246,15 +264,15 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
       }
 
-      // Si l'utilisateur commence à taper manuellement, on coupe l'écoute proprement pour ne pas doubler le texte
+      // Interruption manuelle : l'utilisateur tape, on coupe le micro
       if (interimText) {
         setInterimText("");
         if (listeningRef.current) {
+          listeningRef.current = false;
+          setIsListening(false);
           try {
             recognitionRef.current?.abort();
           } catch {}
-          setIsListening(false);
-          listeningRef.current = false;
         }
       }
 
@@ -286,7 +304,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     return (
       <div className="w-full flex flex-col transition-all duration-500">
-        {/* Zone de Texte Principale avec Auto-Expand */}
         <div className="relative flex-1">
           <textarea
             onChange={handleChange}
@@ -304,7 +321,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           />
         </div>
 
-        {/* FEEDBACK VISUEL LARGE ET LISIBLE (NE SUPERPOSE JAMAIS LE TEXTE) */}
         {isListening && (
           <div className="mt-4 flex items-center justify-center gap-4 bg-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/30 px-6 py-5 rounded-2xl transition-all animate-in slide-in-from-top-2">
             <div className="flex items-end gap-1.5 h-6">
@@ -327,7 +343,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           </div>
         )}
 
-        {/* Astuce dictée claire et lisible */}
         <p className="mt-4 px-2 text-base text-muted-foreground leading-relaxed">
           💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
           <span className="font-semibold text-foreground">« point »</span>,{" "}
@@ -335,7 +350,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           <span className="font-semibold text-foreground">« point d'interrogation »</span>.
         </p>
 
-        {/* Panneau de Contrôle Inférieur (Boutons Modulables) */}
         <div className="mt-5 flex flex-col sm:flex-row gap-3">
           <button
             type="button"
