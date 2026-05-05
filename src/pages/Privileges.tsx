@@ -310,6 +310,32 @@ export default function Privileges() {
                 </ul>
               </div>
             </div>
+
+            {/* Ligne du temps — Transparence facturation */}
+            <div className="max-w-4xl mx-auto mt-16 md:mt-20 bg-white border border-slate-200/70 p-8 md:p-10 rounded-sm">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <CalendarCheck className="h-6 w-6 text-[hsl(var(--gold))]" />
+                <p className="font-medium tracking-[0.2em] uppercase text-foreground text-lg md:text-xl">
+                  Votre engagement, en toute clarté
+                </p>
+              </div>
+              <ul className="space-y-5 text-foreground/80 text-xl leading-relaxed">
+                <li className="flex items-start gap-4">
+                  <span className="font-heading text-2xl text-[hsl(var(--gold))] shrink-0">•</span>
+                  <span>
+                    <strong className="text-foreground">Aujourd'hui : 0€.</strong> Votre période de 3 mois offerts débute
+                    le jour où votre profil est validé et devient visible dans l'algorithme.
+                  </span>
+                </li>
+                <li className="flex items-start gap-4">
+                  <span className="font-heading text-2xl text-[hsl(var(--gold))] shrink-0">•</span>
+                  <span>
+                    <strong className="text-foreground">Transparence :</strong> Premier prélèvement à J+90.
+                    Désactivation possible en un clic avant cette date.
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
