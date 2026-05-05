@@ -12,19 +12,22 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 // Parseur de ponctuation et de mise en forme pour le français
 const formatSpeech = (text: string) => {
   if (!text) return "";
-  return text
-    .replace(/\bpoints?\s+d['’]interrogation\b/gi, "?")
-    .replace(/\bpoints?\s+d['’]exclamation\b/gi, "!")
-    .replace(/\bpoints?\s+de\s+suspension\b/gi, "...")
-    .replace(/\bnouveau\s+paragraphe\b/gi, "\n\n")
-    .replace(/\b(à|a)\s+la\s+ligne\b/gi, "\n")
-    .replace(/\bretour\s+(à|a)\s+la\s+ligne\b/gi, "\n")
-    .replace(/\bvirgule\b/gi, ",")
-    .replace(/\bpoint-virgule\b/gi, ";")
-    .replace(/\bdeux\s+points\b/gi, ":")
-    .replace(/\bpoint\b/gi, ".")
-    .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
-    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto
+  return (
+    text
+      // Ordre strictement respecté : les expressions longues d'abord
+      .replace(/\bpoints?\s+d['’]interrogation\b/gi, "?")
+      .replace(/\bpoints?\s+d['’]exclamation\b/gi, "!")
+      .replace(/\bpoints?\s+de\s+suspension\b/gi, "...")
+      .replace(/\bnouveau\s+paragraphe\b/gi, "\n\n")
+      .replace(/\b(à|a)\s+la\s+ligne\b/gi, "\n")
+      .replace(/\bretour\s+(à|a)\s+la\s+ligne\b/gi, "\n")
+      .replace(/\bvirgules?\b/gi, ",")
+      .replace(/\bpoints?-virgules?\b/gi, ";")
+      .replace(/\bdeux\s+points\b/gi, ":")
+      .replace(/\bpoints?\b/gi, ".")
+      .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+      .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`)
+  ); // Majuscule auto
 };
 
 const capitalizeFirst = (str: string) => {
@@ -39,7 +42,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const recognitionRef = React.useRef<any>(null);
     const internalRef = React.useRef<HTMLTextAreaElement | null>(null);
 
-    // Valeur de référence pour éviter les doublons lors de la dictée
+    // Valeur de référence pour éviter les doublons
     const valueRef = React.useRef(value);
     React.useEffect(() => {
       valueRef.current = value;
@@ -60,7 +63,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       [ref],
     );
 
-    // Auto-expand fluide qui scrolle toujours en bas pour ne rien cacher
+    // L'indicateur d'intention de l'utilisateur
+    const listeningRef = React.useRef(false);
+    React.useEffect(() => {
+      listeningRef.current = isListening;
+    }, [isListening]);
+
+    // Auto-expand fluide qui scrolle toujours en bas
     const adjustTextareaHeight = React.useCallback(() => {
       const ta = internalRef.current;
       if (ta) {
@@ -71,7 +80,10 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         } else {
           ta.style.height = `${scrollHeight}px`;
         }
-        ta.scrollTop = ta.scrollHeight;
+        // Ne force le scroll que si on est en train de dicter pour ne pas gêner la lecture manuelle
+        if (listeningRef.current) {
+          ta.scrollTop = ta.scrollHeight;
+        }
       }
     }, []);
 
@@ -79,12 +91,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       adjustTextareaHeight();
     }, [value, interimText, adjustTextareaHeight]);
 
-    // L'indicateur d'intention de l'utilisateur (crucial pour le redémarrage automatique)
-    const listeningRef = React.useRef(false);
-    React.useEffect(() => {
-      listeningRef.current = isListening;
-    }, [isListening]);
-
+    // INITIALISATION DU MOTEUR DE DICTÉE
     React.useEffect(() => {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (!SpeechRecognition) return;
@@ -108,7 +115,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           else interimSegment += transcript;
         }
 
-        if (finalSegment && internalRef.current) {
+        // Si le moteur a validé un mot de façon définitive
+        if (finalSegment) {
           let currentVal = String(valueRef.current || "");
           let formattedFinal = formatSpeech(finalSegment).trim();
 
@@ -125,15 +133,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           const space = needsSpace ? " " : "";
 
           const newVal = currentVal + space + formattedFinal;
-          valueRef.current = newVal;
+          valueRef.current = newVal; // Sync immédiate
 
-          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-            window.HTMLTextAreaElement.prototype,
-            "value",
-          )?.set;
-          nativeInputValueSetter?.call(internalRef.current, newVal);
-          const ev = new Event("input", { bubbles: true });
-          internalRef.current.dispatchEvent(ev);
+          // On met à jour l'application DIRECTEMENT via les props, sans simuler le clavier
+          if (onChange) {
+            onChange({ target: { value: newVal } } as React.ChangeEvent<HTMLTextAreaElement>);
+          }
         }
 
         setInterimText(formatSpeech(interimSegment));
@@ -141,7 +146,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       };
 
       recognition.onerror = (event: any) => {
-        // Si c'est un problème de permission ou de matériel, on arrête vraiment.
         if (event.error === "not-allowed" || event.error === "audio-capture") {
           listeningRef.current = false;
           setIsListening(false);
@@ -150,7 +154,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       };
 
       recognition.onend = () => {
-        // Le navigateur coupe le micro. Si l'utilisateur n'a pas cliqué sur Arrêter, on relance.
+        // Le navigateur a coupé, mais si l'utilisateur n'a pas cliqué sur arrêter, on relance en silence
         if (listeningRef.current) {
           try {
             recognition.start();
@@ -174,21 +178,19 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           recognition.abort?.();
         } catch {}
       };
-    }, [adjustTextareaHeight]);
+    }, [adjustTextareaHeight, onChange]);
 
+    // BOUTON PLAY/STOP DICTÉE
     const toggleListening = () => {
       if (listeningRef.current) {
-        // Arrêt intentionnel par l'utilisateur
+        // Arrêt intentionnel
         listeningRef.current = false;
         setIsListening(false);
         try {
           recognitionRef.current?.stop();
         } catch {}
-        try {
-          recognitionRef.current?.abort?.();
-        } catch {}
 
-        if (interimText && internalRef.current) {
+        if (interimText) {
           let currentVal = String(valueRef.current || "");
           let finalInterim = interimText.trim();
 
@@ -200,17 +202,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           const newVal = currentVal + space + finalInterim + " ";
           valueRef.current = newVal;
 
-          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-            window.HTMLTextAreaElement.prototype,
-            "value",
-          )?.set;
-          nativeInputValueSetter?.call(internalRef.current, newVal);
-          const ev = new Event("input", { bubbles: true });
-          internalRef.current.dispatchEvent(ev);
+          if (onChange) {
+            onChange({ target: { value: newVal } } as React.ChangeEvent<HTMLTextAreaElement>);
+          }
         }
         setInterimText("");
       } else {
-        // Démarrage par l'utilisateur
+        // Démarrage
         if (!recognitionRef.current) {
           toast({
             title: "Non supporté",
@@ -222,16 +220,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         setInterimText("");
 
-        if (internalRef.current) {
-          const currentVal = String(valueRef.current || "");
-          if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
-            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-              window.HTMLTextAreaElement.prototype,
-              "value",
-            )?.set;
-            nativeInputValueSetter?.call(internalRef.current, currentVal + " ");
-            const ev = new Event("input", { bubbles: true });
-            internalRef.current.dispatchEvent(ev);
+        // On ajoute un espace propre si on reprend la dictée au milieu d'une phrase
+        const currentVal = String(valueRef.current || "");
+        if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
+          const newVal = currentVal + " ";
+          valueRef.current = newVal;
+          if (onChange) {
+            onChange({ target: { value: newVal } } as React.ChangeEvent<HTMLTextAreaElement>);
           }
         }
 
@@ -246,33 +241,28 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       }
     };
 
+    // QUAND L'UTILISATEUR TAPE PHYSIQUEMENT AU CLAVIER
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      if (e.target.value.length > 0) {
-        const textarea = e.target;
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        const currentValue = textarea.value;
-        const capitalizedValue = capitalizeFirst(currentValue);
+      let val = e.target.value;
 
-        if (currentValue !== capitalizedValue) {
-          textarea.value = capitalizedValue;
-          textarea.setSelectionRange(start, end);
-        }
+      // Auto-majuscule sur la première lettre tapée
+      if (val.length === 1) {
+        val = capitalizeFirst(val);
+        e.target.value = val;
       }
 
-      // Interruption manuelle : l'utilisateur tape, on coupe le micro proprement
-      if (interimText) {
+      // Dès que l'utilisateur tape au clavier, on coupe le micro pour ne pas mélanger
+      if (listeningRef.current || interimText) {
         setInterimText("");
-        if (listeningRef.current) {
-          listeningRef.current = false;
-          setIsListening(false);
-          try {
-            recognitionRef.current?.abort();
-          } catch {}
-        }
+        listeningRef.current = false;
+        setIsListening(false);
+        try {
+          recognitionRef.current?.abort();
+        } catch {}
       }
 
       if (onChange) {
+        // On passe l'événement original avec la valeur corrigée (majuscule)
         onChange(e);
       }
 
@@ -296,7 +286,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     }
 
     const safeValue = value === null || value === undefined ? "" : String(value);
-    const displayValue = isListening || interimText ? safeValue + interimText : safeValue;
+
+    // Le texte visible est le texte sauvegardé + le brouillon en cours de reconnaissance
+    let displayValue = safeValue;
+    if (interimText) {
+      const needsSpace = displayValue.length > 0 && !displayValue.endsWith(" ") && !displayValue.endsWith("\n");
+      displayValue += (needsSpace ? " " : "") + interimText;
+    }
 
     return (
       <div className="w-full flex flex-col transition-all duration-500">
