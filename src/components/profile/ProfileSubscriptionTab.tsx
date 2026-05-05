@@ -52,21 +52,21 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                     <div className="w-14 h-14 border border-secondary flex items-center justify-center rounded-2xl bg-secondary/20">
                       <Sparkles className="h-6 w-6 text-[hsl(var(--gold))]" />
                     </div>
-                    <h3 className="font-heading text-3xl text-foreground md:text-4xl">Offre Découverte</h3>
+                    <h3 className="font-heading text-3xl text-foreground md:text-4xl">Cercle Privé</h3>
                   </div>
                 </div>
 
                 {/* Badge Statut & Prix */}
                 <div className="mb-8 pb-8 border-b border-secondary">
                   <div className="inline-flex items-center justify-center bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))] px-4 py-1.5 font-bold tracking-[0.15em] uppercase rounded-lg mb-6 text-lg">
-                    Offre Active
+                    Adhésion trimestrielle · Active
                   </div>
                   <div className="flex items-baseline gap-3 mb-2">
-                    <span className="font-heading text-5xl md:text-6xl text-foreground">60€</span>
+                    <span className="font-heading text-5xl md:text-6xl text-foreground">120€</span>
                     <span className="text-muted-foreground font-medium text-2xl">/ 3 mois</span>
                   </div>
                   <p className="text-muted-foreground tracking-widest uppercase font-medium mt-3 text-xl">
-                    Expire le 12 juin 2026
+                    Soit 40€/mois · Prochain prélèvement le 12 juin 2026
                   </p>
                 </div>
 
