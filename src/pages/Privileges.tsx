@@ -286,7 +286,7 @@ export default function Privileges() {
                   onClick={handleVIPWaitlist}
                   className="mt-auto w-full bg-white border-2 border-foreground text-foreground py-5 text-base uppercase tracking-widest font-medium transition-all hover:bg-foreground hover:text-white flex items-center justify-center gap-2 min-h-[64px]"
                 >
-                  Rejoindre la liste d'attente <ArrowRight className="w-4 h-4" />
+                  Rejoindre la liste d'attente VIP <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
 
