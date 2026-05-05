@@ -148,6 +148,7 @@ export default function MatchProfileModal({
     religion: match.religion || "Musulmane",
     availability: match.availability || "Weekend",
     lookingFor: match.lookingFor || "Amour",
+    politics: match.politics || "Modéré",
     photos: [
       match.avatar,
       ...(match.photos || [
