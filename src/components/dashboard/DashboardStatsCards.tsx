@@ -64,7 +64,7 @@ export default function DashboardStatsCards({
             <MessageSquare className="h-5 w-5 text-primary" />
             <span className="font-semibold text-foreground lg:text-lg text-xl">Messages</span>
             {unreadMessageCount > 0 && (
-              <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-[#1B2333] text-white font-bold text-sm shadow-sm">
+              <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-[#1B2333] text-white font-bold shadow-sm text-xl">
                 {unreadMessageCount}
               </span>
             )}
@@ -82,11 +82,11 @@ export default function DashboardStatsCards({
                 )}
               >
                 <Icon className="h-5 w-5" />
-                <span className="font-semibold lg:text-lg text-lg">{tab.label}</span>
+                <span className="font-semibold lg:text-lg text-xl">{tab.label}</span>
                 {tab.count > 0 && (
                   <span
                     className={cn(
-                      "inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full font-bold text-sm shadow-sm",
+                      "inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full font-bold shadow-sm text-xl",
                       tab.badgeClasses,
                     )}
                   >
