@@ -307,7 +307,6 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
               </span>
               <Textarea
                 showDictation
-                recipientName="vous-même"
                 placeholder="Partagez votre histoire si vous le souhaitez..."
                 value={whyAlone}
                 onChange={(e) => setWhyAlone(e.target.value)}
