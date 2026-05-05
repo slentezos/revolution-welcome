@@ -21,7 +21,8 @@ import {
   Brain,
   HelpCircle,
   ChevronLeft,
-  ChevronRight } from
+  ChevronRight,
+  Flag } from
 "lucide-react";
 import personalityHero from "@/assets/personality-hero.jpg";
 
@@ -83,6 +84,7 @@ interface MatchProfileModalProps {
   onAccept?: () => void;
   onRefuse?: () => void;
   onDecideLater?: () => void;
+  onReport?: () => void;
   hideActions?: boolean;
 }
 
@@ -125,6 +127,7 @@ export default function MatchProfileModal({
   onAccept,
   onRefuse,
   onDecideLater,
+  onReport,
   hideActions = false
 }: MatchProfileModalProps) {
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
