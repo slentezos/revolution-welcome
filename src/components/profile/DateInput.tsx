@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Lock } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
@@ -7,9 +8,10 @@ interface DateInputProps {
   value: string; // Format: "YYYY-MM-DD"
   onChange: (value: string) => void;
   className?: string;
+  disabled?: boolean;
 }
 
-export default function DateInput({ value, onChange, className }: DateInputProps) {
+export default function DateInput({ value, onChange, className, disabled = false }: DateInputProps) {
   // Découpage de la date "YYYY-MM-DD"
   const parts = value ? value.split("-") : ["", "", ""];
   const year = parts[0] || "";
