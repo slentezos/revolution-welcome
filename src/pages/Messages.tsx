@@ -211,7 +211,11 @@ export default function Messages() {
     adjustTextareaHeight();
   }, [message, interimText, chatFontSize, adjustTextareaHeight]);
 
-  // MOTEUR DE DICTÉE VOCALE (AVEC PONCTUATION ET SÉCURITÉ ANTI-UNDEFINED)
+  // Ref miroir pour éviter les closures stales sur isListening
+  const listeningRef = useRef(false);
+  useEffect(() => { listeningRef.current = isListening; }, [isListening]);
+
+  // MOTEUR DE DICTÉE VOCALE — initialisé UNE SEULE FOIS
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -222,6 +226,9 @@ export default function Messages() {
     recognition.lang = "fr-FR";
 
     recognition.onresult = (event: any) => {
+      // Si l'utilisateur a demandé l'arrêt, on ignore les derniers résultats
+      if (!listeningRef.current) return;
+
       let finalSegment = "";
       let interimSegment = "";
 
@@ -234,39 +241,45 @@ export default function Messages() {
       }
 
       if (finalSegment) {
-        // L'utilisation de prev garantit qu'il n'y aura jamais d'undefined
         setMessage((prev) => {
-          const currentVal = prev || ""; 
+          const currentVal = prev || "";
           let formattedFinal = formatSpeech(finalSegment).trim();
-
-          // Majuscule si le champ est vide ou après un point
           if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
             formattedFinal = capitalizeFirst(formattedFinal);
           }
-
-          const needsSpace = currentVal.length > 0 && !currentVal.endsWith(" ") && !currentVal.endsWith("\n") && !formattedFinal.startsWith(",") && !formattedFinal.startsWith(".");
+          const needsSpace =
+            currentVal.length > 0 &&
+            !currentVal.endsWith(" ") &&
+            !currentVal.endsWith("\n") &&
+            !formattedFinal.startsWith(",") &&
+            !formattedFinal.startsWith(".");
           const space = needsSpace ? " " : "";
-
           return currentVal + space + formattedFinal;
         });
       }
 
       setInterimText(formatSpeech(interimSegment));
-      
-      // Force le redimensionnement du champ pendant que la personne parle
-      setTimeout(adjustTextareaHeight, 0); 
+      setTimeout(adjustTextareaHeight, 0);
     };
 
-    recognition.onerror = () => setIsListening(false);
-    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => {
+      listeningRef.current = false;
+      setIsListening(false);
+      setInterimText("");
+    };
+    recognition.onend = () => {
+      listeningRef.current = false;
+      setIsListening(false);
+    };
+
     recognitionRef.current = recognition;
 
     return () => {
-      if (recognitionRef.current && isListening) {
-        recognitionRef.current.stop();
-      }
+      try { recognition.stop(); } catch {}
+      try { recognition.abort?.(); } catch {}
     };
-  }, [isListening, adjustTextareaHeight]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleListening = useCallback(() => {
     if (isListening) {
