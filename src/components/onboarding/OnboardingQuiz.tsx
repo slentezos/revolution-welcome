@@ -1,354 +1,401 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { ChevronLeft, ChevronRight, Lock } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Mic, MicOff, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import CriteriaEditWarningModal from "@/components/onboarding/CriteriaEditWarningModal";
 
-interface CooldownInfo {
-  isCompleted: boolean;
-  isLocked: boolean;
-  canEdit: boolean;
-  daysRemaining: number;
-  recordCriteriaUpdate: () => Promise<void>;
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  showDictation?: boolean;
+  onConfirm?: () => void;
+  onClose?: () => void;
 }
 
-interface OnboardingQuizProps {
-  profileId: string;
-  onComplete: () => void;
-  cooldown?: CooldownInfo;
-}
-
-type PreferenceCategory = {
-  id: string;
-  label: string;
-  placeholder: string;
-  suggestions: string[];
+// Parseur de ponctuation et de mise en forme pour le français
+const formatSpeech = (text: string) => {
+  if (!text) return "";
+  return text
+    .replace(/\bpoints?\s+d['’]interrogation\b/gi, "?")
+    .replace(/\bpoints?\s+d['’]exclamation\b/gi, "!")
+    .replace(/\bpoints?\s+de\s+suspension\b/gi, "...")
+    .replace(/\bnouveau\s+paragraphe\b/gi, "\n\n")
+    .replace(/\b(à|a)\s+la\s+ligne\b/gi, "\n")
+    .replace(/\bretour\s+(à|a)\s+la\s+ligne\b/gi, "\n")
+    .replace(/\bvirgule\b/gi, ",")
+    .replace(/\bpoint-virgule\b/gi, ";")
+    .replace(/\bdeux\s+points\b/gi, ":")
+    .replace(/\bpoint\b/gi, ".")
+    .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto
 };
 
-const categories: PreferenceCategory[] = [
-  {
-    id: "drinks",
-    label: "Vos 3 boissons préférées",
-    placeholder: "Boisson",
-    suggestions: ["Thé vert", "Champagne", "Café noir", "Vin rouge"],
-  },
-  {
-    id: "food",
-    label: "Vos 3 plats/desserts préférés",
-    placeholder: "Plat",
-    suggestions: ["Blanquette de veau", "Tarte Tatin", "Risotto", "Crème brûlée"],
-  },
-  {
-    id: "books",
-    label: "Vos 3 livres préférés",
-    placeholder: "Livre",
-    suggestions: ["Le Petit Prince", "L'Étranger", "Belle du Seigneur", "Les Misérables"],
-  },
-  {
-    id: "movies",
-    label: "Vos 3 films culte",
-    placeholder: "Film",
-    suggestions: ["Les Intouchables", "Amélie Poulain", "Le Grand Bleu", "Casablanca"],
-  },
-  {
-    id: "music",
-    label: "Vos 3 genres de musique",
-    placeholder: "Genre",
-    suggestions: ["Jazz", "Classique", "Chanson française", "Bossa nova"],
-  },
-  {
-    id: "destinations",
-    label: "Vos 3 destinations de rêve",
-    placeholder: "Destination",
-    suggestions: ["Toscane", "Provence", "Japon", "Grèce"],
-  },
-  {
-    id: "artists",
-    label: "Vos 3 artistes / personnages",
-    placeholder: "Artiste",
-    suggestions: ["Aznavour", "Édith Piaf", "Monet", "Simone Veil"],
-  },
-  {
-    id: "animals",
-    label: "Vos 3 animaux préférés",
-    placeholder: "Animal",
-    suggestions: ["Chat", "Cheval", "Dauphin", "Chien"],
-  },
-  {
-    id: "objects",
-    label: "Vos 3 objets fétiches",
-    placeholder: "Objet",
-    suggestions: ["Montre ancienne", "Carnet de voyage", "Appareil photo", "Vinyle"],
-  },
-  {
-    id: "hobbies",
-    label: "Vos 3 passe-temps favoris",
-    placeholder: "Passe-temps",
-    suggestions: ["Jardinage", "Randonnée", "Lecture", "Cuisine"],
-  },
-];
+const capitalizeFirst = (str: string) => {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
-const TOTAL_PAGES = categories.length + 1; // +1 for "why alone"
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, onChange, value, showDictation = false, onConfirm, onClose, ...props }, ref) => {
+    const [isListening, setIsListening] = React.useState(false);
+    const [interimText, setInterimText] = React.useState("");
+    const recognitionRef = React.useRef<any>(null);
+    const internalRef = React.useRef<HTMLTextAreaElement | null>(null);
 
-export default function OnboardingQuiz({ profileId, onComplete, cooldown }: OnboardingQuizProps) {
-  const [preferences, setPreferences] = useState<Record<string, string[]>>(
-    Object.fromEntries(categories.map((cat) => [cat.id, ["", "", ""]])),
-  );
-  const [whyAlone, setWhyAlone] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
-  const [saving, setSaving] = useState(false);
-  const [showWarningModal, setShowWarningModal] = useState(false);
-  const [editUnlocked, setEditUnlocked] = useState(false);
-  const { toast } = useToast();
+    // ARCHITECTURE ANTI-CLIGNOTEMENT (RACE CONDITION FIX)
+    const baseTextRef = React.useRef("");
+    const sessionFinalRef = React.useRef("");
+    const listeningRef = React.useRef(false);
 
-  // Cooldown: if locked, show toast and block editing
-  const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
-  const isCooldownEditable = !cooldown || !cooldown.isCompleted || cooldown.canEdit || editUnlocked;
+    const { toast } = useToast();
 
-  const handleInputChange = (categoryId: string, index: number, value: string) => {
-    if (!isCooldownEditable) {
-      if (isCooldownLocked) {
-        toast({
-          title: "🔒 Critères en cours d'analyse",
-          description: `Vous pourrez les ajuster à nouveau dans ${cooldown?.daysRemaining} jours.`,
-        });
-      } else if (cooldown?.canEdit) {
-        setShowWarningModal(true);
+    // Fusion des références
+    const setRefs = React.useCallback(
+      (node: HTMLTextAreaElement) => {
+        internalRef.current = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          (ref as React.MutableRefObject<HTMLTextAreaElement>).current = node;
+        }
+      },
+      [ref],
+    );
+
+    // Auto-expand fluide qui scrolle toujours en bas
+    const adjustTextareaHeight = React.useCallback(() => {
+      const ta = internalRef.current;
+      if (ta) {
+        ta.style.height = "auto";
+        const scrollHeight = ta.scrollHeight;
+        if (scrollHeight > 300) {
+          ta.style.height = "300px";
+        } else {
+          ta.style.height = `${scrollHeight}px`;
+        }
+        ta.scrollTop = ta.scrollHeight;
       }
-      return;
-    }
-    setPreferences((prev) => ({
-      ...prev,
-      [categoryId]: prev[categoryId].map((v, i) => (i === index ? value.slice(0, 40) : v)),
-    }));
-  };
+    }, []);
 
-  const isWhyAlonePage = currentPage >= categories.length;
-  const isLastPage = currentPage === TOTAL_PAGES - 1;
+    React.useEffect(() => {
+      adjustTextareaHeight();
+    }, [value, interimText, adjustTextareaHeight]);
 
-  const currentCategory = !isWhyAlonePage ? categories[currentPage] : null;
+    // MOTEUR DE DICTÉE VOCALE
+    React.useEffect(() => {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
 
-  const currentPageValid = isWhyAlonePage ? true : preferences[currentCategory!.id].some((v) => v.trim().length > 0);
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = "fr-FR";
 
-  const progressPercent = ((currentPage + 1) / TOTAL_PAGES) * 100;
+      recognition.onresult = (event: any) => {
+        if (!listeningRef.current) return;
 
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session) throw new Error("Non authentifié");
+        let finalSegment = "";
+        let interimSegment = "";
 
-      const insertData: { user_id: string; profile_id: string; question_id: string; answer_value: string }[] = [];
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i];
+          const transcript = result?.[0]?.transcript || "";
+          if (!transcript) continue;
+          if (result.isFinal) finalSegment += transcript + " ";
+          else interimSegment += transcript;
+        }
 
-      for (const category of categories) {
-        const answers = preferences[category.id].filter((v) => v.trim().length > 0);
-        if (answers.length > 0) {
-          insertData.push({
-            user_id: session.user.id,
-            profile_id: profileId,
-            question_id: category.id,
-            answer_value: JSON.stringify(answers),
+        if (finalSegment && internalRef.current) {
+          // Accumulation sécurisée (Isolée du State React asynchrone)
+          sessionFinalRef.current += finalSegment;
+
+          let base = baseTextRef.current;
+          let added = formatSpeech(sessionFinalRef.current).trim();
+
+          if (base.trim() === "" || /[.!?]\s*$/.test(base)) {
+            added = capitalizeFirst(added);
+          }
+
+          const needsSpace =
+            base.length > 0 &&
+            !base.endsWith(" ") &&
+            !base.endsWith("\n") &&
+            !added.startsWith(",") &&
+            !added.startsWith(".");
+          const space = needsSpace ? " " : "";
+
+          const fullConfirmed = base + space + added;
+
+          // Mise à jour synchrone du DOM pour éviter le bug d'effacement
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLTextAreaElement.prototype,
+            "value",
+          )?.set;
+          nativeInputValueSetter?.call(internalRef.current, fullConfirmed);
+          const ev = new Event("input", { bubbles: true });
+          internalRef.current.dispatchEvent(ev);
+        }
+
+        setInterimText(formatSpeech(interimSegment));
+        setTimeout(adjustTextareaHeight, 0);
+      };
+
+      recognition.onerror = (event: any) => {
+        if (event.error === "not-allowed" || event.error === "audio-capture") {
+          listeningRef.current = false;
+          setIsListening(false);
+          setInterimText("");
+        }
+      };
+
+      recognition.onend = () => {
+        // Redémarrage automatique si coupure inopinée du navigateur
+        if (listeningRef.current) {
+          try {
+            recognition.start();
+          } catch (error) {
+            listeningRef.current = false;
+            setIsListening(false);
+          }
+        } else {
+          setIsListening(false);
+        }
+      };
+
+      recognitionRef.current = recognition;
+
+      return () => {
+        listeningRef.current = false;
+        try {
+          recognition.stop();
+        } catch {}
+        try {
+          recognition.abort?.();
+        } catch {}
+      };
+    }, [adjustTextareaHeight]);
+
+    const toggleListening = () => {
+      if (listeningRef.current) {
+        // Arrêt intentionnel
+        listeningRef.current = false;
+        setIsListening(false);
+        try {
+          recognitionRef.current?.stop();
+        } catch {}
+        try {
+          recognitionRef.current?.abort?.();
+        } catch {}
+
+        // Sauvegarde du dernier mot en suspens
+        if (interimText && internalRef.current) {
+          sessionFinalRef.current += interimText + " ";
+
+          let base = baseTextRef.current;
+          let added = formatSpeech(sessionFinalRef.current).trim();
+
+          if (base.trim() === "" || /[.!?]\s*$/.test(base)) {
+            added = capitalizeFirst(added);
+          }
+
+          const space = base.length > 0 && !base.endsWith(" ") ? " " : "";
+          const fullConfirmed = base + space + added + " ";
+
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLTextAreaElement.prototype,
+            "value",
+          )?.set;
+          nativeInputValueSetter?.call(internalRef.current, fullConfirmed);
+          const ev = new Event("input", { bubbles: true });
+          internalRef.current.dispatchEvent(ev);
+        }
+        setInterimText("");
+      } else {
+        // Démarrage
+        if (!recognitionRef.current) {
+          toast({
+            title: "Non supporté",
+            description: "La dictée vocale n'est pas supportée sur ce navigateur.",
+            variant: "destructive",
           });
+          return;
+        }
+
+        // VERROUILLAGE DE LA VALEUR DE BASE AVANT DICTÉE
+        baseTextRef.current = String(value || "");
+        sessionFinalRef.current = "";
+        setInterimText("");
+
+        // Ajout d'un espace propre avant de commencer à parler
+        if (
+          internalRef.current &&
+          baseTextRef.current !== "" &&
+          !baseTextRef.current.endsWith(" ") &&
+          !baseTextRef.current.endsWith("\n")
+        ) {
+          baseTextRef.current += " ";
+          const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLTextAreaElement.prototype,
+            "value",
+          )?.set;
+          nativeInputValueSetter?.call(internalRef.current, baseTextRef.current);
+          const ev = new Event("input", { bubbles: true });
+          internalRef.current.dispatchEvent(ev);
+        }
+
+        try {
+          recognitionRef.current.start();
+          listeningRef.current = true;
+          setIsListening(true);
+        } catch {
+          listeningRef.current = false;
+          setIsListening(false);
+        }
+      }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (e.target.value.length > 0) {
+        const textarea = e.target;
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const currentValue = textarea.value;
+        const capitalizedValue = capitalizeFirst(currentValue);
+
+        if (currentValue !== capitalizedValue) {
+          textarea.value = capitalizedValue;
+          textarea.setSelectionRange(start, end);
         }
       }
 
-      if (whyAlone.trim().length > 0) {
-        insertData.push({
-          user_id: session.user.id,
-          profile_id: profileId,
-          question_id: "why_alone",
-          answer_value: whyAlone.trim(),
-        });
+      // Si frappe manuelle, on coupe la dictée proprement
+      if (interimText || listeningRef.current) {
+        setInterimText("");
+        listeningRef.current = false;
+        setIsListening(false);
+        try {
+          recognitionRef.current?.abort();
+        } catch {}
       }
 
-      if (insertData.length > 0) {
-        const { error } = await supabase.from("quiz_responses").insert(insertData);
-        if (error) throw error;
+      if (onChange) {
+        onChange(e);
       }
 
-      toast({ title: "Enregistré", description: "Vos préférences ont été sauvegardées" });
-    } catch (error: any) {
-      console.error("Save error:", error);
-      toast({ title: "Erreur", description: error.message || "Une erreur est survenue", variant: "destructive" });
-    } finally {
-      setSaving(false);
+      adjustTextareaHeight();
+    };
+
+    if (!showDictation) {
+      return (
+        <textarea
+          onChange={handleChange}
+          value={value}
+          autoCapitalize="sentences"
+          className={cn(
+            "flex w-full rounded-2xl border border-input bg-background/50 px-5 py-4 text-xl backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 min-h-[140px] resize-y overflow-y-auto",
+            className,
+          )}
+          ref={setRefs}
+          {...props}
+        />
+      );
     }
-  };
 
-  const handleNext = () => {
-    if (isLastPage) {
-      handleFinish();
-    } else {
-      setCurrentPage((p) => p + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    const safeValue = value === null || value === undefined ? "" : String(value);
+    let displayValue = safeValue;
+
+    // Ajout visuel du texte temporaire avec gestion propre des espaces
+    if (interimText) {
+      const needsSpace = displayValue.length > 0 && !displayValue.endsWith(" ") && !displayValue.endsWith("\n");
+      displayValue += (needsSpace ? " " : "") + interimText;
     }
-  };
 
-  const handleBack = () => {
-    if (currentPage > 0) {
-      setCurrentPage((p) => p - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
-  const handleFinish = async () => {
-    await handleSave();
-    onComplete();
-  };
-
-  return (
-    <div className="min-h-screen bg-[#FAFAFA] pb-40">
-      {/* Cooldown locked banner */}
-      {isCooldownLocked && (
-        <div className="bg-secondary border-b border-border px-6 py-4 text-center">
-          <p className="text-muted-foreground text-lg flex items-center justify-center gap-2">
-            <Lock className="h-5 w-5" />
-            🔒 Critères en cours d'analyse. Vous pourrez les ajuster à nouveau dans {cooldown?.daysRemaining} jours.
-          </p>
+    return (
+      <div className="w-full flex flex-col transition-all duration-500">
+        <div className="relative flex-1">
+          <textarea
+            onChange={handleChange}
+            value={displayValue}
+            autoCapitalize="sentences"
+            className={cn(
+              "w-full bg-[hsl(var(--cream))]/60 border-2 rounded-2xl text-xl leading-relaxed text-[#1B2333] placeholder:text-gray-400 resize-none min-h-[160px] max-h-[300px] overflow-y-auto focus:outline-none focus:ring-0 px-6 py-5 transition-all shadow-sm",
+              isListening
+                ? "border-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--gold)/0.12)]"
+                : "border-amber-100/80 focus:border-[hsl(var(--gold))]",
+              className,
+            )}
+            ref={setRefs}
+            {...props}
+          />
         </div>
-      )}
 
-      {/* Cooldown warning modal */}
-      <CriteriaEditWarningModal
-        open={showWarningModal}
-        onOpenChange={setShowWarningModal}
-        onConfirm={() => setEditUnlocked(true)}
-      />
-
-      {/* ══════ TOP BAR ══════ */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md pt-8 pb-4 shadow-sm border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <div className="flex items-end justify-between mb-4">
-            <h1 className="font-heading text-3xl font-bold text-[#1B2333]">Quiz des 3 préférences</h1>
-            <span className="text-gray-500 font-medium text-xl">
-              {currentPage + 1} / {TOTAL_PAGES}
+        {isListening && (
+          <div className="mt-4 flex items-center justify-center gap-4 bg-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/30 px-6 py-5 rounded-2xl transition-all animate-in slide-in-from-top-2">
+            <div className="flex items-end gap-1.5 h-6">
+              <span
+                className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:0ms]"
+                style={{ height: "60%" }}
+              />
+              <span
+                className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:150ms]"
+                style={{ height: "100%" }}
+              />
+              <span
+                className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:300ms]"
+                style={{ height: "40%" }}
+              />
+            </div>
+            <span className="text-xl lg:text-2xl font-bold text-[hsl(var(--gold))] animate-pulse tracking-wide">
+              En écoute... Parlez distinctement
             </span>
           </div>
-
-          {/* Progress segments */}
-          <div className="flex gap-2">
-            {Array.from({ length: TOTAL_PAGES }).map((_, idx) => (
-              <div
-                key={idx}
-                className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
-                  idx === currentPage ? "bg-[#D4AF37]" : idx < currentPage ? "bg-[#1B2333]" : "bg-gray-200"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ══════ QUESTION CARDS ══════ */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 pb-40">
-        {!isWhyAlonePage && currentCategory ? (
-          <div className="rounded-[24px] border p-6 md:p-10 transition-all duration-500 ease-out relative opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card">
-            {/* Question header */}
-            <div className="flex items-center gap-4 mb-8">
-              <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-2xl">
-                {(currentPage + 1).toString().padStart(2, "0")}
-              </span>
-              <h3 className="font-heading text-3xl md:text-3xl font-bold text-[#1B2333] leading-snug">
-                {currentCategory.label}
-              </h3>
-            </div>
-
-            {/* Inputs */}
-            <div className="space-y-4 md:ml-14">
-              {[0, 1, 2].map((index) => (
-                <Input
-                  key={index}
-                  placeholder={`${currentCategory.placeholder} ${index + 1}`}
-                  value={preferences[currentCategory.id][index]}
-                  onChange={(e) => handleInputChange(currentCategory.id, index, e.target.value)}
-                  maxLength={40}
-                  className="bg-[hsl(35,15%,97%)] border-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-14 text-xl placeholder:text-muted-foreground placeholder:font-light border-[#7a7a7a]"
-                />
-              ))}
-            </div>
-
-            {/* Suggestions */}
-            <div className="mt-6 md:ml-14">
-              <p className="text-muted-foreground mb-2.5 italic text-base">Inspirations :</p>
-              <div className="flex flex-wrap gap-2">
-                {currentCategory.suggestions.map((suggestion) => (
-                  <span
-                    key={suggestion}
-                    className="px-4 py-1.5 rounded-full font-medium bg-accent text-accent-foreground border border-border text-xl"
-                  >
-                    {suggestion}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="rounded-[24px] border p-6 md:p-10 transition-all duration-500 ease-out relative opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card">
-            {/* Question header */}
-            <div className="flex items-center gap-4 mb-8">
-              <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-2xl">
-                11
-              </span>
-              <h3 className="font-heading text-2xl font-bold text-[#1B2333] leading-snug md:text-2xl">
-                Pourquoi êtes-vous seul(e) aujourd'hui ?
-              </h3>
-            </div>
-
-            <div className="md:ml-14">
-              <span className="italic mb-6 block text-gray-600 text-xl">
-                A cette étape de votre désir de nouvelle vie, ne serait-il pas utile de faire le point avec vous-même et
-                de vous demander en toute sincérité pourquoi vous êtes seule aujourd'hui. (information confidentielle
-                non partagée)
-              </span>
-              <Textarea
-                showDictation
-                placeholder="Partagez votre histoire si vous le souhaitez..."
-                value={whyAlone}
-                onChange={(e) => setWhyAlone(e.target.value)}
-                rows={8}
-              />
-            </div>
-          </div>
         )}
-      </div>
 
-      {/* ══════ BOTTOM BAR ══════ */}
-      <div
-        className="fixed bottom-0 left-0 right-0 w-full bg-white border-t border-gray-200 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] py-3"
-        style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-[60px] flex items-center justify-between">
-          <div className="text-xl font-medium text-gray-500 hidden lg:block">
-            Question {currentPage + 1} / {TOTAL_PAGES}
-          </div>
+        <p className="mt-4 px-2 text-base text-muted-foreground leading-relaxed">
+          💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
+          <span className="font-semibold text-foreground">« point »</span>,{" "}
+          <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
+          <span className="font-semibold text-foreground">« point d'interrogation »</span>.
+        </p>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-            {currentPage > 0 && (
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                className="h-11 px-5 rounded-lg border-gray-300 text-[#1B2333] hover:bg-gray-50 font-medium"
-              >
-                <ChevronLeft className="h-4 w-4 mr-2" />
-                Précédent
-              </Button>
+        <div className="mt-5 flex flex-col sm:flex-row gap-3">
+          <button
+            type="button"
+            onClick={toggleListening}
+            className={cn(
+              "min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-lg lg:text-xl font-semibold transition-all duration-300 shadow-sm",
+              isListening
+                ? "bg-[hsl(var(--gold))] text-white shadow-[0_8px_24px_-8px_hsl(var(--gold)/0.6)] hover:brightness-105"
+                : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--cream))]/50",
             )}
-            <Button
-              onClick={handleNext}
-              disabled={saving}
-              className="h-11 px-6 rounded-lg bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-medium"
+          >
+            {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6 text-[hsl(var(--gold))]" />}
+            {isListening ? "Arrêter la dictée" : "Dicter à voix haute"}
+          </button>
+
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="min-h-[60px] sm:w-auto px-6 rounded-2xl text-lg lg:text-xl font-semibold bg-white border-2 border-gray-200 text-gray-700 hover:bg-gray-50 transition-all"
             >
-              {saving ? "Enregistrement..." : isLastPage ? "Terminer" : "Continuer"}
-              {!isLastPage && <ChevronRight className="h-4 w-4 ml-2" />}
-            </Button>
-          </div>
+              Fermer
+            </button>
+          )}
+
+          {onConfirm && (
+            <button
+              type="button"
+              onClick={onConfirm}
+              disabled={!safeValue.trim() && !isListening}
+              className="min-h-[60px] sm:min-w-[180px] rounded-2xl text-lg lg:text-xl font-semibold flex items-center justify-center gap-2 bg-[#1B2333] text-white hover:bg-[#1B2333]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[0_8px_24px_-8px_rgba(27,35,51,0.5)]"
+            >
+              <Check className="h-5 w-5" />
+              Confirmer
+            </button>
+          )}
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  },
+);
+
+Textarea.displayName = "Textarea";
+export { Textarea };
