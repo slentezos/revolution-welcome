@@ -323,7 +323,7 @@ function StepCard({
                 className="flex items-center justify-center gap-3 bg-white border-2 border-[#E5E0D8] px-8 h-16 rounded-full shadow-sm hover:shadow-md hover:border-[hsl(var(--gold))] transition-all group w-full sm:w-auto"
               >
                 <ArrowUp className="h-6 w-6 text-[hsl(var(--gold))] group-hover:-translate-y-1 transition-transform" />
-                <span className="font-heading text-xl text-[#1B2333] font-semibold">
+                <span className="font-heading text-[#1B2333] font-semibold text-2xl">
                   Revenir à l'étape {stepIndex}
                 </span>
               </button>
