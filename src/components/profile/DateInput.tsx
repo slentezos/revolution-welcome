@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Lock } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
@@ -7,9 +8,10 @@ interface DateInputProps {
   value: string; // Format: "YYYY-MM-DD"
   onChange: (value: string) => void;
   className?: string;
+  disabled?: boolean;
 }
 
-export default function DateInput({ value, onChange, className }: DateInputProps) {
+export default function DateInput({ value, onChange, className, disabled = false }: DateInputProps) {
   // Découpage de la date "YYYY-MM-DD"
   const parts = value ? value.split("-") : ["", "", ""];
   const year = parts[0] || "";
@@ -46,13 +48,22 @@ export default function DateInput({ value, onChange, className }: DateInputProps
 
   return (
     <div className={cn("space-y-4 w-full text-left", className)}>
-      <Label className="text-xl font-medium text-[#1B2333] block mb-3">Date de naissance</Label>
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <Label className="text-xl font-medium text-[#1B2333] block">Date de naissance</Label>
+        {disabled && (
+          <span className="inline-flex items-center gap-2 text-base text-muted-foreground">
+            <Lock className="h-4 w-4" />
+            Non modifiable
+          </span>
+        )}
+      </div>
 
-      <div className="grid grid-cols-3 gap-3 md:gap-4">
+      <div className={cn("grid grid-cols-3 gap-3 md:gap-4", disabled && "opacity-70")}>
+
         {/* --- JOUR --- */}
         <div className="space-y-2">
           <Label className="text-lg text-muted-foreground ml-1">Jour</Label>
-          <Select value={day} onValueChange={(v) => update(v, month, year)}>
+          <Select value={day} onValueChange={(v) => update(v, month, year)} disabled={disabled}>
             <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
               <SelectValue placeholder="JJ" />
             </SelectTrigger>
@@ -69,7 +80,7 @@ export default function DateInput({ value, onChange, className }: DateInputProps
         {/* --- MOIS (NOMS EN FRANÇAIS) --- */}
         <div className="space-y-2">
           <Label className="text-lg text-muted-foreground ml-1">Mois</Label>
-          <Select value={month} onValueChange={(v) => update(day, v, year)}>
+          <Select value={month} onValueChange={(v) => update(day, v, year)} disabled={disabled}>
             <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
               <SelectValue placeholder="Mois" />
             </SelectTrigger>
@@ -86,7 +97,7 @@ export default function DateInput({ value, onChange, className }: DateInputProps
         {/* --- ANNÉE --- */}
         <div className="space-y-2">
           <Label className="text-lg text-muted-foreground ml-1">Année</Label>
-          <Select value={year} onValueChange={(v) => update(day, month, v)}>
+          <Select value={year} onValueChange={(v) => update(day, month, v)} disabled={disabled}>
             <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
               <SelectValue placeholder="AAAA" />
             </SelectTrigger>
