@@ -264,7 +264,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                           {" "}
                           Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé{" "}
                         </p>
-                        <p className="text-lg opacity-80 underline">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
+                        <p className="opacity-80 underline text-xl">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
