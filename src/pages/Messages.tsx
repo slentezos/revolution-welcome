@@ -37,20 +37,22 @@ import { checkMessage } from "@/utils/wordFilter";
 // Parseur de ponctuation et de mise en forme pour le français
 const formatSpeech = (text: string) => {
   if (!text) return "";
-  return text
-    // Ordre important : expressions longues d'abord
-    .replace(/\bpoints? d['']interrogation\b/gi, "?")
-    .replace(/\bpoints? d['']exclamation\b/gi, "!")
-    .replace(/\bpoints de suspension\b/gi, "...")
-    .replace(/\bnouveau paragraphe\b/gi, "\n\n")
-    .replace(/\b(à|a) la ligne\b/gi, "\n")
-    .replace(/\bretour (à|a) la ligne\b/gi, "\n")
-    .replace(/\bvirgule\b/gi, ",")
-    .replace(/\bpoint-virgule\b/gi, ";")
-    .replace(/\bdeux points\b/gi, ":")
-    .replace(/\bpoint\b/gi, ".")
-    .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
-    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto après ponctuation
+  return (
+    text
+      // Ordre important : expressions longues d'abord
+      .replace(/\bpoints? d['']interrogation\b/gi, "?")
+      .replace(/\bpoints? d['']exclamation\b/gi, "!")
+      .replace(/\bpoints de suspension\b/gi, "...")
+      .replace(/\bnouveau paragraphe\b/gi, "\n\n")
+      .replace(/\b(à|a) la ligne\b/gi, "\n")
+      .replace(/\bretour (à|a) la ligne\b/gi, "\n")
+      .replace(/\bvirgule\b/gi, ",")
+      .replace(/\bpoint-virgule\b/gi, ";")
+      .replace(/\bdeux points\b/gi, ":")
+      .replace(/\bpoint\b/gi, ".")
+      .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+      .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`)
+  ); // Majuscule auto après ponctuation
 };
 
 const capitalizeFirst = (str: string) => {
@@ -140,7 +142,7 @@ export default function Messages() {
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState(initialConversations);
   const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
-  
+
   // ÉTATS GLOBAUX
   const [message, setMessage] = useState("");
   const [showConseils, setShowConseils] = useState(false);
@@ -208,7 +210,7 @@ export default function Messages() {
         ta.style.height = `${scrollHeight}px`;
       }
       // Force le scroll vers le bas pendant la dictée ou la frappe
-      ta.scrollTop = ta.scrollHeight; 
+      ta.scrollTop = ta.scrollHeight;
     }
   }, []);
 
@@ -219,7 +221,9 @@ export default function Messages() {
 
   // Ref miroir pour éviter les closures stales sur isListening
   const listeningRef = useRef(false);
-  useEffect(() => { listeningRef.current = isListening; }, [isListening]);
+  useEffect(() => {
+    listeningRef.current = isListening;
+  }, [isListening]);
 
   // MOTEUR DE DICTÉE VOCALE — initialisé UNE SEULE FOIS
   useEffect(() => {
@@ -281,8 +285,12 @@ export default function Messages() {
     recognitionRef.current = recognition;
 
     return () => {
-      try { recognition.stop(); } catch {}
-      try { recognition.abort?.(); } catch {}
+      try {
+        recognition.stop();
+      } catch {}
+      try {
+        recognition.abort?.();
+      } catch {}
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -292,8 +300,12 @@ export default function Messages() {
       // Stop
       listeningRef.current = false;
       setIsListening(false);
-      try { recognitionRef.current?.stop(); } catch {}
-      try { recognitionRef.current?.abort?.(); } catch {}
+      try {
+        recognitionRef.current?.stop();
+      } catch {}
+      try {
+        recognitionRef.current?.abort?.();
+      } catch {}
 
       // Valide le texte intermédiaire en cours
       if (interimText) {
@@ -337,12 +349,12 @@ export default function Messages() {
     const val = e.target.value;
     // Majuscule automatique sur la première lettre de la phrase
     const capitalizedValue = val.length === 1 ? capitalizeFirst(val) : val;
-    
+
     setMessage(capitalizedValue);
-    
+
     // Si frappe manuelle pendant/après dictée, on tue le texte fantôme
-    if (interimText) setInterimText(""); 
-    
+    if (interimText) setInterimText("");
+
     adjustTextareaHeight();
   };
 
@@ -364,7 +376,7 @@ export default function Messages() {
       setSpeakingMsgId(msgId);
       window.speechSynthesis.speak(utterance);
     },
-    [speakingMsgId]
+    [speakingMsgId],
   );
 
   const scrollToBottom = useCallback((smooth = true) => {
@@ -532,8 +544,9 @@ export default function Messages() {
                       >
                         <p className="font-semibold text-[#1B2333] mb-1">Votre Cercle Privé</p>
                         <p className="text-muted-foreground">
-                        Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés peuvent vous écrire. 
-                        La confidentialité est absolue : vos messages sont strictement personnels et ne peuvent être lus par nos équipes, administrateurs inclus.
+                          Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés
+                          peuvent vous écrire. La confidentialité est absolue : vos messages sont strictement personnels
+                          et ne peuvent être lus par nos équipes, administrateurs inclus.
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -642,7 +655,7 @@ export default function Messages() {
                           En ligne
                         </p>
                       </div>
-                      
+
                       <div className="flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
                         <button
                           onClick={() => setChatFontSizeIndex((i) => Math.max(0, i - 1))}
@@ -671,14 +684,18 @@ export default function Messages() {
                                   if (isLocked) {
                                     toast(
                                       "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés.",
-                                      { position: "bottom-left", duration: 4000 }
+                                      { position: "bottom-left", duration: 4000 },
                                     );
                                   } else {
                                     toast.info("Lancement de l'appel...");
                                   }
                                 }}
                               >
-                                {isLocked ? <Lock className="h-4 w-4 text-muted-foreground" /> : <Phone className="h-4 w-4 text-[#1B2333]" />}
+                                {isLocked ? (
+                                  <Lock className="h-4 w-4 text-muted-foreground" />
+                                ) : (
+                                  <Phone className="h-4 w-4 text-[#1B2333]" />
+                                )}
                                 <span className="text-xl font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
                               </button>
                               <button
@@ -688,14 +705,18 @@ export default function Messages() {
                                   if (isLocked) {
                                     toast(
                                       "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés.",
-                                      { position: "bottom-left", duration: 4000 }
+                                      { position: "bottom-left", duration: 4000 },
                                     );
                                   } else {
                                     toast.info("Lancement de l'appel vidéo...");
                                   }
                                 }}
                               >
-                                {isLocked ? <Lock className="h-4 w-4 text-muted-foreground" /> : <Video className="h-4 w-4 text-[#1B2333]" />}
+                                {isLocked ? (
+                                  <Lock className="h-4 w-4 text-muted-foreground" />
+                                ) : (
+                                  <Video className="h-4 w-4 text-[#1B2333]" />
+                                )}
                                 <span className="text-xl font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
                               </button>
                             </>
@@ -779,7 +800,9 @@ export default function Messages() {
                               <div
                                 className={`flex items-center gap-2 mt-2 ${msg.sender === "me" ? "justify-end" : ""}`}
                               >
-                                <p className={`text-base ${msg.sender === "me" ? "text-white/50" : "text-muted-foreground"}`}>
+                                <p
+                                  className={`text-base ${msg.sender === "me" ? "text-white/50" : "text-muted-foreground"}`}
+                                >
                                   {msg.sender === "me"
                                     ? msg.read
                                       ? `Lu à ${msg.time}`
@@ -837,7 +860,6 @@ export default function Messages() {
         </div>
       </div>
 
-
       {/* COMPOSER MODAL — élégant, accessible seniors 60+ */}
       <Dialog
         open={composerOpen}
@@ -849,8 +871,10 @@ export default function Messages() {
         <DialogContent className="max-w-3xl w-[calc(100%-2rem)] p-0 gap-0 bg-white border-0 rounded-[28px] shadow-[0_30px_80px_-20px_rgba(27,35,51,0.35)] overflow-hidden">
           {/* En-tête avec avatar Sophie */}
           <div className="relative bg-gradient-to-br from-[#1B2333] via-[#1B2333] to-[#2a3348] px-8 py-6 flex items-center gap-5">
-            <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
-              style={{ backgroundImage: "radial-gradient(circle at 20% 30%, hsl(var(--gold)) 0%, transparent 50%)" }} />
+            <div
+              className="absolute inset-0 opacity-[0.07] pointer-events-none"
+              style={{ backgroundImage: "radial-gradient(circle at 20% 30%, hsl(var(--gold)) 0%, transparent 50%)" }}
+            />
             {selectedChat && (
               <div className="relative shrink-0">
                 <img
@@ -892,9 +916,18 @@ export default function Messages() {
               {isListening && (
                 <div className="absolute top-4 right-4 flex items-center gap-2 bg-[hsl(var(--gold))]/15 px-3 py-1.5 rounded-full">
                   <div className="flex items-end gap-0.5 h-4">
-                    <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
-                    <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
-                    <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
+                    <span
+                      className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]"
+                      style={{ animationDelay: "0ms" }}
+                    />
+                    <span
+                      className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]"
+                      style={{ animationDelay: "150ms" }}
+                    />
+                    <span
+                      className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]"
+                      style={{ animationDelay: "300ms" }}
+                    />
                   </div>
                   <span className="text-sm font-semibold text-[hsl(var(--gold))]">En écoute</span>
                 </div>
@@ -903,7 +936,11 @@ export default function Messages() {
 
             {/* Astuce dictée */}
             <p className="mt-3 text-base text-muted-foreground leading-relaxed">
-              💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>, <span className="font-semibold text-foreground">« point »</span>, <span className="font-semibold text-foreground">« à la ligne »</span> ou <span className="font-semibold text-foreground">« point d'interrogation »</span>
+              💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
+              <span className="font-semibold text-foreground">« point »</span>,{" "}
+              <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
+              <span className="font-semibold text-foreground">« point d'interrogation »</span> ou{" "}
+              <span className="font-semibold text-foreground">« point d'exclamation »</span>
             </p>
           </div>
 
