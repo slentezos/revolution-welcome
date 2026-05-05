@@ -137,8 +137,6 @@ export default function Privileges() {
               <div className="flex items-center gap-3">
                 <Gift className="w-6 h-6 text-[hsl(var(--gold))]" />
                 <p className="text-xl text-foreground font-heading tracking-wide md:text-3xl">
-                  Vos 3 premiers mois offerts.
-                  <br />
                   Pour toute adhésion validée d'ici le 30 septembre 2026
                 </p>
               </div>
@@ -176,8 +174,8 @@ export default function Privileges() {
                   <p className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-4 text-base md:text-lg">
                     Adhésion mensuelle
                   </p>
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span className="font-heading text-5xl md:text-6xl text-foreground">50€</span>
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="font-heading text-5xl md:text-6xl text-foreground line-through opacity-60">50€</span>
                     <span className="text-xl text-muted-foreground">/ mois</span>
                   </div>
                   <p className="text-muted-foreground text-lg mb-8">Liberté totale, mois par mois.</p>
@@ -197,8 +195,8 @@ export default function Privileges() {
                   <p className="font-medium tracking-[0.2em] uppercase text-[hsl(var(--gold))] mb-4 text-base md:text-lg">
                     Adhésion trimestrielle
                   </p>
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span className="font-heading text-5xl md:text-6xl text-foreground">120€</span>
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="font-heading text-5xl md:text-6xl text-foreground line-through opacity-60">120€</span>
                     <span className="text-xl text-muted-foreground">/ 3 mois</span>
                   </div>
                   <p className="text-muted-foreground text-lg mb-8">Soit 40€/mois — économisez 30€.</p>
@@ -249,8 +247,8 @@ export default function Privileges() {
               {/* Pricing */}
               <div className="mb-4 pb-8 border-b border-white/10">
                 <div className="flex items-baseline gap-3 mb-3">
+                  <span className="text-xl text-white/70 uppercase tracking-[0.2em] font-medium">Option VIP :</span>
                   <span className="font-heading text-5xl md:text-6xl text-white">12€</span>
-                  <span className="font-heading text-white/50 line-through text-4xl">24€</span>
                   <span className="text-xl text-white/70">/ mois</span>
                 </div>
                 <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-lg">
@@ -285,66 +283,60 @@ export default function Privileges() {
         </div>
       </section>
 
-      {/* Bloc 3 — L'Expertise */}
-      <section ref={expertRef} className="relative py-32 lg:py-40 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-[hsl(var(--navy-light))]" />
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-[hsl(var(--gold))] rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-[hsl(var(--gold-light))] rounded-full blur-3xl" />
-        </div>
-
+      {/* Bloc 3 — La Conciergerie Kalimera */}
+      <section ref={expertRef} className="relative py-40 lg:py-48 overflow-hidden bg-[#FCF9F5]">
         <div className="relative z-10 container-main mx-auto px-6 md:px-12">
           <div className="max-w-4xl mx-auto text-center">
             <span
               data-reveal
               className="inline-block px-4 py-1.5 border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold))] font-medium tracking-[0.2em] uppercase mb-8 md:text-base text-xl"
             >
-              Privilège Optionnel
+              Services à la carte
             </span>
             <h2
               data-reveal
               data-reveal-delay="150"
-              className="font-heading text-4xl md:text-5xl lg:text-6xl text-primary-foreground mb-8 leading-tight"
+              className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-8 leading-tight"
             >
-              Services Optionnels
+              La Conciergerie Kalimera
             </h2>
 
             <p
               data-reveal
               data-reveal-delay="350"
-              className="text-lg text-primary-foreground/80 leading-relaxed mb-12 max-w-4xl mx-auto md:text-2xl"
+              className="text-lg text-foreground/70 leading-relaxed mb-16 max-w-4xl mx-auto md:text-2xl"
             >
               Allez au-delà de l'algorithme. Profitez d'une expertise humaine sur-mesure pour vous accompagner dans la création de votre profil.
             </p>
           </div>
 
-          {/* Grille 2 cartes Services Optionnels */}
+          {/* Grille 2 cartes Conciergerie */}
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto text-left">
             {/* Card 1 — Pack Clé en main */}
             <div
               data-reveal
               data-reveal-delay="200"
-              className="bg-white/5 border border-[hsl(var(--gold)/0.3)] backdrop-blur-sm p-10 flex flex-col rounded-sm shadow-xl"
+              className="bg-white border border-slate-200/70 p-10 flex flex-col rounded-sm"
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                <div className="w-14 h-14 border border-slate-200 flex items-center justify-center rounded-sm">
                   <PhoneCall className="h-6 w-6 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-3xl text-primary-foreground md:text-4xl">Pack "Clé en main"</h3>
+                <h3 className="font-heading text-3xl text-foreground md:text-4xl">Pack "Clé en main"</h3>
               </div>
 
-              <p className="text-primary-foreground/80 text-xl leading-relaxed mb-8 flex-1">
+              <p className="text-foreground/70 text-xl leading-relaxed mb-8 flex-1">
                 Notre équipe vous appelle et remplit l'intégralité de votre profil pour vous (questionnaire de personnalité + infos). Coaching vidéo inclus.
               </p>
 
-              <div className="flex items-baseline gap-3 mb-8 pb-8 border-b border-white/10">
-                <span className="font-heading text-5xl md:text-6xl text-primary-foreground">89€</span>
-                <span className="font-heading text-primary-foreground/50 line-through text-4xl">129€</span>
+              <div className="flex items-baseline gap-2 mb-8 pb-8 border-b border-slate-100">
+                <span className="font-heading text-4xl text-foreground">89€</span>
+                <span className="text-lg text-muted-foreground">— une fois</span>
               </div>
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full bg-[hsl(var(--gold))] text-primary py-5 text-lg uppercase tracking-widest font-bold transition-all hover:bg-[hsl(var(--gold-light))] min-h-[64px] flex items-center justify-center gap-2"
+                className="w-full bg-foreground text-white py-5 text-lg uppercase tracking-widest font-medium transition-all hover:bg-[hsl(var(--gold))] min-h-[64px] flex items-center justify-center gap-2"
               >
                 Ajouter le pack
                 <ArrowRight className="w-5 h-5" />
@@ -355,27 +347,27 @@ export default function Privileges() {
             <div
               data-reveal
               data-reveal-delay="350"
-              className="bg-white/5 border border-[hsl(var(--gold)/0.3)] backdrop-blur-sm p-10 flex flex-col rounded-sm shadow-xl"
+              className="bg-white border border-slate-200/70 p-10 flex flex-col rounded-sm"
             >
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                <div className="w-14 h-14 border border-slate-200 flex items-center justify-center rounded-sm">
                   <Video className="h-6 w-6 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-3xl text-primary-foreground md:text-4xl">Coaching Vidéo</h3>
+                <h3 className="font-heading text-3xl text-foreground md:text-4xl">Coaching Vidéo</h3>
               </div>
 
-              <p className="text-primary-foreground/80 text-xl leading-relaxed mb-8 flex-1">
+              <p className="text-foreground/70 text-xl leading-relaxed mb-8 flex-1">
                 Un expert vous guide en direct via Google Meet (sans accès à votre ordinateur) pour réaliser des photos et une vidéo d'une qualité optimale.
               </p>
 
-              <div className="flex items-baseline gap-3 mb-8 pb-8 border-b border-white/10">
-                <span className="font-heading text-5xl md:text-6xl text-primary-foreground">35€</span>
-                <span className="font-heading text-primary-foreground/50 line-through text-4xl">70€</span>
+              <div className="flex items-baseline gap-2 mb-8 pb-8 border-b border-slate-100">
+                <span className="font-heading text-4xl text-foreground">35€</span>
+                <span className="text-lg text-muted-foreground">— une fois</span>
               </div>
 
               <button
                 onClick={() => setModalOpen(true)}
-                className="w-full bg-[hsl(var(--gold))] text-primary py-5 text-lg uppercase tracking-widest font-bold transition-all hover:bg-[hsl(var(--gold-light))] min-h-[64px] flex items-center justify-center gap-2"
+                className="w-full bg-foreground text-white py-5 text-lg uppercase tracking-widest font-medium transition-all hover:bg-[hsl(var(--gold))] min-h-[64px] flex items-center justify-center gap-2"
               >
                 Ajouter le coaching
                 <ArrowRight className="w-5 h-5" />
