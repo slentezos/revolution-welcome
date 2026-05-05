@@ -306,7 +306,7 @@ export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptio
                 </p>
                 <div className="flex items-baseline gap-2 mb-2">
                   <span className="font-heading text-4xl md:text-5xl text-foreground">50€</span>
-                  <span className="text-lg text-muted-foreground">/ mois</span>
+                  <span className="text-muted-foreground text-xl">/ mois</span>
                 </div>
                 <p className="text-muted-foreground text-lg mb-4">Liberté totale, mois par mois.</p>
                 {selectedPlan === "mensuelle" && (
