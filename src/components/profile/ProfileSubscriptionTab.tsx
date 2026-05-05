@@ -13,6 +13,8 @@ interface ProfileSubscriptionTabProps {
 export default function ProfileSubscriptionTab({ firstName }: ProfileSubscriptionTabProps) {
   const [pauseOpen, setPauseOpen] = useState(false);
   const [cancelOpen, setCancelOpen] = useState(false);
+  const [changeOpen, setChangeOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<"trimestrielle" | "mensuelle" | "vip">("trimestrielle");
 
   return (
     <div>
