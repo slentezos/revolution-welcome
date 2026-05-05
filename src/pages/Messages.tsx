@@ -903,7 +903,7 @@ export default function Messages() {
 
             {/* Astuce dictée */}
             <p className="mt-3 text-base text-muted-foreground leading-relaxed">
-              💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>, <span className="font-semibold text-foreground">« point »</span>, <span className="font-semibold text-foreground">« à la ligne »</span>, <span className="font-semibold text-foreground">« point d'interrogation »</span> ou <span className="font-semibold text-foreground">« point d’exclamation »</span>
+              💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>, <span className="font-semibold text-foreground">« point »</span>, <span className="font-semibold text-foreground">« à la ligne »</span> ou <span className="font-semibold text-foreground">« point d'interrogation »</span>
             </p>
           </div>
 
