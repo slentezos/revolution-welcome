@@ -50,6 +50,10 @@ export default function Privileges() {
   // État unique pour la demande d'admission (plus besoin de l'état expertModal)
   const [modalOpen, setModalOpen] = useState(false);
 
+  const handleVIPWaitlist = () => {
+    setModalOpen(true);
+  };
+
   return (
     <Layout>
       {/* Bloc 1 — Hero : L'Invitation */}
