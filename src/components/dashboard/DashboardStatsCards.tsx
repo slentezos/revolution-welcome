@@ -54,11 +54,9 @@ export default function DashboardStatsCards({
   ];
 
   return (
-    <div className="sticky top-[64px] z-40 w-full backdrop-blur-md border-b border-border/40 shadow-sm py-4 overflow-hidden bg-transparent">
-      {/* BOÎTE PARENTE : Gère uniquement le scroll (overflow-x-auto) avec le padding global */}
-      <div className="w-full overflow-x-auto no-scrollbar px-4 md:px-8">
-        {/* BOÎTE ENFANT : w-max force les éléments à rester sur une ligne sans se compresser */}
-        <div className="flex items-center gap-3 md:gap-4 w-max min-w-full lg:justify-center mx-auto pb-1">
+    <div className="sticky top-[64px] z-40 w-full backdrop-blur-md border-b border-border/40 shadow-sm py-4 bg-transparent">
+      <div className="w-full px-2 md:px-6">
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pb-1">
           <button
             onClick={onMessagesClick}
             className="shrink-0 inline-flex items-center gap-2.5 rounded-full px-6 py-3 bg-white border border-border/60 hover:bg-muted transition-colors min-h-[48px] shadow-sm"
