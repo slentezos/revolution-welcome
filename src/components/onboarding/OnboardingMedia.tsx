@@ -466,16 +466,16 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <header className="shrink-0">
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-3">
                     <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-sm">
+                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-lg">
                       Guide Privé
                     </span>
                   </div>
-                  <DialogTitle className="font-heading text-3xl md:text-4xl text-[#1B2333] leading-[1.1]">
+                  <DialogTitle className="font-heading text-4xl md:text-5xl text-[#1B2333] leading-[1.1]">
                     L'art de se <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
                   </DialogTitle>
                 </header>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 shrink-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 shrink-0">
                   {[
                     { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
                     { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
@@ -483,12 +483,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     { icon: Volume2, title: "La Sérénité", desc: "Le silence pour être écouté(e)." },
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-center gap-4">
-                      <div className="w-12 h-12 shrink-0 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                        <item.icon className="h-6 w-6 text-[#1B2333]" />
+                      <div className="w-14 h-14 shrink-0 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
+                        <item.icon className="h-7 w-7 text-[#1B2333]" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-[#1B2333] text-xl leading-tight">{item.title}</h4>
-                        <p className="text-[#1B2333]/60 text-lg leading-snug truncate">{item.desc}</p>
+                        <h4 className="font-bold text-[#1B2333] text-2xl leading-tight">{item.title}</h4>
+                        <p className="text-[#1B2333]/70 text-xl leading-snug">{item.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -497,7 +497,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <div className="flex flex-col gap-3 mt-4 shrink-0 max-w-lg">
                   <Button
                     onClick={() => setShowVideoTutorial(false)}
-                    className="h-14 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-lg"
+                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-xl"
                   >
                     J'ai compris, je commence seul(e)
                   </Button>
@@ -508,18 +508,18 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       setShowVideoTutorial(false);
                       setShowStudioModal(true);
                     }}
-                    className="w-full flex items-center gap-4 p-3 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)] text-left shrink-0"
+                    className="w-full flex items-center gap-4 p-4 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)] text-left shrink-0 min-h-[64px]"
                   >
-                    <div className="shrink-0 w-10 h-10 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
-                      <Headphones className="h-5 w-5 text-[hsl(var(--gold))] animate-pulse" />
+                    <div className="shrink-0 w-12 h-12 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
+                      <Headphones className="h-6 w-6 text-[hsl(var(--gold))] animate-pulse" />
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col">
-                      <p className="font-bold text-[hsl(var(--gold))] text-lg leading-snug whitespace-normal">
+                      <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
                         Accompagnement personnalisé
                       </p>
-                      <p className="text-[hsl(var(--gold))] opacity-80 text-sm">On vous filme en visio (35€)</p>
+                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
                     </div>
-                    <ArrowRight className="h-5 w-5 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-1 transition-transform" />
+                    <ArrowRight className="h-6 w-6 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
