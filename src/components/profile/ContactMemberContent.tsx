@@ -8,6 +8,27 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
+
+/* ─── Parseur de ponctuation et mise en forme (copié de Messages.tsx / Écrire à Sophie) ─── */
+const formatSpeech = (text: string) => {
+  if (!text) return "";
+  return text
+    .replace(/\bpoints? d['']interrogation\b/gi, "?")
+    .replace(/\bpoints? d['']exclamation\b/gi, "!")
+    .replace(/\bpoints de suspension\b/gi, "...")
+    .replace(/\bnouveau paragraphe\b/gi, "\n\n")
+    .replace(/\b(à|a) la ligne\b/gi, "\n")
+    .replace(/\bretour (à|a) la ligne\b/gi, "\n")
+    .replace(/\bvirgule\b/gi, ",")
+    .replace(/\bpoint-virgule\b/gi, ";")
+    .replace(/\bdeux points\b/gi, ":")
+    .replace(/\bpoint\b/gi, ".")
+    .replace(/\s+([,;:?.!])/g, "$1")
+    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (_m, p1, p2) => `${p1} ${p2.toUpperCase()}`);
+};
+
+const capitalizeFirst = (str: string) => (str ? str.charAt(0).toUpperCase() + str.slice(1) : "");
 
 /* ─── FAQ Content ─── */
 const faqSections = [
@@ -101,11 +122,12 @@ const contactMotifs = [
 export default function ContactMemberContent() {
   const [motif, setMotif] = useState("");
   const [message, setMessage] = useState("");
+  const [interimText, setInterimText] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const baseTextRef = useRef("");
   const recognitionRef = useRef<any>(null);
+  const listeningRef = useRef(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const heroRef = useScrollReveal<HTMLElement>({ threshold: 0.08 });
@@ -115,68 +137,143 @@ export default function ContactMemberContent() {
   const isFormLocked = !motif;
 
   /* ─── Auto-expand textarea ─── */
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
+  const adjustTextareaHeight = useCallback(() => {
+    const ta = textareaRef.current;
+    if (ta) {
+      ta.style.height = "auto";
+      ta.style.height = ta.scrollHeight + "px";
     }
-  }, [message]);
+  }, []);
 
-  /* ─── Speech Recognition ─── */
-  const startDictation = useCallback(() => {
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [message, interimText, adjustTextareaHeight]);
+
+  useEffect(() => {
+    listeningRef.current = isListening;
+  }, [isListening]);
+
+  /* ─── Speech Recognition (init unique) ─── */
+  useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
 
     const recognition = new SpeechRecognition();
-    recognition.lang = "fr-FR";
     recognition.continuous = true;
     recognition.interimResults = true;
-
-    baseTextRef.current = message;
+    recognition.lang = "fr-FR";
 
     recognition.onresult = (event: any) => {
-      let interim = "";
-      let final = "";
+      if (!listeningRef.current) return;
+
+      let finalSegment = "";
+      let interimSegment = "";
+
       for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcript = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          final += transcript;
-        } else {
-          interim += transcript;
-        }
+        const result = event.results[i];
+        const transcript = result?.[0]?.transcript || "";
+        if (!transcript) continue;
+        if (result.isFinal) finalSegment += transcript + " ";
+        else interimSegment += transcript;
       }
 
-      if (final) {
-        baseTextRef.current += (baseTextRef.current ? " " : "") + final;
+      if (finalSegment) {
+        setMessage((prev) => {
+          const currentVal = prev || "";
+          let formattedFinal = formatSpeech(finalSegment).trim();
+          if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+            formattedFinal = capitalizeFirst(formattedFinal);
+          }
+          const needsSpace =
+            currentVal.length > 0 &&
+            !currentVal.endsWith(" ") &&
+            !currentVal.endsWith("\n") &&
+            !formattedFinal.startsWith(",") &&
+            !formattedFinal.startsWith(".");
+          return currentVal + (needsSpace ? " " : "") + formattedFinal;
+        });
       }
 
-      setMessage(baseTextRef.current + (interim ? " " + interim : ""));
+      setInterimText(formatSpeech(interimSegment));
+      setTimeout(adjustTextareaHeight, 0);
     };
 
     recognition.onerror = () => {
+      listeningRef.current = false;
       setIsListening(false);
+      setInterimText("");
     };
-
     recognition.onend = () => {
+      listeningRef.current = false;
       setIsListening(false);
     };
 
     recognitionRef.current = recognition;
-    recognition.start();
-    setIsListening(true);
-  }, [message]);
 
-  const stopDictation = useCallback(() => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-      recognitionRef.current = null;
-    }
-    setIsListening(false);
+    return () => {
+      try { recognition.stop(); } catch { /* noop */ }
+      try { recognition.abort?.(); } catch { /* noop */ }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const toggleListening = useCallback(() => {
+    if (listeningRef.current) {
+      listeningRef.current = false;
+      setIsListening(false);
+      try { recognitionRef.current?.stop(); } catch { /* noop */ }
+      try { recognitionRef.current?.abort?.(); } catch { /* noop */ }
+
+      if (interimText) {
+        setMessage((prev) => {
+          const currentVal = prev || "";
+          let finalInterim = interimText.trim();
+          if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
+            finalInterim = capitalizeFirst(finalInterim);
+          }
+          const space = currentVal.length > 0 && !currentVal.endsWith(" ") ? " " : "";
+          return currentVal + space + finalInterim + " ";
+        });
+      }
+      setInterimText("");
+    } else {
+      if (!recognitionRef.current) {
+        toast.error("La dictée vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
+      setInterimText("");
+      setMessage((prev) => {
+        const currentVal = prev || "";
+        if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
+          return currentVal + " ";
+        }
+        return currentVal;
+      });
+      try {
+        recognitionRef.current.start();
+        listeningRef.current = true;
+        setIsListening(true);
+      } catch {
+        listeningRef.current = false;
+        setIsListening(false);
+      }
+    }
+  }, [interimText]);
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    const capitalizedValue = val.length === 1 ? capitalizeFirst(val) : val;
+    setMessage(capitalizedValue);
+    if (interimText) setInterimText("");
+    adjustTextareaHeight();
+  };
+
+  const displayValue = isListening || interimText ? message + interimText : message;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!motif || !message.trim()) return;
+    if (listeningRef.current) toggleListening();
     setSubmitted(true);
   };
 
@@ -204,13 +301,9 @@ export default function ContactMemberContent() {
 
   return (
     <>
-      {/* ─── Hero ─── 
-          CORRECTION : On utilise une marge négative précise pour annuler le padding du Layout 
-          et on ajoute top-[-1px] pour recouvrir la bordure de l'onglet si besoin.
-      */}
+      {/* ─── Hero ─── */}
       <section ref={heroRef} className="relative pt-0 pb-16 md:pb-24 overflow-hidden z-10 mt-0">
         <div className="grid lg:grid-cols-2 min-h-[50vh]">
-          {/* Colonne Gauche : On ajoute un pt-32 pour compenser la remontée du bloc et laisser respirer le texte */}
           <div className="flex items-center bg-gradient-to-b from-secondary to-background px-6 md:px-12 lg:px-20 pt-32 pb-16 lg:pt-40 lg:pb-24">
             <div className="max-w-xl">
               <span
@@ -237,7 +330,6 @@ export default function ContactMemberContent() {
             </div>
           </div>
 
-          {/* Colonne Droite (Photo) */}
           <div className="relative hidden lg:block pt-[81px]">
             <img
               src={contactMemberHero}
@@ -327,98 +419,80 @@ export default function ContactMemberContent() {
 
             {/* Message area */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <label className="font-semibold text-foreground text-2xl">Votre message</label>
+              <label className="font-semibold text-foreground text-2xl block">Votre message</label>
 
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="lg"
+              <div className="relative">
+                <textarea
+                  ref={textareaRef}
+                  value={displayValue}
+                  onChange={handleTextareaChange}
                   disabled={isFormLocked}
-                  onClick={isListening ? stopDictation : startDictation}
-                  className={`bg-[#181c25] text-primary-foreground gap-3 px-8 py-6 text-xl rounded-2xl transition-all duration-300 ${
+                  placeholder={
                     isFormLocked
-                      ? "opacity-40 cursor-not-allowed"
+                      ? "Veuillez d'abord sélectionner un motif..."
+                      : "Décrivez votre demande en quelques mots..."
+                  }
+                  className={`flex w-full rounded-2xl border-2 bg-[hsl(var(--cream))]/60 px-6 py-5 ring-offset-background placeholder:text-muted-foreground/60 focus-visible:outline-none focus:ring-0 text-xl md:text-2xl leading-relaxed resize-none overflow-hidden transition-all duration-300 min-h-[200px] ${
+                    isFormLocked
+                      ? "opacity-40 cursor-not-allowed border-amber-100/80"
                       : isListening
-                        ? "border-[hsl(var(--gold))] text-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.12)] scale-105"
-                        : "hover:border-primary"
+                        ? "border-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--gold)/0.12)]"
+                        : "border-amber-100/80 focus:border-[hsl(var(--gold))]"
                   }`}
-                >
-                  {isListening ? (
-                    <>
-                      <MicOff className="h-6 w-6" />
-                      Arrêter
-                    </>
-                  ) : (
-                    <>
-                      <Mic className="h-6 w-6" />
-                      Dicter
-                    </>
-                  )}
-                </Button>
+                />
+                {isListening && (
+                  <div className="absolute top-4 right-4 flex items-center gap-2 bg-[hsl(var(--gold))]/15 px-3 py-1.5 rounded-full">
+                    <div className="flex items-end gap-0.5 h-4">
+                      <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
+                      <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
+                      <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
+                    </div>
+                    <span className="text-sm font-semibold text-[hsl(var(--gold))]">En écoute</span>
+                  </div>
+                )}
               </div>
 
-              {isListening && (
-                <div className="flex items-center gap-4 py-4 px-6 rounded-2xl bg-[hsl(var(--gold)/0.08)] border border-[hsl(var(--gold)/0.2)] animate-in slide-in-from-top-2 duration-500">
-                  <div className="flex items-end gap-[4px] h-6 shrink-0">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <span
-                        key={i}
-                        className="w-[4px] rounded-full bg-[hsl(var(--gold))]"
-                        style={{
-                          animation: `equalizer 0.8s ease-in-out ${i * 0.1}s infinite alternate`,
-                          height: "30%",
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-[hsl(var(--gold))] text-xl md:text-2xl font-medium italic leading-tight">
-                    Je vous écoute... et j'écris votre message.
-                  </span>
-                </div>
-              )}
-
-              <textarea
-                ref={textareaRef}
-                value={message}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setMessage(val.charAt(0).toUpperCase() + val.slice(1));
-                  baseTextRef.current = val.charAt(0).toUpperCase() + val.slice(1);
-                }}
-                disabled={isFormLocked}
-                placeholder={
-                  isFormLocked
-                    ? "Veuillez d'abord sélectionner un motif..."
-                    : "Décrivez votre demande en quelques mots..."
-                }
-                className={`flex w-full rounded-2xl border border-input bg-background px-6 py-5 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-xl md:text-2xl leading-relaxed resize-none overflow-hidden transition-all duration-300 min-h-[200px] ${
-                  isFormLocked ? "opacity-40 cursor-not-allowed" : ""
-                }`}
-              />
+              {/* Astuce dictée */}
+              <p className="mt-1 text-base text-muted-foreground leading-relaxed">
+                💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
+                <span className="font-semibold text-foreground">« point »</span>,{" "}
+                <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
+                <span className="font-semibold text-foreground">« point d'interrogation »</span>.
+              </p>
             </div>
 
-            {/* Submit */}
-            <Button
-              type="submit"
-              disabled={isFormLocked || !message.trim()}
-              className="btn-primary w-full md:w-auto px-12 py-8 text-2xl rounded-2xl group shadow-luxury"
-            >
-              Envoyer à mon conseiller
-              <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-2" />
-            </Button>
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                type="button"
+                onClick={toggleListening}
+                disabled={isFormLocked}
+                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-lg lg:text-xl font-semibold transition-all duration-300 ${
+                  isFormLocked
+                    ? "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] opacity-40 cursor-not-allowed"
+                    : isListening
+                      ? "bg-[hsl(var(--gold))] text-white shadow-[0_8px_24px_-8px_hsl(var(--gold)/0.6)] hover:brightness-105"
+                      : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--cream))]/50"
+                }`}
+              >
+                {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6 text-[hsl(var(--gold))]" />}
+                {isListening ? "Arrêter la dictée" : "Dicter à voix haute"}
+              </button>
+
+              <Button
+                type="submit"
+                disabled={isFormLocked || !message.trim()}
+                className="btn-primary min-h-[60px] sm:min-w-[220px] px-8 text-xl rounded-2xl group shadow-luxury"
+              >
+                Envoyer
+                <ArrowRight className="ml-3 h-6 w-6 transition-transform group-hover:translate-x-2" />
+              </Button>
+            </div>
           </form>
         </div>
       </section>
 
       <GiftBannerSection image={giftBannerContact} />
-
-      <style>{`
-        @keyframes equalizer {
-          0% { height: 30%; }
-          100% { height: 100%; }
-        }
-      `}</style>
     </>
   );
 }
