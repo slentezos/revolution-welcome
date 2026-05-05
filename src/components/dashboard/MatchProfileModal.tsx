@@ -182,7 +182,7 @@ export default function MatchProfileModal({
     { icon: Globe, label: "Origine", value: profileData.origin },
     { icon: Moon, label: "Religion", value: profileData.religion },
     { icon: Sparkles, label: "Disponibilité", value: profileData.availability },
-    { icon: Heart, label: "Recherche", value: profileData.lookingFor },
+    { icon: Landmark, label: "Politique", value: profileData.politics },
   ];
 
   const quizCategories = [
