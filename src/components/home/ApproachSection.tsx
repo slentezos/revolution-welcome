@@ -35,7 +35,7 @@ export default function ApproachSection() {
       {/* Content */}
       <div className="flex items-center justify-center p-10 md:p-16 lg:p-20 bg-secondary order-1 lg:order-2">
         <div className="max-w-lg w-full">
-          <span data-reveal className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 block text-xl">
+          <span data-reveal className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-xl">
             03 — Notre approche
           </span>
 
