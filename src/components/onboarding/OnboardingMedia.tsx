@@ -536,7 +536,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <Headphones className="h-5 w-5 text-[hsl(var(--gold))] animate-pulse" />
                       </div>
                       <div>
-                        <p className="font-bold text-[hsl(var(--gold))] leading-tight text-xl">Intimidé(e) ?</p>
+                        <p className="font-bold text-[hsl(var(--gold))] leading-tight text-xl">Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé</p>
                         <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
                       </div>
                     </div>
