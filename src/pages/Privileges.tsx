@@ -225,59 +225,70 @@ export default function Privileges() {
               </div>
             </div>
 
-            {/* Carré VIP */}
+            {/* Carré VIP — aligné sur l'UI du Cercle Privé */}
             <div
               data-reveal
               data-reveal-delay="300"
-              className="relative bg-primary border border-[hsl(var(--gold)/0.3)] shadow-2xl p-10 md:p-14 flex flex-col max-w-3xl mx-auto rounded-sm"
+              className="bg-white border border-slate-200/60 shadow-sm p-8 md:p-12 relative max-w-3xl mx-auto"
             >
-              {/* Badge "Bientôt disponible" */}
-              <div className="absolute -top-4 right-8 bg-white/10 text-white px-5 py-1.5 text-base font-medium tracking-[0.2em] uppercase rounded-full backdrop-blur-sm border border-white/20">
+              {/* Badge titre */}
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-foreground text-white px-6 py-1.5 font-bold tracking-[0.2em] uppercase rounded-full shadow-md text-lg">
+                Option Confort
+              </div>
+
+              {/* Badge Bientôt disponible */}
+              <div className="absolute -top-3 right-6 bg-[hsl(var(--gold))] text-primary px-4 py-1 font-bold tracking-[0.2em] uppercase rounded-full text-base">
                 Bientôt disponible
               </div>
 
-              {/* Header */}
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
-                  <Crown className="h-6 w-6 text-[hsl(var(--gold))]" />
+              {/* Header — même structure que Cercle Privé */}
+              <div className="flex items-center justify-center gap-4 mb-3 mt-2">
+                <div className="w-12 h-12 border border-slate-200 flex items-center justify-center rounded-sm">
+                  <Crown className="h-5 w-5 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-3xl text-white md:text-4xl">Le Carré VIP</h3>
+                <h3 className="font-heading text-3xl text-foreground md:text-4xl">Le Carré VIP</h3>
               </div>
+              <p className="text-center text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-base md:text-lg mb-10">
+                Sans engagement
+              </p>
 
-              {/* Pricing */}
-              <div className="mb-4 pb-8 border-b border-white/10">
-                <div className="flex items-baseline gap-3 mb-3">
-                  <span className="text-xl text-white/70 uppercase tracking-[0.2em] font-medium">Option VIP :</span>
-                  <span className="font-heading text-5xl md:text-6xl text-white">12€</span>
-                  <span className="text-xl text-white/70">/ mois</span>
-                </div>
-                <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-lg">
-                  Sans engagement
+              {/* Carte intérieure — reprend le style des formules */}
+              <div className="border-2 border-slate-200 p-8 md:p-10 flex flex-col rounded-sm mb-10">
+                <p className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-4 text-base md:text-lg">
+                  Option VIP
                 </p>
+                <div className="flex items-baseline gap-3 mb-2">
+                  <span className="font-heading text-5xl md:text-6xl text-foreground">12€</span>
+                  <span className="text-xl text-muted-foreground">/ mois</span>
+                </div>
+                <p className="text-muted-foreground text-xl mb-8">Plus de discrétion, plus de confort.</p>
+                <button
+                  onClick={handleVIPWaitlist}
+                  className="mt-auto w-full bg-white border-2 border-foreground text-foreground py-5 text-base uppercase tracking-widest font-medium transition-all hover:bg-foreground hover:text-white flex items-center justify-center gap-2 min-h-[64px]"
+                >
+                  Rejoindre la liste d'attente <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
 
-              {/* Features */}
-              <ul className="space-y-5 mb-10 mt-8 flex-1">
-                {[
-                  "Inclus dans les deux formules +",
-                  "Mode Invisible — Vous choisissez qui vous voit",
-                  "Confirmation de lecture — Savoir si on a lu votre message",
-                  "Alertes Conciergerie — Notifications par SMS discrets",
-                ].map((feature) => (
-                  <li key={feature} className="flex items-start gap-4">
-                    <Check className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                    <span className="text-white/90 leading-relaxed text-xl">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                onClick={handleVIPWaitlist}
-                className="w-full bg-[hsl(var(--gold))] text-primary py-5 text-lg uppercase tracking-widest font-bold transition-all hover:bg-[hsl(var(--gold-light))] min-h-[64px] flex items-center justify-center gap-2"
-              >
-                Rejoindre la liste d'attente VIP
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              {/* Avantages VIP */}
+              <div className="border-t border-slate-100 pt-8">
+                <p className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-base">
+                  En plus du Cercle Privé
+                </p>
+                <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-4 max-w-3xl mx-auto">
+                  {[
+                    "Mode Invisible — Vous choisissez qui vous voit",
+                    "Confirmation de lecture des messages",
+                    "Alertes Conciergerie par SMS discrets",
+                    "Accès prioritaire aux nouveautés",
+                  ].map((feature) => (
+                    <li key={feature} className="flex items-start gap-3">
+                      <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-1" />
+                      <span className="text-foreground/80 leading-relaxed text-xl">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
