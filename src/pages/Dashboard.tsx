@@ -288,9 +288,7 @@ export default function Dashboard() {
 
               <div className="grid grid-cols-1 gap-6">
                 {visibleSavedForLater.map((match) => (
-                  <div key={match.id} className="relative">
-                    <DashboardMatchCard match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
-                  </div>
+                  <DashboardMatchCard key={match.id} match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
                 ))}
               </div>
             </div>
