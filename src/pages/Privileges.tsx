@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Lock, Shield, Clock, Sparkles, Crown, Check, Gift, ArrowRight, CreditCard, PhoneCall, Video } from "lucide-react";
+import { Lock, Shield, Clock, Sparkles, Crown, Check, Gift, ArrowRight, CreditCard, PhoneCall, Video, CalendarCheck } from "lucide-react";
+import { toast } from "sonner";
 import Layout from "@/components/layout/Layout";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import LocationCheckModal from "@/components/location/LocationCheckModal";
 import PrivilegeBadge from "@/components/location/PrivilegeBadge";
+import VIPWaitlistModal from "@/components/privileges/VIPWaitlistModal";
+import { supabase } from "@/integrations/supabase/client";
 import privilegesHero from "@/assets/privileges-hero.jpg";
 import giftBannerPrivileges from "@/assets/gift-banner-privileges.jpg";
 
@@ -49,9 +52,26 @@ export default function Privileges() {
 
   // État unique pour la demande d'admission (plus besoin de l'état expertModal)
   const [modalOpen, setModalOpen] = useState(false);
+  const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const subscriptionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setIsLoggedIn(!!data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setIsLoggedIn(!!session));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  const scrollToSubscriptions = () => {
+    subscriptionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const handleVIPWaitlist = () => {
-    setModalOpen(true);
+    if (isLoggedIn) {
+      toast.success("Vous êtes déjà sur la liste prioritaire.");
+      return;
+    }
+    setShowWaitlistModal(true);
   };
 
   return (
@@ -145,7 +165,7 @@ export default function Privileges() {
           </div>
 
           {/* Bloc Cercle Privé : 2 formules + VIP */}
-          <div className="max-w-6xl mx-auto">
+          <div ref={subscriptionRef} className="max-w-6xl mx-auto scroll-mt-24">
             {/* Wrapper Cercle Privé */}
             <div
               data-reveal
@@ -266,7 +286,7 @@ export default function Privileges() {
                   onClick={handleVIPWaitlist}
                   className="mt-auto w-full bg-white border-2 border-foreground text-foreground py-5 text-base uppercase tracking-widest font-medium transition-all hover:bg-foreground hover:text-white flex items-center justify-center gap-2 min-h-[64px]"
                 >
-                  Rejoindre la liste d'attente <ArrowRight className="w-4 h-4" />
+                  Rejoindre la liste d'attente VIP <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
 
@@ -289,6 +309,32 @@ export default function Privileges() {
                   ))}
                 </ul>
               </div>
+            </div>
+
+            {/* Ligne du temps — Transparence facturation */}
+            <div className="max-w-4xl mx-auto mt-16 md:mt-20 bg-white border border-slate-200/70 p-8 md:p-10 rounded-sm">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <CalendarCheck className="h-6 w-6 text-[hsl(var(--gold))]" />
+                <p className="font-medium tracking-[0.2em] uppercase text-foreground text-lg md:text-xl">
+                  Votre engagement, en toute clarté
+                </p>
+              </div>
+              <ul className="space-y-5 text-foreground/80 text-xl leading-relaxed">
+                <li className="flex items-start gap-4">
+                  <span className="font-heading text-2xl text-[hsl(var(--gold))] shrink-0">•</span>
+                  <span>
+                    <strong className="text-foreground">Aujourd'hui : 0€.</strong> Votre période de 3 mois offerts débute
+                    le jour où votre profil est validé et devient visible dans l'algorithme.
+                  </span>
+                </li>
+                <li className="flex items-start gap-4">
+                  <span className="font-heading text-2xl text-[hsl(var(--gold))] shrink-0">•</span>
+                  <span>
+                    <strong className="text-foreground">Transparence :</strong> Premier prélèvement à J+90.
+                    Désactivation possible en un clic avant cette date.
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -514,6 +560,21 @@ export default function Privileges() {
 
       {/* Modale d'admission classique (Unique point d'entrée) */}
       <LocationCheckModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <VIPWaitlistModal
+        open={showWaitlistModal}
+        onClose={() => setShowWaitlistModal(false)}
+        onSuccess={scrollToSubscriptions}
+      />
+
+      {/* Bouton flottant Conciergerie */}
+      <a
+        href="tel:0800000000"
+        className="fixed bottom-6 right-6 z-40 bg-foreground text-white px-6 py-4 rounded-full shadow-xl hover:bg-[hsl(var(--gold))] transition-all flex items-center gap-3 min-h-[56px] text-lg font-medium"
+        aria-label="Contacter la conciergerie Kalimera"
+      >
+        <PhoneCall className="h-6 w-6" />
+        <span className="hidden sm:inline">Besoin d'aide ? Appel non surtaxé</span>
+      </a>
     </Layout>
   );
 }
