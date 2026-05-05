@@ -388,10 +388,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <div className="w-14 h-14 rounded-full bg-[hsl(var(--cream))] flex items-center justify-center border-2 border-[hsl(var(--gold))]/40 shrink-0">
                 <Video className="h-7 w-7 text-[#1B2333]" />
               </div>
-              <DialogTitle className="font-heading text-2xl sm:text-3xl font-bold text-[#1B2333] leading-tight">
+              <DialogTitle className="tracking-tight font-heading text-2xl font-bold text-[#1B2333] leading-tight sm:text-4xl">
                 Votre voix, votre regard, votre présence
               </DialogTitle>
-              <p className="text-lg text-[#1B2333]/80 leading-snug">
+              <p className="text-[#1B2333]/80 leading-snug text-xl">
                 Pour vous accompagner, Kalimera vous propose une aide personnalisée.
               </p>
             </div>
