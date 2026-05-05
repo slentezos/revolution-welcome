@@ -251,7 +251,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         e.target.value = val;
       }
 
-      // Dès que l'utilisateur tape au clavier, on coupe le micro pour ne pas mélanger
+      // Dès que l'utilisateur tape au clavier, on coupe le micro
       if (listeningRef.current || interimText) {
         setInterimText("");
         listeningRef.current = false;
@@ -262,7 +262,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       }
 
       if (onChange) {
-        // On passe l'événement original avec la valeur corrigée (majuscule)
         onChange(e);
       }
 
@@ -287,7 +286,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const safeValue = value === null || value === undefined ? "" : String(value);
 
-    // Le texte visible est le texte sauvegardé + le brouillon en cours de reconnaissance
+    // Le texte visible
     let displayValue = safeValue;
     if (interimText) {
       const needsSpace = displayValue.length > 0 && !displayValue.endsWith(" ") && !displayValue.endsWith("\n");
