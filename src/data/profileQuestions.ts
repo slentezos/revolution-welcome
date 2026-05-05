@@ -913,8 +913,8 @@ export const PROFILE_QUESTIONS: ProfileQuestion[] = [
     ...ch(7),
     monMax: 1,
     sonMax: 1,
-    monOptions: ["Amour", "Amitié", "Partage"],
-    sonOptions: ["Amour", "Amitié", "Partage"],
+    monOptions: ["Droite", "Amitié", "Partage"],
+    sonOptions: ["Droite", "Amitié", "Partage"],
   },
   {
     id: "R44",
