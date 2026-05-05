@@ -61,7 +61,7 @@ export default function DashboardStatsCards({
           className="shrink-0 inline-flex items-center gap-2 rounded-full px-5 py-2.5 bg-card border border-border hover:bg-muted transition-colors min-h-[48px]"
         >
           <MessageSquare className="h-5 w-5 text-primary" />
-          <span className="font-semibold text-foreground text-base whitespace-nowrap">Messages</span>
+          <span className="font-semibold text-foreground whitespace-nowrap text-xl">Messages</span>
           {unreadMessageCount > 0 && (
             <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-primary text-primary-foreground font-bold text-base">
               {unreadMessageCount}
@@ -83,7 +83,7 @@ export default function DashboardStatsCards({
               )}
             >
               <Icon className="h-5 w-5" />
-              <span className="font-semibold text-base whitespace-nowrap">{tab.label}</span>
+              <span className="font-semibold whitespace-nowrap text-xl">{tab.label}</span>
               {tab.count > 0 && (
                 <span
                   className={cn(
