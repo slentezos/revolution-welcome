@@ -230,7 +230,7 @@ function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepCl
                   {isPast ? <Check className="h-6 w-6" /> : <Icon className="h-6 w-6" />}
                 </div>
                 <span
-                  className={`text-base sm:text-xl font-medium transition-colors text-center leading-tight ${
+                  className={`text-base sm:text-2xl font-medium transition-colors text-center leading-tight ${
                     isActive ? "text-foreground" : "text-muted-foreground"
                   }`}
                 >
