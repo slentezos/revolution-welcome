@@ -331,7 +331,7 @@ export default function Privileges() {
 
               <div className="flex items-baseline gap-2 mb-8 pb-8 border-b border-slate-100">
                 <span className="font-heading text-4xl text-foreground">89€</span>
-                <span className="text-lg text-muted-foreground">— une fois</span>
+                <span className="text-xl text-muted-foreground">— une fois</span>
               </div>
 
               <button
@@ -353,16 +353,16 @@ export default function Privileges() {
                 <div className="w-14 h-14 border border-slate-200 flex items-center justify-center rounded-sm">
                   <Video className="h-6 w-6 text-[hsl(var(--gold))]" />
                 </div>
-                <h3 className="font-heading text-3xl text-foreground md:text-4xl">Coaching Vidéo</h3>
+                <h3 className="font-heading text-3xl text-foreground md:text-4xl">Enregistrement Vidéo</h3>
               </div>
 
               <p className="text-foreground/70 text-xl leading-relaxed mb-8 flex-1">
-                Un expert vous guide en direct via Google Meet (sans accès à votre ordinateur) pour réaliser des photos et une vidéo d'une qualité optimale.
+                Un expert vous guide en direct (sans accès à votre ordinateur) pour réaliser des photos et une vidéo d'une qualité optimale.
               </p>
 
               <div className="flex items-baseline gap-2 mb-8 pb-8 border-b border-slate-100">
                 <span className="font-heading text-4xl text-foreground">35€</span>
-                <span className="text-lg text-muted-foreground">— une fois</span>
+                <span className="text-xl text-muted-foreground">— une fois</span>
               </div>
 
               <button
