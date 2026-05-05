@@ -38,13 +38,18 @@ import { checkMessage } from "@/utils/wordFilter";
 const formatSpeech = (text: string) => {
   if (!text) return "";
   return text
-    .replace(/\bvirgule\b/gi, ",")
-    .replace(/\bpoint\b/gi, ".")
-    .replace(/\bpoint d'interrogation\b/gi, "?")
-    .replace(/\bpoint d'exclamation\b/gi, "!")
+    // Ordre important : expressions longues d'abord
+    .replace(/\bpoints? d['']interrogation\b/gi, "?")
+    .replace(/\bpoints? d['']exclamation\b/gi, "!")
     .replace(/\bpoints de suspension\b/gi, "...")
-    .replace(/\bà la ligne\b/gi, "\n")
-    .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
+    .replace(/\bnouveau paragraphe\b/gi, "\n\n")
+    .replace(/\b(à|a) la ligne\b/gi, "\n")
+    .replace(/\bretour (à|a) la ligne\b/gi, "\n")
+    .replace(/\bvirgule\b/gi, ",")
+    .replace(/\bpoint-virgule\b/gi, ";")
+    .replace(/\bdeux points\b/gi, ":")
+    .replace(/\bpoint\b/gi, ".")
+    .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace inutile avant la ponctuation
     .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto après ponctuation
 };
 
@@ -833,7 +838,7 @@ export default function Messages() {
       </div>
 
 
-      {/* COMPOSER MODAL — grand champ pour seniors */}
+      {/* COMPOSER MODAL — élégant, accessible seniors 60+ */}
       <Dialog
         open={composerOpen}
         onOpenChange={(v) => {
@@ -841,49 +846,79 @@ export default function Messages() {
           if (!v && listeningRef.current) toggleListening();
         }}
       >
-        <DialogContent className="max-w-3xl w-[calc(100%-2rem)] p-0 gap-0 bg-white border border-amber-100 rounded-3xl shadow-2xl overflow-hidden">
-          <div className="bg-[#1B2333] px-8 py-5 flex items-center justify-between">
-            <h2 className="font-heading font-semibold text-white text-2xl lg:text-3xl">
-              Écrire à {selectedChat?.name}
-            </h2>
+        <DialogContent className="max-w-3xl w-[calc(100%-2rem)] p-0 gap-0 bg-white border-0 rounded-[28px] shadow-[0_30px_80px_-20px_rgba(27,35,51,0.35)] overflow-hidden">
+          {/* En-tête avec avatar Sophie */}
+          <div className="relative bg-gradient-to-br from-[#1B2333] via-[#1B2333] to-[#2a3348] px-8 py-6 flex items-center gap-5">
+            <div className="absolute inset-0 opacity-[0.07] pointer-events-none"
+              style={{ backgroundImage: "radial-gradient(circle at 20% 30%, hsl(var(--gold)) 0%, transparent 50%)" }} />
+            {selectedChat && (
+              <div className="relative shrink-0">
+                <img
+                  src={selectedChat.avatar}
+                  alt={selectedChat.name}
+                  className="w-16 h-16 lg:w-20 lg:h-20 rounded-full object-cover ring-4 ring-[hsl(var(--gold))]/40 shadow-lg"
+                />
+                {isListening && (
+                  <span className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-[hsl(var(--gold))] border-[3px] border-[#1B2333] rounded-full animate-pulse" />
+                )}
+              </div>
+            )}
+            <div className="relative flex-1 min-w-0">
+              <p className="text-[hsl(var(--gold-light))] text-sm lg:text-base uppercase tracking-[0.18em] font-medium mb-1">
+                Nouveau message
+              </p>
+              <h2 className="font-heading font-semibold text-white text-2xl lg:text-3xl truncate">
+                Écrire à {selectedChat?.name}
+              </h2>
+            </div>
           </div>
 
-          <div className="px-6 lg:px-8 py-6 space-y-5">
-            <Textarea
-              autoFocus
-              ref={textareaRef}
-              placeholder="Écrivez votre message ici, ou cliquez sur « Dicter » pour parler…"
-              value={displayValue}
-              onChange={handleTextareaChange}
-              className="w-full min-h-[260px] resize-none bg-[hsl(var(--cream))] border-2 border-amber-100/70 rounded-2xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-5 py-5 leading-relaxed"
-              style={{ fontSize: `${Math.max(chatFontSize, 20)}px` }}
-            />
-
-            <div className="min-h-[2rem]">
+          {/* Zone de texte */}
+          <div className="px-6 lg:px-8 pt-7 pb-3">
+            <div className="relative">
+              <Textarea
+                autoFocus
+                ref={textareaRef}
+                placeholder={`Bonjour ${selectedChat?.name ?? ""}, …`}
+                value={displayValue}
+                onChange={handleTextareaChange}
+                className={`w-full min-h-[240px] resize-none bg-[hsl(var(--cream))]/60 border-2 rounded-2xl font-medium text-foreground placeholder:text-muted-foreground/60 focus:ring-0 focus:outline-none focus:ring-offset-0 px-6 py-5 leading-relaxed transition-all ${
+                  isListening
+                    ? "border-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--gold)/0.12)]"
+                    : "border-amber-100/80 focus:border-[hsl(var(--gold))]"
+                }`}
+                style={{ fontSize: `${Math.max(chatFontSize, 20)}px` }}
+              />
               {isListening && (
-                <div className="flex items-center gap-3">
-                  <p className="font-bold text-2xl" style={{ color: "hsl(var(--gold))" }}>
-                    Je vous écoute…
-                  </p>
-                  <div className="flex items-end gap-1 h-5">
-                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
-                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
-                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
+                <div className="absolute top-4 right-4 flex items-center gap-2 bg-[hsl(var(--gold))]/15 px-3 py-1.5 rounded-full">
+                  <div className="flex items-end gap-0.5 h-4">
+                    <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
+                    <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
+                    <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
                   </div>
+                  <span className="text-sm font-semibold text-[hsl(var(--gold))]">En écoute</span>
                 </div>
               )}
             </div>
 
+            {/* Astuce dictée */}
+            <p className="mt-3 text-base text-muted-foreground leading-relaxed">
+              💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>, <span className="font-semibold text-foreground">« point »</span>, <span className="font-semibold text-foreground">« à la ligne »</span> ou <span className="font-semibold text-foreground">« point d'interrogation »</span>.
+            </p>
+          </div>
+
+          {/* Actions */}
+          <div className="px-6 lg:px-8 pb-7 pt-4 bg-gradient-to-b from-transparent to-[hsl(var(--cream))]/40">
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={toggleListening}
-                className={`min-h-[64px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl font-semibold transition-all ${
+                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-lg lg:text-xl font-semibold transition-all duration-300 ${
                   isListening
-                    ? "bg-[hsl(var(--gold))] text-white shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
-                    : "bg-white border-2 border-[#1B2333] text-[#1B2333] hover:bg-amber-50"
+                    ? "bg-[hsl(var(--gold))] text-white shadow-[0_8px_24px_-8px_hsl(var(--gold)/0.6)] hover:brightness-105"
+                    : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--cream))]/50"
                 }`}
               >
-                {isListening ? <MicOff className="h-7 w-7" /> : <Mic className="h-7 w-7" />}
+                {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6 text-[hsl(var(--gold))]" />}
                 {isListening ? "Arrêter la dictée" : "Dicter à voix haute"}
               </button>
               <Button
@@ -892,16 +927,16 @@ export default function Messages() {
                   if (listeningRef.current) toggleListening();
                 }}
                 variant="outline"
-                className="min-h-[64px] sm:w-auto rounded-2xl text-xl font-semibold px-6"
+                className="min-h-[60px] sm:w-auto rounded-2xl text-lg lg:text-xl font-semibold px-6 border-2"
               >
                 Fermer
               </Button>
               <Button
                 onClick={handleSend}
                 disabled={isSent || (!message.trim() && !isListening)}
-                className="min-h-[64px] sm:min-w-[180px] rounded-2xl text-xl font-semibold gap-2 bg-[#1B2333] hover:bg-[#1B2333]/90"
+                className="min-h-[60px] sm:min-w-[180px] rounded-2xl text-lg lg:text-xl font-semibold gap-2 bg-[#1B2333] hover:bg-[#1B2333]/90 shadow-[0_8px_24px_-8px_rgba(27,35,51,0.5)]"
               >
-                {isSent ? <Check className="h-6 w-6" /> : <Send className="h-6 w-6" />}
+                {isSent ? <Check className="h-6 w-6" /> : <Send className="h-5 w-5" />}
                 {isSent ? "Envoyé" : "Envoyer"}
               </Button>
             </div>
