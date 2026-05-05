@@ -382,7 +382,6 @@ export default function Privileges() {
               </button>
             </div>
           </div>
-          </div>
         </div>
       </section>
 
