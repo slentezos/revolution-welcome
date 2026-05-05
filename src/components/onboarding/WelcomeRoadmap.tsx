@@ -68,7 +68,7 @@ function PricingModal({
         ) : (
           <div className="flex flex-col flex-1 animate-in slide-in-from-bottom-4 duration-500">
             <div className="text-center px-8 pt-12 pb-8 border-b border-border/60">
-              <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-lg">
+              <span className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-xl">
                 Votre accueil
               </span>
               <h2 className="font-heading text-4xl sm:text-5xl text-foreground mt-4 leading-tight">
@@ -114,7 +114,7 @@ function PricingModal({
 
               {/* ─── Service Conciergerie ─── */}
               <div className="bg-primary text-primary-foreground p-10 flex flex-col h-full relative shadow-[var(--shadow-luxury)] rounded-sm overflow-hidden">
-                <div className="absolute top-0 right-0 bg-gold text-white text-base font-medium tracking-[0.15em] uppercase px-5 py-2">
+                <div className="absolute -top-3 right-6 bg-[hsl(var(--gold))] text-primary px-4 py-1 font-bold tracking-[0.2em] uppercase rounded-full text-base">
                   Recommandé
                 </div>
 

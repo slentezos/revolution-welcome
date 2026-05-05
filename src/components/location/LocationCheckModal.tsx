@@ -66,7 +66,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
           <h2 className="font-heading font-bold text-[#1B2333] mb-3 text-4xl">
             Bienvenue chez Kalimera.
           </h2>
-          <p className="text-foreground text-xl">
+          <p className="text-center text-[hsl(var(--gold))] font-bold tracking-widest uppercase md:text-lg mb-10 text-xl">
             Pour vous garantir des rencontres de qualité près de chez vous, vérifions d'abord que notre Cercle est
             ouvert dans votre région.
           </p>
@@ -95,7 +95,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
         </div>
 
         {/* Helper text */}
-        <p className="text-gray-500 text-center mb-6 flex items-center justify-center gap-1.5 text-xl">
+        <p className="text-muted-foreground mb-8 text-xl flex items-center justify-center gap-1.5">
           <Lock className="h-3.5 w-3.5" />
           Vérification de la proximité pour garantir des rencontres authentiques.
         </p>
