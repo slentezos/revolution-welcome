@@ -1,3 +1,44 @@
+export type Gender = "homme" | "femme";
+
+export interface PersonalityMetric {
+  label: string;
+  value: number;
+}
+
+export interface PersonalityAttractions {
+  comfortTitle: string;
+  comfort: string[];
+  drainTitle: string;
+  drain: string[];
+}
+
+export interface PersonalityProfileData {
+  id: string;
+  title: string;
+  imageSlug?: string;
+  metrics: PersonalityMetric[];
+  intro: string;
+  strengths: string[];
+  weaknesses: string[];
+  loveVision: string;
+  balanceStress: string;
+  rapportToOthers: string;
+  attractions: PersonalityAttractions;
+  signature: string;
+}
+
+export function genderize(text: string, gender: Gender): string {
+  if (!text) return text;
+  if (gender === "femme") {
+    return text.replace(/\(([a-zà-ÿ]+)\)/gi, "$1");
+  }
+  return text.replace(/\(([a-zà-ÿ]+)\)/gi, "");
+}
+
+export function getProfile(id: string): PersonalityProfileData | undefined {
+  return personalityDatabase[id];
+}
+
 export const personalityDatabase: Record<string, PersonalityProfileData> = {
   // 1. LE STRATÈGE (INTP)
   strategiste: {
