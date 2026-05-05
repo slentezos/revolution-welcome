@@ -100,11 +100,11 @@ function PricingModal({
                   <div className="w-10 h-10 bg-white/10 flex items-center justify-center">
                     <Phone className="h-5 w-5 text-gold-light" />
                   </div>
-                  <span className="font-medium tracking-widest uppercase text-white/70 text-2xl">
+                  <span className="font-medium tracking-widest uppercase text-white/70 hidden sm:inline text-lg">
                     Service Conciergerie
                   </span>
                 </div>
-                <h3 className="font-heading mb-2 text-white text-4xl">L'Accompagnement Privé</h3>
+                <h3 className="font-bold text-primary-foreground text-2xl mb-2">L'Accompagnement Privé</h3>
                 <div className="divider-gold mb-6 border-white/20" />
                 <ul className="space-y-4 mb-8 flex-grow">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
