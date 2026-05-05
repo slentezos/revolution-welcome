@@ -618,7 +618,7 @@ export default function Messages() {
                         Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés peuvent
                         vous écrire.
                       </p>
-                      <p className="text-white/70 leading-relaxed italic text-lg">
+                      <p className="leading-relaxed italic text-lg text-primary-foreground">
                         La confidentialité est absolue : vos messages sont strictement personnels et ne peuvent être lus
                         par nos équipes, administrateurs inclus.
                       </p>
