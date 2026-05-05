@@ -800,61 +800,20 @@ export default function Messages() {
                     )}
                   </div>
 
-                  {/* INPUT AREA */}
+                  {/* INPUT AREA — déclencheur compact */}
                   <div className="p-4 lg:p-6 border-t border-amber-100/40 bg-white">
-                    <div className="flex items-end gap-2 sm:gap-3 lg:gap-4">
-                      <button
-                        onClick={toggleListening}
-                        className={`min-h-[56px] min-w-[56px] px-3 sm:px-4 lg:px-5 sm:min-w-[120px] lg:min-w-[130px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-lg sm:text-xl font-semibold shrink-0 ${
-                          isListening
-                            ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
-                            : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
-                        }`}
-                        aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
-                      >
-                        {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
-                        <span className="hidden sm:inline">{isListening ? "Arrêter" : "Dicter"}</span>
-                      </button>
-                      <div className="flex-1 min-w-0">
-                        {/* UTILISATION DE TEXTAREA AVEC MAJUSCULE "T" */}
-                        <Textarea
-                          id="chat-textarea"
-                          ref={textareaRef}
-                          placeholder="Écrivez votre message..."
-                          value={displayValue}
-                          onChange={handleTextareaChange}
-                          className="w-full min-h-[56px] overflow-y-auto resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-4 py-4"
-                          style={{ fontSize: `${chatFontSize}px` }}
-                        />
-                      </div>
-                      <Button
-                        onClick={handleSend}
-                        disabled={isSent || (!message.trim() && !isListening)}
-                        className="min-h-[56px] min-w-[56px] w-auto lg:w-[140px] rounded-xl text-lg sm:text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300 px-3 sm:px-4"
-                      >
-                        {isSent ? <Check className="h-6 w-6" /> : <Send className="h-6 w-6" />}
-                        <span className="hidden lg:inline">{isSent ? "Envoyé" : "Envoyer"}</span>
-                      </Button>
-                    </div>
-                    
-                    <div className="mt-3 min-h-[1.5rem]">
-                      {isListening ? (
-                        <div className="flex items-center gap-3">
-                          <p className="font-bold text-2xl lg:text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
-                            Je vous écoute...
-                          </p>
-                          <div className="flex items-end gap-1 h-5">
-                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
-                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
-                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
-                          </div>
-                        </div>
-                      ) : safeMessage.length > 0 ? (
-                        <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
-                          ✍️ Votre brouillon est sauvegardé
-                        </p>
-                      ) : null}
-                    </div>
+                    <button
+                      onClick={() => setComposerOpen(true)}
+                      className="w-full min-h-[64px] flex items-center justify-between gap-4 px-5 py-4 rounded-2xl bg-[hsl(var(--cream))] border-2 border-amber-100/70 hover:border-[hsl(var(--gold))] transition-all text-left shadow-sm"
+                    >
+                      <span className="flex-1 truncate text-xl text-muted-foreground">
+                        {safeMessage.length > 0 ? safeMessage : "Écrivez votre message..."}
+                      </span>
+                      <span className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1B2333] text-white text-lg font-semibold">
+                        <Send className="h-5 w-5" />
+                        Rédiger
+                      </span>
+                    </button>
                   </div>
                 </>
               ) : (
