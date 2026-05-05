@@ -1,10 +1,12 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Mic, MicOff } from "lucide-react";
+import { Mic, MicOff, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   showDictation?: boolean;
+  recipientName?: string;
+  recipientAvatar?: string;
 }
 
 // Parseur de ponctuation et de mise en forme pour le français
@@ -18,7 +20,7 @@ const formatSpeech = (text: string) => {
     .replace(/\bpoints de suspension\b/gi, "...")
     .replace(/\bà la ligne\b/gi, "\n")
     .replace(/\s+([,?.!])/g, "$1") // Supprime l'espace avant la ponctuation
-    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto après ponctuation
+    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`); // Majuscule auto
 };
 
 const capitalizeFirst = (str: string) => {
@@ -27,7 +29,18 @@ const capitalizeFirst = (str: string) => {
 };
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, onChange, value, showDictation = false, ...props }, ref) => {
+  (
+    {
+      className,
+      onChange,
+      value,
+      showDictation = false,
+      recipientName = "Sophie",
+      recipientAvatar = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=256&h=256&auto=format&fit=crop", // UX 2026: Placeholder Premium
+      ...props
+    },
+    ref,
+  ) => {
     const [isListening, setIsListening] = React.useState(false);
     const [interimText, setInterimText] = React.useState("");
     const recognitionRef = React.useRef<any>(null);
@@ -69,12 +82,10 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
             let currentVal = internalRef.current.value || "";
             let formattedFinal = formatSpeech(finalSegment).trim();
 
-            // Auto-majuscule si le champ est vide ou si on suit une ponctuation de fin de phrase
             if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
               formattedFinal = capitalizeFirst(formattedFinal);
             }
 
-            // Gestion intelligente de l'espace de liaison
             const needsSpace =
               currentVal.length > 0 &&
               !currentVal.endsWith(" ") &&
@@ -85,7 +96,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
             const newVal = currentVal + space + formattedFinal;
 
-            // Injection native pour déclencher le onChange de React
             const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
               window.HTMLTextAreaElement.prototype,
               "value",
@@ -137,7 +147,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         setInterimText("");
       } else {
         if (recognitionRef.current) {
-          setInterimText(""); // Sécurité : On vide toujours le buffer avant de démarrer
+          setInterimText("");
           if (internalRef.current) {
             const currentVal = internalRef.current.value || "";
             if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
@@ -176,8 +186,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         }
       }
 
-      // Si l'utilisateur efface ou tape du texte manuellement, on tue le buffer vocal
-      // pour éviter l'effet "Texte Fantôme"
       if (interimText) {
         setInterimText("");
       }
@@ -194,7 +202,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           value={value}
           autoCapitalize="sentences"
           className={cn(
-            "flex w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-xl resize-y min-h-[120px] max-h-[300px] overflow-y-auto",
+            "flex w-full rounded-2xl border border-input bg-background/50 px-5 py-4 text-xl backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 min-h-[140px] resize-y",
             className,
           )}
           ref={setRefs}
@@ -207,65 +215,100 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const displayValue = isListening || interimText ? safeValue + interimText : safeValue;
 
     return (
-      <div className="flex flex-col w-full">
-        <div className="flex items-end gap-3 w-full">
-          <button
-            type="button"
-            onClick={toggleListening}
-            className={cn(
-              "min-h-[48px] px-4 w-auto min-w-[120px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-xl font-semibold shrink-0",
-              isListening
-                ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
-                : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90",
-            )}
-            aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
-          >
-            {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-            {isListening ? "Arrêter de dicter" : "Dicter"}
-          </button>
-
-          <div className="flex-1 w-full">
-            <textarea
-              onChange={handleChange}
-              value={displayValue}
-              autoCapitalize="sentences"
-              className={cn(
-                "flex w-full rounded-xl border border-input bg-background px-4 py-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] focus-visible:border-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 text-xl resize-y min-h-[120px] max-h-[300px] overflow-y-auto",
-                className,
-              )}
-              ref={setRefs}
-              {...props}
+      <div className="w-full max-w-3xl mx-auto flex flex-col bg-white rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden transition-all duration-500">
+        {/* En-tête Contextuel (UX 2026 : Intégration de l'Avatar) */}
+        <div className="flex items-center gap-4 px-6 pt-6 pb-2">
+          <div className="relative">
+            <img
+              src={recipientAvatar}
+              alt={`Avatar de ${recipientName}`}
+              className="w-14 h-14 rounded-full object-cover border-2 border-transparent ring-2 ring-[hsl(var(--gold))/0.2]"
             />
+            {isListening && (
+              <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></span>
+            )}
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Nouveau Message</p>
+            <p className="text-xl font-bold text-[#1B2333]">Écrire à {recipientName}</p>
           </div>
         </div>
 
-        {/* FEEDBACK ÉGALISEUR SOUS LE CHAMP DE TEXTE */}
-        <div className="mt-2 min-h-[1.5rem]">
-          {isListening ? (
-            <div className="flex items-center gap-3">
-              <p className="font-bold text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
-                Je vous écoute...
-              </p>
-              <div className="flex items-end gap-1 h-5">
-                <span
-                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                  style={{ height: "60%", animationDelay: "0ms" }}
-                />
-                <span
-                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                  style={{ height: "100%", animationDelay: "150ms" }}
-                />
-                <span
-                  className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce"
-                  style={{ height: "40%", animationDelay: "300ms" }}
-                />
+        {/* Zone de Texte Principale */}
+        <div className="relative px-6 py-2 flex-1">
+          <textarea
+            onChange={handleChange}
+            value={displayValue}
+            autoCapitalize="sentences"
+            placeholder={`Bonjour ${recipientName}...`}
+            className={cn(
+              "w-full bg-transparent text-xl leading-relaxed text-[#1B2333] placeholder:text-gray-300 resize-none min-h-[160px] focus:outline-none focus:ring-0",
+              className,
+            )}
+            ref={setRefs}
+            {...props}
+          />
+
+          {/* Overlay de Dictée (Feedback Visuel 2026) */}
+          {isListening && (
+            <div className="absolute inset-0 pointer-events-none rounded-xl border border-[hsl(var(--gold))/0.3] bg-[hsl(var(--gold))/0.02] transition-opacity duration-300"></div>
+          )}
+        </div>
+
+        {/* Panneau de Contrôle Inférieur */}
+        <div className="px-6 pb-6 pt-2 flex items-center justify-between bg-gray-50/50 mt-auto rounded-b-[32px]">
+          {/* Indicateur d'état & Égaliseur */}
+          <div className="flex items-center min-w-[150px] h-10">
+            {isListening ? (
+              <div className="flex items-center gap-3 bg-[hsl(var(--gold))/0.1] px-4 py-2 rounded-full">
+                <div className="flex items-end gap-1 h-4">
+                  <span
+                    className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:0ms]"
+                    style={{ height: "60%" }}
+                  />
+                  <span
+                    className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:150ms]"
+                    style={{ height: "100%" }}
+                  />
+                  <span
+                    className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:300ms]"
+                    style={{ height: "40%" }}
+                  />
+                  <span
+                    className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce [animation-delay:450ms]"
+                    style={{ height: "80%" }}
+                  />
+                </div>
+                <span className="text-sm font-semibold text-[hsl(var(--gold))] animate-pulse">Écoute en cours...</span>
               </div>
-            </div>
-          ) : safeValue.length > 0 ? (
-            <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
-              ✍️ Votre brouillon est sauvegardé
-            </p>
-          ) : null}
+            ) : safeValue.length > 0 ? (
+              <span className="text-sm font-medium text-gray-400">Brouillon sauvegardé</span>
+            ) : null}
+          </div>
+
+          {/* Actions : Dictée & Envoi */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={toggleListening}
+              className={cn(
+                "flex items-center justify-center gap-2 h-12 px-6 rounded-full transition-all duration-300 text-lg font-semibold shadow-sm",
+                isListening
+                  ? "bg-white text-red-500 border border-red-100 hover:bg-red-50"
+                  : "bg-white text-[#1B2333] border border-gray-200 hover:bg-gray-50",
+              )}
+            >
+              {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5 text-[hsl(var(--gold))]" />}
+              {isListening ? "Arrêter" : "Dicter"}
+            </button>
+
+            <button
+              type="button"
+              className="flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-[#1B2333] text-white hover:bg-[#1B2333]/90 transition-all text-lg font-semibold shadow-md"
+            >
+              Envoyer <Send className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     );
