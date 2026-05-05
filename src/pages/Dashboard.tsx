@@ -230,7 +230,7 @@ export default function Dashboard() {
             {filteredMatches.length === 0 && pendingMatches.length === 0 && visibleSavedForLater.length === 0 ? (
               <EmptyMatchState />
             ) : filteredMatches.length === 0 ? null : (
-              <div className="grid grid-cols-1 gap-5 my-0">
+              <div className="grid grid-cols-1 gap-6">
                 {filteredMatches.map((match) => (
                   <DashboardMatchCard key={match.id} match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />
                 ))}
@@ -258,7 +258,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-5 my-0">
+              <div className="grid grid-cols-1 gap-6">
                 {pendingMatches.map((match) => (
                   <DashboardPendingCard key={match.id} match={match} onView={() => { setSelectedMatch(match); setViewingPending(true); setModalOpen(true); }} />
                 ))}
@@ -286,7 +286,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-5 my-0">
+              <div className="grid grid-cols-1 gap-6">
                 {visibleSavedForLater.map((match) => (
                   <div key={match.id} className="relative">
                     <DashboardMatchCard match={match} onView={() => { setSelectedMatch(match); setModalOpen(true); }} />

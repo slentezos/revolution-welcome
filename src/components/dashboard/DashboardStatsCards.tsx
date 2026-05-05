@@ -1,5 +1,6 @@
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
 import { MessageSquare, Sparkles, Send, Clock } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DashboardStatsCardsProps {
   onMessagesClick: () => void;
@@ -8,14 +9,6 @@ interface DashboardStatsCardsProps {
   savedCount: number;
   unreadMessageCount?: number;
 }
-
-const messageAvatars = [
-  { name: "Marie", src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face" },
-  {
-    name: "Sophie",
-    src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-  },
-];
 
 const scrollTo = (id: string) => {
   const el = document.getElementById(id);
@@ -29,79 +22,92 @@ export default function DashboardStatsCards({
   savedCount,
   unreadMessageCount = 0,
 }: DashboardStatsCardsProps) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 240);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const tabs = [
     {
       id: "section-nouvelles",
       label: "Nouvelles propositions",
+      shortLabel: "Nouvelles",
       count: newProposalsCount,
       icon: Sparkles,
-      colorClasses: "bg-primary/10 text-primary",
-      badgeClasses: "bg-primary text-primary-foreground text-xl",
+      pillClasses: "bg-primary/10 text-primary hover:bg-primary/15 border-primary/20",
+      badgeClasses: "bg-primary text-primary-foreground",
     },
     {
       id: "section-attente",
       label: "En attente de sa réponse",
+      shortLabel: "En attente",
       count: pendingCount,
       icon: Send,
-      colorClasses: "bg-emerald-100 text-emerald-700",
-      badgeClasses: "bg-primary text-primary-foreground text-xl",
+      pillClasses: "bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border-emerald-200",
+      badgeClasses: "bg-emerald-600 text-white",
     },
     {
       id: "section-finaliser",
       label: "À finaliser de ma part",
+      shortLabel: "À finaliser",
       count: savedCount,
       icon: Clock,
-      colorClasses: "bg-amber-100 text-amber-700",
-      badgeClasses: "bg-primary text-primary-foreground text-xl",
+      pillClasses: "bg-amber-50 text-amber-800 hover:bg-amber-100 border-amber-200",
+      badgeClasses: "bg-amber-500 text-white",
     },
   ];
 
   return (
-    <div className="sticky top-16 md:top-20 z-40 w-full bg-[#FDFBF7]/95 backdrop-blur-md border-b border-border/30 shadow-sm py-4 mb-8">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 max-w-7xl mx-auto px-4">
-        {/* ... le reste de votre code ne change pas ... */}
-        <div
-          className="bg-card rounded-xl p-4 md:p-5 border border-border/30 cursor-pointer hover:shadow-md transition-shadow"
+    <div
+      className={cn(
+        "sticky top-16 md:top-20 z-30 -mx-4 md:-mx-8 px-4 md:px-8 py-3 bg-background/95 backdrop-blur-md border-b border-border/40 shadow-sm transition-all duration-300",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none",
+      )}
+    >
+      <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-x-auto no-scrollbar">
+        <button
           onClick={onMessagesClick}
+          className="shrink-0 inline-flex items-center gap-2 rounded-full px-5 py-2.5 bg-card border border-border hover:bg-muted transition-colors min-h-[48px]"
         >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-              <MessageSquare className="h-5 w-5 text-primary" />
-            </div>
-              {unreadMessageCount > 0 && (
-                <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-primary text-primary-foreground font-bold text-xl">
-                  {unreadMessageCount}
-                </span>
-              )}
-          </div>
-          <h3 className="font-semibold text-foreground text-base leading-tight md:text-2xl">Mes nouveaux messages</h3>
-        </div>
+          <MessageSquare className="h-5 w-5 text-primary" />
+          <span className="font-semibold text-foreground text-base whitespace-nowrap">Messages</span>
+          {unreadMessageCount > 0 && (
+            <span className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full bg-primary text-primary-foreground font-bold text-base">
+              {unreadMessageCount}
+            </span>
+          )}
+        </button>
 
-        {/* Section navigation tabs */}
+        <div className="h-8 w-px bg-border/60 shrink-0" aria-hidden />
+
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
-            <div
+            <button
               key={tab.id}
-              className="bg-card rounded-xl p-4 md:p-5 border border-border/30 cursor-pointer hover:shadow-md transition-shadow group"
               onClick={() => scrollTo(tab.id)}
+              className={cn(
+                "shrink-0 inline-flex items-center gap-2 rounded-full px-5 py-2.5 border transition-colors min-h-[48px]",
+                tab.pillClasses,
+              )}
             >
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${tab.colorClasses}`}>
-                  <Icon className="h-5 w-5" />
-                </div>
-                {tab.count > 0 && (
-                  <span
-                    className={`inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full font-bold ${tab.badgeClasses}`}
-                  >
-                    {tab.count}
-                  </span>
-                )}
-              </div>
-              <h3 className="font-semibold text-foreground text-base leading-tight group-hover:text-primary transition-colors md:text-2xl">
-                {tab.label}
-              </h3>
-            </div>
+              <Icon className="h-5 w-5" />
+              <span className="font-semibold text-base whitespace-nowrap">{tab.label}</span>
+              {tab.count > 0 && (
+                <span
+                  className={cn(
+                    "inline-flex items-center justify-center min-w-[28px] h-7 px-2 rounded-full font-bold text-base",
+                    tab.badgeClasses,
+                  )}
+                >
+                  {tab.count}
+                </span>
+              )}
+            </button>
           );
         })}
       </div>
