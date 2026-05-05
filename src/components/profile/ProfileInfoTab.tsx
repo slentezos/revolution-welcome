@@ -69,7 +69,21 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
               <DateInput
                 value={formData.birth_date}
                 onChange={(val) => setFormData({ ...formData, birth_date: val })}
+                disabled={!!formData.birth_date}
               />
+              {!!formData.birth_date && (
+                <p className="text-base text-muted-foreground -mt-2">
+                  Votre date de naissance est définitive. Pour toute correction,{" "}
+                  <button
+                    type="button"
+                    onClick={onContactTab}
+                    className="font-semibold text-foreground underline underline-offset-4 hover:text-[hsl(var(--gold))] transition-colors"
+                  >
+                    contactez-nous
+                  </button>
+                  .
+                </p>
+              )}
             </div>
 
             <div className="space-y-8">
