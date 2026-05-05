@@ -155,7 +155,7 @@ export default function OnboardingPricing({ onComplete, onSkip }: OnboardingPric
       {/* RIGHT: Image Panel */}
       <div className="hidden lg:flex lg:w-[300px] flex-col flex-shrink-0 relative">
         <div className="absolute inset-0">
-          <img src={heroCouple} alt="" className="w-full h-full object-cover" />
+          <img decoding="async" src={heroCouple} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/70 to-white/30" />
         </div>
 

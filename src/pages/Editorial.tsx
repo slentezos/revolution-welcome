@@ -60,7 +60,7 @@ export default function Editorial() {
       {/* Hero – Full bleed */}
       <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={editorialHero} alt="L'éditorial" className="w-full h-full object-cover" />
+          <img decoding="async" src={editorialHero} alt="L'éditorial" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-foreground/60 via-foreground/40 to-foreground/70" />
         </div>
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">

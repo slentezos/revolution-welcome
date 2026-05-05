@@ -93,7 +93,7 @@ export default function Conseils() {
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={coupleCafe} alt="Premier rendez-vous" className="w-full h-full object-cover" />
+          <img decoding="async" src={coupleCafe} alt="Premier rendez-vous" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary/80" />
         </div>
 

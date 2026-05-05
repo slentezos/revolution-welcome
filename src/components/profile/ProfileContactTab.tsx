@@ -26,7 +26,7 @@ export default function ProfileContactTab() {
       {/* Hero split */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-0">
         <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:min-h-[60vh]">
-          <img src={profileContactImg} alt="Nous contacter" className="w-full h-full object-cover" />
+          <img decoding="async" src={profileContactImg} alt="Nous contacter" className="w-full h-full object-cover" />
         </div>
         <div className="flex flex-col justify-center bg-secondary px-8 md:px-16 lg:px-20 xl:px-28 py-16 lg:py-24">
           <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-4 block text-2xl">

@@ -26,7 +26,7 @@ function HeroSection() {
   return (
     <section ref={revealRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
-        <img src={parrainageHero} alt="Couple senior s'offrant un cadeau" className="w-full h-full object-cover" />
+        <img decoding="async" src={parrainageHero} alt="Couple senior s'offrant un cadeau" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/75 to-primary/95" />
       </div>
 
@@ -302,7 +302,7 @@ function FormSection() {
   return (
     <section id="formulaire" ref={revealRef} className="relative py-24 overflow-hidden">
       <div className="absolute inset-0">
-        <img src={parrainageFormBg} alt="Background" className="w-full h-full object-cover" />
+        <img decoding="async" src={parrainageFormBg} alt="Background" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-primary/90" />
       </div>
 

@@ -47,7 +47,7 @@ export default function APropos() {
       {/* Hero */}
       <section ref={heroRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={coupleGarden} alt="Notre histoire" className="w-full h-full object-cover" />
+          <img decoding="async" src={coupleGarden} alt="Notre histoire" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-primary/70" />
         </div>
 

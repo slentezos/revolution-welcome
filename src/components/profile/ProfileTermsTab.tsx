@@ -41,7 +41,7 @@ export default function ProfileTermsTab() {
           </p>
         </div>
         <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:min-h-[50vh] order-1 lg:order-2">
-          <img src={dashboardHero} alt="Conditions" className="w-full h-full object-cover" />
+          <img decoding="async" src={dashboardHero} alt="Conditions" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-l from-foreground/10 to-transparent" />
         </div>
       </section>

@@ -26,7 +26,7 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
       {/* Hero split */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-0">
         <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:min-h-[60vh]">
-          <img src={profileInfoImg} alt="Votre profil" className="w-full h-full object-cover" />
+          <img decoding="async" src={profileInfoImg} alt="Votre profil" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/20 to-transparent" />
         </div>
         <div className="flex flex-col justify-center bg-secondary px-8 md:px-16 lg:px-20 xl:px-28 py-16 lg:py-24">

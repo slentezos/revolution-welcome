@@ -292,7 +292,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   >
                     {slot.preview ? (
                       <>
-                        <img src={slot.preview} alt={slot.label} className="w-full h-full object-cover" />
+                        <img decoding="async" src={slot.preview} alt={slot.label} className="w-full h-full object-cover" />
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -500,7 +500,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             </div>
 
             <div className="hidden lg:block w-[400px] relative h-full">
-              <img src={coupleGarden} className="absolute inset-0 w-full h-full object-cover" alt="Couple" />
+              <img decoding="async" src={coupleGarden} className="absolute inset-0 w-full h-full object-cover" alt="Couple" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/30 via-transparent to-transparent" />
             </div>
           </div>

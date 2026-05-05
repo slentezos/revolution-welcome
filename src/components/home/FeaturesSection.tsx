@@ -96,7 +96,7 @@ export default function FeaturesSection() {
                 {/* Image */}
                 <div className="flex-1">
                   <div className="relative rounded-lg overflow-hidden h-full min-h-[300px] md:min-h-[400px]">
-                    <img src={feature.image} alt={feature.title} className="w-full h-full object-cover" />
+                    <img decoding="async" src={feature.image} alt={feature.title} className="w-full h-full object-cover" />
                   </div>
                 </div>
               </div>

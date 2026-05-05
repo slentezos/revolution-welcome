@@ -245,7 +245,7 @@ export default function MatchProfileModal({
                   {/* Identity bar */}
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-[hsl(var(--gold))]/30 flex-shrink-0">
-                      <img src={match.avatar} alt={match.name} className="w-full h-full object-cover" />
+                      <img decoding="async" src={match.avatar} alt={match.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
@@ -320,7 +320,7 @@ export default function MatchProfileModal({
                             : "opacity-50 hover:opacity-90"
                         }`}
                       >
-                        <img src={photo} alt="" className="w-full h-full object-cover" />
+                        <img decoding="async" src={photo} alt="" className="w-full h-full object-cover" />
                         {idx === 0 && (
                           <div className="absolute inset-0 flex items-center justify-center bg-foreground/30">
                             <Play className="h-3.5 w-3.5 text-primary-foreground" />
@@ -395,7 +395,7 @@ export default function MatchProfileModal({
               <div className="min-h-full pb-10">
                 {/* Hero section */}
                 <div className="relative h-[320px] lg:h-[360px] flex items-center justify-center overflow-hidden">
-                  <img src={personalityHero} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                  <img decoding="async" src={personalityHero} alt="" className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-primary/70" />
                   <div className="relative z-10 text-center px-8">
                     <p className="text-[hsl(var(--gold))] font-heading tracking-[4px] uppercase mb-3 text-3xl">

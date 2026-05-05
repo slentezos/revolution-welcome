@@ -77,7 +77,7 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
 
       {/* ═══════════════ HERO ═══════════════ */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        <img src={personalityHero} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <img decoding="async" src={personalityHero} alt="" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-[hsl(var(--navy))] opacity-70" />
         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))] via-transparent to-transparent opacity-50" />
 
@@ -190,7 +190,7 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
 
         const imageBlock =
         <div className="relative min-h-[400px] lg:min-h-0">
-            <img src={image} alt="" className="absolute inset-0 w-full h-full object-cover" />
+            <img decoding="async" src={image} alt="" className="absolute inset-0 w-full h-full object-cover" />
           </div>;
 
 

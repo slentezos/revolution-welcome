@@ -25,7 +25,7 @@ export default function EmptyMatchState() {
     <div className="animate-fade-in [animation-duration:1000ms]">
       <div className="relative rounded-2xl overflow-hidden border border-gold/40 shadow-2xl">
         {/* Background image */}
-        <img src={theme.image} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+        <img decoding="async" src={theme.image} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
 
         {/* Overlay */}
         <div className={`absolute inset-0 bg-gradient-to-b ${theme.overlay}`} />

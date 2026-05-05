@@ -11,7 +11,7 @@ export default function HeroSection() {
     <section ref={revealRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Full-screen background */}
       <div className="absolute inset-0">
-        <img src={heroCouple} alt="Couple senior heureux" className="w-full h-full object-cover scale-105" />
+        <img decoding="async" src={heroCouple} alt="Couple senior heureux" className="w-full h-full object-cover scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/30 to-background/80" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/50 to-transparent opacity-100" />
       </div>
