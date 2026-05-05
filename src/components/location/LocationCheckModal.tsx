@@ -95,7 +95,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
         </div>
 
         {/* Helper text */}
-        <p className="text-gray-500 text-center mb-6 flex items-center justify-center gap-1.5 text-xl">
+        <p className="text-muted-foreground mb-8 text-xl flex items-center justify-center gap-1.5">
           <Lock className="h-3.5 w-3.5" />
           Vérification de la proximité pour garantir des rencontres authentiques.
         </p>
