@@ -137,8 +137,6 @@ export default function Privileges() {
               <div className="flex items-center gap-3">
                 <Gift className="w-6 h-6 text-[hsl(var(--gold))]" />
                 <p className="text-xl text-foreground font-heading tracking-wide md:text-3xl">
-                  Vos 3 premiers mois offerts.
-                  <br />
                   Pour toute adhésion validée d'ici le 30 septembre 2026
                 </p>
               </div>
@@ -176,8 +174,8 @@ export default function Privileges() {
                   <p className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-4 text-base md:text-lg">
                     Adhésion mensuelle
                   </p>
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span className="font-heading text-5xl md:text-6xl text-foreground">50€</span>
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="font-heading text-5xl md:text-6xl text-foreground line-through opacity-60">50€</span>
                     <span className="text-xl text-muted-foreground">/ mois</span>
                   </div>
                   <p className="text-muted-foreground text-lg mb-8">Liberté totale, mois par mois.</p>
@@ -197,8 +195,8 @@ export default function Privileges() {
                   <p className="font-medium tracking-[0.2em] uppercase text-[hsl(var(--gold))] mb-4 text-base md:text-lg">
                     Adhésion trimestrielle
                   </p>
-                  <div className="flex items-baseline gap-2 mb-2">
-                    <span className="font-heading text-5xl md:text-6xl text-foreground">120€</span>
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <span className="font-heading text-5xl md:text-6xl text-foreground line-through opacity-60">120€</span>
                     <span className="text-xl text-muted-foreground">/ 3 mois</span>
                   </div>
                   <p className="text-muted-foreground text-lg mb-8">Soit 40€/mois — économisez 30€.</p>
@@ -249,8 +247,8 @@ export default function Privileges() {
               {/* Pricing */}
               <div className="mb-4 pb-8 border-b border-white/10">
                 <div className="flex items-baseline gap-3 mb-3">
+                  <span className="text-xl text-white/70 uppercase tracking-[0.2em] font-medium">Option VIP :</span>
                   <span className="font-heading text-5xl md:text-6xl text-white">12€</span>
-                  <span className="font-heading text-white/50 line-through text-4xl">24€</span>
                   <span className="text-xl text-white/70">/ mois</span>
                 </div>
                 <p className="text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-lg">
