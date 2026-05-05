@@ -282,20 +282,21 @@ export default function Messages() {
   }, []);
 
   const toggleListening = useCallback(() => {
-    if (isListening) {
-      if (recognitionRef.current) recognitionRef.current.stop();
+    if (listeningRef.current) {
+      // Stop
+      listeningRef.current = false;
       setIsListening(false);
+      try { recognitionRef.current?.stop(); } catch {}
+      try { recognitionRef.current?.abort?.(); } catch {}
 
-      // Si on arrête la dictée, on valide le texte intermédiaire en cours
+      // Valide le texte intermédiaire en cours
       if (interimText) {
         setMessage((prev) => {
           const currentVal = prev || "";
           let finalInterim = interimText.trim();
-
           if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
             finalInterim = capitalizeFirst(finalInterim);
           }
-
           const space = currentVal.length > 0 && !currentVal.endsWith(" ") ? " " : "";
           return currentVal + space + finalInterim + " ";
         });
@@ -306,10 +307,7 @@ export default function Messages() {
         toast.error("La dictée vocale n'est pas supportée par votre navigateur.");
         return;
       }
-      
-      setInterimText(""); // Nettoyage de sécurité
-      
-      // On prépare le terrain en ajoutant un espace si nécessaire
+      setInterimText("");
       setMessage((prev) => {
         const currentVal = prev || "";
         if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
@@ -317,15 +315,16 @@ export default function Messages() {
         }
         return currentVal;
       });
-
       try {
         recognitionRef.current.start();
+        listeningRef.current = true;
         setIsListening(true);
-      } catch (e) {
+      } catch {
+        listeningRef.current = false;
         setIsListening(false);
       }
     }
-  }, [isListening, interimText]);
+  }, [interimText]);
 
   // GESTION DU SCROLL DYNAMIQUE À LA FRAPPE MANUELLE
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
