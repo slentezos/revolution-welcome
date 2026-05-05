@@ -832,6 +832,83 @@ export default function Messages() {
         </div>
       </div>
 
+
+      {/* COMPOSER MODAL — grand champ pour seniors */}
+      <Dialog
+        open={composerOpen}
+        onOpenChange={(v) => {
+          setComposerOpen(v);
+          if (!v && listeningRef.current) toggleListening();
+        }}
+      >
+        <DialogContent className="max-w-3xl w-[calc(100%-2rem)] p-0 gap-0 bg-white border border-amber-100 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="bg-[#1B2333] px-8 py-5 flex items-center justify-between">
+            <h2 className="font-heading font-semibold text-white text-2xl lg:text-3xl">
+              Écrire à {selectedChat?.name}
+            </h2>
+          </div>
+
+          <div className="px-6 lg:px-8 py-6 space-y-5">
+            <Textarea
+              autoFocus
+              ref={textareaRef}
+              placeholder="Écrivez votre message ici, ou cliquez sur « Dicter » pour parler…"
+              value={displayValue}
+              onChange={handleTextareaChange}
+              className="w-full min-h-[260px] resize-none bg-[hsl(var(--cream))] border-2 border-amber-100/70 rounded-2xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-5 py-5 leading-relaxed"
+              style={{ fontSize: `${Math.max(chatFontSize, 20)}px` }}
+            />
+
+            <div className="min-h-[2rem]">
+              {isListening && (
+                <div className="flex items-center gap-3">
+                  <p className="font-bold text-2xl" style={{ color: "hsl(var(--gold))" }}>
+                    Je vous écoute…
+                  </p>
+                  <div className="flex items-end gap-1 h-5">
+                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
+                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
+                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={toggleListening}
+                className={`min-h-[64px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl font-semibold transition-all ${
+                  isListening
+                    ? "bg-[hsl(var(--gold))] text-white shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
+                    : "bg-white border-2 border-[#1B2333] text-[#1B2333] hover:bg-amber-50"
+                }`}
+              >
+                {isListening ? <MicOff className="h-7 w-7" /> : <Mic className="h-7 w-7" />}
+                {isListening ? "Arrêter la dictée" : "Dicter à voix haute"}
+              </button>
+              <Button
+                onClick={() => {
+                  setComposerOpen(false);
+                  if (listeningRef.current) toggleListening();
+                }}
+                variant="outline"
+                className="min-h-[64px] sm:w-auto rounded-2xl text-xl font-semibold px-6"
+              >
+                Fermer
+              </Button>
+              <Button
+                onClick={handleSend}
+                disabled={isSent || (!message.trim() && !isListening)}
+                className="min-h-[64px] sm:min-w-[180px] rounded-2xl text-xl font-semibold gap-2 bg-[#1B2333] hover:bg-[#1B2333]/90"
+              >
+                {isSent ? <Check className="h-6 w-6" /> : <Send className="h-6 w-6" />}
+                {isSent ? "Envoyé" : "Envoyer"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {showConseils && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/40" onClick={() => setShowConseils(false)} />
