@@ -23,6 +23,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Flag,
+  Landmark,
 } from "lucide-react";
 import personalityHero from "@/assets/personality-hero.jpg";
 
@@ -62,6 +63,7 @@ interface MatchProfile {
   religion?: string;
   availability?: string;
   lookingFor?: string;
+  politics?: string;
   matchedAt?: string;
   quizPreferences?: {
     drinks?: string[];
@@ -146,6 +148,7 @@ export default function MatchProfileModal({
     religion: match.religion || "Musulmane",
     availability: match.availability || "Weekend",
     lookingFor: match.lookingFor || "Amour",
+    politics: match.politics || "Modéré",
     photos: [
       match.avatar,
       ...(match.photos || [
@@ -182,7 +185,7 @@ export default function MatchProfileModal({
     { icon: Globe, label: "Origine", value: profileData.origin },
     { icon: Moon, label: "Religion", value: profileData.religion },
     { icon: Sparkles, label: "Disponibilité", value: profileData.availability },
-    { icon: Heart, label: "Recherche", value: profileData.lookingFor },
+    { icon: Landmark, label: "Politique", value: profileData.politics },
   ];
 
   const quizCategories = [
