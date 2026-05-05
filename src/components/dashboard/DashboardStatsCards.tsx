@@ -22,14 +22,6 @@ export default function DashboardStatsCards({
   savedCount,
   unreadMessageCount = 0,
 }: DashboardStatsCardsProps) {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 240);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const tabs = [
     {
@@ -62,12 +54,7 @@ export default function DashboardStatsCards({
   ];
 
   return (
-    <div
-      className={cn(
-        "sticky top-16 md:top-20 z-30 -mx-4 md:-mx-8 px-4 md:px-8 py-3 bg-background/95 backdrop-blur-md border-b border-border/40 shadow-sm transition-all duration-300",
-        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none",
-      )}
-    >
+    <div className="sticky top-16 md:top-20 z-30 -mx-4 md:-mx-8 px-4 md:px-8 py-3 bg-background/95 backdrop-blur-md border-b border-border/40 shadow-sm">
       <div className="max-w-7xl mx-auto flex items-center gap-3 overflow-x-auto no-scrollbar">
         <button
           onClick={onMessagesClick}
