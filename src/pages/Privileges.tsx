@@ -306,36 +306,82 @@ export default function Privileges() {
               data-reveal-delay="150"
               className="font-heading text-4xl md:text-5xl lg:text-6xl text-primary-foreground mb-8 leading-tight"
             >
-              L'Accompagnement Signature
+              Services Optionnels
             </h2>
 
             <p
               data-reveal
               data-reveal-delay="350"
-              className="text-lg text-primary-foreground/80 leading-relaxed mb-6 max-w-4xl mx-auto md:text-2xl"
+              className="text-lg text-primary-foreground/80 leading-relaxed mb-12 max-w-4xl mx-auto md:text-2xl"
             >
-              Allez au-delà de l'algorithme. Profitez d'une expertise humaine sur-mesure pour décrypter votre test de
-              personnalité ou confier la création de votre profil à notre conciergerie.
+              Allez au-delà de l'algorithme. Profitez d'une expertise humaine sur-mesure pour vous accompagner dans la création de votre profil.
             </p>
+          </div>
 
-            <p
+          {/* Grille 2 cartes Services Optionnels */}
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto text-left">
+            {/* Card 1 — Pack Clé en main */}
+            <div
               data-reveal
-              data-reveal-delay="400"
-              className="text-lg text-primary-foreground/60 italic mb-12 md:text-2xl"
+              data-reveal-delay="200"
+              className="bg-white/5 border border-[hsl(var(--gold)/0.3)] backdrop-blur-sm p-10 flex flex-col rounded-sm shadow-xl"
             >
-              Un service exclusif et facultatif pour nos membres les plus exigeants.
-            </p>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                  <PhoneCall className="h-6 w-6 text-[hsl(var(--gold))]" />
+                </div>
+                <h3 className="font-heading text-3xl text-primary-foreground md:text-4xl">Pack "Clé en main"</h3>
+              </div>
 
-            <div data-reveal data-reveal-delay="450">
-              {/* Le bouton déclenche maintenant directement l'admission (modalOpen) */}
+              <p className="text-primary-foreground/80 text-xl leading-relaxed mb-8 flex-1">
+                Notre équipe vous appelle et remplit l'intégralité de votre profil pour vous (questionnaire de personnalité + infos). Coaching vidéo inclus.
+              </p>
+
+              <div className="flex items-baseline gap-3 mb-8 pb-8 border-b border-white/10">
+                <span className="font-heading text-5xl md:text-6xl text-primary-foreground">89€</span>
+                <span className="font-heading text-3xl text-primary-foreground/50 line-through">129€</span>
+              </div>
+
               <button
                 onClick={() => setModalOpen(true)}
-                className="inline-flex items-center gap-3 border border-primary-foreground/30 text-primary-foreground px-10 py-5 text-base font-medium tracking-wide transition-all duration-500 hover:bg-primary-foreground hover:text-primary group"
+                className="w-full bg-[hsl(var(--gold))] text-primary py-5 text-lg uppercase tracking-widest font-bold transition-all hover:bg-[hsl(var(--gold-light))] min-h-[64px] flex items-center justify-center gap-2"
               >
-                Demander mon admission
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                Ajouter le pack
+                <ArrowRight className="w-5 h-5" />
               </button>
             </div>
+
+            {/* Card 2 — Coaching Vidéo */}
+            <div
+              data-reveal
+              data-reveal-delay="350"
+              className="bg-white/5 border border-[hsl(var(--gold)/0.3)] backdrop-blur-sm p-10 flex flex-col rounded-sm shadow-xl"
+            >
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center rounded-sm">
+                  <Video className="h-6 w-6 text-[hsl(var(--gold))]" />
+                </div>
+                <h3 className="font-heading text-3xl text-primary-foreground md:text-4xl">Coaching Vidéo</h3>
+              </div>
+
+              <p className="text-primary-foreground/80 text-xl leading-relaxed mb-8 flex-1">
+                Un expert vous guide en direct via Google Meet (sans accès à votre ordinateur) pour réaliser des photos et une vidéo d'une qualité optimale.
+              </p>
+
+              <div className="flex items-baseline gap-3 mb-8 pb-8 border-b border-white/10">
+                <span className="font-heading text-5xl md:text-6xl text-primary-foreground">35€</span>
+                <span className="font-heading text-3xl text-primary-foreground/50 line-through">70€</span>
+              </div>
+
+              <button
+                onClick={() => setModalOpen(true)}
+                className="w-full bg-[hsl(var(--gold))] text-primary py-5 text-lg uppercase tracking-widest font-bold transition-all hover:bg-[hsl(var(--gold-light))] min-h-[64px] flex items-center justify-center gap-2"
+              >
+                Ajouter le coaching
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
           </div>
         </div>
       </section>
