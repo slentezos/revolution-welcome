@@ -370,7 +370,7 @@ export default function Privileges() {
 
               <div className="flex items-baseline gap-3 mb-8 pb-8 border-b border-white/10">
                 <span className="font-heading text-5xl md:text-6xl text-primary-foreground">35€</span>
-                <span className="font-heading text-3xl text-primary-foreground/50 line-through">70€</span>
+                <span className="font-heading text-primary-foreground/50 line-through text-4xl">70€</span>
               </div>
 
               <button
