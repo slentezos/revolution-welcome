@@ -472,7 +472,7 @@ export default function WelcomeRoadmap({
               );
             })}
           </div>
-
+        </div>
       </section>
 
       {/* ─── PROGRESS BAR ─── */}
