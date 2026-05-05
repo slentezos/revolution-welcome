@@ -148,6 +148,7 @@ export default function Messages() {
   const [unmatchModalOpen, setUnmatchModalOpen] = useState(false);
   const [unmatchTarget, setUnmatchTarget] = useState<string>("");
   const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
+  const [composerOpen, setComposerOpen] = useState(false);
 
   // ÉTATS DE LA DICTÉE INTELLIGENTE
   const [isListening, setIsListening] = useState(false);
@@ -211,7 +212,11 @@ export default function Messages() {
     adjustTextareaHeight();
   }, [message, interimText, chatFontSize, adjustTextareaHeight]);
 
-  // MOTEUR DE DICTÉE VOCALE (AVEC PONCTUATION ET SÉCURITÉ ANTI-UNDEFINED)
+  // Ref miroir pour éviter les closures stales sur isListening
+  const listeningRef = useRef(false);
+  useEffect(() => { listeningRef.current = isListening; }, [isListening]);
+
+  // MOTEUR DE DICTÉE VOCALE — initialisé UNE SEULE FOIS
   useEffect(() => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -222,6 +227,9 @@ export default function Messages() {
     recognition.lang = "fr-FR";
 
     recognition.onresult = (event: any) => {
+      // Si l'utilisateur a demandé l'arrêt, on ignore les derniers résultats
+      if (!listeningRef.current) return;
+
       let finalSegment = "";
       let interimSegment = "";
 
@@ -234,55 +242,62 @@ export default function Messages() {
       }
 
       if (finalSegment) {
-        // L'utilisation de prev garantit qu'il n'y aura jamais d'undefined
         setMessage((prev) => {
-          const currentVal = prev || ""; 
+          const currentVal = prev || "";
           let formattedFinal = formatSpeech(finalSegment).trim();
-
-          // Majuscule si le champ est vide ou après un point
           if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
             formattedFinal = capitalizeFirst(formattedFinal);
           }
-
-          const needsSpace = currentVal.length > 0 && !currentVal.endsWith(" ") && !currentVal.endsWith("\n") && !formattedFinal.startsWith(",") && !formattedFinal.startsWith(".");
+          const needsSpace =
+            currentVal.length > 0 &&
+            !currentVal.endsWith(" ") &&
+            !currentVal.endsWith("\n") &&
+            !formattedFinal.startsWith(",") &&
+            !formattedFinal.startsWith(".");
           const space = needsSpace ? " " : "";
-
           return currentVal + space + formattedFinal;
         });
       }
 
       setInterimText(formatSpeech(interimSegment));
-      
-      // Force le redimensionnement du champ pendant que la personne parle
-      setTimeout(adjustTextareaHeight, 0); 
+      setTimeout(adjustTextareaHeight, 0);
     };
 
-    recognition.onerror = () => setIsListening(false);
-    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => {
+      listeningRef.current = false;
+      setIsListening(false);
+      setInterimText("");
+    };
+    recognition.onend = () => {
+      listeningRef.current = false;
+      setIsListening(false);
+    };
+
     recognitionRef.current = recognition;
 
     return () => {
-      if (recognitionRef.current && isListening) {
-        recognitionRef.current.stop();
-      }
+      try { recognition.stop(); } catch {}
+      try { recognition.abort?.(); } catch {}
     };
-  }, [isListening, adjustTextareaHeight]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleListening = useCallback(() => {
-    if (isListening) {
-      if (recognitionRef.current) recognitionRef.current.stop();
+    if (listeningRef.current) {
+      // Stop
+      listeningRef.current = false;
       setIsListening(false);
+      try { recognitionRef.current?.stop(); } catch {}
+      try { recognitionRef.current?.abort?.(); } catch {}
 
-      // Si on arrête la dictée, on valide le texte intermédiaire en cours
+      // Valide le texte intermédiaire en cours
       if (interimText) {
         setMessage((prev) => {
           const currentVal = prev || "";
           let finalInterim = interimText.trim();
-
           if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
             finalInterim = capitalizeFirst(finalInterim);
           }
-
           const space = currentVal.length > 0 && !currentVal.endsWith(" ") ? " " : "";
           return currentVal + space + finalInterim + " ";
         });
@@ -293,10 +308,7 @@ export default function Messages() {
         toast.error("La dictée vocale n'est pas supportée par votre navigateur.");
         return;
       }
-      
-      setInterimText(""); // Nettoyage de sécurité
-      
-      // On prépare le terrain en ajoutant un espace si nécessaire
+      setInterimText("");
       setMessage((prev) => {
         const currentVal = prev || "";
         if (currentVal !== "" && !currentVal.endsWith(" ") && !currentVal.endsWith("\n")) {
@@ -304,15 +316,16 @@ export default function Messages() {
         }
         return currentVal;
       });
-
       try {
         recognitionRef.current.start();
+        listeningRef.current = true;
         setIsListening(true);
-      } catch (e) {
+      } catch {
+        listeningRef.current = false;
         setIsListening(false);
       }
     }
-  }, [isListening, interimText]);
+  }, [interimText]);
 
   // GESTION DU SCROLL DYNAMIQUE À LA FRAPPE MANUELLE
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -400,8 +413,8 @@ export default function Messages() {
       if (sendTimeoutRef.current) clearTimeout(sendTimeoutRef.current);
       sendTimeoutRef.current = setTimeout(() => setIsSent(false), 1500);
       setTimeout(() => scrollToBottom(), 150);
-      
-      // Réinitialiser la hauteur du textarea après l'envoi
+      setComposerOpen(false);
+
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";
       }
@@ -787,61 +800,20 @@ export default function Messages() {
                     )}
                   </div>
 
-                  {/* INPUT AREA */}
+                  {/* INPUT AREA — déclencheur compact */}
                   <div className="p-4 lg:p-6 border-t border-amber-100/40 bg-white">
-                    <div className="flex items-end gap-2 sm:gap-3 lg:gap-4">
-                      <button
-                        onClick={toggleListening}
-                        className={`min-h-[56px] min-w-[56px] px-3 sm:px-4 lg:px-5 sm:min-w-[120px] lg:min-w-[130px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300 text-lg sm:text-xl font-semibold shrink-0 ${
-                          isListening
-                            ? "bg-[hsl(var(--gold))] text-white animate-pulse [animation-duration:3s] shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
-                            : "bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
-                        }`}
-                        aria-label={isListening ? "Arrêter de dicter" : "Dictée vocale"}
-                      >
-                        {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
-                        <span className="hidden sm:inline">{isListening ? "Arrêter" : "Dicter"}</span>
-                      </button>
-                      <div className="flex-1 min-w-0">
-                        {/* UTILISATION DE TEXTAREA AVEC MAJUSCULE "T" */}
-                        <Textarea
-                          id="chat-textarea"
-                          ref={textareaRef}
-                          placeholder="Écrivez votre message..."
-                          value={displayValue}
-                          onChange={handleTextareaChange}
-                          className="w-full min-h-[56px] overflow-y-auto resize-none bg-[hsl(var(--cream))] border border-amber-100/60 rounded-xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-4 py-4"
-                          style={{ fontSize: `${chatFontSize}px` }}
-                        />
-                      </div>
-                      <Button
-                        onClick={handleSend}
-                        disabled={isSent || (!message.trim() && !isListening)}
-                        className="min-h-[56px] min-w-[56px] w-auto lg:w-[140px] rounded-xl text-lg sm:text-xl font-semibold gap-2 shrink-0 bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all duration-300 px-3 sm:px-4"
-                      >
-                        {isSent ? <Check className="h-6 w-6" /> : <Send className="h-6 w-6" />}
-                        <span className="hidden lg:inline">{isSent ? "Envoyé" : "Envoyer"}</span>
-                      </Button>
-                    </div>
-                    
-                    <div className="mt-3 min-h-[1.5rem]">
-                      {isListening ? (
-                        <div className="flex items-center gap-3">
-                          <p className="font-bold text-2xl lg:text-3xl text-[#e2a036]" style={{ color: "hsl(var(--gold))" }}>
-                            Je vous écoute...
-                          </p>
-                          <div className="flex items-end gap-1 h-5">
-                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
-                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
-                            <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
-                          </div>
-                        </div>
-                      ) : safeMessage.length > 0 ? (
-                        <p className="italic text-right text-lg" style={{ color: "hsl(var(--gold))" }}>
-                          ✍️ Votre brouillon est sauvegardé
-                        </p>
-                      ) : null}
-                    </div>
+                    <button
+                      onClick={() => setComposerOpen(true)}
+                      className="w-full min-h-[64px] flex items-center justify-between gap-4 px-5 py-4 rounded-2xl bg-[hsl(var(--cream))] border-2 border-amber-100/70 hover:border-[hsl(var(--gold))] transition-all text-left shadow-sm"
+                    >
+                      <span className="flex-1 truncate text-xl text-muted-foreground">
+                        {safeMessage.length > 0 ? safeMessage : "Écrivez votre message..."}
+                      </span>
+                      <span className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1B2333] text-white text-lg font-semibold">
+                        <Send className="h-5 w-5" />
+                        Rédiger
+                      </span>
+                    </button>
                   </div>
                 </>
               ) : (
@@ -859,6 +831,83 @@ export default function Messages() {
           </div>
         </div>
       </div>
+
+
+      {/* COMPOSER MODAL — grand champ pour seniors */}
+      <Dialog
+        open={composerOpen}
+        onOpenChange={(v) => {
+          setComposerOpen(v);
+          if (!v && listeningRef.current) toggleListening();
+        }}
+      >
+        <DialogContent className="max-w-3xl w-[calc(100%-2rem)] p-0 gap-0 bg-white border border-amber-100 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="bg-[#1B2333] px-8 py-5 flex items-center justify-between">
+            <h2 className="font-heading font-semibold text-white text-2xl lg:text-3xl">
+              Écrire à {selectedChat?.name}
+            </h2>
+          </div>
+
+          <div className="px-6 lg:px-8 py-6 space-y-5">
+            <Textarea
+              autoFocus
+              ref={textareaRef}
+              placeholder="Écrivez votre message ici, ou cliquez sur « Dicter » pour parler…"
+              value={displayValue}
+              onChange={handleTextareaChange}
+              className="w-full min-h-[260px] resize-none bg-[hsl(var(--cream))] border-2 border-amber-100/70 rounded-2xl font-medium text-foreground placeholder:text-muted-foreground focus:border-[hsl(var(--gold))] focus:ring-0 focus:outline-none focus:ring-offset-0 px-5 py-5 leading-relaxed"
+              style={{ fontSize: `${Math.max(chatFontSize, 20)}px` }}
+            />
+
+            <div className="min-h-[2rem]">
+              {isListening && (
+                <div className="flex items-center gap-3">
+                  <p className="font-bold text-2xl" style={{ color: "hsl(var(--gold))" }}>
+                    Je vous écoute…
+                  </p>
+                  <div className="flex items-end gap-1 h-5">
+                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[60%]" style={{ animationDelay: "0ms" }} />
+                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
+                    <span className="w-1.5 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={toggleListening}
+                className={`min-h-[64px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl font-semibold transition-all ${
+                  isListening
+                    ? "bg-[hsl(var(--gold))] text-white shadow-[0_0_16px_hsl(var(--gold)/0.4)]"
+                    : "bg-white border-2 border-[#1B2333] text-[#1B2333] hover:bg-amber-50"
+                }`}
+              >
+                {isListening ? <MicOff className="h-7 w-7" /> : <Mic className="h-7 w-7" />}
+                {isListening ? "Arrêter la dictée" : "Dicter à voix haute"}
+              </button>
+              <Button
+                onClick={() => {
+                  setComposerOpen(false);
+                  if (listeningRef.current) toggleListening();
+                }}
+                variant="outline"
+                className="min-h-[64px] sm:w-auto rounded-2xl text-xl font-semibold px-6"
+              >
+                Fermer
+              </Button>
+              <Button
+                onClick={handleSend}
+                disabled={isSent || (!message.trim() && !isListening)}
+                className="min-h-[64px] sm:min-w-[180px] rounded-2xl text-xl font-semibold gap-2 bg-[#1B2333] hover:bg-[#1B2333]/90"
+              >
+                {isSent ? <Check className="h-6 w-6" /> : <Send className="h-6 w-6" />}
+                {isSent ? "Envoyé" : "Envoyer"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {showConseils && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
