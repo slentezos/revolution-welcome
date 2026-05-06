@@ -1,27 +1,28 @@
 import * as React from "react";
-import { useState, useMemo } from "react";
-import { Eye, EyeOff, Calendar } from "lucide-react";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// ─── 1. COMPOSANT INPUT PREMIUM (Texte, Email, etc.) ───
+// ─── 1. COMPOSANT INPUT CLASSIQUE (Texte, Email, etc.) ───
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, onChange, ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      // Capitalisation automatique pour tout sauf email et password
       if (type !== "email" && type !== "password" && e.target.value?.length > 0) {
         const input = e.target;
         const start = input.selectionStart;
         const end = input.selectionEnd;
-        const val = input.value;
-        const capitalized = val.charAt(0).toUpperCase() + val.slice(1);
+        const currentValue = input.value;
+        const capitalizedValue = currentValue.charAt(0).toUpperCase() + currentValue.slice(1);
 
-        if (val !== capitalized) {
-          input.value = capitalized;
+        if (currentValue !== capitalizedValue) {
+          input.value = capitalizedValue;
           input.setSelectionRange(start, end);
         }
       }
-      if (onChange) onChange(e);
+      if (onChange) {
+        onChange(e);
+      }
     };
 
     return (
@@ -30,7 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         onChange={handleChange}
         autoCapitalize="sentences"
         className={cn(
-          "flex h-16 w-full rounded-xl border border-white/10 bg-[#1B2333] px-5 py-2 text-xl text-white shadow-2xl transition-all placeholder:text-white/20 hover:border-[hsl(var(--gold))/50] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-1 focus-visible:ring-[hsl(var(--gold))/20] disabled:cursor-not-allowed disabled:opacity-50",
+          "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-xl shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground",
           className,
         )}
         ref={ref}
@@ -41,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 );
 Input.displayName = "Input";
 
-// ─── 2. COMPOSANT MOT DE PASSE (Sécurisé) ───
+// ─── 2. COMPOSANT MOT DE PASSE (Avec œil de visibilité) ───
 const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -50,7 +51,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
         <input
           type={showPassword ? "text" : "password"}
           className={cn(
-            "flex h-16 w-full rounded-xl border border-white/10 bg-[#1B2333] px-5 py-2 text-xl text-white shadow-2xl transition-all placeholder:text-white/20 hover:border-[hsl(var(--gold))/50] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-1 focus-visible:ring-[hsl(var(--gold))/20] pr-14",
+            "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-lg shadow-none transition-colors hover:border-[hsl(var(--gold))] focus-visible:outline-none focus-visible:border-[hsl(var(--gold))] focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-muted-foreground pr-12",
             className,
           )}
           ref={ref}
@@ -59,8 +60,8 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-[hsl(var(--gold))] transition-colors p-2"
-          title={showPassword ? "Masquer" : "Afficher"}
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
+          title={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
         >
           {showPassword ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
         </button>
@@ -70,7 +71,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<"i
 );
 PasswordInput.displayName = "PasswordInput";
 
-// ─── 3. COMPOSANT DATE DE NAISSANCE (Contrainte 60+ ans) ───
+// ─── 3. COMPOSANT DATE DE NAISSANCE (Le design à 3 blocs) ───
 interface DateInputProps {
   value: { day: string; month: string; year: string };
   onChange: (field: "day" | "month" | "year", val: string) => void;
@@ -95,68 +96,56 @@ const DateInput = ({ value, onChange, error, className, label = "Date de naissan
     { value: "11", label: "Novembre" },
     { value: "12", label: "Décembre" },
   ];
-
-  // LOGIQUE MÉTIER : 60 ANS ET PLUS (Basé sur 2026)
-  const years = useMemo(() => {
-    const currentYear = 2026;
-    const maxYear = currentYear - 60; // 1966
-    return Array.from({ length: 50 }, (_, i) => String(maxYear - i));
-  }, []);
-
-  const selectTriggerClass =
-    "h-16 text-xl rounded-xl border-white/10 bg-[#1B2333] text-white shadow-2xl hover:border-[hsl(var(--gold))/50] focus:ring-1 focus:ring-[hsl(var(--gold))/20] focus:border-[hsl(var(--gold))] transition-all";
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 100 }, (_, i) => String(currentYear - i));
 
   return (
     <div className={cn("w-full text-left", className)}>
-      <label className="block font-semibold text-white/90 mb-4 text-xl flex items-center gap-2">
-        <Calendar className="h-5 w-5 text-[hsl(var(--gold))]" />
-        {label}
-      </label>
-      <div className="grid grid-cols-3 gap-3 md:gap-5">
+      <label className="block font-medium text-[#1B2333] mb-3 text-xl">{label}</label>
+      <div className="grid grid-cols-3 gap-3 md:gap-4">
+        {/* JOUR */}
         <Select value={value.day} onValueChange={(v) => onChange("day", v)}>
-          <SelectTrigger className={selectTriggerClass}>
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Jour" />
           </SelectTrigger>
-          <SelectContent className="bg-[#1B2333] border-white/10 text-white max-h-[300px]">
+          <SelectContent className="max-h-[250px]">
             {days.map((d) => (
-              <SelectItem key={d} value={d} className="text-lg focus:bg-[hsl(var(--gold))] focus:text-primary">
+              <SelectItem key={d} value={d}>
                 {d}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
+        {/* MOIS */}
         <Select value={value.month} onValueChange={(v) => onChange("month", v)}>
-          <SelectTrigger className={selectTriggerClass}>
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Mois" />
           </SelectTrigger>
-          <SelectContent className="bg-[#1B2333] border-white/10 text-white max-h-[300px]">
+          <SelectContent className="max-h-[250px]">
             {months.map((m) => (
-              <SelectItem
-                key={m.value}
-                value={m.value}
-                className="text-lg focus:bg-[hsl(var(--gold))] focus:text-primary"
-              >
+              <SelectItem key={m.value} value={m.value}>
                 {m.label}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
+        {/* ANNÉE */}
         <Select value={value.year} onValueChange={(v) => onChange("year", v)}>
-          <SelectTrigger className={selectTriggerClass}>
+          <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none hover:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 focus:border-[hsl(var(--gold))] transition-colors">
             <SelectValue placeholder="Année" />
           </SelectTrigger>
-          <SelectContent className="bg-[#1B2333] border-white/10 text-white max-h-[300px]">
+          <SelectContent className="max-h-[250px]">
             {years.map((y) => (
-              <SelectItem key={y} value={y} className="text-lg focus:bg-[hsl(var(--gold))] focus:text-primary">
+              <SelectItem key={y} value={y}>
                 {y}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
-      {error && <p className="text-red-400 text-lg mt-3 font-medium animate-pulse">⚠️ {error}</p>}
+      {error && <p className="text-destructive text-lg mt-2">{error}</p>}
     </div>
   );
 };
