@@ -34,7 +34,7 @@ export default function LifeLoversSection() {
 
           <div data-reveal data-reveal-delay="250" className="divider-gold mb-10" />
 
-          <div data-reveal data-reveal-delay="350" className="space-y-8 text-muted-foreground text-lg leading-relaxed">
+          <div data-reveal data-reveal-delay="350" className="space-y-8 text-muted-foreground leading-relaxed text-xl">
             <p className="text-xl">
               Votre carrière professionnelle s'éloigne. Vos enfants sont à présent indépendants.
               <strong className="text-foreground font-bold"> Et si c'était le moment de penser à vous ?</strong>
