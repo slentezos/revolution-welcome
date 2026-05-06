@@ -225,7 +225,7 @@ export default function APropos() {
 
             <div data-reveal data-reveal-delay="250" className="divider-gold mb-10" />
 
-            <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
+            <div className="space-y-6 text-muted-foreground leading-relaxed text-xl">
               <p data-reveal data-reveal-delay="350" className="text-xl">Logique de jeunes : nous avons inscrit nos grands-parents sur des sites de rencontres pour seniors et encouragé des rencontres.
 
 
