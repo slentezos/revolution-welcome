@@ -204,7 +204,7 @@ export default function ListeAttente() {
 
                 <div className="max-w-sm space-y-6">
                   <div>
-                    <label className="block font-medium text-foreground mb-3 text-xl">
+                    <label className="block font-medium text-foreground mb-3 text-2xl">
                       <Phone className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
                       Téléphone (optionnel)
                     </label>
