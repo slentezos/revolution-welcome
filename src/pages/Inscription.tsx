@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, CheckCircle, Clock, Shield, MapPin } from "lucide-react";
+import { Clock, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { getStoredLocation } from "@/data/frenchPostalCodes";
+import { Button } from "@/components/ui/button";
 import heroCouple from "@/assets/hero-couple.jpg";
 
 import InscriptionStep1Profil from "@/components/inscription/InscriptionStep1Profil";
@@ -15,7 +16,6 @@ import { RegistrationLocationHeader } from "@/components/RegistrationLocationHea
 export default function Inscription() {
   const storedLocation = getStoredLocation();
   const skipLocation = !!(storedLocation?.postalCode && storedLocation?.cityName);
-
   const allSteps = skipLocation ? ["Profil", "Téléphone", "Compte"] : ["Profil", "Localisation", "Téléphone", "Compte"];
 
   const [step, setStep] = useState(0);
@@ -40,7 +40,7 @@ export default function Inscription() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Verrouillage STRICT du viewport
+  // Protocole Zero-Scroll : Verrouillage du viewport pour stabilité maximale
   useEffect(() => {
     document.body.style.overflow = "hidden";
     document.body.style.height = "100vh";
@@ -59,23 +59,12 @@ export default function Inscription() {
 
   const validateStep4 = () => {
     const e: Record<string, string> = {};
-    if (!formData.nationality) e.nationality = "Veuillez sélectionner votre nationalité";
-    if (!formData.email || !formData.email.includes("@")) e.email = "Veuillez entrer une adresse email valide";
-    if (!formData.password || formData.password.length < 6)
-      e.password = "Le mot de passe doit contenir au moins 6 caractères";
-    if (!formData.acceptTerms) e.acceptTerms = "Vous devez accepter les conditions pour continuer";
+    if (!formData.nationality) e.nationality = "Sélection requise";
+    if (!formData.email || !formData.email.includes("@")) e.email = "Format email non conforme";
+    if (!formData.password || formData.password.length < 6) e.password = "Minimum 6 caractères";
+    if (!formData.acceptTerms) e.acceptTerms = "Acceptation des conditions obligatoire";
     setErrors(e);
     return Object.keys(e).length === 0;
-  };
-
-  const nextStep = () => {
-    setStep((s) => s + 1);
-    setErrors({});
-  };
-
-  const prevStep = () => {
-    setStep((s) => s - 1);
-    setErrors({});
   };
 
   const handleSubmit = async () => {
@@ -122,7 +111,7 @@ export default function Inscription() {
         setPendingReview(true);
       }
     } catch (error: any) {
-      toast({ title: "Erreur", description: "Une erreur est survenue.", variant: "destructive" });
+      toast({ title: "Erreur Système", description: "Le traitement a échoué.", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -130,30 +119,29 @@ export default function Inscription() {
 
   if (pendingReview) {
     return (
-      <div className="h-screen flex overflow-hidden">
-        <div className="flex-1 flex flex-col justify-center px-12 lg:px-24 py-12">
+      <div className="h-screen flex overflow-hidden bg-white">
+        <div className="flex-1 flex flex-col justify-center px-12 lg:px-24">
           <div className="max-w-md w-full mx-auto text-center">
-            <Link to="/" className="font-heading text-3xl font-semibold text-primary mb-8 block">
+            <Link to="/" className="font-heading text-3xl font-bold text-primary mb-8 block">
               Kalimera
             </Link>
             <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
               <Clock className="h-10 w-10 text-[hsl(var(--gold))]" />
             </div>
-            <h1 className="font-heading text-4xl font-semibold mb-4 text-[#1B2333]">Merci, {formData.firstName} !</h1>
+            <h1 className="font-heading text-4xl font-bold mb-4 text-[#1B2333]">Dossier en cours</h1>
             <p className="text-muted-foreground text-xl mb-8 leading-relaxed">
-              Votre profil est en cours de validation sous 24h.
+              Validation manuelle sous un délai de 24 heures ouvrées.
             </p>
-            <Link
-              to="/"
-              className="inline-block bg-[#1B2333] text-white px-10 py-4 font-bold rounded-xl text-lg transition-all hover:scale-[1.02]"
+            <Button
+              onClick={() => navigate("/")}
+              className="w-full bg-[#1B2333] text-white h-14 font-bold rounded-xl text-lg"
             >
-              Retour à l'accueil
-            </Link>
+              Quitter le tunnel
+            </Button>
           </div>
         </div>
-        <div className="hidden lg:block flex-1 relative overflow-hidden">
-          <img src={heroCouple} alt="Couple" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-primary/70" />
+        <div className="hidden lg:block flex-1 relative bg-[#1B2333]">
+          <img src={heroCouple} alt="Marketing" className="absolute inset-0 w-full h-full object-cover opacity-60" />
         </div>
       </div>
     );
@@ -162,107 +150,107 @@ export default function Inscription() {
   const currentStepLabel = allSteps[step];
 
   return (
-    <div className="h-screen flex overflow-hidden bg-white">
-      {/* LEFT - FORMULAIRE (FIXE, ZÉRO SCROLL) */}
-      <div className="flex-1 flex flex-col px-12 lg:px-20 py-10">
-        <div className="max-w-lg w-full mx-auto flex flex-col h-full justify-between">
-          <div>
-            <Link to="/" className="font-heading text-3xl font-bold text-[#1B2333] mb-12 block">
-              Kalimera
-            </Link>
+    <div className="h-screen w-full flex overflow-hidden bg-white">
+      {/* COLONNE GAUCHE - INTERFACE TRANSACTIONNELLE (SCROLL INTERNE) */}
+      <div className="flex-1 h-full overflow-y-auto bg-white flex flex-col scrollbar-hide">
+        <div className="max-w-lg w-full mx-auto px-6 py-12 md:px-12 flex flex-col min-h-full">
+          <Link to="/" className="font-heading text-3xl font-bold text-[#1B2333] mb-12 block shrink-0">
+            Kalimera
+          </Link>
 
-            <div className="mb-10">
-              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${((step + 1) / allSteps.length) * 100}%` }}
-                />
-              </div>
-              <p className="text-muted-foreground mt-3 font-bold uppercase tracking-[0.2em] text-lg">
-                Étape {step + 1} sur {allSteps.length} — {currentStepLabel}
-              </p>
+          <div className="mb-10 shrink-0">
+            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-primary transition-all duration-500 ease-out"
+                style={{ width: `${((step + 1) / allSteps.length) * 100}%` }}
+              />
             </div>
-
-            <div className="mt-8">
-              {currentStepLabel === "Profil" && (
-                <InscriptionStep1Profil
-                  formData={formData}
-                  setFormData={setFormData}
-                  onNext={nextStep}
-                  errors={errors}
-                />
-              )}
-              {currentStepLabel === "Localisation" && (
-                <InscriptionStep2Localisation
-                  formData={formData}
-                  setFormData={setFormData}
-                  onNext={nextStep}
-                  onBack={prevStep}
-                  errors={errors}
-                />
-              )}
-              {currentStepLabel === "Téléphone" && (
-                <InscriptionStep3Telephone
-                  formData={formData}
-                  setFormData={setFormData}
-                  onNext={nextStep}
-                  onBack={prevStep}
-                  errors={errors}
-                />
-              )}
-              {currentStepLabel === "Compte" && (
-                <InscriptionStep4Compte
-                  formData={formData}
-                  setFormData={setFormData}
-                  onSubmit={handleSubmit}
-                  onBack={prevStep}
-                  errors={errors}
-                  loading={loading}
-                />
-              )}
-            </div>
+            <p className="text-slate-500 mt-4 text-xs font-bold uppercase tracking-[0.3em]">
+              Étape {step + 1} / {allSteps.length} — {currentStepLabel}
+            </p>
           </div>
 
-          {/* Footer removed from here */}
+          <div className="flex-1">
+            {currentStepLabel === "Profil" && (
+              <InscriptionStep1Profil
+                formData={formData}
+                setFormData={setFormData}
+                onNext={() => setStep((s) => s + 1)}
+                errors={errors}
+              />
+            )}
+            {currentStepLabel === "Localisation" && (
+              <InscriptionStep2Localisation
+                formData={formData}
+                setFormData={setFormData}
+                onNext={() => setStep((s) => s + 1)}
+                onBack={() => setStep((s) => s - 1)}
+                errors={errors}
+              />
+            )}
+            {currentStepLabel === "Téléphone" && (
+              <InscriptionStep3Telephone
+                formData={formData}
+                setFormData={setFormData}
+                onNext={() => setStep((s) => s + 1)}
+                onBack={() => setStep((s) => s - 1)}
+                errors={errors}
+              />
+            )}
+            {currentStepLabel === "Compte" && (
+              <InscriptionStep4Compte
+                formData={formData}
+                setFormData={setFormData}
+                onSubmit={handleSubmit}
+                onBack={() => setStep((s) => s - 1)}
+                errors={errors}
+                loading={loading}
+              />
+            )}
+          </div>
+
+          <div className="h-10 shrink-0" />
         </div>
       </div>
 
-      {/* RIGHT - IMAGE + MARKETING + CONNECTEZ-VOUS */}
-      <div className="hidden lg:block flex-1 relative overflow-hidden bg-[#1B2333]">
+      {/* COLONNE DROITE - ANALYSE & MARKETING (FIXE) */}
+      <div className="hidden lg:flex flex-1 relative bg-[#1B2333] h-full overflow-hidden items-center justify-center p-16">
         <img
           src={heroCouple}
           alt="Couple Kalimera"
           className="absolute inset-0 w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-16 text-center text-primary-foreground">
-          <div className="max-w-md">
+
+        <div className="relative z-10 w-full max-w-md flex flex-col items-center">
+          {/* LOCALISATION : CERTIFICATION DE DISPONIBILITÉ */}
+          <div className="w-full mb-10 transform scale-105">
             <RegistrationLocationHeader />
-            <h2 className="font-heading font-semibold mb-6 text-5xl">75% d'affinités réciproques</h2>
-            <p className="text-primary-foreground/90 mb-12 text-2xl leading-relaxed">
-              Notre algorithme analyse 200 critères pour garantir votre compatibilité.
-            </p>
+          </div>
 
-            <div className="flex justify-center gap-12 mb-16">
-              <div>
-                <div className="text-5xl font-heading font-bold text-[hsl(var(--gold))] mb-1">40+</div>
-                <div className="text-primary-foreground/60 text-sm uppercase tracking-widest font-bold text-slate-50">Rubriques</div>
-              </div>
-              <div>
-                <div className="text-5xl font-heading font-bold text-[hsl(var(--gold))] mb-1">300+</div>
-                <div className="text-primary-foreground/60 text-sm uppercase tracking-widest font-bold text-slate-50">Critères</div>
-              </div>
-            </div>
+          <h2 className="text-5xl font-bold text-white mb-6 text-center leading-tight">75% d'affinités réciproques</h2>
+          <p className="text-white/70 text-xl text-center mb-16 leading-relaxed">
+            Notre algorithme traite 200 points de données pour assurer la viabilité des mises en relation.
+          </p>
 
-            {/* POSITIONNEMENT FINAL DU LIEN DE CONNEXION */}
-            <div className="pt-8 border-t border-white/10 animate-in fade-in zoom-in-95 duration-700">
-              <p className="text-lg mb-2 text-slate-50">Déjà membre de notre club ?</p>
-              <Link
-                to="/connexion"
-                className="inline-block px-10 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white font-bold text-xl hover:bg-white/20 transition-all active:scale-[0.98]"
-              >
-                Se connecter
-              </Link>
+          <div className="flex justify-center gap-12 mb-16">
+            <div className="text-center">
+              <p className="text-5xl font-bold text-[hsl(var(--gold))] mb-1">40+</p>
+              <p className="text-[10px] uppercase tracking-widest font-bold text-white/50">Rubriques</p>
             </div>
+            <div className="text-center">
+              <p className="text-5xl font-bold text-[hsl(var(--gold))] mb-1">300+</p>
+              <p className="text-[10px] uppercase tracking-widest font-bold text-white/50">Critères</p>
+            </div>
+          </div>
+
+          <div className="pt-10 border-t border-white/10 w-full text-center">
+            <p className="text-white/50 mb-6 font-medium">Déjà référencé dans notre club ?</p>
+            <Link
+              to="/connexion"
+              className="inline-block px-12 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl text-white font-bold text-xl hover:bg-white/10 transition-all active:scale-[0.98]"
+            >
+              Se connecter
+            </Link>
           </div>
         </div>
       </div>
