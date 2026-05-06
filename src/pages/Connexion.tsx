@@ -182,7 +182,7 @@ export default function Connexion() {
         <div className="w-12 h-7 bg-muted rounded-full peer-checked:bg-[hsl(var(--gold))] transition-colors duration-300 shadow-inner border border-border peer-checked:border-[hsl(var(--gold))]" />
         <div className="absolute left-1 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 peer-checked:translate-x-5" />
       </div>
-      <span className="text-muted-foreground select-none group-hover:text-foreground transition-colors text-lg md:text-xl whitespace-nowrap">
+      <span className="text-muted-foreground select-none group-hover:text-foreground transition-colors md:text-xl whitespace-nowrap text-2xl">
         {label}
       </span>
     </label>
