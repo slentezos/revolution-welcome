@@ -199,7 +199,7 @@ export default function Connexion() {
             </Link>
 
             <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-2">Connexion</h1>
-            <p className="text-muted-foreground mb-8 text-xl">
+            <p className="text-muted-foreground mb-8 text-2xl">
               Accédez à votre espace membre pour retrouver vos affinités.
             </p>
 
