@@ -239,7 +239,7 @@ export default function Connexion() {
             {method === "email" && (
               <form onSubmit={handleEmailSubmit} className="space-y-5 animate-in fade-in duration-300">
                 <div>
-                  <label className="block font-medium text-foreground mb-2 text-xl">Adresse email</label>
+                  <label className="block font-medium text-foreground mb-2 text-2xl">Adresse email</label>
                   <Input
                     type="email"
                     placeholder="votre@email.com"
