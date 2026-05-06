@@ -614,11 +614,11 @@ export default function Messages() {
                           Votre Cercle Privé
                         </p>
                       </div>
-                      <p className="text-white/90 text-lg leading-relaxed mb-3">
+                      <p className="text-white/90 text-xl leading-relaxed mb-3">
                         Espace exclusif et confidentiel où vos échanges sont protégés. Seuls vos matchs validés peuvent
                         vous écrire.
                       </p>
-                      <p className="leading-relaxed italic text-lg text-primary-foreground">
+                      <p className="leading-relaxed italic text-xl text-primary-foreground">
                         La confidentialité est absolue : vos messages sont strictement personnels et ne peuvent être lus
                         par nos équipes, administrateurs inclus.
                       </p>
