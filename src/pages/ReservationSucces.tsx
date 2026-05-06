@@ -34,7 +34,7 @@ export default function ReservationSucces() {
             Félicitations&nbsp;!
           </h1>
           <div className="divider-gold mx-auto mb-6" />
-          <p className="text-muted-foreground text-lg leading-relaxed max-w-lg mx-auto">
+          <p className="text-muted-foreground leading-relaxed text-xl max-w-lg mx-auto">
             Votre réservation est confirmée. Notre équipe vous contactera sur{" "}
             <strong className="text-foreground">WhatsApp</strong> au créneau choisi pour votre entretien
             de 45 minutes.
