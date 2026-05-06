@@ -52,7 +52,7 @@ export default function DateInput({ value, onChange, className, disabled = false
         <div className="flex items-center justify-between gap-3 mb-3">
           <Label className="text-xl font-medium text-[#1B2333] block">Date de naissance</Label>
           {disabled && (
-            <span className="inline-flex items-center gap-2 text-base text-muted-foreground">
+            <span className="inline-flex items-center gap-2 text-muted-foreground text-xl">
               <Lock className="h-4 w-4" />
               Non modifiable
             </span>

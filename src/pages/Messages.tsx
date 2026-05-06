@@ -618,7 +618,7 @@ export default function Messages() {
                     <TooltipTrigger asChild>
                       <button className="w-full flex items-center justify-center gap-2 py-2 rounded-xl cursor-help opacity-80 hover:opacity-100 transition-opacity">
                         <Lock className="h-4 w-4 text-[hsl(var(--gold))]" />
-                        <span className="font-medium text-[#1B2333] text-lg">Cercle privé</span>
+                        <span className="font-medium text-[#1B2333] text-xl">Cercle privé</span>
                         <Info className="h-4 w-4 text-muted-foreground/50" />
                       </button>
                     </TooltipTrigger>
@@ -935,7 +935,7 @@ export default function Messages() {
             </div>
 
             {/* Astuce dictée */}
-            <p className="mt-3 text-base text-muted-foreground leading-relaxed">
+            <p className="mt-3 text-muted-foreground text-xl leading-relaxed">
               💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
               <span className="font-semibold text-foreground">« point »</span>,{" "}
               <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
