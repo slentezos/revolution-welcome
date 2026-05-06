@@ -204,7 +204,7 @@ export default function Header() {
                       onClick={() => navigate("/profil?tab=abonnement")}
                       className="py-3 px-4 text-[14px] text-slate-700 cursor-pointer rounded-lg hover:bg-amber-50 transition-colors gap-3"
                     >
-                      <CreditCard className="h-4 w-4 text-amber-600" /> Mon abonnement Privilège
+                      <CreditCard className="h-4 w-4 text-amber-600" /> Mon abonnement
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => navigate("/contact")}
