@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Lock, ArrowRight } from "lucide-react";
+import { Lock, ArrowRight, MapPin } from "lucide-react";
 import { lookupPostalCode, type LocationInfo } from "@/data/frenchPostalCodes";
 import { handleLocationTransition } from "@/lib/locationTransition";
+// IMPORT CRUCIAL : La source de précision
+import { PINPOINT_MAPPING } from "@/data/locationData";
 
 interface PostalCodeInputProps {
   className?: string;
@@ -20,18 +22,29 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
 
     if (cleaned.length === 5) {
       const info = lookupPostalCode(cleaned);
-      if (info) setLocationInfo(info);
-      else setLocationInfo(null);
+      if (info) {
+        // LOGIQUE DE PRÉCISION : Priorité au mapping local
+        const preciseCity = PINPOINT_MAPPING[cleaned] || info.cityName;
+
+        setLocationInfo({
+          ...info,
+          cityName: preciseCity, // On injecte le nom exact (ex: Bagneux)
+        });
+      } else {
+        setLocationInfo(null);
+      }
     } else {
       setLocationInfo(null);
     }
   };
 
   const handleSubmit = () => {
+    // On passe le locationInfo mis à jour pour garantir la persistance au clic
     handleLocationTransition(postalCode, navigate, locationInfo);
   };
 
   const isHero = variant === "hero";
+  const isPinpoint = !!PINPOINT_MAPPING[postalCode];
 
   return (
     <div className={className}>
@@ -45,33 +58,44 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
           placeholder="Entrer votre code postal"
           value={postalCode}
           onChange={(e) => handleChange(e.target.value)}
-          className="flex-1 h-14 px-5 border-[hsl(var(--gold)/0.6)] border-r-0 outline-none tracking-wider font-medium text-primary-foreground text-xl border-transparent border-0 bg-[#222a39]"
+          className="flex-1 h-14 px-5 outline-none tracking-wider font-medium text-primary-foreground text-xl border-0 bg-[#222a39]"
         />
 
         <button
           onClick={handleSubmit}
           disabled={!locationInfo}
-          className="h-14 px-6 bg-[hsl(var(--gold))] text-primary font-medium flex items-center gap-2 hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap text-xl"
+          className="h-14 px-6 bg-[hsl(var(--gold))] text-primary font-bold flex items-center gap-2 hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap text-xl"
         >
           Vérifier
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="h-5 w-5" />
         </button>
       </div>
 
-      {/* City/Region display - UPDATED WITH UX EXPLANATION */}
       {locationInfo && (
         <div className="mt-4 p-4 bg-[#222a39]/50 border border-[hsl(var(--gold))/20] rounded-xl animate-fade-in text-left">
           <p className="font-bold text-2xl text-[hsl(var(--gold))] mb-2 flex items-center gap-2">
-            📍 Bassin de {locationInfo.regionName}
+            <MapPin className="h-6 w-6" />
+            {isPinpoint ? `Localisation : ${locationInfo.cityName}` : `Bassin de ${locationInfo.regionName}`}
           </p>
           <p className="text-base text-primary-foreground/80 leading-relaxed">
-            Votre code postal ({postalCode}) a bien été identifié. Pour vous garantir des mises en relation pertinentes,
-            vous êtes rattaché(e) au bassin de rencontre de <strong>{locationInfo.regionName} et ses alentours</strong>.
+            Votre code postal ({postalCode}) a bien été identifié.
+            {isPinpoint ? (
+              <>
+                {" "}
+                Vous bénéficiez d'un <strong>accès prioritaire</strong> pour le secteur de{" "}
+                <strong>{locationInfo.cityName}</strong>.
+              </>
+            ) : (
+              <>
+                {" "}
+                Vous êtes rattaché(e) au bassin de rencontre de{" "}
+                <strong>{locationInfo.regionName} et ses alentours</strong>.
+              </>
+            )}
           </p>
         </div>
       )}
 
-      {/* Helper text */}
       <p
         className={`text-lg mt-4 flex items-center gap-1.5 ${isHero ? "text-muted-foreground justify-center" : "text-primary-foreground/60"}`}
       >
