@@ -158,7 +158,7 @@ export default function PostalCodeInput({
           placeholder="Entrer votre code postal"
           value={postalCode}
           onChange={handleChange}
-          className="flex-1 h-16 px-6 outline-none tracking-[0.2em] font-bold text-primary-foreground text-2xl bg-[#1B2333] border-none focus:bg-[#1f293b] transition-colors"
+          className="flex-1 h-16 px-6 outline-none tracking-[0.2em] font-bold text-primary-foreground bg-[#1B2333] border-none focus:bg-[#1f293b] transition-colors text-xl"
         />
         <button
           onClick={handleSubmit}
@@ -184,7 +184,7 @@ export default function PostalCodeInput({
           </div>
 
           <div className="space-y-4">
-            <p className="text-base text-primary-foreground/80 leading-relaxed font-medium">
+            <p className="text-primary-foreground/80 leading-relaxed text-xl font-medium">
               {isPinpoint
                 ? `Zone à haute densité validée. Votre secteur (${locationInfo.regionName}) est actuellement ouvert.`
                 : `Pour vous garantir un volume critique de profils qualifiés, vous êtes rattaché(e) au bassin : ${DEPARTMENT_TO_CITY[deptPrefix] || locationInfo.regionName} & alentours.`}
