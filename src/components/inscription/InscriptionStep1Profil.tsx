@@ -39,8 +39,8 @@ export default function Inscription() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  // Verrouillage du scroll global pour un aspect "App" stable
   useEffect(() => {
-    // Lock le body pour éviter le scroll parasite du navigateur
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
@@ -51,6 +51,7 @@ export default function Inscription() {
     if (loading) return;
     setLoading(true);
     try {
+      // Données certifiées du localStorage
       const finalZip = localStorage.getItem("user_postal_code") || formData.postalCode;
       const finalCity = localStorage.getItem("user_city_name") || storedLocation?.cityName;
 
@@ -101,17 +102,22 @@ export default function Inscription() {
           <Link to="/" className="font-heading text-3xl font-bold text-primary mb-8 block">
             Kalimera
           </Link>
-          <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6 border border-[hsl(var(--gold)/0.3)]">
             <Clock className="h-10 w-10 text-[hsl(var(--gold))]" />
           </div>
-          <h1 className="text-3xl font-bold mb-4">Merci, {formData.firstName} !</h1>
-          <p className="text-muted-foreground text-xl mb-8">Votre profil est en cours de validation.</p>
-          <Link to="/" className="bg-primary text-white px-10 py-4 rounded-xl font-bold">
+          <h1 className="text-3xl font-bold mb-4 text-[#1B2333]">Merci, {formData.firstName} !</h1>
+          <p className="text-muted-foreground text-xl mb-8 leading-relaxed">
+            Votre profil est en cours de validation manuelle sous 24h.
+          </p>
+          <Link
+            to="/"
+            className="inline-block bg-primary text-primary-foreground px-10 py-4 font-bold rounded-xl text-lg transition-all hover:shadow-elevated"
+          >
             Retour à l'accueil
           </Link>
         </div>
         <div className="hidden lg:block flex-1 relative bg-primary">
-          <img src={heroCouple} className="absolute inset-0 w-full h-full object-cover opacity-80" alt="Couple" />
+          <img src={heroCouple} alt="Couple" className="absolute inset-0 w-full h-full object-cover opacity-80" />
         </div>
       </div>
     );
@@ -121,7 +127,7 @@ export default function Inscription() {
 
   return (
     <div className="h-screen w-full flex overflow-hidden bg-white">
-      {/* GAUCHE : LE FORMULAIRE AVEC SON PROPRE SCROLL */}
+      {/* GAUCHE : LE FORMULAIRE AVEC SON PROPRE SCROLL (Indispensable pour voir le bouton continuer) */}
       <div className="flex-1 h-full overflow-y-auto scrollbar-hide">
         <div className="min-h-full flex flex-col px-6 py-10 md:px-16 lg:px-20">
           <div className="max-w-lg w-full mx-auto flex-1 flex flex-col">
@@ -129,7 +135,7 @@ export default function Inscription() {
               Kalimera
             </Link>
 
-            {/* Progress */}
+            {/* Barre de Progression */}
             <div className="mb-8">
               <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                 <div
@@ -144,7 +150,7 @@ export default function Inscription() {
 
             <RegistrationLocationHeader />
 
-            {/* Step Content : Ici on ne bride pas la hauteur */}
+            {/* Contenu dynamique des étapes */}
             <div className="flex-1 mt-6">
               {currentStepLabel === "Profil" && (
                 <InscriptionStep1Profil
@@ -184,24 +190,24 @@ export default function Inscription() {
               )}
             </div>
 
-            {/* Sécurité : Un espace en bas pour s'assurer que le bouton n'est jamais collé */}
-            <div className="h-10 w-full flex-shrink-0" />
+            {/* Marge de sécurité basse pour le bouton Continuer */}
+            <div className="h-12 w-full flex-shrink-0" />
           </div>
         </div>
       </div>
 
-      {/* DROITE : L'IMAGE FIXE IMMOBILE */}
+      {/* DROITE : L'IMAGE FIXE ET LE MARKETING */}
       <div className="hidden lg:block lg:flex-1 relative bg-[#1B2333] h-full overflow-hidden">
         <img
           src={heroCouple}
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
           alt="Couple Kalimera"
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
         />
 
         <div className="absolute inset-0 flex flex-col items-center justify-center p-16 text-center text-white">
           <div className="max-w-md">
             <h2 className="text-5xl font-bold mb-6">75% d'affinités réciproques</h2>
-            <p className="text-xl mb-12 opacity-90">
+            <p className="text-xl mb-12 opacity-90 leading-relaxed">
               Notre algorithme analyse 200 critères pour garantir votre compatibilité.
             </p>
 
@@ -216,11 +222,12 @@ export default function Inscription() {
               </div>
             </div>
 
+            {/* Lien de connexion intégré au marketing */}
             <div className="pt-10 border-t border-white/10">
               <p className="text-lg mb-6 opacity-70">Déjà membre de notre club ?</p>
               <Link
                 to="/connexion"
-                className="inline-block px-12 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl text-white font-bold text-xl hover:bg-white/20 transition-all"
+                className="inline-block px-12 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl text-white font-bold text-xl hover:bg-white/20 transition-all active:scale-[0.98]"
               >
                 Se connecter
               </Link>
