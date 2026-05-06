@@ -80,7 +80,7 @@ function PricingModal({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 sm:px-12 py-10 flex-1 overflow-y-auto bg-[hsl(var(--cream))]/40">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 sm:px-12 py-10 bg-[hsl(var(--cream))]/40">
               {/* ─── Mode Autonome ─── */}
               <div className="bg-card border border-border p-10 flex flex-col h-full shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-luxury)] transition-shadow rounded-sm">
                 <div className="flex items-center gap-4 mb-8">
