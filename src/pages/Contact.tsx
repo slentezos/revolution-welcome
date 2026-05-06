@@ -84,7 +84,7 @@ export default function Contact() {
                 <h2 className="font-heading text-2xl font-semibold text-foreground mb-2 md:text-4xl">
                   Envoyez-nous un message
                 </h2>
-                <p className="text-muted-foreground mb-8 text-xl">Nous vous répondrons dans les plus brefs délais.</p>
+                <p className="text-muted-foreground mb-8 text-2xl">Nous vous répondrons dans les plus brefs délais.</p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid sm:grid-cols-2 gap-4">
