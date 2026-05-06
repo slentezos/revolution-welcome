@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface FormData {
   firstName: string;
@@ -53,36 +54,42 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
     setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
 
+  // Style commun pour les bordures au survol et focus
+  const interactiveClasses =
+    "hover:border-[hsl(var(--gold))] focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 transition-colors duration-300";
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
       <div className="text-center mb-10">
-        <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">Parlez-nous de vous</h1>
-        <p className="text-muted-foreground text-xl">Quelques informations pour mieux vous connaître</p>
+        <h1 className="font-heading text-3xl md:text-4xl font-semibold text-[#1B2333] mb-3">Parlez-nous de vous</h1>
+        <p className="text-muted-foreground text-xl">Informations requises pour la certification de votre profil.</p>
       </div>
 
+      {/* PRÉNOM */}
       <div>
-        <label className="block font-medium text-foreground mb-3 text-xl">Prénom *</label>
+        <label className="block font-medium text-[#1B2333] mb-3 text-xl">Prénom *</label>
         <Input
           placeholder="Votre prénom"
-          className="h-14 text-xl rounded-xl"
+          className={cn("h-14 text-xl rounded-xl border-[#E5E0D8]", interactiveClasses)}
           value={formData.firstName}
           onChange={(e) => update("firstName", e.target.value)}
           autoComplete="given-name"
           autoFocus
         />
-        {errors.firstName && <p className="text-destructive text-lg mt-2">{errors.firstName}</p>}
+        {errors.firstName && <p className="text-destructive text-lg mt-2 font-medium">{errors.firstName}</p>}
       </div>
 
+      {/* DATE DE NAISSANCE */}
       <div>
-        <label className="block font-medium text-foreground mb-3 text-xl">Date de naissance *</label>
+        <label className="block font-medium text-[#1B2333] mb-3 text-xl">Date de naissance *</label>
         <div className="grid grid-cols-3 gap-3">
           <Select value={formData.birthDay} onValueChange={(v) => update("birthDay", v)}>
-            <SelectTrigger className="h-14 text-xl rounded-xl">
+            <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
               <SelectValue placeholder="Jour" />
             </SelectTrigger>
             <SelectContent className="max-h-[300px]">
               {days.map((d) => (
-                <SelectItem key={d} value={d} className="text-xl py-3 cursor-pointer">
+                <SelectItem key={d} value={d} className="text-xl py-3 cursor-pointer focus:bg-slate-50">
                   {d}
                 </SelectItem>
               ))}
@@ -90,12 +97,12 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
           </Select>
 
           <Select value={formData.birthMonth} onValueChange={(v) => update("birthMonth", v)}>
-            <SelectTrigger className="h-14 text-xl rounded-xl">
+            <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
               <SelectValue placeholder="Mois" />
             </SelectTrigger>
             <SelectContent className="max-h-[300px]">
               {months.map((m) => (
-                <SelectItem key={m.value} value={m.value} className="text-xl py-3 cursor-pointer">
+                <SelectItem key={m.value} value={m.value} className="text-xl py-3 cursor-pointer focus:bg-slate-50">
                   {m.label}
                 </SelectItem>
               ))}
@@ -103,24 +110,25 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
           </Select>
 
           <Select value={formData.birthYear} onValueChange={(v) => update("birthYear", v)}>
-            <SelectTrigger className="h-14 text-xl rounded-xl">
+            <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
               <SelectValue placeholder="Année" />
             </SelectTrigger>
             <SelectContent className="max-h-[300px]">
               {years.map((y) => (
-                <SelectItem key={y} value={String(y)} className="text-xl py-3 cursor-pointer">
+                <SelectItem key={y} value={String(y)} className="text-xl py-3 cursor-pointer focus:bg-slate-50">
                   {y}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
-        {errors.birthDate && <p className="text-destructive text-lg mt-2">{errors.birthDate}</p>}
+        {errors.birthDate && <p className="text-destructive text-lg mt-2 font-medium">{errors.birthDate}</p>}
       </div>
 
+      {/* GENRE & RECHERCHE */}
       <div className="flex flex-col gap-8">
         <div>
-          <label className="block font-medium text-foreground mb-3 text-xl">Je suis *</label>
+          <label className="block font-medium text-[#1B2333] mb-3 text-xl">Je suis *</label>
           <div className="grid grid-cols-2 gap-3">
             {[
               { value: "homme", label: "Un homme" },
@@ -130,21 +138,22 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 key={opt.value}
                 type="button"
                 onClick={() => update("gender", opt.value)}
-                className={`h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300 ${
+                className={cn(
+                  "h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
                   formData.gender === opt.value
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-background text-foreground hover:border-primary/40"
-                }`}
+                    ? "border-[#1B2333] bg-[#1B2333] text-white"
+                    : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
+                )}
               >
                 {opt.label}
               </button>
             ))}
           </div>
-          {errors.gender && <p className="text-destructive text-lg mt-2">{errors.gender}</p>}
+          {errors.gender && <p className="text-destructive text-lg mt-2 font-medium">{errors.gender}</p>}
         </div>
 
         <div>
-          <label className="block font-medium text-foreground mb-3 text-xl">Je recherche *</label>
+          <label className="block font-medium text-[#1B2333] mb-3 text-xl">Je recherche *</label>
           <div className="grid grid-cols-2 gap-3">
             {[
               { value: "Un compagnon", label: "Un compagnon" },
@@ -154,21 +163,26 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 key={opt.value}
                 type="button"
                 onClick={() => update("lookingFor", opt.value)}
-                className={`h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300 ${
+                className={cn(
+                  "h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
                   formData.lookingFor === opt.value
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-background text-foreground hover:border-primary/40"
-                }`}
+                    ? "border-[#1B2333] bg-[#1B2333] text-white"
+                    : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
+                )}
               >
                 {opt.label}
               </button>
             ))}
           </div>
-          {errors.lookingFor && <p className="text-destructive text-lg mt-2">{errors.lookingFor}</p>}
+          {errors.lookingFor && <p className="text-destructive text-lg mt-2 font-medium">{errors.lookingFor}</p>}
         </div>
       </div>
 
-      <Button type="button" onClick={onNext} className="btn-primary w-full h-14 text-xl rounded-xl mt-4">
+      <Button
+        type="button"
+        onClick={onNext}
+        className="w-full h-14 bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl rounded-xl mt-4 shadow-lg transition-all active:scale-[0.98]"
+      >
         Continuer
         <ArrowRight className="ml-2 h-5 w-5" />
       </Button>
