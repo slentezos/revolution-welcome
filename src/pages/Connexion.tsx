@@ -294,7 +294,7 @@ export default function Connexion() {
                         </div>
                         <Input
                           placeholder="6 12 34 56 78"
-                          className="h-14 text-xl rounded-xl flex-1"
+                          className="h-14 rounded-xl flex-1 text-2xl"
                           value={phone}
                           onChange={(e) => setPhone(formatPhoneDigits(e.target.value))}
                           inputMode="tel"
