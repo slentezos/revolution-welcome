@@ -610,7 +610,7 @@ export default function Messages() {
                     >
                       <div className="flex items-center gap-2 mb-3">
                         <Lock className="h-5 w-5 text-[hsl(var(--gold-light))]" />
-                        <p className="font-heading font-semibold text-[hsl(var(--gold-light))] text-xl">
+                        <p className="font-heading font-semibold text-[hsl(var(--gold-light))] text-3xl">
                           Votre Cercle Privé
                         </p>
                       </div>
