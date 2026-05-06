@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Save, ExternalLink } from "lucide-react";
 import DateInput from "@/components/profile/DateInput";
 import profileInfoImg from "@/assets/profile-info.jpg";
+import LocationsSection, { type ProfileLocationData } from "@/components/profile/LocationsSection";
 
 interface ProfileInfoTabProps {
   formData: {
@@ -18,9 +19,11 @@ interface ProfileInfoTabProps {
   saving: boolean;
   onSave: () => void;
   onContactTab: () => void;
+  profile: ProfileLocationData | null;
+  onProfileUpdated: (next: ProfileLocationData) => void;
 }
 
-export default function ProfileInfoTab({ formData, setFormData, userEmail, saving, onSave, onContactTab }: ProfileInfoTabProps) {
+export default function ProfileInfoTab({ formData, setFormData, userEmail, saving, onSave, onContactTab, profile, onProfileUpdated }: ProfileInfoTabProps) {
   return (
     <div>
       {/* Hero split */}
