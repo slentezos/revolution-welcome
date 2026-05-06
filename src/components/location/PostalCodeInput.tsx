@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, ArrowRight } from "lucide-react";
-import { lookupPostalCode, saveLocation, type LocationInfo } from "@/data/frenchPostalCodes";
-import { PINPOINT_MAPPING } from "@/data/locationData";
+import { lookupPostalCode, type LocationInfo } from "@/data/frenchPostalCodes";
+import { handleLocationTransition } from "@/lib/locationTransition";
 
 interface PostalCodeInputProps {
   className?: string;
@@ -28,21 +28,7 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
   };
 
   const handleSubmit = () => {
-    if (!locationInfo) return;
-
-    // 1. On détermine le nom exact (Bagneux pour 92220)
-    const preciseCity = PINPOINT_MAPPING[postalCode] || locationInfo.cityName;
-
-    // 2. On enregistre de force dans le localStorage
-    localStorage.setItem("user_postal_code", postalCode);
-    localStorage.setItem("user_city_name", preciseCity);
-
-    // 3. Navigation
-    if (locationInfo.isIDF) {
-      navigate("/inscription");
-    } else {
-      navigate(`/liste-attente?dept=${postalCode.slice(0, 2)}&city=${encodeURIComponent(preciseCity)}`);
-    }
+    handleLocationTransition(postalCode, navigate, locationInfo);
   };
 
   const isHero = variant === "hero";
