@@ -140,7 +140,7 @@ export default function Profil() {
           onSave={handleSave}
           onContactTab={() => setActiveTab("contact")}
           profile={profile}
-          onProfileUpdated={(next) => setProfile({ ...profile, ...next })} />
+          onProfileUpdated={(next) => setProfile((prev: any) => ({ ...(prev || {}), ...next }))} />
 
         }
         {activeTab === "questionnaires" &&
