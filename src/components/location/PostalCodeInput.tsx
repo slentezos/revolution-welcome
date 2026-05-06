@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, ArrowRight } from "lucide-react";
 import { lookupPostalCode, saveLocation, type LocationInfo } from "@/data/frenchPostalCodes";
+import { PINPOINT_MAPPING } from "@/data/locationData";
 
 interface PostalCodeInputProps {
   className?: string;
@@ -29,6 +30,8 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
   const handleSubmit = () => {
     if (!locationInfo) return;
     saveLocation(locationInfo);
+    localStorage.setItem('user_postal_code', postalCode);
+    localStorage.setItem('user_city_name', PINPOINT_MAPPING[postalCode] || locationInfo.cityName);
     if (locationInfo.isIDF) {
       navigate("/inscription");
     } else {

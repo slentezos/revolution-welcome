@@ -10,6 +10,7 @@ import InscriptionStep1Profil from "@/components/inscription/InscriptionStep1Pro
 import InscriptionStep2Localisation from "@/components/inscription/InscriptionStep2Localisation";
 import InscriptionStep3Telephone from "@/components/inscription/InscriptionStep3Telephone";
 import InscriptionStep4Compte from "@/components/inscription/InscriptionStep4Compte";
+import RegistrationLocationHeader from "@/components/RegistrationLocationHeader";
 
 export default function Inscription() {
   const storedLocation = getStoredLocation();
@@ -203,7 +204,9 @@ export default function Inscription() {
   const currentStepLabel = allSteps[step];
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col">
+      <RegistrationLocationHeader />
+      <div className="flex-1 flex">
       {/* Left - Form */}
       <div className="flex-1 flex flex-col px-6 md:px-12 lg:px-20 py-8 overflow-y-auto">
         <div className="max-w-lg w-full mx-auto flex flex-col flex-1">
@@ -303,6 +306,7 @@ export default function Inscription() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
