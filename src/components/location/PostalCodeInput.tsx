@@ -111,7 +111,6 @@ export default function PostalCodeInput({
   const [locationInfo, setLocationInfo] = useState<LocationInfo | null>(null);
   const navigate = useNavigate();
 
-  // Détection en temps réel
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, "").slice(0, 5);
     setPostalCode(val);
@@ -123,19 +122,14 @@ export default function PostalCodeInput({
     }
   };
 
-  const isPinpoint = useMemo(() => {
-    return PINPOINT_DEPARTMENTS.includes(postalCode.slice(0, 2));
-  }, [postalCode]);
+  const deptPrefix = useMemo(() => postalCode.slice(0, 2), [postalCode]);
+  const isPinpoint = useMemo(() => PINPOINT_DEPARTMENTS.includes(deptPrefix), [deptPrefix]);
 
   const handleSubmit = () => {
     if (!locationInfo) return;
     saveLocation(locationInfo);
-    if (locationInfo.isIDF) {
-      navigate("/inscription");
-    } else {
-      // On passe le dept et la ville pour vos analyses de masse critique
-      navigate(`/liste-attente?dept=${postalCode.slice(0, 2)}&city=${encodeURIComponent(locationInfo.cityName)}`);
-    }
+    if (locationInfo.isIDF) navigate("/inscription");
+    else navigate(`/liste-attente?dept=${deptPrefix}&city=${encodeURIComponent(locationInfo.cityName)}`);
   };
 
   return (
@@ -163,30 +157,37 @@ export default function PostalCodeInput({
 
       {locationInfo && (
         <div className="mt-4 p-5 bg-[#1B2333]/60 border border-[hsl(var(--gold))/30] rounded-2xl text-left animate-in fade-in slide-in-from-top-2">
-          <div className="flex items-center gap-3 mb-3">
-            {isPinpoint ? (
-              <CheckCircle2 className="h-6 w-6 text-[hsl(var(--gold))]" />
-            ) : (
-              <MapPin className="h-6 w-6 text-[hsl(var(--gold))]" />
-            )}
-            <p className="font-bold text-xl text-white">
-              {isPinpoint ? "Localisation précise :" : "Secteur identifié :"} {locationInfo.cityName} ({postalCode})
-            </p>
-          </div>
-
-          <p className="text-base text-primary-foreground/80 leading-relaxed font-medium">
-            {isPinpoint
-              ? `Zone à haute densité identifiée (${locationInfo.regionName}). Votre secteur est ouvert.`
-              : `Pour vous garantir un volume critique de profils qualifiés, vous êtes rattaché(e) au bassin : ${DEPARTMENT_TO_CITY[postalCode.slice(0, 2)] || locationInfo.regionName} & alentours.`}
-          </p>
-
-          {!locationInfo.isIDF && (
-            <div className="mt-4 flex items-start gap-3 p-3 bg-[hsl(var(--gold))]/10 rounded-xl border border-[hsl(var(--gold))]/20">
-              <BellRing className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-sm text-white/90">
-                <strong>Membre Fondateur :</strong> Nous vous contacterons dès que la masse critique sera atteinte dans
-                le {postalCode.slice(0, 2)}.
+          {/* LOGIQUE PINPOINT (75, 77, 78, 90-95) */}
+          {isPinpoint ? (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <CheckCircle2 className="h-6 w-6 text-[hsl(var(--gold))]" />
+                <p className="font-bold text-xl text-white">Localisation précise : {locationInfo.cityName}</p>
+              </div>
+              <p className="text-base text-primary-foreground/80 leading-relaxed font-medium">
+                Zone à haute densité validée. Votre secteur (<strong>{locationInfo.regionName}</strong>) est
+                actuellement ouvert. Nous privilégions votre emplacement exact pour des rencontres de proximité
+                immédiate.
               </p>
+            </div>
+          ) : (
+            /* LOGIQUE BASSIN (Reste de la France) */
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <MapPin className="h-6 w-6 text-[hsl(var(--gold))]" />
+                <p className="font-bold text-xl text-white">Secteur identifié : {locationInfo.cityName}</p>
+              </div>
+              <p className="text-base text-primary-foreground/80 leading-relaxed font-medium">
+                Afin de vous garantir un volume critique de profils qualifiés, vous êtes rattaché(e) au bassin de
+                rencontre : <strong>{DEPARTMENT_TO_CITY[deptPrefix] || locationInfo.regionName} & alentours</strong>.
+              </p>
+              <div className="flex items-start gap-3 p-3 bg-[hsl(var(--gold))]/10 rounded-xl border border-[hsl(var(--gold))]/20">
+                <BellRing className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+                <p className="text-sm text-white/90">
+                  <strong>Membre Fondateur :</strong> Votre secteur est en cours d'ouverture. Nous vous contacterons dès
+                  que la masse critique sera atteinte dans le {deptPrefix}.
+                </p>
+              </div>
             </div>
           )}
         </div>
