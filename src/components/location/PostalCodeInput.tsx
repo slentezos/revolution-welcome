@@ -1,7 +1,111 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Lock, ArrowRight } from "lucide-react";
+import { Lock, ArrowRight, MapPin } from "lucide-react";
 import { lookupPostalCode, saveLocation, type LocationInfo } from "@/data/frenchPostalCodes";
+
+// Dictionnaire des préfectures pour le mode "Bassin"
+const DEPARTMENT_TO_CITY: Record<string, string> = {
+  "01": "Bourg-en-Bresse",
+  "02": "Laon",
+  "03": "Moulins",
+  "04": "Digne-les-Bains",
+  "05": "Gap",
+  "06": "Nice",
+  "07": "Privas",
+  "08": "Charleville-Mézières",
+  "09": "Foix",
+  "10": "Troyes",
+  "11": "Carcassonne",
+  "12": "Rodez",
+  "13": "Marseille",
+  "14": "Caen",
+  "15": "Aurillac",
+  "16": "Angoulême",
+  "17": "La Rochelle",
+  "18": "Bourges",
+  "19": "Tulle",
+  "20": "Ajaccio",
+  "2A": "Ajaccio",
+  "2B": "Bastia",
+  "21": "Dijon",
+  "22": "Saint-Brieuc",
+  "23": "Guéret",
+  "24": "Périgueux",
+  "25": "Besançon",
+  "26": "Valence",
+  "27": "Évreux",
+  "28": "Chartres",
+  "29": "Quimper",
+  "30": "Nîmes",
+  "31": "Toulouse",
+  "32": "Auch",
+  "33": "Bordeaux",
+  "34": "Montpellier",
+  "35": "Rennes",
+  "36": "Châteauroux",
+  "37": "Tours",
+  "38": "Grenoble",
+  "39": "Lons-le-Saunier",
+  "40": "Mont-de-Marsan",
+  "41": "Blois",
+  "42": "Saint-Étienne",
+  "43": "Le Puy-en-Velay",
+  "44": "Nantes",
+  "45": "Orléans",
+  "46": "Cahors",
+  "47": "Agen",
+  "48": "Mende",
+  "49": "Angers",
+  "50": "Saint-Lô",
+  "51": "Châlons-en-Champagne",
+  "52": "Chaumont",
+  "53": "Laval",
+  "54": "Nancy",
+  "55": "Bar-le-Duc",
+  "56": "Vannes",
+  "57": "Metz",
+  "58": "Nevers",
+  "59": "Lille",
+  "60": "Beauvais",
+  "61": "Alençon",
+  "62": "Arras",
+  "63": "Clermont-Ferrand",
+  "64": "Pau",
+  "65": "Tarbes",
+  "66": "Perpignan",
+  "67": "Strasbourg",
+  "68": "Colmar",
+  "69": "Lyon",
+  "70": "Vesoul",
+  "71": "Mâcon",
+  "72": "Le Mans",
+  "73": "Chambéry",
+  "74": "Annecy",
+  "75": "Paris",
+  "76": "Rouen",
+  "77": "Melun",
+  "78": "Versailles",
+  "79": "Niort",
+  "80": "Amiens",
+  "81": "Albi",
+  "82": "Montauban",
+  "83": "Toulon",
+  "84": "Avignon",
+  "85": "La Roche-sur-Yon",
+  "86": "Poitiers",
+  "87": "Limoges",
+  "88": "Épinal",
+  "89": "Auxerre",
+  "90": "Belfort",
+  "91": "Évry",
+  "92": "Nanterre",
+  "93": "Bobigny",
+  "94": "Créteil",
+  "95": "Cergy",
+};
+
+// Départements nécessitant une précision chirurgicale (Pinpoint)
+const PINPOINT_DEPARTMENTS = ["75", "77", "78", "90", "91", "92", "93", "94", "95"];
 
 interface PostalCodeInputProps {
   className?: string;
@@ -38,6 +142,47 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
 
   const isHero = variant === "hero";
 
+  // Fonction de rendu conditionnel de la localisation
+  const renderLocationDisplay = () => {
+    if (!locationInfo) return null;
+
+    const deptPrefix = postalCode.slice(0, 2);
+    const isPinpoint = PINPOINT_DEPARTMENTS.includes(deptPrefix);
+
+    if (isPinpoint) {
+      // MODE PINPOINT : Précision exacte (IDF + 90)
+      return (
+        <div className="mt-4 p-4 bg-[#222a39]/50 border border-[hsl(var(--gold))/20] rounded-xl animate-fade-in text-left">
+          <p className="font-bold text-2xl text-[hsl(var(--gold))] mb-1 flex items-center gap-2">
+            📍 {locationInfo.cityName}
+          </p>
+          <p className="text-lg text-primary-foreground font-medium">
+            Secteur {locationInfo.regionName} ({deptPrefix})
+          </p>
+          <p className="text-base text-primary-foreground/60 mt-2 leading-relaxed">
+            Zone à haute densité identifiée. Votre emplacement précis est utilisé pour optimiser la pertinence de vos
+            futures rencontres.
+          </p>
+        </div>
+      );
+    }
+
+    // MODE RÉGION : Affichage par Bassin pour le reste de la France
+    const majorCity = DEPARTMENT_TO_CITY[deptPrefix] || locationInfo.regionName;
+
+    return (
+      <div className="mt-4 p-4 bg-[#222a39]/50 border border-[hsl(var(--gold))/20] rounded-xl animate-fade-in text-left">
+        <p className="font-bold text-2xl text-[hsl(var(--gold))] mb-2 flex items-center gap-2">
+          📍 Bassin de {majorCity}
+        </p>
+        <p className="text-base text-primary-foreground/80 leading-relaxed">
+          Votre code postal ({postalCode}) a bien été identifié. Pour vous garantir des mises en relation de qualité,
+          vous êtes rattaché(e) au bassin de <strong>{majorCity} et ses alentours</strong>.
+        </p>
+      </div>
+    );
+  };
+
   return (
     <div className={className}>
       <div
@@ -63,18 +208,7 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
         </button>
       </div>
 
-      {/* City/Region display - UPDATED WITH UX EXPLANATION */}
-      {locationInfo && (
-        <div className="mt-4 p-4 bg-[#222a39]/50 border border-[hsl(var(--gold))/20] rounded-xl animate-fade-in text-left">
-          <p className="font-bold text-2xl text-[hsl(var(--gold))] mb-2 flex items-center gap-2">
-            📍 Bassin de {locationInfo.regionName}
-          </p>
-          <p className="text-base text-primary-foreground/80 leading-relaxed">
-            Votre code postal ({postalCode}) a bien été identifié. Pour vous garantir des mises en relation pertinentes,
-            vous êtes rattaché(e) au bassin de rencontre de <strong>{locationInfo.regionName} et ses alentours</strong>.
-          </p>
-        </div>
-      )}
+      {renderLocationDisplay()}
 
       {/* Helper text */}
       <p
