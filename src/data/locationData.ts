@@ -1,8 +1,29 @@
-// Pinpoint mapping: precise city names for postal codes in IDF outer departments
-// (91 - Essonne, 92 - Hauts-de-Seine, 93 - Seine-Saint-Denis, 94 - Val-de-Marne, 95 - Val-d'Oise)
-// When a postal code is in this map, we display "Localisation précise" instead of just the department capital.
-
 export const PINPOINT_MAPPING: Record<string, string> = {
+  // PARIS (75) - Arrondissements
+  "75001": "Paris 1er",
+  "75002": "Paris 2e",
+  "75003": "Paris 3e",
+  "75004": "Paris 4e",
+  "75005": "Paris 5e",
+  "75006": "Paris 6e",
+  "75007": "Paris 7e",
+  "75008": "Paris 8e",
+  "75009": "Paris 9e",
+  "75010": "Paris 10e",
+  "75011": "Paris 11e",
+  "75012": "Paris 12e",
+  "75013": "Paris 13e",
+  "75014": "Paris 14e",
+  "75015": "Paris 15e",
+  "75016": "Paris 16e",
+  "75017": "Paris 17e",
+  "75018": "Paris 18e",
+  "75019": "Paris 19e",
+  "75020": "Paris 20e",
+
+  // 90 - Territoire de Belfort
+  "90000": "Belfort",
+
   // 91 - Essonne
   "91000": "Évry-Courcouronnes",
   "91100": "Corbeil-Essonnes",
