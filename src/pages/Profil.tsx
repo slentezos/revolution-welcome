@@ -21,9 +21,26 @@ const tabs = [
 
 
 export default function Profil() {
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>({ email: "marie.dupont@example.com" });
+  const [profile, setProfile] = useState<any>({
+    id: "mock-id",
+    first_name: "Marie",
+    last_name: "Dupont",
+    birth_date: "1955-06-12",
+    gender: "femme",
+    looking_for: "Un compagnon",
+    phone: "612345678",
+    postal_code: "75008",
+    city_name: "Paris 8e",
+    region_name: "Île-de-France",
+    secondary_postal_code: null,
+    secondary_city_name: null,
+    secondary_region_name: null,
+    last_secondary_update: null,
+    active_location: "primary",
+    last_location_switch: null,
+  });
+  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -36,11 +53,12 @@ export default function Profil() {
   };
 
   const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    birth_date: "",
-    gender: "",
-    looking_for: ""
+    first_name: "Marie",
+    last_name: "Dupont",
+    birth_date: "1955-06-12",
+    gender: "femme",
+    looking_for: "Un compagnon",
+    phone: "612345678",
   });
 
   useEffect(() => {
@@ -64,7 +82,8 @@ export default function Profil() {
           last_name: profileData.last_name || "",
           birth_date: profileData.birth_date || "",
           gender: profileData.gender || "",
-          looking_for: profileData.looking_for || ""
+          looking_for: profileData.looking_for || "",
+          phone: profileData.phone || "",
         });
       }
       setLoading(false);
