@@ -263,13 +263,13 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 >
                   <div className="flex items-center gap-3">
                     <Home className={`h-6 w-6 ${isActive ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`} />
-                    <span>
+                    <span className="text-2xl">
                       {loc === "primary" ? "Résidence principale" : "Résidence secondaire"}
-                      {cityLabel && <span className="block text-base font-normal opacity-80 mt-1">{cityLabel}</span>}
+                      {cityLabel && <span className="block font-normal opacity-80 mt-1 text-xl">{cityLabel}</span>}
                     </span>
                   </div>
                   {isActive && (
-                    <span className="block mt-3 text-base font-normal text-[hsl(var(--gold))]">
+                    <span className="block mt-3 font-normal text-[hsl(var(--gold))] text-xl">
                       <Sparkles className="inline h-4 w-4 mr-1" />
                       Profil actuellement rayonnant ici
                     </span>
