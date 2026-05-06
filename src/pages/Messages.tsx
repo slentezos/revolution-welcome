@@ -157,6 +157,9 @@ export default function Messages() {
   const [benevolenceModalOpen, setBenevolenceModalOpen] = useState(false);
   const [composerOpen, setComposerOpen] = useState(false);
 
+  // ÉTAT POUR LA MODAL D'APPEL
+  const [callModalOpen, setCallModalOpen] = useState(false);
+
   // ÉTATS DE LA DICTÉE INTELLIGENTE
   const [isListening, setIsListening] = useState(false);
   const [interimText, setInterimText] = useState("");
@@ -210,7 +213,9 @@ export default function Messages() {
         ta.style.height = `${scrollHeight}px`;
       }
       // Force le scroll vers le bas pendant la dictée ou la frappe
-      ta.scrollTop = ta.scrollHeight;
+      if (listeningRef.current) {
+        ta.scrollTop = ta.scrollHeight;
+      }
     }
   }, []);
 
@@ -489,6 +494,20 @@ export default function Messages() {
     setProfileModalOpen(true);
   };
 
+  // Helper pour l'ouverture de la modal d'appel
+  const handleOpenCallModal = () => {
+    const messageCount = mockMessages.length;
+    const isLocked = messageCount < 5;
+    if (isLocked) {
+      toast("🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés.", {
+        position: "bottom-left",
+        duration: 4000,
+      });
+    } else {
+      setCallModalOpen(true);
+    }
+  };
+
   const selectedChat = conversations.find((c) => c.id === selectedConversation);
 
   const matchProfileData = profileToView
@@ -529,7 +548,6 @@ export default function Messages() {
               <div className="p-6 border-b border-amber-100/40">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="font-heading text-2xl font-bold text-[#1B2333]">Mes conversations</h2>
-                  {/* Le Tooltip Cercle privé a été retiré d'ici pour être placé en bas */}
                 </div>
                 <div className="relative">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -594,7 +612,7 @@ export default function Messages() {
                   <span className="font-medium text-muted-foreground text-xl">9 conseils de sécurité</span>
                 </button>
 
-                {/* TOOLTIP CERCLE PRIVÉ (Déplacé en bas et relooké) */}
+                {/* TOOLTIP CERCLE PRIVÉ */}
                 <TooltipProvider delayDuration={200}>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -683,56 +701,27 @@ export default function Messages() {
                           <span className="text-base font-bold text-[#1B2333]">A+</span>
                         </button>
                         <div className="w-px h-6 bg-amber-100/60 mx-1 shrink-0" />
+
+                        {/* NOUVEAU BOUTON D'APPEL UNIQUE */}
                         {(() => {
                           const messageCount = mockMessages.length;
                           const isLocked = messageCount < 5;
                           return (
-                            <>
-                              <button
-                                className="h-10 px-4 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-2 transition-colors shrink-0"
-                                aria-label="Appel audio"
-                                onClick={() => {
-                                  if (isLocked) {
-                                    toast(
-                                      "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés.",
-                                      { position: "bottom-left", duration: 4000 },
-                                    );
-                                  } else {
-                                    toast.info("Lancement de l'appel...");
-                                  }
-                                }}
-                              >
-                                {isLocked ? (
-                                  <Lock className="h-4 w-4 text-muted-foreground" />
-                                ) : (
-                                  <Phone className="h-4 w-4 text-[#1B2333]" />
-                                )}
-                                <span className="text-xl font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
-                              </button>
-                              <button
-                                className="h-10 px-4 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-2 transition-colors shrink-0"
-                                aria-label="Appel vidéo"
-                                onClick={() => {
-                                  if (isLocked) {
-                                    toast(
-                                      "🔒 Pour votre sécurité, les appels se débloquent automatiquement après quelques messages échangés.",
-                                      { position: "bottom-left", duration: 4000 },
-                                    );
-                                  } else {
-                                    toast.info("Lancement de l'appel vidéo...");
-                                  }
-                                }}
-                              >
-                                {isLocked ? (
-                                  <Lock className="h-4 w-4 text-muted-foreground" />
-                                ) : (
-                                  <Video className="h-4 w-4 text-[#1B2333]" />
-                                )}
-                                <span className="text-xl font-medium text-[#1B2333] hidden xl:inline">Vidéo</span>
-                              </button>
-                            </>
+                            <button
+                              className="h-10 px-4 rounded-lg border border-amber-100 bg-white hover:bg-amber-50 flex items-center gap-2 transition-colors shrink-0"
+                              aria-label="Appeler"
+                              onClick={handleOpenCallModal}
+                            >
+                              {isLocked ? (
+                                <Lock className="h-4 w-4 text-muted-foreground" />
+                              ) : (
+                                <Phone className="h-4 w-4 text-[#1B2333]" />
+                              )}
+                              <span className="text-xl font-medium text-[#1B2333] hidden xl:inline">Appeler</span>
+                            </button>
                           );
                         })()}
+
                         <div className="w-px h-6 bg-amber-100/60 mx-1 shrink-0" />
                         <Button
                           variant="ghost"
@@ -991,6 +980,62 @@ export default function Messages() {
         </DialogContent>
       </Dialog>
 
+      {/* MODAL CHOIX APPEL AUDIO / VIDÉO */}
+      <Dialog open={callModalOpen} onOpenChange={setCallModalOpen}>
+        <DialogContent className="max-w-md p-0 overflow-hidden rounded-[24px] border-0 shadow-2xl bg-white">
+          <div className="bg-[#1B2333] px-8 py-6 flex items-center justify-center">
+            <h2 className="font-heading text-2xl font-semibold text-white">Appeler {selectedChat?.name}</h2>
+          </div>
+          <div className="px-8 py-8 space-y-4">
+            <p className="text-muted-foreground text-xl text-center mb-6">
+              Choisissez le type d'appel que vous souhaitez lancer.
+            </p>
+
+            <button
+              onClick={() => {
+                setCallModalOpen(false);
+                toast.info(`Lancement de l'appel audio avec ${selectedChat?.name}...`);
+              }}
+              className="w-full flex items-center justify-start gap-4 p-5 rounded-2xl border-2 border-secondary bg-white hover:border-[hsl(var(--gold))]/40 hover:bg-amber-50/30 transition-all text-left group"
+            >
+              <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center group-hover:bg-[hsl(var(--gold))]/10 transition-colors">
+                <Phone className="h-6 w-6 text-[#1B2333] group-hover:text-[hsl(var(--gold))] transition-colors" />
+              </div>
+              <div>
+                <p className="font-semibold text-xl text-[#1B2333]">Appel vocal</p>
+                <p className="text-muted-foreground">Uniquement par la voix</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setCallModalOpen(false);
+                toast.info(`Lancement de l'appel vidéo avec ${selectedChat?.name}...`);
+              }}
+              className="w-full flex items-center justify-start gap-4 p-5 rounded-2xl border-2 border-secondary bg-white hover:border-[hsl(var(--gold))]/40 hover:bg-amber-50/30 transition-all text-left group"
+            >
+              <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center group-hover:bg-[hsl(var(--gold))]/10 transition-colors">
+                <Video className="h-6 w-6 text-[#1B2333] group-hover:text-[hsl(var(--gold))] transition-colors" />
+              </div>
+              <div>
+                <p className="font-semibold text-xl text-[#1B2333]">Appel vidéo</p>
+                <p className="text-muted-foreground">Se voir et se parler</p>
+              </div>
+            </button>
+          </div>
+
+          <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center">
+            <button
+              onClick={() => setCallModalOpen(false)}
+              className="text-muted-foreground hover:text-[#1B2333] font-medium text-lg transition-colors py-2 px-4"
+            >
+              Annuler
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* CONSEILS DE SÉCURITÉ */}
       {showConseils && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/40" onClick={() => setShowConseils(false)} />
