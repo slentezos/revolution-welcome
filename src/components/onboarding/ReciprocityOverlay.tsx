@@ -147,7 +147,7 @@ export default function ReciprocityOverlay({ profile, dimensions, onComplete }: 
           {currentStep === 3 && (
             <div className="flex-1 flex flex-col items-center justify-center px-10 py-20 text-center animate-in fade-in slide-in-from-right-4 duration-500">
               <h2 className="font-heading text-3xl md:text-4xl text-[#1B2333] mb-4">{steps[3].title}</h2>
-              <p className="text-muted-foreground text-lg leading-relaxed max-w-md mb-12">
+              <p className="text-muted-foreground leading-relaxed text-xl max-w-md mb-12">
                 En acceptant de partager votre résumé, vous débloquez automatiquement le droit de découvrir celui de vos rencontres.
               </p>
               <div className="flex flex-col gap-4 max-w-sm w-full">
