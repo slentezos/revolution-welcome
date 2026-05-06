@@ -402,19 +402,15 @@ export default function Messages() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/connexion");
-        return;
-      }
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("onboarding_step")
-        .eq("user_id", session.user.id)
-        .maybeSingle();
-
-      if (!profile || profile.onboarding_step !== "completed") {
-        navigate("/onboarding");
-        return;
+      // TEMP: auth redirects disabled for design work
+      // if (!session) { navigate("/connexion"); return; }
+      if (session) {
+        await supabase
+          .from("profiles")
+          .select("onboarding_step")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+        // if (!profile || profile.onboarding_step !== "completed") { navigate("/onboarding"); return; }
       }
       setLoading(false);
     };

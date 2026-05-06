@@ -91,18 +91,21 @@ export default function Dashboard() {
   }, [searchParams, loading, setSearchParams]);
 
   useEffect(() => {
+    // TEMP: auth redirects disabled for design work
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {navigate("/connexion");return;}
-      setUser(session.user);
-      const { data: profileData } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
-      if (!profileData || profileData.onboarding_step !== "completed") {navigate("/onboarding");return;}
-      setProfile(profileData);
+      // if (!session) {navigate("/connexion");return;}
+      if (session) {
+        setUser(session.user);
+        const { data: profileData } = await supabase.from("profiles").select("*").eq("user_id", session.user.id).maybeSingle();
+        // if (!profileData || profileData.onboarding_step !== "completed") {navigate("/onboarding");return;}
+        if (profileData) setProfile(profileData);
+      }
       setLoading(false);
     };
     checkAuth();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {if (!session) navigate("/connexion");});
-    return () => subscription.unsubscribe();
+    // const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {if (!session) navigate("/connexion");});
+    // return () => subscription.unsubscribe();
   }, [navigate]);
 
   useEffect(() => {localStorage.setItem(SAVED_MATCHES_STORAGE_KEY, JSON.stringify(savedForLater));}, [savedForLater]);
