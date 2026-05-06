@@ -46,11 +46,10 @@ export default function Profil() {
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/connexion");
-        return;
-      }
-      setUser(session.user);
+      // TEMP: auth redirect disabled for design work
+      // if (!session) { navigate("/connexion"); return; }
+      if (session) setUser(session.user);
+      if (!session) return;
 
       const { data: profileData } = await supabase.
       from("profiles").
