@@ -38,6 +38,8 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
   const handleSubmit = () => {
     if (!locationInfo) return;
     saveLocation(locationInfo);
+    localStorage.setItem('user_postal_code', postalCode);
+    localStorage.setItem('user_city_name', PINPOINT_MAPPING[postalCode] || locationInfo.cityName);
     onClose();
 
     if (locationInfo.isIDF) {
