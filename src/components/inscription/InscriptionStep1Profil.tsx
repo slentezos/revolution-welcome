@@ -1,50 +1,177 @@
-import { Dispatch, SetStateAction } from "react";
-import { cn } from "@/lib/utils";
+import { useMemo } from "react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
-// 1. DÉFINITION DES PROPS (Le "Contrat")
-interface InscriptionStepProps {
-  formData: any; // Vous pouvez préciser le type exact si souhaité
-  setFormData: Dispatch<SetStateAction<any>>;
+interface FormData {
+  firstName: string;
+  birthDay: string;
+  birthMonth: string;
+  birthYear: string;
+  gender: string;
+  lookingFor: string;
+}
+
+interface Props {
+  formData: FormData;
+  setFormData: React.Dispatch<React.SetStateAction<any>>;
   onNext: () => void;
   errors: Record<string, string>;
 }
 
-// 2. APPLICATION DU TYPAGE
-export default function InscriptionStep1Profil({ formData, setFormData, onNext, errors }: InscriptionStepProps) {
-  // Validation locale avec la règle des 3 caractères minimum
-  const handleContinue = () => {
-    if (formData.firstName.trim().length >= 3) {
-      onNext();
-    } else {
-      // L'erreur sera gérée par le parent ou ici
-    }
+const months = [
+  { value: "01", label: "Janvier" },
+  { value: "02", label: "Février" },
+  { value: "03", label: "Mars" },
+  { value: "04", label: "Avril" },
+  { value: "05", label: "Mai" },
+  { value: "06", label: "Juin" },
+  { value: "07", label: "Juillet" },
+  { value: "08", label: "Août" },
+  { value: "09", label: "Septembre" },
+  { value: "10", label: "Octobre" },
+  { value: "11", label: "Novembre" },
+  { value: "12", label: "Décembre" },
+];
+
+export default function InscriptionStep1Profil({ formData, setFormData, onNext, errors }: Props) {
+  const years = useMemo(() => {
+    const arr = [];
+    for (let y = 1940; y <= 1966; y++) arr.push(y);
+    return arr.reverse();
+  }, []);
+
+  const days = useMemo(() => {
+    const month = parseInt(formData.birthMonth) || 1;
+    const year = parseInt(formData.birthYear) || 1960;
+    const daysInMonth = new Date(year, month, 0).getDate();
+    return Array.from({ length: daysInMonth }, (_, i) => String(i + 1).padStart(2, "0"));
+  }, [formData.birthMonth, formData.birthYear]);
+
+  const update = (field: string, value: string) => {
+    setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
-      <div className="space-y-2">
-        <label className="text-xl font-bold text-[#1B2333]">Votre Prénom</label>
-        <input
-          type="text"
-          value={formData.firstName}
-          onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-          className={cn(
-            "flex h-14 w-full rounded-xl border border-[#E5E0D8] bg-white px-4 py-2 text-xl outline-none",
-            errors.firstName && "border-red-500",
-          )}
-          placeholder="Ex: Jean-Pierre"
-        />
-        {errors.firstName && <p className="text-red-500 text-sm font-bold">{errors.firstName}</p>}
+    <div className="space-y-8">
+      <div className="text-center mb-10">
+        <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">Parlez-nous de vous</h1>
+        <p className="text-muted-foreground text-xl">Quelques informations pour mieux vous connaître</p>
       </div>
 
-      {/* ... reste du formulaire ... */}
+      <div>
+        <label className="block font-medium text-foreground mb-3 text-xl">Prénom *</label>
+        <Input
+          placeholder="Votre prénom"
+          className="h-14 text-xl rounded-xl"
+          value={formData.firstName}
+          onChange={(e) => update("firstName", e.target.value)}
+          autoComplete="given-name"
+          autoFocus
+        />
+        {errors.firstName && <p className="text-destructive text-lg mt-2">{errors.firstName}</p>}
+      </div>
 
-      <button
-        onClick={handleContinue}
-        className="w-full h-14 bg-[#1B2333] text-white rounded-xl font-bold text-xl hover:opacity-90 transition-all"
-      >
+      <div>
+        <label className="block font-medium text-foreground mb-3 text-xl">Date de naissance *</label>
+        <div className="grid grid-cols-3 gap-3">
+          <Select value={formData.birthDay} onValueChange={(v) => update("birthDay", v)}>
+            <SelectTrigger className="h-14 text-xl rounded-xl">
+              <SelectValue placeholder="Jour" />
+            </SelectTrigger>
+            <SelectContent className="max-h-[300px]">
+              {days.map((d) => (
+                <SelectItem key={d} value={d} className="text-xl py-3 cursor-pointer">
+                  {d}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={formData.birthMonth} onValueChange={(v) => update("birthMonth", v)}>
+            <SelectTrigger className="h-14 text-xl rounded-xl">
+              <SelectValue placeholder="Mois" />
+            </SelectTrigger>
+            <SelectContent className="max-h-[300px]">
+              {months.map((m) => (
+                <SelectItem key={m.value} value={m.value} className="text-xl py-3 cursor-pointer">
+                  {m.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={formData.birthYear} onValueChange={(v) => update("birthYear", v)}>
+            <SelectTrigger className="h-14 text-xl rounded-xl">
+              <SelectValue placeholder="Année" />
+            </SelectTrigger>
+            <SelectContent className="max-h-[300px]">
+              {years.map((y) => (
+                <SelectItem key={y} value={String(y)} className="text-xl py-3 cursor-pointer">
+                  {y}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        {errors.birthDate && <p className="text-destructive text-lg mt-2">{errors.birthDate}</p>}
+      </div>
+
+      <div className="flex flex-col gap-8">
+        <div>
+          <label className="block font-medium text-foreground mb-3 text-xl">Je suis *</label>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { value: "homme", label: "Un homme" },
+              { value: "femme", label: "Une femme" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => update("gender", opt.value)}
+                className={`h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300 ${
+                  formData.gender === opt.value
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background text-foreground hover:border-primary/40"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          {errors.gender && <p className="text-destructive text-lg mt-2">{errors.gender}</p>}
+        </div>
+
+        <div>
+          <label className="block font-medium text-foreground mb-3 text-xl">Je recherche *</label>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { value: "Un compagnon", label: "Un compagnon" },
+              { value: "Une compagne", label: "Une compagne" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => update("lookingFor", opt.value)}
+                className={`h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300 ${
+                  formData.lookingFor === opt.value
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border bg-background text-foreground hover:border-primary/40"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          {errors.lookingFor && <p className="text-destructive text-lg mt-2">{errors.lookingFor}</p>}
+        </div>
+      </div>
+
+      <Button type="button" onClick={onNext} className="btn-primary w-full h-14 text-xl rounded-xl mt-4">
         Continuer
-      </button>
+        <ArrowRight className="ml-2 h-5 w-5" />
+      </Button>
     </div>
   );
 }
