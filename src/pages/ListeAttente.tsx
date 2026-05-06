@@ -108,11 +108,11 @@ export default function ListeAttente() {
             <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
               Votre accès VIP est confirmé !
             </h1>
-            <p className="text-muted-foreground mb-4 text-xl leading-relaxed">
+            <p className="text-muted-foreground mb-4 text-2xl leading-relaxed">
               Nous vous préviendrons dès que Kalimera sera disponible
               {isPinpoint ? ` à ${displayLocation}` : ` dans le ${displayLocation}`}.
             </p>
-            <p className="text-muted-foreground mb-8 text-xl">
+            <p className="text-muted-foreground mb-8 text-2xl">
               Votre privilège est réservé : <strong className="text-[hsl(var(--gold))]">3 mois offerts</strong> seront
               activés automatiquement lors de votre première connexion.
             </p>
@@ -155,7 +155,7 @@ export default function ListeAttente() {
                 style={{ width: `${((step + 1) / 2) * 100}%` }}
               />
             </div>
-            <p className="text-muted-foreground mt-2 text-xl">Étape {step + 1} sur 2</p>
+            <p className="text-muted-foreground mt-2 text-2xl">Étape {step + 1} sur 2</p>
           </div>
 
           <div className="flex-1">
@@ -165,7 +165,7 @@ export default function ListeAttente() {
                   <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3 leading-tight">
                     Kalimera arrive bientôt en {location.regionName}.
                   </h1>
-                  <p className="text-muted-foreground text-xl leading-relaxed">
+                  <p className="text-muted-foreground text-2xl leading-relaxed">
                     Rejoignez les membres {isPinpoint ? `de ${displayLocation}` : `du ${displayLocation}`} et réservez
                     votre privilège :<strong className="text-[#1B2333]"> 3 mois vous seront offerts </strong> dès notre
                     arrivée.
@@ -173,7 +173,7 @@ export default function ListeAttente() {
                 </div>
 
                 <div className="max-w-sm">
-                  <label className="block font-medium text-foreground mb-3 text-xl">
+                  <label className="block font-medium text-foreground mb-3 text-2xl">
                     <Mail className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
                     Votre adresse email *
                   </label>
@@ -204,7 +204,7 @@ export default function ListeAttente() {
 
                 <div className="max-w-sm space-y-6">
                   <div>
-                    <label className="block font-medium text-foreground mb-3 text-xl">
+                    <label className="block font-medium text-foreground mb-3 text-2xl">
                       <Phone className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
                       Téléphone (optionnel)
                     </label>
