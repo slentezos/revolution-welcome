@@ -69,7 +69,7 @@ export default function ProfileQuestionnairesTab({ onContactTab }: ProfileQuesti
                 className="group bg-secondary/50 hover:bg-secondary p-8 md:p-10 transition-all duration-300 hover:shadow-[var(--shadow-card)]"
               >
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground mb-2">{q.title}</h3>
-                <p className="text-muted-foreground mb-6 text-xl">{q.subtitle}</p>
+                <p className="text-muted-foreground mb-6 text-2xl">{q.subtitle}</p>
                 {q.editable ? (
                   <a
                     href={q.href}

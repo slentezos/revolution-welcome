@@ -21,7 +21,7 @@ export default function CommitmentsSection() {
         <div className="container-main mx-auto px-6 md:px-12">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <span data-reveal className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-xl">
+            <span data-reveal className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-2xl">
               04 — Nos engagements
             </span>
             <h2 data-reveal data-reveal-delay="150" className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
