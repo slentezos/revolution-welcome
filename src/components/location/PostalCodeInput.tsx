@@ -30,6 +30,8 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
   const handleSubmit = () => {
     if (!locationInfo) return;
     saveLocation(locationInfo);
+    localStorage.setItem('user_postal_code', postalCode);
+    localStorage.setItem('user_city_name', PINPOINT_MAPPING[postalCode] || locationInfo.cityName);
     if (locationInfo.isIDF) {
       navigate("/inscription");
     } else {
