@@ -572,16 +572,16 @@ export default function Messages() {
                       <img
                         src={conv.avatar}
                         alt={conv.name}
-                        className="w-16 h-16 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
+                        className="w-20 h-20 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
                       />
                       {conv.online && (
                         <div
-                          className="absolute bottom-0.5 right-0.5 w-4 h-4 rounded-full ring-2 ring-white"
+                          className="absolute bottom-1 right-1 w-5 h-5 rounded-full ring-2 ring-white"
                           style={{ backgroundColor: "hsl(142, 71%, 45%)" }}
                         />
                       )}
                       {conv.unread > 0 && (
-                        <div className="absolute -top-1 -right-1 w-6 h-6 bg-[#1B2333] text-white text-base rounded-full flex items-center justify-center font-semibold">
+                        <div className="absolute -top-1 -right-1 w-7 h-7 bg-[#1B2333] text-white text-base rounded-full flex items-center justify-center font-semibold">
                           {conv.unread}
                         </div>
                       )}
@@ -667,11 +667,11 @@ export default function Messages() {
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
-                          className="w-12 h-12 lg:w-14 lg:h-14 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
+                          className="w-20 h-20 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
                         />
                         {conversations.find((c) => c.id === selectedConversation)?.online && (
                           <div
-                            className="absolute bottom-0 right-0 w-3 h-3 rounded-full ring-2 ring-white"
+                            className="absolute bottom-1 right-1 w-4 h-4 rounded-full ring-2 ring-white"
                             style={{ backgroundColor: "hsl(142, 71%, 45%)" }}
                           />
                         )}
@@ -752,7 +752,7 @@ export default function Messages() {
                         <img
                           src={selectedChat.avatar}
                           alt={selectedChat.name}
-                          className="w-28 h-28 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
+                          className="w-40 h-40 rounded-full object-cover ring-4 ring-amber-100/40 cursor-pointer hover:ring-[hsl(var(--gold))]/60 transition-all"
                           onClick={(e) => handleAvatarClick(selectedChat, e)}
                         />
                         <p className="text-muted-foreground text-xl text-center italic">
@@ -784,7 +784,7 @@ export default function Messages() {
                               <img
                                 src={selectedChat.avatar}
                                 alt=""
-                                className="w-10 h-10 lg:w-12 lg:h-12 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
+                                className="w-14 h-14 lg:w-16 lg:h-16 rounded-full object-cover mr-4 mt-auto shrink-0 cursor-pointer hover:ring-2 hover:ring-[hsl(var(--gold))]/40 transition-all"
                                 onClick={(e) => handleAvatarClick(selectedChat, e)}
                               />
                             )}
@@ -880,7 +880,7 @@ export default function Messages() {
                 <img
                   src={selectedChat.avatar}
                   alt={selectedChat.name}
-                  className="w-16 h-16 lg:w-20 lg:h-20 rounded-full object-cover ring-4 ring-[hsl(var(--gold))]/40 shadow-lg"
+                  className="w-20 h-20 lg:w-24 lg:h-24 rounded-full object-cover ring-4 ring-[hsl(var(--gold))]/40 shadow-lg"
                 />
                 {isListening && (
                   <span className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-[hsl(var(--gold))] border-[3px] border-[#1B2333] rounded-full animate-pulse" />
