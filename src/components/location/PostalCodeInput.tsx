@@ -29,13 +29,19 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
 
   const handleSubmit = () => {
     if (!locationInfo) return;
-    saveLocation(locationInfo);
-    localStorage.setItem('user_postal_code', postalCode);
-    localStorage.setItem('user_city_name', PINPOINT_MAPPING[postalCode] || locationInfo.cityName);
+
+    // 1. On détermine le nom exact (Bagneux pour 92220)
+    const preciseCity = PINPOINT_MAPPING[postalCode] || locationInfo.cityName;
+
+    // 2. On enregistre de force dans le localStorage
+    localStorage.setItem("user_postal_code", postalCode);
+    localStorage.setItem("user_city_name", preciseCity);
+
+    // 3. Navigation
     if (locationInfo.isIDF) {
       navigate("/inscription");
     } else {
-      navigate("/liste-attente");
+      navigate(`/liste-attente?dept=${postalCode.slice(0, 2)}&city=${encodeURIComponent(preciseCity)}`);
     }
   };
 
