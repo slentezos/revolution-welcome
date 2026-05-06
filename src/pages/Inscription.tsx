@@ -204,7 +204,9 @@ export default function Inscription() {
   const currentStepLabel = allSteps[step];
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col">
+      <RegistrationLocationHeader />
+      <div className="flex-1 flex">
       {/* Left - Form */}
       <div className="flex-1 flex flex-col px-6 md:px-12 lg:px-20 py-8 overflow-y-auto">
         <div className="max-w-lg w-full mx-auto flex flex-col flex-1">
