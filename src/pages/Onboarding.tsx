@@ -32,45 +32,43 @@ export default function Onboarding() {
   const cooldown = useCriteriaCooldown(profileId);
 
   useEffect(() => {
+    // TEMP: auth redirects disabled for design work
     const checkAuth = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/connexion");
-        return;
-      }
+      // if (!session) { navigate("/connexion"); return; }
 
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("id, onboarding_step")
-        .eq("user_id", session.user.id)
-        .maybeSingle();
+      if (session) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id, onboarding_step")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
 
-      if (profile) {
-        setProfileId(profile.id);
-        const completed = profile.onboarding_step === "completed";
-        setIsOnboardingCompleted(completed);
+        if (profile) {
+          setProfileId(profile.id);
+          const completed = profile.onboarding_step === "completed";
+          setIsOnboardingCompleted(completed);
 
-        const requestedStep = searchParams.get("step");
-        const validSteps = ["welcome", "quiz", "media_upload", "profile", "personality", "personality-results"];
+          const requestedStep = searchParams.get("step");
+          const validSteps = ["welcome", "quiz", "media_upload", "profile", "personality", "personality-results"];
 
-        if (requestedStep && validSteps.includes(requestedStep)) {
-          if (completed) setIsReturningUser(true);
-          setStep(requestedStep as OnboardingStep);
-        } else if (completed) {
-          navigate("/dashboard");
-          return;
-        } else {
-          setStep(profile.onboarding_step as OnboardingStep);
+          if (requestedStep && validSteps.includes(requestedStep)) {
+            if (completed) setIsReturningUser(true);
+            setStep(requestedStep as OnboardingStep);
+          } else if (!completed) {
+            setStep(profile.onboarding_step as OnboardingStep);
+          }
+          // else { navigate("/dashboard"); return; }
         }
       } else {
-        const { data: newProfile } = await supabase
-          .from("profiles")
-          .insert({ user_id: session.user.id, onboarding_step: "welcome" })
-          .select()
-          .single();
-        if (newProfile) setProfileId(newProfile.id);
+        // No session: allow design preview, default to welcome step
+        const requestedStep = searchParams.get("step");
+        const validSteps = ["welcome", "quiz", "media_upload", "profile", "personality", "personality-results"];
+        if (requestedStep && validSteps.includes(requestedStep)) {
+          setStep(requestedStep as OnboardingStep);
+        }
       }
       setLoading(false);
     };
