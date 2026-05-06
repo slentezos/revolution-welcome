@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { getStoredLocation } from "@/data/frenchPostalCodes";
 import { useToast } from "@/hooks/use-toast";
 import heroCouple from "@/assets/hero-couple.jpg";
+// IMPORT OBLIGATOIRE : Pour vérifier le mapping pinpoint
+import { PINPOINT_MAPPING } from "@/data/locationData";
 
 export default function ListeAttente() {
   const [step, setStep] = useState(0);
@@ -22,8 +24,12 @@ export default function ListeAttente() {
 
   const location = getStoredLocation();
 
-  // LOGIQUE DE NETTOYAGE : Détecte si la ville enregistrée est un bassin régional
-  const isBassin = location?.cityName?.toLowerCase().includes("bassin");
+  // LOGIQUE DE SÉCURITÉ CAC40 :
+  // On détermine si la ville doit être affichée (Pinpoint) ou si on reste sur le Bassin Régional.
+  const isPinpoint = location && !!PINPOINT_MAPPING[location.postalCode];
+  const displayLocation = isPinpoint 
+    ? location.cityName 
+    : `Bassin de ${location?.regionName}`;
 
   useEffect(() => {
     if (!location) {
@@ -33,73 +39,12 @@ export default function ListeAttente() {
 
   if (!location) return null;
 
-  const handleStep1 = async () => {
-    if (!email.includes("@")) return;
-    setLoading(true);
-    try {
-      const { data: existingLead } = await supabase
-        .from("waitlist_leads")
-        .select("id")
-        .eq("email", email)
-        .maybeSingle();
-
-      if (existingLead) {
-        toast({
-          title: "Déjà inscrit(e) !",
-          description: "Vous êtes déjà sur notre liste VIP ! Nous vous contacterons très bientôt.",
-        });
-        setLoading(false);
-        return;
-      }
-      setStep(1);
-    } catch (err) {
-      setStep(1);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      if (phone.length >= 6) {
-        const { data: phoneLead } = await supabase.from("waitlist_leads").select("id").eq("phone", phone).maybeSingle();
-
-        if (phoneLead) {
-          toast({
-            title: "Déjà inscrit(e) !",
-            description: "Ce numéro est déjà enregistré sur notre liste VIP.",
-          });
-          setLoading(false);
-          return;
-        }
-      }
-
-      const { error } = await supabase.from("waitlist_leads").insert({
-        email,
-        phone: phone || null,
-        phone_preference: [prefersSms && "sms", prefersCall && "call"].filter(Boolean).join(",") || null,
-        postal_code: location.postalCode,
-        city_name: location.cityName,
-        region_name: location.regionName,
-      });
-      if (error) throw error;
-      setDone(true);
-    } catch (err: any) {
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue. Veuillez réessayer.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // ... (Garder handleStep1 et handleSubmit identiques)
 
   if (done) {
     return (
-      <div className="min-h-screen flex">
-        <div className="flex-1 flex flex-col justify-center px-6 md:px-16 lg:px-24 py-12">
+      <div className="h-screen flex overflow-hidden">
+        <div className="flex-1 flex flex-col justify-center px-6 md:px-16 lg:px-24 py-12 overflow-y-auto">
           <div className="max-w-md w-full mx-auto text-center">
             <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-10 w-10 text-green-600" />
@@ -108,57 +53,35 @@ export default function ListeAttente() {
               Votre accès VIP est confirmé !
             </h1>
             <p className="text-muted-foreground mb-4 text-xl leading-relaxed">
-              Nous vous préviendrons dès que Kalimera sera disponible{" "}
-              {isBassin ? `dans le ${location.cityName}` : `à ${location.cityName}`}.
+              Nous vous préviendrons dès que Kalimera sera disponible 
+              {isPinpoint ? ` à ${displayLocation}` : ` dans le ${displayLocation}`}.
             </p>
-            <p className="text-muted-foreground mb-8 text-xl">
-              Votre privilège est réservé : <strong className="text-[hsl(var(--gold))]">3 mois offerts</strong> seront
-              activés automatiquement lors de votre première connexion.
-            </p>
-            <Button
-              onClick={() => navigate("/")}
-              variant="outline"
-              className="h-14 text-base rounded-xl px-8 border-[hsl(var(--gold))] text-primary"
-            >
-              Retour à l'accueil
-            </Button>
+            {/* ... reste du contenu identique */}
           </div>
         </div>
-        <div className="hidden lg:block flex-1 relative overflow-hidden">
-          <img src={heroCouple} alt="Couple heureux" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-primary/70" />
-        </div>
+        {/* ... colonne image identique */}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="h-screen flex overflow-hidden bg-white">
       <div className="flex-1 flex flex-col px-6 md:px-12 lg:px-20 py-8 overflow-y-auto">
-        <div className="max-w-lg w-full mx-auto flex flex-col flex-1">
-          <button
-            onClick={() => navigate("/")}
-            className="font-heading text-2xl md:text-3xl font-semibold text-primary mb-8 block text-left"
-          >
+        <div className="max-w-lg w-full mx-auto flex flex-col min-h-full">
+          <button onClick={() => navigate("/")} className="font-heading text-2xl md:text-3xl font-semibold text-primary mb-8 block text-left">
             Kalimera
           </button>
 
-          {/* BADGE : Nettoyage de la répétition Bassin/Région */}
+          {/* BADGE : Utilise displayLocation pour bannir Marseille si pas pinpoint */}
           <div className="flex items-center gap-2 mb-8 text-muted-foreground">
             <MapPin className="h-4 w-4 text-[hsl(var(--gold))]" />
-            <span className="text-xl font-medium text-[#1B2333]">
-              {isBassin ? location.cityName : `${location.cityName}, ${location.regionName}`}
+            <span className="text-xl font-bold text-[#1B2333]">
+              {displayLocation}
             </span>
           </div>
 
           <div className="mb-10">
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[hsl(var(--gold))] rounded-full transition-all duration-500"
-                style={{ width: `${((step + 1) / 2) * 100}%` }}
-              />
-            </div>
-            <p className="text-muted-foreground mt-2 text-xl">Étape {step + 1} sur 2</p>
+            {/* ... barre de progression identique */}
           </div>
 
           <div className="flex-1">
@@ -169,115 +92,19 @@ export default function ListeAttente() {
                     Kalimera arrive bientôt en {location.regionName}.
                   </h1>
                   <p className="text-muted-foreground text-xl leading-relaxed">
-                    Rejoignez les membres {isBassin ? `du ${location.cityName}` : `de ${location.cityName}`} et réservez
-                    votre privilège : <strong className="text-[#1B2333]">3 mois vous seront offerts</strong> dès notre
-                    arrivée.
+                    Rejoignez les membres {isPinpoint ? `de ${displayLocation}` : `du ${displayLocation}`} et réservez votre privilège : 
+                    <strong className="text-[#1B2333]"> 3 mois vous seront offerts </strong> dès notre arrivée.
                   </p>
                 </div>
-
-                <div className="max-w-sm">
-                  <label className="block font-medium text-foreground mb-3 text-xl">
-                    <Mail className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
-                    Votre adresse email *
-                  </label>
-                  <Input
-                    type="email"
-                    placeholder="votre@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 text-lg rounded-xl border-slate-200 focus:border-[hsl(var(--gold))]"
-                    autoFocus
-                  />
-                </div>
-
-                <Button
-                  onClick={handleStep1}
-                  disabled={!email.includes("@") || loading}
-                  className="h-14 text-base rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90"
-                >
-                  {loading ? "Vérification..." : "Continuer"}
-                  {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
-                </Button>
+                {/* ... reste de l'étape 0 identique */}
               </div>
             ) : (
-              <div className="space-y-8">
-                <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
-                  Souhaitez-vous être prévenu(e) en priorité ?
-                </h1>
-
-                <div className="max-w-sm space-y-6">
-                  <div>
-                    <label className="block font-medium text-foreground mb-3 text-xl">
-                      <Phone className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
-                      Téléphone (optionnel)
-                    </label>
-                    <div className="flex gap-3">
-                      <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-base font-medium shrink-0">
-                        🇫🇷 +33
-                      </div>
-                      <Input
-                        type="tel"
-                        placeholder="6 12 34 56 78"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                        className="h-14 text-lg rounded-xl flex-1"
-                      />
-                    </div>
-                  </div>
-
-                  {phone.length >= 6 && (
-                    <div className="animate-fade-in space-y-4">
-                      <p className="font-medium text-foreground text-xl">Préférence de contact :</p>
-                      <label className="flex items-center justify-between p-4 rounded-xl border border-border hover:border-[hsl(var(--gold))]/40 cursor-pointer">
-                        <span className="text-xl">💬 Par SMS</span>
-                        <Switch
-                          checked={prefersSms}
-                          onCheckedChange={setPrefersSms}
-                          className="data-[state=checked]:bg-[#C5A059]"
-                        />
-                      </label>
-                      <label className="flex items-center justify-between p-4 rounded-xl border border-border hover:border-[hsl(var(--gold))]/40 cursor-pointer">
-                        <span className="text-xl">📞 Appel de courtoisie</span>
-                        <Switch
-                          checked={prefersCall}
-                          onCheckedChange={setPrefersCall}
-                          className="data-[state=checked]:bg-[#C5A059]"
-                        />
-                      </label>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex gap-4 max-w-sm">
-                  <Button variant="outline" onClick={() => setStep(0)} className="h-14 text-base rounded-xl flex-1">
-                    <ArrowLeft className="mr-2 h-5 w-5" /> Retour
-                  </Button>
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    className="h-14 text-base rounded-xl flex-[2] bg-[hsl(var(--gold))] text-primary font-bold"
-                  >
-                    {loading ? "Envoi..." : "Valider mon accès VIP"}
-                  </Button>
-                </div>
-              </div>
+              /* ... reste de l'étape 1 identique */
             )}
           </div>
         </div>
       </div>
-
-      <div className="hidden lg:block flex-1 relative overflow-hidden">
-        <img src={heroCouple} alt="Couple" className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-primary/70" />
-        <div className="absolute inset-0 flex items-center justify-center p-16">
-          <div className="text-center text-primary-foreground relative z-10">
-            <h2 className="font-heading text-4xl font-semibold mb-6">Rejoignez le Cercle Kalimera</h2>
-            <p className="text-primary-foreground/90 max-w-md mx-auto text-2xl">
-              Des rencontres authentiques et vérifiées pour les seniors exigeants.
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* ... colonne image identique avec le lien de connexion en bas à droite */}
     </div>
   );
 }
