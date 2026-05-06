@@ -16,7 +16,6 @@ export default function Inscription() {
   const storedLocation = getStoredLocation();
   const skipLocation = !!(storedLocation?.postalCode && storedLocation?.cityName);
 
-  // Définition des étapes
   const allSteps = skipLocation ? ["Profil", "Téléphone", "Compte"] : ["Profil", "Localisation", "Téléphone", "Compte"];
 
   const [step, setStep] = useState(0);
@@ -41,11 +40,13 @@ export default function Inscription() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Verrouillage du scroll global au montage
+  // Verrouillage STRICT du viewport
   useEffect(() => {
     document.body.style.overflow = "hidden";
+    document.body.style.height = "100vh";
     return () => {
       document.body.style.overflow = "unset";
+      document.body.style.height = "auto";
     };
   }, []);
 
@@ -82,7 +83,6 @@ export default function Inscription() {
 
     setLoading(true);
     try {
-      // TRIPLE CHECK : On récupère la donnée de localisation gravée dans le localStorage
       const finalZip = localStorage.getItem("user_postal_code") || formData.postalCode;
       const finalCity = localStorage.getItem("user_city_name") || storedLocation?.cityName;
 
@@ -106,7 +106,7 @@ export default function Inscription() {
       if (error) throw error;
 
       if (data.user) {
-        const { error: profileError } = await supabase.from("profiles").insert({
+        await supabase.from("profiles").insert({
           user_id: data.user.id,
           first_name: formData.firstName,
           gender: formData.gender,
@@ -119,19 +119,10 @@ export default function Inscription() {
           phone: formData.phone || null,
           account_status: "pending_review",
         });
-
-        if (profileError) console.error("Profile creation error:", profileError);
         setPendingReview(true);
       }
     } catch (error: any) {
-      toast({
-        title: "Erreur",
-        description:
-          error.message === "User already registered"
-            ? "Un compte existe déjà avec cette adresse email."
-            : "Une erreur est survenue.",
-        variant: "destructive",
-      });
+      toast({ title: "Erreur", description: "Une erreur est survenue.", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -140,41 +131,29 @@ export default function Inscription() {
   if (pendingReview) {
     return (
       <div className="h-screen flex overflow-hidden">
-        <div className="flex-1 flex flex-col justify-center px-6 md:px-16 lg:px-24 py-12 overflow-y-auto">
+        <div className="flex-1 flex flex-col justify-center px-12 lg:px-24 py-12">
           <div className="max-w-md w-full mx-auto text-center">
             <Link to="/" className="font-heading text-3xl font-semibold text-primary mb-8 block">
               Kalimera
             </Link>
-            <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6 border border-[hsl(var(--gold)/0.3)]">
+            <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
               <Clock className="h-10 w-10 text-[hsl(var(--gold))]" />
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
-              Merci, {formData.firstName} !
-            </h1>
-            <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
-              Votre profil est en cours de <strong className="text-foreground">validation manuelle</strong> sous 24h.
+            <h1 className="font-heading text-4xl font-semibold mb-4 text-[#1B2333]">Merci, {formData.firstName} !</h1>
+            <p className="text-muted-foreground text-xl mb-8 leading-relaxed">
+              Votre profil est en cours de validation sous 24h.
             </p>
-            <div className="bg-muted/50 rounded-xl p-6 mb-8 text-left">
-              <div className="flex items-start gap-3">
-                <Shield className="h-6 w-6 text-[hsl(var(--gold))] mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-foreground font-medium text-lg mb-1">Vérification en cours</p>
-                  <p className="text-muted-foreground text-base">
-                    Un email vous sera envoyé à <strong>{formData.email}</strong> dès validation.
-                  </p>
-                </div>
-              </div>
-            </div>
             <Link
               to="/"
-              className="inline-block bg-primary text-primary-foreground px-10 py-4 font-medium transition-all hover:shadow-elevated text-lg"
+              className="inline-block bg-[#1B2333] text-white px-10 py-4 font-bold rounded-xl text-lg transition-all hover:scale-[1.02]"
             >
               Retour à l'accueil
             </Link>
           </div>
         </div>
-        <div className="hidden lg:block flex-1 relative overflow-hidden bg-primary">
-          <img src={heroCouple} alt="Couple" className="absolute inset-0 w-full h-full object-cover opacity-80" />
+        <div className="hidden lg:block flex-1 relative overflow-hidden">
+          <img src={heroCouple} alt="Couple" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-primary/70" />
         </div>
       </div>
     );
@@ -184,87 +163,87 @@ export default function Inscription() {
 
   return (
     <div className="h-screen flex overflow-hidden bg-white">
-      {/* Colonne Gauche - Formulaire (Seule zone scrollable) */}
-      <div className="flex-1 flex flex-col px-6 md:px-12 lg:px-20 py-8 overflow-y-auto">
-        <div className="max-w-lg w-full mx-auto flex flex-col min-h-full">
-          <Link to="/" className="font-heading text-2xl md:text-3xl font-semibold text-primary mb-10 block">
-            Kalimera
-          </Link>
-
-          {/* Barre de progression compacte */}
-          <div className="mb-8">
-            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
-                style={{ width: `${((step + 1) / allSteps.length) * 100}%` }}
-              />
-            </div>
-            <p className="text-muted-foreground mt-3 text-xs font-bold uppercase tracking-[0.2em]">
-              Étape {step + 1} / {allSteps.length} — {currentStepLabel}
-            </p>
-          </div>
-
-          {/* HEADER LOCALISATION : Intégré au flux du formulaire */}
-          <RegistrationLocationHeader />
-
-          {/* Contenu de l'étape */}
-          <div className="flex-1">
-            {currentStepLabel === "Profil" && (
-              <InscriptionStep1Profil formData={formData} setFormData={setFormData} onNext={nextStep} errors={errors} />
-            )}
-            {currentStepLabel === "Localisation" && (
-              <InscriptionStep2Localisation
-                formData={formData}
-                setFormData={setFormData}
-                onNext={nextStep}
-                onBack={prevStep}
-                errors={errors}
-              />
-            )}
-            {currentStepLabel === "Téléphone" && (
-              <InscriptionStep3Telephone
-                formData={formData}
-                setFormData={setFormData}
-                onNext={nextStep}
-                onBack={prevStep}
-                errors={errors}
-              />
-            )}
-            {currentStepLabel === "Compte" && (
-              <InscriptionStep4Compte
-                formData={formData}
-                setFormData={setFormData}
-                onSubmit={handleSubmit}
-                onBack={prevStep}
-                errors={errors}
-                loading={loading}
-              />
-            )}
-          </div>
-
-          <p className="mt-8 text-center text-muted-foreground pb-6 text-lg">
-            Déjà membre ?{" "}
-            <Link to="/connexion" className="text-primary font-bold hover:underline">
-              Connectez-vous
+      {/* LEFT - FORMULAIRE (FIXE, ZÉRO SCROLL) */}
+      <div className="flex-1 flex flex-col px-12 lg:px-20 py-10">
+        <div className="max-w-lg w-full mx-auto flex flex-col h-full justify-between">
+          <div>
+            <Link to="/" className="font-heading text-3xl font-bold text-[#1B2333] mb-12 block">
+              Kalimera
             </Link>
-          </p>
+
+            <div className="mb-10">
+              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary rounded-full transition-all duration-500 ease-out"
+                  style={{ width: `${((step + 1) / allSteps.length) * 100}%` }}
+                />
+              </div>
+              <p className="text-muted-foreground mt-3 text-xs font-bold uppercase tracking-[0.2em]">
+                Étape {step + 1} sur {allSteps.length} — {currentStepLabel}
+              </p>
+            </div>
+
+            <RegistrationLocationHeader />
+
+            <div className="mt-8">
+              {currentStepLabel === "Profil" && (
+                <InscriptionStep1Profil
+                  formData={formData}
+                  setFormData={setFormData}
+                  onNext={nextStep}
+                  errors={errors}
+                />
+              )}
+              {currentStepLabel === "Localisation" && (
+                <InscriptionStep2Localisation
+                  formData={formData}
+                  setFormData={setFormData}
+                  onNext={nextStep}
+                  onBack={prevStep}
+                  errors={errors}
+                />
+              )}
+              {currentStepLabel === "Téléphone" && (
+                <InscriptionStep3Telephone
+                  formData={formData}
+                  setFormData={setFormData}
+                  onNext={nextStep}
+                  onBack={prevStep}
+                  errors={errors}
+                />
+              )}
+              {currentStepLabel === "Compte" && (
+                <InscriptionStep4Compte
+                  formData={formData}
+                  setFormData={setFormData}
+                  onSubmit={handleSubmit}
+                  onBack={prevStep}
+                  errors={errors}
+                  loading={loading}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Footer removed from here */}
         </div>
       </div>
 
-      {/* Colonne Droite - Image (Fixe) */}
+      {/* RIGHT - IMAGE + MARKETING + CONNECTEZ-VOUS */}
       <div className="hidden lg:block flex-1 relative overflow-hidden bg-[#1B2333]">
         <img
           src={heroCouple}
           alt="Couple Kalimera"
           className="absolute inset-0 w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 flex items-center justify-center p-16">
-          <div className="text-center text-primary-foreground relative z-10">
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-16 text-center text-primary-foreground">
+          <div className="max-w-md">
             <h2 className="font-heading font-semibold mb-6 text-5xl">75% d'affinités réciproques</h2>
-            <p className="text-primary-foreground/90 max-w-md mx-auto mb-10 text-2xl leading-relaxed">
+            <p className="text-primary-foreground/90 mb-12 text-2xl leading-relaxed">
               Notre algorithme analyse 200 critères pour garantir votre compatibilité.
             </p>
-            <div className="flex justify-center gap-12">
+
+            <div className="flex justify-center gap-12 mb-16">
               <div>
                 <div className="text-5xl font-heading font-bold text-[hsl(var(--gold))] mb-1">40+</div>
                 <div className="text-primary-foreground/60 text-sm uppercase tracking-widest font-bold">Rubriques</div>
@@ -273,6 +252,17 @@ export default function Inscription() {
                 <div className="text-5xl font-heading font-bold text-[hsl(var(--gold))] mb-1">300+</div>
                 <div className="text-primary-foreground/60 text-sm uppercase tracking-widest font-bold">Critères</div>
               </div>
+            </div>
+
+            {/* POSITIONNEMENT FINAL DU LIEN DE CONNEXION */}
+            <div className="pt-8 border-t border-white/10 animate-in fade-in zoom-in-95 duration-700">
+              <p className="text-white/60 text-lg mb-2">Déjà membre de notre club ?</p>
+              <Link
+                to="/connexion"
+                className="inline-block px-10 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white font-bold text-xl hover:bg-white/20 transition-all active:scale-[0.98]"
+              >
+                Se connecter
+              </Link>
             </div>
           </div>
         </div>
