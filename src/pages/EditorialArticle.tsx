@@ -30,7 +30,7 @@ export default function EditorialArticle() {
           
         </div>
         <div className="flex flex-col justify-center p-8 md:p-12 lg:p-20 bg-secondary">
-          <span className="tracking-[0.3em] uppercase text-muted-foreground mb-6 text-xl">
+          <span className="tracking-[0.3em] uppercase text-muted-foreground mb-6 text-2xl">
             {article.category}
           </span>
           <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl text-foreground mb-6 leading-tight">

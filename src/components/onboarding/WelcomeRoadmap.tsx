@@ -68,7 +68,7 @@ function PricingModal({
         ) : (
           <div className="flex flex-col flex-1 animate-in slide-in-from-bottom-4 duration-500">
             <div className="text-center px-8 pt-12 pb-8 border-b border-border/60">
-              <span className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-xl">
+              <span className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-2xl">
                 Votre accueil
               </span>
               <h2 className="font-heading text-4xl sm:text-5xl text-foreground mt-4 leading-tight">
