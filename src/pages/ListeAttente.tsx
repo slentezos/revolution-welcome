@@ -155,7 +155,7 @@ export default function ListeAttente() {
                 style={{ width: `${((step + 1) / 2) * 100}%` }}
               />
             </div>
-            <p className="text-muted-foreground mt-2 text-xl">Étape {step + 1} sur 2</p>
+            <p className="text-muted-foreground mt-2 text-2xl">Étape {step + 1} sur 2</p>
           </div>
 
           <div className="flex-1">
