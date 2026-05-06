@@ -4,6 +4,7 @@ import { MapPin, Lock, X, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { lookupPostalCode, saveLocation, type LocationInfo } from "@/data/frenchPostalCodes";
+import { PINPOINT_MAPPING } from "@/data/locationData";
 
 interface LocationCheckModalProps {
   open: boolean;
