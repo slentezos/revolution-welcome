@@ -230,7 +230,7 @@ export default function ProfileSubscriptionTab({
               <h2 className="font-heading text-foreground text-3xl md:text-4xl leading-tight">
                 Prenez le temps de souffler.
               </h2>
-              <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto">
+              <p className="text-muted-foreground text-lg md:text-2xl max-w-md mx-auto">
                 Mettez votre compte en veille pendant 1 mois. Voici comment cela fonctionne :
               </p>
             </div>
@@ -303,7 +303,7 @@ export default function ProfileSubscriptionTab({
                 <Sparkles className="h-8 w-8 text-[hsl(var(--gold))]" />
               </div>
               <h2 className="font-heading text-foreground text-3xl md:text-4xl leading-tight">Changer d'offre</h2>
-              <p className="text-muted-foreground text-lg md:text-xl max-w-md mx-auto">
+              <p className="text-muted-foreground text-lg md:text-2xl max-w-md mx-auto">
                 Choisissez la formule qui vous correspond le mieux.
               </p>
             </div>
