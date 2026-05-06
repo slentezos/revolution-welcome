@@ -1,12 +1,10 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { ShieldCheck, Edit3, Send, Check, X } from "lucide-react";
+import { ShieldCheck, Save, Phone } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import DateInput from "@/components/profile/DateInput";
 import profileInfoImg from "@/assets/profile-info.jpg";
 import LocationsSection, { type ProfileLocationData } from "@/components/profile/LocationsSection";
 
@@ -17,6 +15,7 @@ interface ProfileInfoTabProps {
     birth_date: string;
     gender: string;
     looking_for: string;
+    phone: string;
   };
   setFormData: (data: any) => void;
   userEmail: string;
@@ -27,43 +26,69 @@ interface ProfileInfoTabProps {
   onProfileUpdated: (next: ProfileLocationData) => void;
 }
 
-const MODIFIABLE_FIELDS = [
-  { id: "first_name", label: "Prénom" },
-  { id: "last_name", label: "Nom" },
-  { id: "birth_date", label: "Date de naissance" },
-  { id: "email", label: "Adresse Email" },
+const months = [
+  { value: "01", label: "Janvier" },
+  { value: "02", label: "Février" },
+  { value: "03", label: "Mars" },
+  { value: "04", label: "Avril" },
+  { value: "05", label: "Mai" },
+  { value: "06", label: "Juin" },
+  { value: "07", label: "Juillet" },
+  { value: "08", label: "Août" },
+  { value: "09", label: "Septembre" },
+  { value: "10", label: "Octobre" },
+  { value: "11", label: "Novembre" },
+  { value: "12", label: "Décembre" },
 ];
 
-export default function ProfileInfoTab({ formData, userEmail, profile, onProfileUpdated }: ProfileInfoTabProps) {
-  const [modModalOpen, setModModalOpen] = useState(false);
-  const [selectedFields, setSelectedFields] = useState<string[]>([]);
-  const [modMessage, setModMessage] = useState("");
-  const [sending, setSending] = useState(false);
+const interactiveClasses =
+  "hover:border-[hsl(var(--gold))] focus:border-[hsl(var(--gold))] focus:ring-0 focus:ring-offset-0 transition-colors duration-300";
 
-  const toggleField = (id: string) => {
-    setSelectedFields((prev) => (prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]));
+export default function ProfileInfoTab({
+  formData,
+  setFormData,
+  saving,
+  onSave,
+  profile,
+  onProfileUpdated,
+}: ProfileInfoTabProps) {
+  // Decompose birth_date "YYYY-MM-DD"
+  const [birthYear, birthMonth, birthDay] = (formData.birth_date || "--").split("-");
+
+  const update = (field: string, value: string) => {
+    setFormData((prev: any) => ({ ...prev, [field]: value }));
   };
 
-  const handleSendRequest = () => {
-    if (selectedFields.length === 0 && !modMessage.trim()) {
-      toast.error("Veuillez sélectionner au moins un champ ou écrire un message.");
-      return;
-    }
+  const updateBirth = (part: "y" | "m" | "d", value: string) => {
+    const y = part === "y" ? value : birthYear || "0000";
+    const m = part === "m" ? value : birthMonth || "00";
+    const d = part === "d" ? value : birthDay || "00";
+    setFormData((prev: any) => ({ ...prev, birth_date: `${y}-${m}-${d}` }));
+  };
 
-    setSending(true);
-    // Simulation d'envoi API
-    setTimeout(() => {
-      setSending(false);
-      setModModalOpen(false);
-      setSelectedFields([]);
-      setModMessage("");
-      toast.success("Votre demande a été transmise à notre équipe. Elle sera traitée sous 24h.");
-    }, 1200);
+  const years = useMemo(() => {
+    const arr = [];
+    for (let y = 1940; y <= 1966; y++) arr.push(y);
+    return arr.reverse();
+  }, []);
+
+  const days = useMemo(() => {
+    const month = parseInt(birthMonth) || 1;
+    const year = parseInt(birthYear) || 1960;
+    const daysInMonth = new Date(year, month, 0).getDate();
+    return Array.from({ length: daysInMonth }, (_, i) => String(i + 1).padStart(2, "0"));
+  }, [birthMonth, birthYear]);
+
+  const formatPhone = (phone: string) => phone.replace(/\D/g, "").slice(0, 10);
+
+  const handleSave = () => {
+    onSave();
+    toast.success("Vos modifications ont été enregistrées.");
   };
 
   return (
     <div>
-      {/* Hero split */}
+      {/* Hero split – kept as requested */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-0">
         <div className="relative overflow-hidden aspect-[4/3] lg:aspect-auto lg:min-h-[60vh]">
           <img decoding="async" src={profileInfoImg} alt="Votre profil" className="w-full h-full object-cover" />
@@ -81,135 +106,168 @@ export default function ProfileInfoTab({ formData, userEmail, profile, onProfile
         </div>
       </section>
 
-      {/* Form section */}
-      <section className="bg-slate-50 py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-6 md:px-12">
-          <div className="bg-white p-8 md:p-12 rounded-[32px] shadow-sm border border-slate-100 mb-12">
-            <div className="flex items-center gap-3 mb-10 pb-6 border-b border-slate-100">
+      {/* Editable identity form – matches onboarding UI */}
+      <section className="bg-secondary/40 py-16 md:py-24">
+        <div className="px-6 md:px-16 lg:px-20 xl:px-28 max-w-6xl mx-auto">
+          <div className="mb-10">
+            <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-3 block text-lg">
+              Identité Certifiée
+            </span>
+            <h3 className="font-heading text-3xl md:text-4xl text-foreground mb-3 leading-tight flex items-center gap-3">
               <ShieldCheck className="h-8 w-8 text-[hsl(var(--gold))]" />
-              <h3 className="text-2xl font-bold text-[#1B2333]">Identité Certifiée</h3>
+              Vos informations
+            </h3>
+            <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-6" />
+            <p className="text-muted-foreground leading-relaxed text-xl max-w-2xl">
+              Mettez à jour vos informations personnelles. Toute modification est sécurisée et tracée.
+            </p>
+          </div>
+
+          <div className="bg-background border-2 border-border rounded-lg p-8 md:p-12 shadow-[var(--shadow-card)] space-y-8">
+            {/* PRÉNOM */}
+            <div>
+              <label className="block font-medium text-[#1B2333] mb-3 text-xl">Prénom *</label>
+              <Input
+                placeholder="Votre prénom"
+                className={cn("h-14 text-xl rounded-xl border-[#E5E0D8]", interactiveClasses)}
+                value={formData.first_name}
+                onChange={(e) => update("first_name", e.target.value)}
+                autoComplete="given-name"
+              />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 mb-12">
-              <div className="space-y-3">
-                <Label className="font-semibold text-muted-foreground text-lg uppercase tracking-wider">Prénom</Label>
-                <div className="h-14 px-4 flex items-center text-2xl font-medium text-[#1B2333] bg-slate-50/50 rounded-xl border border-slate-100">
-                  {formData.first_name}
-                </div>
-              </div>
+            {/* DATE DE NAISSANCE */}
+            <div>
+              <label className="block font-medium text-[#1B2333] mb-3 text-xl">Date de naissance *</label>
+              <div className="grid grid-cols-3 gap-3">
+                <Select value={birthDay} onValueChange={(v) => updateBirth("d", v)}>
+                  <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
+                    <SelectValue placeholder="Jour" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[300px]">
+                    {days.map((d) => (
+                      <SelectItem key={d} value={d} className="text-xl py-3 cursor-pointer focus:bg-slate-50">
+                        {d}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-              <div className="space-y-3">
-                <Label className="font-semibold text-muted-foreground text-lg uppercase tracking-wider">Nom</Label>
-                <div className="h-14 px-4 flex items-center text-2xl font-medium text-[#1B2333] bg-slate-50/50 rounded-xl border border-slate-100">
-                  {formData.last_name || "—"}
-                </div>
-              </div>
+                <Select value={birthMonth} onValueChange={(v) => updateBirth("m", v)}>
+                  <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
+                    <SelectValue placeholder="Mois" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[300px]">
+                    {months.map((m) => (
+                      <SelectItem key={m.value} value={m.value} className="text-xl py-3 cursor-pointer focus:bg-slate-50">
+                        {m.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
-              <div className="space-y-3">
-                <Label className="font-semibold text-muted-foreground text-lg uppercase tracking-wider">
-                  Date de naissance
-                </Label>
-                <div className="pointer-events-none opacity-90">
-                  <DateInput value={formData.birth_date} onChange={() => {}} disabled={true} />
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <Label className="font-semibold text-muted-foreground text-lg uppercase tracking-wider">
-                  Adresse Email
-                </Label>
-                <div className="h-14 px-4 flex items-center text-xl font-medium text-[#1B2333] bg-slate-50/50 rounded-xl border border-slate-100">
-                  {userEmail}
-                </div>
+                <Select value={birthYear} onValueChange={(v) => updateBirth("y", v)}>
+                  <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
+                    <SelectValue placeholder="Année" />
+                  </SelectTrigger>
+                  <SelectContent className="max-h-[300px]">
+                    {years.map((y) => (
+                      <SelectItem key={y} value={String(y)} className="text-xl py-3 cursor-pointer focus:bg-slate-50">
+                        {y}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            {/* ACTION UNIQUE DE MODIFICATION */}
-            <div className="flex flex-col sm:flex-row items-center justify-between p-6 bg-[#1B2333]/5 rounded-2xl border border-[#1B2333]/10">
-              <div className="mb-4 sm:mb-0">
-                <p className="text-[#1B2333] font-semibold text-xl mb-1">Une correction à apporter ?</p>
-                <p className="text-muted-foreground text-lg">Modifiez vos données de manière sécurisée.</p>
+            {/* GENRE */}
+            <div>
+              <label className="block font-medium text-[#1B2333] mb-3 text-xl">Je suis *</label>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { value: "homme", label: "Un homme" },
+                  { value: "femme", label: "Une femme" },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => update("gender", opt.value)}
+                    className={cn(
+                      "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
+                      formData.gender === opt.value
+                        ? "border-[#1B2333] bg-[#1B2333] text-white"
+                        : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
+                    )}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
               </div>
-              <Button
-                onClick={() => setModModalOpen(true)}
-                className="w-full sm:w-auto h-14 bg-white text-[#1B2333] border-2 border-[#1B2333]/10 hover:border-[hsl(var(--gold))] hover:bg-white text-lg font-bold rounded-xl shadow-sm transition-all"
-              >
-                <Edit3 className="h-5 w-5 mr-2" />
-                Demander une modification
-              </Button>
             </div>
+
+            {/* RECHERCHE */}
+            <div>
+              <label className="block font-medium text-[#1B2333] mb-3 text-xl">Je recherche *</label>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { value: "Un compagnon", label: "Un compagnon" },
+                  { value: "Une compagne", label: "Une compagne" },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => update("looking_for", opt.value)}
+                    className={cn(
+                      "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
+                      formData.looking_for === opt.value
+                        ? "border-[#1B2333] bg-[#1B2333] text-white"
+                        : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
+                    )}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* TÉLÉPHONE */}
+            <div>
+              <label className="block font-medium text-[#1B2333] mb-3 text-xl">
+                <Phone className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
+                Numéro de téléphone *
+              </label>
+              <div className="flex gap-3">
+                <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-lg font-medium text-foreground shrink-0">
+                  🇫🇷 +33
+                </div>
+                <Input
+                  placeholder="6 12 34 56 78"
+                  className={cn("h-14 text-xl rounded-xl flex-1 border-[#E5E0D8]", interactiveClasses)}
+                  value={formData.phone}
+                  onChange={(e) => update("phone", formatPhone(e.target.value))}
+                  inputMode="tel"
+                  autoComplete="tel-national"
+                />
+              </div>
+            </div>
+
+            {/* SAVE */}
+            <Button
+              type="button"
+              onClick={handleSave}
+              disabled={saving}
+              className="w-full min-h-[64px] bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl rounded-xl mt-4 shadow-lg transition-all active:scale-[0.98]"
+            >
+              <Save className="mr-2 h-5 w-5" />
+              {saving ? "Enregistrement..." : "Enregistrer les modifications"}
+            </Button>
           </div>
         </div>
       </section>
 
+      {/* Locations – seamless continuation */}
       {profile && <LocationsSection profile={profile} onProfileUpdated={onProfileUpdated} />}
-
-      {/* MODALE DE DEMANDE DE MODIFICATION */}
-      <Dialog open={modModalOpen} onOpenChange={setModModalOpen}>
-        <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white border-0 rounded-[28px] shadow-2xl">
-          <div className="bg-[#1B2333] px-8 py-6 flex items-center justify-between">
-            <h2 className="font-heading text-2xl font-bold text-white">Demande de modification</h2>
-            <button onClick={() => setModModalOpen(false)} className="text-white/70 hover:text-white transition-colors">
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-
-          <div className="p-8">
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Sélectionnez les informations que vous souhaitez mettre à jour. Notre équipe traitera votre demande
-              rapidement pour garantir la sécurité de votre compte.
-            </p>
-
-            <div className="grid grid-cols-2 gap-4 mb-8">
-              {MODIFIABLE_FIELDS.map((field) => {
-                const isSelected = selectedFields.includes(field.id);
-                return (
-                  <button
-                    key={field.id}
-                    onClick={() => toggleField(field.id)}
-                    className={`h-14 px-4 flex items-center justify-between rounded-xl border-2 transition-all text-lg font-semibold ${
-                      isSelected
-                        ? "border-[#1B2333] bg-[#1B2333] text-white shadow-md"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-[hsl(var(--gold))]"
-                    }`}
-                  >
-                    {field.label}
-                    {isSelected && <Check className="h-5 w-5 text-[hsl(var(--gold))]" />}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="space-y-3 mb-10">
-              <Label className="font-semibold text-[#1B2333] text-xl">Détails de la modification (Optionnel)</Label>
-              <Textarea
-                value={modMessage}
-                onChange={(e) => setModMessage(e.target.value)}
-                placeholder="Ex: Bonjour, suite à une erreur de frappe, mon prénom s'écrit avec un e final..."
-                className="min-h-[120px] text-xl rounded-xl border-2 border-slate-200 focus:border-[hsl(var(--gold))] focus:ring-0 resize-none p-4"
-              />
-            </div>
-
-            <div className="flex justify-end gap-4">
-              <Button
-                variant="ghost"
-                onClick={() => setModModalOpen(false)}
-                className="h-14 px-6 text-lg font-medium text-muted-foreground hover:text-[#1B2333]"
-              >
-                Annuler
-              </Button>
-              <Button
-                onClick={handleSendRequest}
-                disabled={sending}
-                className="h-14 px-8 bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl font-bold rounded-xl shadow-lg transition-all"
-              >
-                {sending ? "Envoi en cours..." : "Transmettre ma demande"}
-                {!sending && <Send className="ml-2 h-5 w-5" />}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
