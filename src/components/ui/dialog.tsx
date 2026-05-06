@@ -43,8 +43,8 @@ const DialogContent = React.forwardRef<
     >
       {children}
       {/* VOTRE CROIX CIRCULAIRE UNIQUE */}
-      <DialogPrimitive.Close className="absolute right-5 top-5 flex h-12 w-12 items-center justify-center rounded-full bg-secondary/80 text-foreground transition-all hover:bg-secondary hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))] disabled:pointer-events-none z-50">
-        <X className="h-5 w-5" />
+      <DialogPrimitive.Close className="absolute right-5 top-5 flex h-14 w-14 items-center justify-center rounded-full bg-secondary/80 text-foreground transition-all hover:bg-secondary hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))] disabled:pointer-events-none z-50">
+        <X className="h-7 w-7" />
         <span className="sr-only">Fermer</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
