@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Lock, ArrowRight, CheckCircle2, BellRing } from "lucide-react";
+import { Lock, ArrowRight, CheckCircle2, BellRing, MapPin } from "lucide-react";
 import { lookupPostalCode, saveLocation, type LocationInfo } from "@/data/frenchPostalCodes";
 
-// Dictionnaire des Villes Phares
+// Dictionnaire des Villes Phares (Bureaux Régionaux / Bassins)
 const DEPARTMENT_TO_CITY: Record<string, string> = {
   "01": "Bourg-en-Bresse",
   "02": "Laon",
@@ -104,18 +104,19 @@ const DEPARTMENT_TO_CITY: Record<string, string> = {
 
 const PINPOINT_DEPARTMENTS = ["75", "77", "78", "90", "91", "92", "93", "94", "95"];
 
-interface PostalCodeInputProps {
+export default function PostalCodeInput({
+  className = "",
+  variant = "hero",
+}: {
   className?: string;
   variant?: "hero" | "section";
-}
-
-export default function PostalCodeInput({ className = "", variant = "hero" }: PostalCodeInputProps) {
+}) {
   const [postalCode, setPostalCode] = useState("");
   const [locationInfo, setLocationInfo] = useState<LocationInfo | null>(null);
   const navigate = useNavigate();
 
-  // Traitement instantané
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Optimisation de la réactivité : Traitement immédiat à la saisie
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, "").slice(0, 5);
     setPostalCode(val);
 
@@ -125,13 +126,14 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
     } else {
       setLocationInfo(null);
     }
-  };
+  }, []);
 
   const handleSubmit = () => {
     if (!locationInfo) return;
     saveLocation(locationInfo);
-    const dept = postalCode.slice(0, 2);
 
+    const dept = postalCode.slice(0, 2);
+    // Redirection vers inscription si IDF, sinon liste d'attente avec tracking data
     if (locationInfo.isIDF) {
       navigate("/inscription");
     } else {
@@ -141,20 +143,22 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
 
   const isHero = variant === "hero";
   const deptPrefix = postalCode.slice(0, 2);
+  const isPinpoint = PINPOINT_DEPARTMENTS.includes(deptPrefix);
 
   return (
     <div className={className}>
       <div
-        className={`flex items-center gap-0 rounded-xl overflow-hidden shadow-2xl ${isHero ? "max-w-lg mx-auto" : "max-w-md"}`}
+        className={`flex items-center gap-0 rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10 ${isHero ? "max-w-lg mx-auto" : "max-w-md"}`}
       >
         <input
           type="text"
           inputMode="numeric"
           maxLength={5}
-          placeholder="Code postal"
+          autoFocus
+          placeholder="Entrer votre code postal"
           value={postalCode}
           onChange={handleChange}
-          className="flex-1 h-16 px-6 outline-none tracking-[0.2em] font-bold text-primary-foreground text-2xl bg-[#1B2333] border-none focus:ring-0"
+          className="flex-1 h-16 px-6 outline-none tracking-[0.2em] font-bold text-primary-foreground text-2xl bg-[#1B2333] border-none focus:bg-[#1f293b] transition-colors"
         />
         <button
           onClick={handleSubmit}
@@ -167,27 +171,32 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
       </div>
 
       {locationInfo && (
-        <div className="mt-4 p-5 bg-[#1B2333]/60 border border-[hsl(var(--gold))/30] rounded-2xl text-left backdrop-blur-sm animate-in fade-in slide-in-from-top-2">
+        <div className="mt-4 p-5 bg-[#1B2333]/60 border border-[hsl(var(--gold))/30] rounded-2xl text-left backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="flex items-center gap-3 mb-3">
-            <CheckCircle2 className="h-6 w-6 text-[hsl(var(--gold))]" />
+            {isPinpoint ? (
+              <CheckCircle2 className="h-6 w-6 text-[hsl(var(--gold))]" />
+            ) : (
+              <MapPin className="h-6 w-6 text-[hsl(var(--gold))]" />
+            )}
             <p className="font-bold text-xl text-white">
-              Localisation : {locationInfo.cityName} ({postalCode})
+              {isPinpoint ? "Localisation précise :" : "Secteur identifié :"} {locationInfo.cityName}
             </p>
           </div>
 
           <div className="space-y-4">
-            <p className="text-primary-foreground/80 leading-relaxed text-xl">
-              {PINPOINT_DEPARTMENTS.includes(deptPrefix)
-                ? `Zone à haute densité identifiée (${locationInfo.regionName}). Emplacement optimisé pour la proximité.`
+            <p className="text-base text-primary-foreground/80 leading-relaxed font-medium">
+              {isPinpoint
+                ? `Zone à haute densité validée. Votre secteur (${locationInfo.regionName}) est actuellement ouvert.`
                 : `Pour vous garantir un volume critique de profils qualifiés, vous êtes rattaché(e) au bassin : ${DEPARTMENT_TO_CITY[deptPrefix] || locationInfo.regionName} & alentours.`}
             </p>
 
             {!locationInfo.isIDF && (
-              <div className="flex items-start gap-3 p-3 bg-[hsl(var(--gold))]/10 rounded-xl border border-[hsl(var(--gold))]/20">
+              <div className="flex items-start gap-3 p-3 bg-[hsl(var(--gold))]/10 rounded-xl border border-[hsl(var(--gold))]/20 shadow-inner">
                 <BellRing className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
                 <p className="text-sm text-white/90 leading-tight">
-                  <strong>Membre Fondateur :</strong> Votre secteur est en cours d'ouverture. Nous vous contacterons dès
-                  que la masse critique de profils sera atteinte dans le {deptPrefix}.
+                  <strong className="text-[hsl(var(--gold-light))]">Membre Fondateur :</strong> En validant, vous
+                  devenez prioritaire. Nous vous contacterons dès que la masse critique de profils sera atteinte dans le{" "}
+                  {deptPrefix}.
                 </p>
               </div>
             )}
@@ -199,7 +208,7 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
         className={`text-sm mt-5 flex items-center gap-2 font-medium ${isHero ? "text-muted-foreground/60 justify-center" : "text-primary-foreground/40"}`}
       >
         <Lock className="h-4 w-4" />
-        Saisie sécurisée — Standard de confidentialité élevé.
+        Standard de sécurité SSL — Confidentialité des données garantie.
       </p>
     </div>
   );
