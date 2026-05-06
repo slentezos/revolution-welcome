@@ -161,8 +161,8 @@ export default function ProfileSubscriptionTab({
                         <div className="flex items-start gap-4 flex-1">
                           <Sparkles className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-foreground font-semibold text-xl leading-snug">{opt.title}</p>
-                            <p className="text-muted-foreground text-lg mt-1 leading-relaxed">{opt.desc}</p>
+                            <p className="text-foreground font-semibold text-2xl leading-snug">{opt.title}</p>
+                            <p className="text-muted-foreground leading-relaxed text-xl mt-1">{opt.desc}</p>
                           </div>
                         </div>
                         <span className="font-heading text-2xl text-foreground shrink-0">{opt.price}</span>
