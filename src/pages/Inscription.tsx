@@ -10,6 +10,7 @@ import InscriptionStep1Profil from "@/components/inscription/InscriptionStep1Pro
 import InscriptionStep2Localisation from "@/components/inscription/InscriptionStep2Localisation";
 import InscriptionStep3Telephone from "@/components/inscription/InscriptionStep3Telephone";
 import InscriptionStep4Compte from "@/components/inscription/InscriptionStep4Compte";
+import RegistrationLocationHeader from "@/components/RegistrationLocationHeader";
 
 export default function Inscription() {
   const storedLocation = getStoredLocation();
