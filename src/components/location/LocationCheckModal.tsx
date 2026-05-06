@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { lookupPostalCode, type LocationInfo } from "@/data/frenchPostalCodes";
 import { handleLocationTransition } from "@/lib/locationTransition";
+// IMPORT IMPÉRATIF : La source de vérité pour les zones prioritaires
+import { PINPOINT_MAPPING } from "@/data/locationData";
 
 interface LocationCheckModalProps {
   open: boolean;
@@ -25,7 +27,13 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
     if (cleaned.length === 5) {
       const info = lookupPostalCode(cleaned);
       if (info) {
-        setLocationInfo(info);
+        // OVERRIDE LOGIC : On vérifie si la ville est dans notre mapping prioritaire
+        const preciseCityName = PINPOINT_MAPPING[cleaned] || info.cityName;
+
+        setLocationInfo({
+          ...info,
+          cityName: preciseCityName, // On force le nom précis (ex: Bagneux)
+        });
       } else {
         setLocationInfo(null);
         setError("Code postal non reconnu. Veuillez vérifier.");
@@ -36,6 +44,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
   };
 
   const handleSubmit = () => {
+    // On passe le locationInfo mis à jour pour que la transition sauvegarde la bonne ville
     if (!handleLocationTransition(postalCode, navigate, locationInfo)) return;
     onClose();
   };
@@ -52,21 +61,17 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
           <X className="h-5 w-5 text-[#1B2333]" />
         </button>
 
-        {/* Centered icon */}
         <div className="text-center mb-6">
           <div className="mx-auto w-12 h-12 rounded-full bg-[hsl(var(--gold))]/10 flex items-center justify-center mb-4 text-[#1B2333]">
             <MapPin className="h-6 w-6" />
           </div>
-          <h2 className="font-heading font-bold text-[#1B2333] mb-3 text-4xl">
-            Bienvenue chez Kalimera.
-          </h2>
+          <h2 className="font-heading font-bold text-[#1B2333] mb-3 text-4xl">Bienvenue chez Kalimera.</h2>
           <p className="text-center text-[hsl(var(--gold))] font-bold tracking-widest uppercase md:text-lg mb-10 text-xl">
             Pour vous garantir des rencontres de qualité près de chez vous, vérifions d'abord que notre Cercle est
             ouvert dans votre région.
           </p>
         </div>
 
-        {/* Postal code input */}
         <div className="max-w-xs mx-auto mb-6">
           <Input
             placeholder="Entrer votre code postal"
@@ -80,7 +85,8 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
 
           {locationInfo && (
             <div className="mt-3 text-center animate-fade-in">
-              <p className="text-[#1B2333] font-medium text-base">{locationInfo.cityName}</p>
+              {/* AFFICHAGE : Utilise maintenant cityName qui a été filtré par le mapping */}
+              <p className="text-[#1B2333] font-bold text-xl">{locationInfo.cityName}</p>
               <p className="text-gray-500 text-sm">{locationInfo.regionName}</p>
             </div>
           )}
@@ -88,17 +94,15 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
           {error && <p className="text-red-600 text-sm mt-2 text-center">{error}</p>}
         </div>
 
-        {/* Helper text */}
-        <p className="text-muted-foreground mb-8 text-xl flex items-center justify-center gap-1.5">
+        <p className="text-muted-foreground mb-8 text-sm flex items-center justify-center gap-1.5 italic">
           <Lock className="h-3.5 w-3.5" />
-          Vérification de la proximité pour garantir des rencontres authentiques.
+          Vérification de proximité pour garantir des rencontres authentiques.
         </p>
 
-        {/* Submit */}
         <Button
           onClick={handleSubmit}
           disabled={!locationInfo}
-          className="w-full h-12 rounded-xl text-white font-medium bg-[#1B2333] hover:bg-[#1B2333]/90"
+          className="w-full h-12 rounded-xl text-white font-medium bg-[#1B2333] hover:bg-[#1B2333]/90 transition-all active:scale-[0.98]"
         >
           Vérifier ma zone
           <ArrowRight className="ml-2 h-5 w-5" />
