@@ -1,177 +1,233 @@
-import { useMemo } from "react";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Clock, Shield } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { getStoredLocation } from "@/data/frenchPostalCodes";
+import heroCouple from "@/assets/hero-couple.jpg";
 
-interface FormData {
-  firstName: string;
-  birthDay: string;
-  birthMonth: string;
-  birthYear: string;
-  gender: string;
-  lookingFor: string;
-}
+import InscriptionStep1Profil from "@/components/inscription/InscriptionStep1Profil";
+import InscriptionStep2Localisation from "@/components/inscription/InscriptionStep2Localisation";
+import InscriptionStep3Telephone from "@/components/inscription/InscriptionStep3Telephone";
+import InscriptionStep4Compte from "@/components/inscription/InscriptionStep4Compte";
+import { RegistrationLocationHeader } from "@/components/RegistrationLocationHeader";
 
-interface Props {
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<any>>;
-  onNext: () => void;
-  errors: Record<string, string>;
-}
+export default function Inscription() {
+  const storedLocation = getStoredLocation();
+  const skipLocation = !!(storedLocation?.postalCode && storedLocation?.cityName);
+  const allSteps = skipLocation ? ["Profil", "Téléphone", "Compte"] : ["Profil", "Localisation", "Téléphone", "Compte"];
 
-const months = [
-  { value: "01", label: "Janvier" },
-  { value: "02", label: "Février" },
-  { value: "03", label: "Mars" },
-  { value: "04", label: "Avril" },
-  { value: "05", label: "Mai" },
-  { value: "06", label: "Juin" },
-  { value: "07", label: "Juillet" },
-  { value: "08", label: "Août" },
-  { value: "09", label: "Septembre" },
-  { value: "10", label: "Octobre" },
-  { value: "11", label: "Novembre" },
-  { value: "12", label: "Décembre" },
-];
+  const [step, setStep] = useState(0);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    birthDay: "",
+    birthMonth: "",
+    birthYear: "",
+    gender: "",
+    lookingFor: "",
+    postalCode: storedLocation?.postalCode || "",
+    phone: "",
+    nationality: "",
+    email: "",
+    password: "",
+    acceptTerms: false,
+  });
 
-export default function InscriptionStep1Profil({ formData, setFormData, onNext, errors }: Props) {
-  const years = useMemo(() => {
-    const arr = [];
-    for (let y = 1940; y <= 1966; y++) arr.push(y);
-    return arr.reverse();
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [pendingReview, setPendingReview] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Lock le body pour éviter le scroll parasite du navigateur
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, []);
 
-  const days = useMemo(() => {
-    const month = parseInt(formData.birthMonth) || 1;
-    const year = parseInt(formData.birthYear) || 1960;
-    const daysInMonth = new Date(year, month, 0).getDate();
-    return Array.from({ length: daysInMonth }, (_, i) => String(i + 1).padStart(2, "0"));
-  }, [formData.birthMonth, formData.birthYear]);
+  const handleSubmit = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const finalZip = localStorage.getItem("user_postal_code") || formData.postalCode;
+      const finalCity = localStorage.getItem("user_city_name") || storedLocation?.cityName;
 
-  const update = (field: string, value: string) => {
-    setFormData((prev: any) => ({ ...prev, [field]: value }));
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/onboarding`,
+          data: {
+            first_name: formData.firstName,
+            nationality: formData.nationality,
+            postal_code: finalZip,
+            gender: formData.gender,
+            looking_for: formData.lookingFor,
+            birth_date: `${formData.birthYear}-${formData.birthMonth}-${formData.birthDay}`,
+            phone: formData.phone,
+          },
+        },
+      });
+
+      if (error) throw error;
+      if (data.user) {
+        await supabase.from("profiles").insert({
+          user_id: data.user.id,
+          first_name: formData.firstName,
+          gender: formData.gender,
+          looking_for: formData.lookingFor,
+          onboarding_step: "media_upload",
+          postal_code: finalZip,
+          city_name: finalCity,
+          region_name: storedLocation?.regionName || null,
+          phone: formData.phone || null,
+          account_status: "pending_review",
+        });
+        setPendingReview(true);
+      }
+    } catch (error: any) {
+      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
+  if (pendingReview) {
+    return (
+      <div className="h-screen flex overflow-hidden bg-white">
+        <div className="flex-1 flex flex-col justify-center px-6 md:px-16 text-center">
+          <Link to="/" className="font-heading text-3xl font-bold text-primary mb-8 block">
+            Kalimera
+          </Link>
+          <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
+            <Clock className="h-10 w-10 text-[hsl(var(--gold))]" />
+          </div>
+          <h1 className="text-3xl font-bold mb-4">Merci, {formData.firstName} !</h1>
+          <p className="text-muted-foreground text-xl mb-8">Votre profil est en cours de validation.</p>
+          <Link to="/" className="bg-primary text-white px-10 py-4 rounded-xl font-bold">
+            Retour à l'accueil
+          </Link>
+        </div>
+        <div className="hidden lg:block flex-1 relative bg-primary">
+          <img src={heroCouple} className="absolute inset-0 w-full h-full object-cover opacity-80" alt="Couple" />
+        </div>
+      </div>
+    );
+  }
+
+  const currentStepLabel = allSteps[step];
+
   return (
-    <div className="space-y-8">
-      <div className="text-center mb-10">
-        <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">Parlez-nous de vous</h1>
-        <p className="text-muted-foreground text-xl">Quelques informations pour mieux vous connaître</p>
+    <div className="h-screen w-full flex overflow-hidden bg-white">
+      {/* GAUCHE : LE FORMULAIRE AVEC SON PROPRE SCROLL */}
+      <div className="flex-1 h-full overflow-y-auto scrollbar-hide">
+        <div className="min-h-full flex flex-col px-6 py-10 md:px-16 lg:px-20">
+          <div className="max-w-lg w-full mx-auto flex-1 flex flex-col">
+            <Link to="/" className="font-heading text-3xl font-bold text-[#1B2333] mb-10 block">
+              Kalimera
+            </Link>
+
+            {/* Progress */}
+            <div className="mb-8">
+              <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-primary transition-all duration-500 ease-out"
+                  style={{ width: `${((step + 1) / allSteps.length) * 100}%` }}
+                />
+              </div>
+              <p className="text-muted-foreground mt-3 text-xs font-bold uppercase tracking-[0.2em]">
+                Étape {step + 1} / {allSteps.length} — {currentStepLabel}
+              </p>
+            </div>
+
+            <RegistrationLocationHeader />
+
+            {/* Step Content : Ici on ne bride pas la hauteur */}
+            <div className="flex-1 mt-6">
+              {currentStepLabel === "Profil" && (
+                <InscriptionStep1Profil
+                  formData={formData}
+                  setFormData={setFormData}
+                  onNext={() => setStep((s) => s + 1)}
+                  errors={errors}
+                />
+              )}
+              {currentStepLabel === "Localisation" && (
+                <InscriptionStep2Localisation
+                  formData={formData}
+                  setFormData={setFormData}
+                  onNext={() => setStep((s) => s + 1)}
+                  onBack={() => setStep((s) => s - 1)}
+                  errors={errors}
+                />
+              )}
+              {currentStepLabel === "Téléphone" && (
+                <InscriptionStep3Telephone
+                  formData={formData}
+                  setFormData={setFormData}
+                  onNext={() => setStep((s) => s + 1)}
+                  onBack={() => setStep((s) => s - 1)}
+                  errors={errors}
+                />
+              )}
+              {currentStepLabel === "Compte" && (
+                <InscriptionStep4Compte
+                  formData={formData}
+                  setFormData={setFormData}
+                  onSubmit={handleSubmit}
+                  onBack={() => setStep((s) => s - 1)}
+                  errors={errors}
+                  loading={loading}
+                />
+              )}
+            </div>
+
+            {/* Sécurité : Un espace en bas pour s'assurer que le bouton n'est jamais collé */}
+            <div className="h-10 w-full flex-shrink-0" />
+          </div>
+        </div>
       </div>
 
-      <div>
-        <label className="block font-medium text-foreground mb-3 text-xl">Prénom *</label>
-        <Input
-          placeholder="Votre prénom"
-          className="h-14 text-xl rounded-xl"
-          value={formData.firstName}
-          onChange={(e) => update("firstName", e.target.value)}
-          autoComplete="given-name"
-          autoFocus
+      {/* DROITE : L'IMAGE FIXE IMMOBILE */}
+      <div className="hidden lg:block lg:flex-1 relative bg-[#1B2333] h-full overflow-hidden">
+        <img
+          src={heroCouple}
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
+          alt="Couple Kalimera"
         />
-        {errors.firstName && <p className="text-destructive text-lg mt-2">{errors.firstName}</p>}
-      </div>
 
-      <div>
-        <label className="block font-medium text-foreground mb-3 text-xl">Date de naissance *</label>
-        <div className="grid grid-cols-3 gap-3">
-          <Select value={formData.birthDay} onValueChange={(v) => update("birthDay", v)}>
-            <SelectTrigger className="h-14 text-xl rounded-xl">
-              <SelectValue placeholder="Jour" />
-            </SelectTrigger>
-            <SelectContent className="max-h-[300px]">
-              {days.map((d) => (
-                <SelectItem key={d} value={d} className="text-xl py-3 cursor-pointer">
-                  {d}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-16 text-center text-white">
+          <div className="max-w-md">
+            <h2 className="text-5xl font-bold mb-6">75% d'affinités réciproques</h2>
+            <p className="text-xl mb-12 opacity-90">
+              Notre algorithme analyse 200 critères pour garantir votre compatibilité.
+            </p>
 
-          <Select value={formData.birthMonth} onValueChange={(v) => update("birthMonth", v)}>
-            <SelectTrigger className="h-14 text-xl rounded-xl">
-              <SelectValue placeholder="Mois" />
-            </SelectTrigger>
-            <SelectContent className="max-h-[300px]">
-              {months.map((m) => (
-                <SelectItem key={m.value} value={m.value} className="text-xl py-3 cursor-pointer">
-                  {m.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <div className="flex justify-center gap-12 mb-16">
+              <div>
+                <p className="text-5xl font-bold text-[hsl(var(--gold))] mb-1">40+</p>
+                <p className="text-xs uppercase tracking-widest font-bold opacity-60">Rubriques</p>
+              </div>
+              <div>
+                <p className="text-5xl font-bold text-[hsl(var(--gold))] mb-1">300+</p>
+                <p className="text-xs uppercase tracking-widest font-bold opacity-60">Critères</p>
+              </div>
+            </div>
 
-          <Select value={formData.birthYear} onValueChange={(v) => update("birthYear", v)}>
-            <SelectTrigger className="h-14 text-xl rounded-xl">
-              <SelectValue placeholder="Année" />
-            </SelectTrigger>
-            <SelectContent className="max-h-[300px]">
-              {years.map((y) => (
-                <SelectItem key={y} value={String(y)} className="text-xl py-3 cursor-pointer">
-                  {y}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        {errors.birthDate && <p className="text-destructive text-lg mt-2">{errors.birthDate}</p>}
-      </div>
-
-      <div className="flex flex-col gap-8">
-        <div>
-          <label className="block font-medium text-foreground mb-3 text-xl">Je suis *</label>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { value: "homme", label: "Un homme" },
-              { value: "femme", label: "Une femme" },
-            ].map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => update("gender", opt.value)}
-                className={`h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300 ${
-                  formData.gender === opt.value
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-background text-foreground hover:border-primary/40"
-                }`}
+            <div className="pt-10 border-t border-white/10">
+              <p className="text-lg mb-6 opacity-70">Déjà membre de notre club ?</p>
+              <Link
+                to="/connexion"
+                className="inline-block px-12 py-4 bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl text-white font-bold text-xl hover:bg-white/20 transition-all"
               >
-                {opt.label}
-              </button>
-            ))}
+                Se connecter
+              </Link>
+            </div>
           </div>
-          {errors.gender && <p className="text-destructive text-lg mt-2">{errors.gender}</p>}
-        </div>
-
-        <div>
-          <label className="block font-medium text-foreground mb-3 text-xl">Je recherche *</label>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { value: "Un compagnon", label: "Un compagnon" },
-              { value: "Une compagne", label: "Une compagne" },
-            ].map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => update("lookingFor", opt.value)}
-                className={`h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300 ${
-                  formData.lookingFor === opt.value
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-background text-foreground hover:border-primary/40"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-          {errors.lookingFor && <p className="text-destructive text-lg mt-2">{errors.lookingFor}</p>}
         </div>
       </div>
-
-      <Button type="button" onClick={onNext} className="btn-primary w-full h-14 text-xl rounded-xl mt-4">
-        Continuer
-        <ArrowRight className="ml-2 h-5 w-5" />
-      </Button>
     </div>
   );
 }
