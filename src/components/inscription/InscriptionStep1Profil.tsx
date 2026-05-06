@@ -142,7 +142,7 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                   "h-14 px-3 rounded-xl text-lg md:text-xl font-medium whitespace-nowrap transition-all duration-300",
                   formData.gender === opt.value
                     ? "border-[#1B2333] bg-[#1B2333] text-white border-2"
-                    : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))] border",
+                    : "border-[#E5E0D8] bg-background hover:border-[hsl(var(--gold))] border text-muted-foreground",
                 )}
               >
                 {opt.label}
