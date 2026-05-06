@@ -137,11 +137,21 @@ export default function Inscription() {
               Kalimera
             </Link>
             <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
-              <Clock className="h-10 w-10 text-[hsl(var(--gold))]" />
+              <Mail className="h-10 w-10 text-[hsl(var(--gold))]" />
             </div>
-            <h1 className="font-heading text-4xl font-semibold mb-4 text-[#1B2333]">Merci, {formData.firstName} !</h1>
+            <h1 className="font-heading text-4xl font-semibold mb-4 text-[#1B2333]">
+              Merci, {formData.firstName} !
+            </h1>
+            <p className="text-foreground text-2xl mb-4 leading-relaxed">
+              Confirmez votre adresse email pour continuer.
+            </p>
             <p className="text-muted-foreground text-xl mb-8 leading-relaxed">
-              Votre profil est en cours de validation sous 24h.
+              Nous venons d'envoyer un message à <span className="font-semibold text-foreground">{formData.email}</span>.
+              Cliquez sur le lien qu'il contient pour activer votre compte et accéder à votre espace personnel
+              (questionnaires, photos et vidéo).
+            </p>
+            <p className="text-muted-foreground text-lg mb-8">
+              Pensez à vérifier vos courriers indésirables si vous ne le voyez pas.
             </p>
             <Link
               to="/"
