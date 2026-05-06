@@ -72,7 +72,7 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
                 disabled={!!formData.birth_date}
               />
               {!!formData.birth_date && (
-                <p className="text-base text-muted-foreground -mt-2">
+                <p className="text-muted-foreground text-xl -mt-2">
                   Votre date de naissance est définitive. Pour toute correction,{" "}
                   <button
                     type="button"

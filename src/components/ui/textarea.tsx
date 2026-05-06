@@ -334,7 +334,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           </div>
         )}
 
-        <p className="mt-4 px-2 text-base text-muted-foreground leading-relaxed">
+        <p className="mt-4 px-2 text-muted-foreground text-xl leading-relaxed">
           💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
           <span className="font-semibold text-foreground">« point »</span>,{" "}
           <span className="font-semibold text-foreground">« à la ligne »</span> ou{" "}
