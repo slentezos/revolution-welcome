@@ -359,7 +359,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">
                 Partagez votre bonheur
               </h2>
-              <p className="text-muted-foreground text-lg md:text-xl">
+              <p className="text-muted-foreground text-lg md:text-2xl">
                 Célébrez votre histoire en offrant 3 mois d'abonnement au Cercle à vos proches.
               </p>
             </div>
@@ -459,7 +459,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 <Mail className="h-6 w-6 text-[hsl(var(--gold))]" />
               </div>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">Confiez-nous l'envoi</h2>
-              <p className="text-muted-foreground text-lg md:text-xl">
+              <p className="text-muted-foreground text-lg md:text-2xl">
                 Saisissez l'adresse e-mail de vos {invitesLeft} proches, nous nous chargeons de leur envoyer
                 l'invitation.
               </p>
@@ -531,7 +531,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
             </div>
             <div className="flex items-start gap-5 p-6 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <Sparkles className="h-8 w-8 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-xl md:text-xl">
+              <p className="text-foreground leading-relaxed text-2xl md:text-2xl">
                 Nous aimerions vous offrir{" "}
                 <span className="font-semibold text-primary">un mois supplémentaire totalement offert</span> pour vous
                 permettre de découvrir de nouveaux profils.
@@ -579,7 +579,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <Pause className="h-8 w-8 text-[hsl(var(--gold))]" />
             </div>
             <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">Le saviez-vous ?</h2>
-            <p className="text-muted-foreground text-lg md:text-xl">
+            <p className="text-muted-foreground text-lg md:text-2xl">
               Vous n'êtes pas obligé(e) de tout effacer. Mettez votre profil en{" "}
               <span className="font-medium text-foreground">pause sérénité</span>.
             </p>
@@ -587,13 +587,13 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
           <div className="space-y-4">
             <div className="flex items-start gap-5 p-5 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <EyeOff className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-xl">
+              <p className="text-foreground leading-relaxed text-2xl">
                 Votre profil devient <span className="font-medium">totalement invisible</span> pour les autres membres.
               </p>
             </div>
             <div className="flex items-start gap-5 p-5 rounded-[1.5rem] bg-secondary/50 border border-secondary text-left">
               <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-              <p className="text-foreground leading-relaxed text-xl">
+              <p className="text-foreground leading-relaxed text-2xl">
                 Vos <span className="font-medium">messages sont sauvegardés</span> et votre facturation suspendue.
               </p>
             </div>
