@@ -158,7 +158,7 @@ export default function PostalCodeInput({
           placeholder="Entrer votre code postal"
           value={postalCode}
           onChange={handleChange}
-          className="flex-1 h-16 px-6 outline-none tracking-[0.2em] font-bold text-primary-foreground text-2xl bg-[#1B2333] border-none focus:bg-[#1f293b] transition-colors"
+          className="flex-1 h-16 px-6 outline-none tracking-[0.2em] font-bold text-primary-foreground bg-[#1B2333] border-none focus:bg-[#1f293b] transition-colors text-xl"
         />
         <button
           onClick={handleSubmit}
