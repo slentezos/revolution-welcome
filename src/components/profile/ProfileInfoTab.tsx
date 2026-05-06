@@ -116,6 +116,8 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
           </div>
         </div>
       </section>
+
+      {profile && <LocationsSection profile={profile} onProfileUpdated={onProfileUpdated} />}
     </div>);
 
 }
