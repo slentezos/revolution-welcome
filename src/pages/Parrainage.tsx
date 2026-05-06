@@ -93,7 +93,7 @@ function HowItWorksSection() {
     <section ref={revealRef} className="section-luxury bg-secondary">
       <div className="container-main">
         <div className="text-center mb-16">
-          <p data-reveal className="text-[hsl(var(--gold))] font-medium tracking-widest uppercase mb-4 text-xl">
+          <p data-reveal className="text-[hsl(var(--gold))] font-medium tracking-widest uppercase mb-4 text-2xl">
             Simple & rapide
           </p>
           <h2
@@ -108,7 +108,7 @@ function HowItWorksSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16">
           {steps.map((step, i) => (
             <div key={i} data-reveal data-reveal-delay={String(100 + i * 150)} className="text-center group">
-              <p className="font-heading text-[hsl(var(--gold)/0.2)] mb-4 font-medium text-7xl">0{i + 1}</p>
+              <p className="font-heading text-[hsl(var(--gold)/0.2)] mb-4 font-medium text-7xl text-secondary-foreground">0{i + 1}</p>
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border border-border bg-background mb-6 transition-all duration-500 group-hover:border-[hsl(var(--gold))] group-hover:shadow-[var(--shadow-card)]">
                 <step.icon className="w-7 h-7 text-primary" />
               </div>
@@ -147,7 +147,7 @@ function ValuePropositionSection() {
     <section ref={revealRef} className="section-luxury bg-background">
       <div className="container-main">
         <div className="text-center mb-16">
-          <p data-reveal className="text-[hsl(var(--gold))] font-medium tracking-widest uppercase mb-4 text-xl">
+          <p data-reveal className="text-[hsl(var(--gold))] font-medium tracking-widest uppercase mb-4 text-2xl">
             Pourquoi Kalimera
           </p>
           <h2
@@ -201,7 +201,7 @@ function FAQSection() {
     <section ref={revealRef} className="section-luxury bg-secondary">
       <div className="container-main max-w-3xl">
         <div className="text-center mb-16">
-          <p data-reveal className="text-[hsl(var(--gold))] font-medium tracking-widest uppercase mb-4 text-xl">
+          <p data-reveal className="text-[hsl(var(--gold))] font-medium tracking-widest uppercase mb-4 text-2xl">
             Questions fréquentes
           </p>
           <h2
