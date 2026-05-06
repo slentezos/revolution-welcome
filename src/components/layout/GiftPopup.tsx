@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { Gift, Heart, CheckCircle } from "lucide-react";
+import { Gift, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { useNavigate } from "react-router-dom";
 import giftCoupleImg from "@/assets/gift-couple.jpg";
+import LocationCheckModal from "@/components/location/LocationCheckModal";
 
 const POPUP_STORAGE_KEY = "gift_popup_dismissed";
 const POPUP_DELAY_MS = 3000;
 
 export default function GiftPopup() {
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+  const [locationOpen, setLocationOpen] = useState(false);
 
   useEffect(() => {
     const dismissed = sessionStorage.getItem(POPUP_STORAGE_KEY);
@@ -27,7 +27,7 @@ export default function GiftPopup() {
 
   const handleCta = () => {
     handleDismiss();
-    navigate("/inscription");
+    setLocationOpen(true);
   };
 
   return (
