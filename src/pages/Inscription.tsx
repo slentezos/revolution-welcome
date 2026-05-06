@@ -178,7 +178,7 @@ export default function Inscription() {
                   style={{ width: `${((step + 1) / allSteps.length) * 100}%` }}
                 />
               </div>
-              <p className="text-muted-foreground mt-3 font-bold uppercase tracking-[0.2em] text-lg">
+              <p className="text-muted-foreground mt-3 uppercase tracking-[0.2em] text-lg font-semibold">
                 Étape {step + 1} sur {allSteps.length} — {currentStepLabel}
               </p>
             </div>
