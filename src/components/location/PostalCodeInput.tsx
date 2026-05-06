@@ -1,33 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, ArrowRight, CheckCircle2, BellRing, MapPin } from "lucide-react";
 import { lookupPostalCode, saveLocation, type LocationInfo } from "@/data/frenchPostalCodes";
 
-// 1. Précision spécifique pour Paris
-const PARIS_ARRONDISSEMENTS: Record<string, string> = {
-  "75001": "Paris 1er",
-  "75002": "Paris 2e",
-  "75003": "Paris 3e",
-  "75004": "Paris 4e",
-  "75005": "Paris 5e",
-  "75006": "Paris 6e",
-  "75007": "Paris 7e",
-  "75008": "Paris 8e",
-  "75009": "Paris 9e",
-  "75010": "Paris 10e",
-  "75011": "Paris 11e",
-  "75012": "Paris 12e",
-  "75013": "Paris 13e",
-  "75014": "Paris 14e",
-  "75015": "Paris 15e",
-  "75016": "Paris 16e",
-  "75017": "Paris 17e",
-  "75018": "Paris 18e",
-  "75019": "Paris 19e",
-  "75020": "Paris 20e",
-};
-
-// 2. Référentiel des Bassins pour la province
 const DEPARTMENT_TO_CITY: Record<string, string> = {
   "01": "Bourg-en-Bresse",
   "02": "Laon",
@@ -115,9 +90,14 @@ const DEPARTMENT_TO_CITY: Record<string, string> = {
   "87": "Limoges",
   "88": "Épinal",
   "89": "Auxerre",
+  "90": "Belfort",
+  "91": "Évry",
+  "92": "Boulogne-Billancourt",
+  "93": "Saint-Denis",
+  "94": "Saint-Maur-des-Fossés",
+  "95": "Cergy",
 };
 
-// 3. Liste des départements en mode PINPOINT (IDF + Belfort)
 const PINPOINT_DEPARTMENTS = ["75", "77", "78", "90", "91", "92", "93", "94", "95"];
 
 export default function PostalCodeInput({
@@ -131,66 +111,58 @@ export default function PostalCodeInput({
   const [locationInfo, setLocationInfo] = useState<LocationInfo | null>(null);
   const navigate = useNavigate();
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  // Détection en temps réel
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, "").slice(0, 5);
     setPostalCode(val);
-
     if (val.length === 5) {
       const info = lookupPostalCode(val);
-      if (info) setLocationInfo(info);
+      setLocationInfo(info || null);
     } else {
       setLocationInfo(null);
     }
-  }, []);
+  };
+
+  const isPinpoint = useMemo(() => {
+    return PINPOINT_DEPARTMENTS.includes(postalCode.slice(0, 2));
+  }, [postalCode]);
 
   const handleSubmit = () => {
     if (!locationInfo) return;
     saveLocation(locationInfo);
-
-    const dept = postalCode.slice(0, 2);
     if (locationInfo.isIDF) {
       navigate("/inscription");
     } else {
-      // Data tracking pour future ouverture de région
-      navigate(`/liste-attente?dept=${dept}&city=${encodeURIComponent(locationInfo.cityName)}`);
+      // On passe le dept et la ville pour vos analyses de masse critique
+      navigate(`/liste-attente?dept=${postalCode.slice(0, 2)}&city=${encodeURIComponent(locationInfo.cityName)}`);
     }
   };
-
-  const isHero = variant === "hero";
-  const deptPrefix = postalCode.slice(0, 2);
-  const isPinpoint = PINPOINT_DEPARTMENTS.includes(deptPrefix);
-
-  // Détermination du nom de la ville pour l'affichage (Priorité Paris Arrondissement)
-  const displayCity =
-    deptPrefix === "75" ? PARIS_ARRONDISSEMENTS[postalCode] || locationInfo?.cityName : locationInfo?.cityName;
 
   return (
     <div className={className}>
       <div
-        className={`flex items-center gap-0 rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10 ${isHero ? "max-w-lg mx-auto" : "max-w-md"}`}
+        className={`flex items-center rounded-xl overflow-hidden shadow-2xl border border-white/10 ${variant === "hero" ? "max-w-lg mx-auto" : "max-w-md"}`}
       >
         <input
           type="text"
           inputMode="numeric"
           maxLength={5}
-          autoFocus
           placeholder="Code postal"
           value={postalCode}
           onChange={handleChange}
-          className="flex-1 h-16 px-6 outline-none tracking-[0.2em] font-bold text-primary-foreground text-2xl bg-[#1B2333] border-none"
+          className="flex-1 h-16 px-6 outline-none tracking-[0.2em] font-bold text-primary-foreground text-2xl bg-[#1B2333]"
         />
         <button
           onClick={handleSubmit}
           disabled={!locationInfo}
-          className="h-16 px-8 bg-[hsl(var(--gold))] text-primary font-bold flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all disabled:opacity-30 disabled:grayscale whitespace-nowrap text-xl"
+          className="h-16 px-8 bg-[hsl(var(--gold))] text-primary font-bold flex items-center gap-2 hover:brightness-110 transition-all disabled:opacity-20"
         >
-          Valider
-          <ArrowRight className="h-6 w-6" />
+          Valider <ArrowRight className="h-6 w-6" />
         </button>
       </div>
 
       {locationInfo && (
-        <div className="mt-4 p-5 bg-[#1B2333]/60 border border-[hsl(var(--gold))/30] rounded-2xl text-left backdrop-blur-md animate-in fade-in slide-in-from-top-2">
+        <div className="mt-4 p-5 bg-[#1B2333]/60 border border-[hsl(var(--gold))/30] rounded-2xl text-left animate-in fade-in slide-in-from-top-2">
           <div className="flex items-center gap-3 mb-3">
             {isPinpoint ? (
               <CheckCircle2 className="h-6 w-6 text-[hsl(var(--gold))]" />
@@ -198,37 +170,27 @@ export default function PostalCodeInput({
               <MapPin className="h-6 w-6 text-[hsl(var(--gold))]" />
             )}
             <p className="font-bold text-xl text-white">
-              {isPinpoint ? "Localisation précise :" : "Secteur identifié :"} {displayCity}
+              {isPinpoint ? "Localisation précise :" : "Secteur identifié :"} {locationInfo.cityName} ({postalCode})
             </p>
           </div>
 
-          <div className="space-y-4">
-            <p className="text-base text-primary-foreground/80 leading-relaxed font-medium">
-              {isPinpoint
-                ? `Zone à haute densité identifiée. Votre secteur est actuellement ouvert aux nouvelles adhésions.`
-                : `Pour vous garantir un volume critique de profils qualifiés, vous êtes rattaché(e) au bassin : ${DEPARTMENT_TO_CITY[deptPrefix] || locationInfo.regionName} & alentours.`}
-            </p>
+          <p className="text-base text-primary-foreground/80 leading-relaxed font-medium">
+            {isPinpoint
+              ? `Zone à haute densité identifiée (${locationInfo.regionName}). Votre secteur est ouvert.`
+              : `Pour vous garantir un volume critique de profils qualifiés, vous êtes rattaché(e) au bassin : ${DEPARTMENT_TO_CITY[postalCode.slice(0, 2)] || locationInfo.regionName} & alentours.`}
+          </p>
 
-            {!locationInfo.isIDF && (
-              <div className="flex items-start gap-3 p-3 bg-[hsl(var(--gold))]/10 rounded-xl border border-[hsl(var(--gold))]/20 shadow-inner">
-                <BellRing className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
-                <p className="text-sm text-white/90 leading-tight">
-                  <strong className="text-[hsl(var(--gold-light))]">Membre Fondateur :</strong> Votre secteur est en
-                  cours d'ouverture. Nous vous contacterons dès que la masse critique de profils sera atteinte dans le{" "}
-                  {deptPrefix}.
-                </p>
-              </div>
-            )}
-          </div>
+          {!locationInfo.isIDF && (
+            <div className="mt-4 flex items-start gap-3 p-3 bg-[hsl(var(--gold))]/10 rounded-xl border border-[hsl(var(--gold))]/20">
+              <BellRing className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-0.5" />
+              <p className="text-sm text-white/90">
+                <strong>Membre Fondateur :</strong> Nous vous contacterons dès que la masse critique sera atteinte dans
+                le {postalCode.slice(0, 2)}.
+              </p>
+            </div>
+          )}
         </div>
       )}
-
-      <p
-        className={`text-sm mt-5 flex items-center gap-2 font-medium ${isHero ? "text-muted-foreground/60 justify-center" : "text-primary-foreground/40"}`}
-      >
-        <Lock className="h-4 w-4" />
-        Standard de sécurité SSL — Confidentialité garantie.
-      </p>
     </div>
   );
 }
