@@ -14,7 +14,190 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profile_media: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          file_path: string
+          id: string
+          media_type: string
+          profile_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          file_path: string
+          id?: string
+          media_type: string
+          profile_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          file_path?: string
+          id?: string
+          media_type?: string
+          profile_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_media_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          account_status: string
+          active_location: string
+          birth_date: string | null
+          city_name: string | null
+          created_at: string
+          first_name: string | null
+          gender: string | null
+          id: string
+          last_location_switch: string | null
+          last_name: string | null
+          last_secondary_update: string | null
+          looking_for: string | null
+          onboarding_step: string
+          phone: string | null
+          postal_code: string | null
+          region_name: string | null
+          secondary_city_name: string | null
+          secondary_postal_code: string | null
+          secondary_region_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_status?: string
+          active_location?: string
+          birth_date?: string | null
+          city_name?: string | null
+          created_at?: string
+          first_name?: string | null
+          gender?: string | null
+          id?: string
+          last_location_switch?: string | null
+          last_name?: string | null
+          last_secondary_update?: string | null
+          looking_for?: string | null
+          onboarding_step?: string
+          phone?: string | null
+          postal_code?: string | null
+          region_name?: string | null
+          secondary_city_name?: string | null
+          secondary_postal_code?: string | null
+          secondary_region_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_status?: string
+          active_location?: string
+          birth_date?: string | null
+          city_name?: string | null
+          created_at?: string
+          first_name?: string | null
+          gender?: string | null
+          id?: string
+          last_location_switch?: string | null
+          last_name?: string | null
+          last_secondary_update?: string | null
+          looking_for?: string | null
+          onboarding_step?: string
+          phone?: string | null
+          postal_code?: string | null
+          region_name?: string | null
+          secondary_city_name?: string | null
+          secondary_postal_code?: string | null
+          secondary_region_name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      quiz_responses: {
+        Row: {
+          answer_value: string
+          created_at: string
+          id: string
+          profile_id: string
+          question_id: string
+          user_id: string
+        }
+        Insert: {
+          answer_value: string
+          created_at?: string
+          id?: string
+          profile_id: string
+          question_id: string
+          user_id: string
+        }
+        Update: {
+          answer_value?: string
+          created_at?: string
+          id?: string
+          profile_id?: string
+          question_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_responses_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      waitlist_leads: {
+        Row: {
+          city_name: string
+          created_at: string
+          email: string
+          id: string
+          phone: string | null
+          phone_preference: string | null
+          postal_code: string
+          region_name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          city_name: string
+          created_at?: string
+          email: string
+          id?: string
+          phone?: string | null
+          phone_preference?: string | null
+          postal_code: string
+          region_name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          city_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          phone?: string | null
+          phone_preference?: string | null
+          postal_code?: string
+          region_name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
