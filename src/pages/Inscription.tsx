@@ -183,8 +183,6 @@ export default function Inscription() {
               </p>
             </div>
 
-            <RegistrationLocationHeader />
-
             <div className="mt-8">
               {currentStepLabel === "Profil" && (
                 <InscriptionStep1Profil
@@ -238,6 +236,7 @@ export default function Inscription() {
         />
         <div className="absolute inset-0 flex flex-col items-center justify-center p-16 text-center text-primary-foreground">
           <div className="max-w-md">
+            <RegistrationLocationHeader />
             <h2 className="font-heading font-semibold mb-6 text-5xl">75% d'affinités réciproques</h2>
             <p className="text-primary-foreground/90 mb-12 text-2xl leading-relaxed">
               Notre algorithme analyse 200 critères pour garantir votre compatibilité.
