@@ -44,7 +44,7 @@ function PricingModal({
         if (!v) setView("story");
       }}
     >
-      <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background overflow-hidden max-h-[90vh] flex flex-col z-[100]">
+      <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background max-h-[90vh] overflow-y-auto flex flex-col z-[100]">
         {view === "story" ? (
           <div className="p-10 sm:p-20 text-center space-y-8 flex flex-col items-center justify-center min-h-[500px] animate-in fade-in duration-500">
             <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground text-xl">
@@ -80,7 +80,7 @@ function PricingModal({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 sm:px-12 py-10 flex-1 overflow-y-auto bg-[hsl(var(--cream))]/40">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 sm:px-12 py-10 bg-[hsl(var(--cream))]/40">
               {/* ─── Mode Autonome ─── */}
               <div className="bg-card border border-border p-10 flex flex-col h-full shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-luxury)] transition-shadow rounded-sm">
                 <div className="flex items-center gap-4 mb-8">
