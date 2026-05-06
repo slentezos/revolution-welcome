@@ -184,7 +184,7 @@ export default function PostalCodeInput({
           </div>
 
           <div className="space-y-4">
-            <p className="text-base text-primary-foreground/80 leading-relaxed font-medium">
+            <p className="text-primary-foreground/80 leading-relaxed text-xl font-medium">
               {isPinpoint
                 ? `Zone à haute densité validée. Votre secteur (${locationInfo.regionName}) est actuellement ouvert.`
                 : `Pour vous garantir un volume critique de profils qualifiés, vous êtes rattaché(e) au bassin : ${DEPARTMENT_TO_CITY[deptPrefix] || locationInfo.regionName} & alentours.`}
