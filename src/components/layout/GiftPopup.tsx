@@ -102,5 +102,7 @@ export default function GiftPopup() {
           </div>
         </div>
       </DialogContent>
-    </Dialog>);
+    </Dialog>
+    <LocationCheckModal open={locationOpen} onClose={() => setLocationOpen(false)} />
+    </>);
 }
