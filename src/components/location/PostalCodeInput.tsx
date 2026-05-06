@@ -176,7 +176,7 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
           </div>
 
           <div className="space-y-4">
-            <p className="text-base text-primary-foreground/80 leading-relaxed">
+            <p className="text-primary-foreground/80 leading-relaxed text-xl">
               {PINPOINT_DEPARTMENTS.includes(deptPrefix)
                 ? `Zone à haute densité identifiée (${locationInfo.regionName}). Emplacement optimisé pour la proximité.`
                 : `Pour vous garantir un volume critique de profils qualifiés, vous êtes rattaché(e) au bassin : ${DEPARTMENT_TO_CITY[deptPrefix] || locationInfo.regionName} & alentours.`}
