@@ -66,6 +66,7 @@ export type Database = {
           last_name: string | null
           last_secondary_update: string | null
           looking_for: string | null
+          nationality: string | null
           onboarding_step: string
           phone: string | null
           postal_code: string | null
@@ -89,6 +90,7 @@ export type Database = {
           last_name?: string | null
           last_secondary_update?: string | null
           looking_for?: string | null
+          nationality?: string | null
           onboarding_step?: string
           phone?: string | null
           postal_code?: string | null
@@ -112,6 +114,7 @@ export type Database = {
           last_name?: string | null
           last_secondary_update?: string | null
           looking_for?: string | null
+          nationality?: string | null
           onboarding_step?: string
           phone?: string | null
           postal_code?: string | null
