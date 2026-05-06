@@ -49,7 +49,7 @@ export default function Profil() {
       // TEMP: auth redirect disabled for design work
       // if (!session) { navigate("/connexion"); return; }
       if (session) setUser(session.user);
-      if (!session) return;
+      if (!session) { setLoading(false); return; }
 
       const { data: profileData } = await supabase.
       from("profiles").
