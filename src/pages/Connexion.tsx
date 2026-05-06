@@ -250,7 +250,7 @@ export default function Connexion() {
                   />
                 </div>
                 <div>
-                  <label className="block font-medium text-foreground mb-2 text-xl">Mot de passe</label>
+                  <label className="block font-medium text-foreground mb-2 text-2xl">Mot de passe</label>
                   <PasswordInput
                     placeholder="••••••••"
                     className="h-14 text-xl"
