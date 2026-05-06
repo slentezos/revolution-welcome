@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Lock, ArrowRight } from "lucide-react";
 import { lookupPostalCode, saveLocation, type LocationInfo } from "@/data/frenchPostalCodes";
+import { PINPOINT_MAPPING } from "@/data/locationData";
 
 interface PostalCodeInputProps {
   className?: string;
