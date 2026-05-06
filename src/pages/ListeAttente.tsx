@@ -112,7 +112,7 @@ export default function ListeAttente() {
               Nous vous préviendrons dès que Kalimera sera disponible
               {isPinpoint ? ` à ${displayLocation}` : ` dans le ${displayLocation}`}.
             </p>
-            <p className="text-muted-foreground mb-8 text-xl">
+            <p className="text-muted-foreground mb-8 text-2xl">
               Votre privilège est réservé : <strong className="text-[hsl(var(--gold))]">3 mois offerts</strong> seront
               activés automatiquement lors de votre première connexion.
             </p>
