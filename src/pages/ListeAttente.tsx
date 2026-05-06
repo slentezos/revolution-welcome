@@ -165,7 +165,7 @@ export default function ListeAttente() {
                   <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3 leading-tight">
                     Kalimera arrive bientôt en {location.regionName}.
                   </h1>
-                  <p className="text-muted-foreground text-xl leading-relaxed">
+                  <p className="text-muted-foreground text-2xl leading-relaxed">
                     Rejoignez les membres {isPinpoint ? `de ${displayLocation}` : `du ${displayLocation}`} et réservez
                     votre privilège :<strong className="text-[#1B2333]"> 3 mois vous seront offerts </strong> dès notre
                     arrivée.
