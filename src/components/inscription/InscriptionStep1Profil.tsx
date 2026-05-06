@@ -164,10 +164,10 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 type="button"
                 onClick={() => update("lookingFor", opt.value)}
                 className={cn(
-                  "h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
+                  "h-14 px-3 rounded-xl text-lg md:text-xl font-medium whitespace-nowrap transition-all duration-300",
                   formData.lookingFor === opt.value
-                    ? "border-[#1B2333] bg-[#1B2333] text-white"
-                    : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
+                    ? "border-[#1B2333] bg-[#1B2333] text-white border-2"
+                    : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))] border",
                 )}
               >
                 {opt.label}
