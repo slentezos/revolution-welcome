@@ -1,8 +1,4 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Save, ExternalLink } from "lucide-react";
-import DateInput from "@/components/profile/DateInput";
+import { ExternalLink, Lock } from "lucide-react";
 import profileInfoImg from "@/assets/profile-info.jpg";
 import LocationsSection, { type ProfileLocationData } from "@/components/profile/LocationsSection";
 
@@ -19,11 +15,78 @@ interface ProfileInfoTabProps {
   saving: boolean;
   onSave: () => void;
   onContactTab: () => void;
-  profile: ProfileLocationData | null;
+  profile: (ProfileLocationData & { phone?: string | null; nationality?: string | null }) | null;
   onProfileUpdated: (next: ProfileLocationData) => void;
 }
 
-export default function ProfileInfoTab({ formData, setFormData, userEmail, saving, onSave, onContactTab, profile, onProfileUpdated }: ProfileInfoTabProps) {
+const NATIONALITY_LABELS: Record<string, { label: string; flag: string }> = {
+  france: { label: "France", flag: "🇫🇷" },
+  belgique: { label: "Belgique", flag: "🇧🇪" },
+  suisse: { label: "Suisse", flag: "🇨🇭" },
+  canada: { label: "Canada", flag: "🇨🇦" },
+  maroc: { label: "Maroc", flag: "🇲🇦" },
+  tunisie: { label: "Tunisie", flag: "🇹🇳" },
+  algerie: { label: "Algérie", flag: "🇩🇿" },
+  allemagne: { label: "Allemagne", flag: "🇩🇪" },
+  espagne: { label: "Espagne", flag: "🇪🇸" },
+  italie: { label: "Italie", flag: "🇮🇹" },
+};
+
+const GENDER_LABELS: Record<string, string> = {
+  homme: "Homme",
+  femme: "Femme",
+  male: "Homme",
+  female: "Femme",
+};
+
+const LOOKING_FOR_LABELS: Record<string, string> = {
+  homme: "Un homme",
+  femme: "Une femme",
+  male: "Un homme",
+  female: "Une femme",
+  les_deux: "Les deux",
+};
+
+function formatBirthDate(iso: string) {
+  if (!iso) return "Non renseignée";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+}
+
+interface FieldProps {
+  label: string;
+  value: string;
+  onContact: () => void;
+}
+
+function ReadOnlyField({ label, value, onContact }: FieldProps) {
+  return (
+    <div className="space-y-3">
+      <label className="font-medium text-foreground text-xl block">{label}</label>
+      <div className="relative">
+        <div className="h-14 flex items-center px-4 text-xl bg-muted/40 border-2 border-muted text-foreground rounded-none pr-12">
+          {value || <span className="text-muted-foreground italic">Non renseigné</span>}
+        </div>
+        <Lock className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" aria-label="Champ verrouillé" />
+      </div>
+      <button
+        onClick={onContact}
+        className="inline-flex items-center gap-2 font-medium text-muted-foreground hover:text-foreground transition-colors text-lg"
+      >
+        Demander une modification
+        <ExternalLink className="h-4 w-4" />
+      </button>
+    </div>
+  );
+}
+
+export default function ProfileInfoTab({ formData, userEmail, onContactTab, profile, onProfileUpdated }: ProfileInfoTabProps) {
+  const nat = profile?.nationality ? NATIONALITY_LABELS[profile.nationality] : null;
+  const nationalityValue = nat ? `${nat.flag} ${nat.label}` : profile?.nationality || "";
+  const genderValue = GENDER_LABELS[formData.gender] || formData.gender || "";
+  const lookingForValue = LOOKING_FOR_LABELS[formData.looking_for] || formData.looking_for || "";
+
   return (
     <div>
       {/* Hero split */}
@@ -41,83 +104,43 @@ export default function ProfileInfoTab({ formData, setFormData, userEmail, savin
           </h2>
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-8" />
           <p className="text-muted-foreground leading-relaxed max-w-lg text-2xl">
-            Gérez vos informations personnelles. Votre profil est protégé et visible uniquement par nos membres vérifiés.
+            Vos informations sont protégées et figées pour garantir l'authenticité de votre profil.
+            Pour toute correction, notre équipe est à votre écoute.
           </p>
         </div>
       </section>
 
-      {/* Form section */}
+      {/* Read-only info section */}
       <section className="bg-background py-16 md:py-24">
         <div className="px-6 md:px-16 lg:px-20 xl:px-28">
+          {/* Notice */}
+          <div className="mb-12 bg-secondary/40 border-l-4 border-[hsl(var(--gold))] px-6 py-5 rounded-r-lg max-w-3xl">
+            <p className="text-foreground text-xl leading-relaxed">
+              <span className="font-semibold">Vos données d'identité sont verrouillées.</span> Cette mesure protège
+              l'intégrité de votre profil au sein du club. Pour toute modification, contactez notre équipe : nous
+              traiterons votre demande sous 48 heures.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             <div className="space-y-8">
-              <div className="space-y-3">
-                <Label htmlFor="first_name" className="font-medium text-foreground text-xl">Prénom</Label>
-                <Input
-                  id="first_name"
-                  value={formData.first_name}
-                  onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                  className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none" />
-                
-              </div>
-              <div className="space-y-3">
-                <Label htmlFor="last_name" className="font-medium text-foreground text-xl">Nom</Label>
-                <Input
-                  id="last_name"
-                  value={formData.last_name}
-                  onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                  className="h-14 text-lg border-2 border-muted bg-background focus:border-primary rounded-none" />
-                
-              </div>
-              <DateInput
-                value={formData.birth_date}
-                onChange={(val) => setFormData({ ...formData, birth_date: val })}
-                disabled={!!formData.birth_date}
-              />
-              {!!formData.birth_date && (
-                <p className="text-muted-foreground text-xl -mt-2">
-                  Votre date de naissance est définitive. Pour toute correction,{" "}
-                  <button
-                    type="button"
-                    onClick={onContactTab}
-                    className="font-semibold text-foreground underline underline-offset-4 hover:text-[hsl(var(--gold))] transition-colors"
-                  >
-                    contactez-nous
-                  </button>
-                  .
-                </p>
-              )}
+              <ReadOnlyField label="Prénom" value={formData.first_name} onContact={onContactTab} />
+              <ReadOnlyField label="Nom" value={formData.last_name} onContact={onContactTab} />
+              <ReadOnlyField label="Date de naissance" value={formatBirthDate(formData.birth_date)} onContact={onContactTab} />
+              <ReadOnlyField label="Nationalité" value={nationalityValue} onContact={onContactTab} />
             </div>
 
             <div className="space-y-8">
-              <div className="space-y-3">
-                <Label className="font-medium text-foreground text-xl">Email</Label>
-                <Input value={userEmail} disabled className="h-14 text-lg bg-muted border-2 border-muted rounded-none" />
-                <button
-                  onClick={onContactTab}
-                  className="inline-flex items-center gap-2 font-medium text-muted-foreground hover:text-foreground transition-colors mt-1 text-xl">
-                  
-                  Nous contacter pour modifier
-                  <ExternalLink className="h-4 w-4" />
-                </button>
-              </div>
-
-              <div className="pt-4">
-                <Button
-                  onClick={onSave}
-                  disabled={saving}
-                  className="btn-primary py-5 px-10 text-lg h-auto min-h-[56px] w-full lg:w-auto">
-                  
-                  <Save className="h-5 w-5 mr-3" />
-                  {saving ? "Enregistrement..." : "Enregistrer les modifications"}
-                </Button>
-              </div>
+              <ReadOnlyField label="Email" value={userEmail} onContact={onContactTab} />
+              <ReadOnlyField label="Téléphone" value={profile?.phone || ""} onContact={onContactTab} />
+              <ReadOnlyField label="Genre" value={genderValue} onContact={onContactTab} />
+              <ReadOnlyField label="Je recherche" value={lookingForValue} onContact={onContactTab} />
             </div>
           </div>
         </div>
       </section>
 
       {profile && <LocationsSection profile={profile} onProfileUpdated={onProfileUpdated} />}
-    </div>);
-
+    </div>
+  );
 }
