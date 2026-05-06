@@ -572,7 +572,7 @@ export default function Messages() {
                       <img
                         src={conv.avatar}
                         alt={conv.name}
-                        className="w-16 h-16 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
+                        className="w-18 h-18 rounded-full object-cover ring-2 ring-amber-100/40 group-hover:ring-[hsl(var(--gold))]/50 transition-all"
                       />
                       {conv.online && (
                         <div
