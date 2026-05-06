@@ -117,6 +117,7 @@ export default function Inscription() {
           city_name: finalCity,
           region_name: storedLocation?.regionName || null,
           phone: formData.phone || null,
+          nationality: formData.nationality || null,
           account_status: "pending_review",
         });
         setPendingReview(true);
