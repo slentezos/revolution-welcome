@@ -284,7 +284,7 @@ export default function Connexion() {
                 {!otpSent ? (
                   <>
                     <div>
-                      <label className="block font-medium text-foreground mb-2 text-xl">
+                      <label className="block font-medium text-foreground mb-2 text-2xl">
                         <Phone className="inline h-5 w-5 mr-1.5 -mt-0.5 text-primary" />
                         Numéro de téléphone
                       </label>
