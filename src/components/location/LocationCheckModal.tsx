@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { MapPin, Lock, X, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { lookupPostalCode, saveLocation, type LocationInfo } from "@/data/frenchPostalCodes";
-import { PINPOINT_MAPPING } from "@/data/locationData";
+import { lookupPostalCode, type LocationInfo } from "@/data/frenchPostalCodes";
+import { handleLocationTransition } from "@/lib/locationTransition";
 
 interface LocationCheckModalProps {
   open: boolean;
@@ -36,17 +36,8 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
   };
 
   const handleSubmit = () => {
-    if (!locationInfo) return;
-    saveLocation(locationInfo);
-    localStorage.setItem('user_postal_code', postalCode);
-    localStorage.setItem('user_city_name', PINPOINT_MAPPING[postalCode] || locationInfo.cityName);
+    if (!handleLocationTransition(postalCode, navigate, locationInfo)) return;
     onClose();
-
-    if (locationInfo.isIDF) {
-      navigate("/inscription");
-    } else {
-      navigate("/liste-attente");
-    }
   };
 
   if (!open) return null;
