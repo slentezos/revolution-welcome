@@ -47,68 +47,79 @@ export default function DateInput({ value, onChange, className, disabled = false
   const years = Array.from({ length: 1966 - 1940 + 1 }, (_, i) => String(1966 - i));
 
   return (
-    <div className={cn("space-y-4 w-full text-left", className)}>
-      <div className="flex items-center justify-between gap-3 mb-3">
-        <Label className="text-xl font-medium text-[#1B2333] block">Date de naissance</Label>
-        {disabled && (
-          <span className="inline-flex items-center gap-2 text-base text-muted-foreground">
-            <Lock className="h-4 w-4" />
-            Non modifiable
-          </span>
-        )}
+    <div className={cn("space-y-6 w-full text-left", className)}>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <Label className="text-xl font-medium text-[#1B2333] block">Date de naissance</Label>
+          {disabled && (
+            <span className="inline-flex items-center gap-2 text-base text-muted-foreground">
+              <Lock className="h-4 w-4" />
+              Non modifiable
+            </span>
+          )}
+        </div>
+
+        <div className={cn("grid grid-cols-3 gap-3 md:gap-4", disabled && "opacity-70")}>
+          {/* --- JOUR --- */}
+          <div className="space-y-2">
+            <Label className="text-lg text-muted-foreground ml-1">Jour</Label>
+            <Select value={day} onValueChange={(v) => update(v, month, year)} disabled={disabled}>
+              <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+                <SelectValue placeholder="JJ" />
+              </SelectTrigger>
+              <SelectContent className="max-h-[300px] rounded-xl border-[#E5E0D8]">
+                {days.map((d) => (
+                  <SelectItem key={d} value={d} className="text-lg py-3">
+                    {d}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* --- MOIS (NOMS EN FRANÇAIS) --- */}
+          <div className="space-y-2">
+            <Label className="text-lg text-muted-foreground ml-1">Mois</Label>
+            <Select value={month} onValueChange={(v) => update(day, v, year)} disabled={disabled}>
+              <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+                <SelectValue placeholder="Mois" />
+              </SelectTrigger>
+              <SelectContent className="max-h-[300px] rounded-xl border-[#E5E0D8]">
+                {months.map((m) => (
+                  <SelectItem key={m.value} value={m.value} className="text-lg py-3">
+                    {m.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* --- ANNÉE --- */}
+          <div className="space-y-2">
+            <Label className="text-lg text-muted-foreground ml-1">Année</Label>
+            <Select value={year} onValueChange={(v) => update(day, month, v)} disabled={disabled}>
+              <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
+                <SelectValue placeholder="AAAA" />
+              </SelectTrigger>
+              <SelectContent className="max-h-[300px] rounded-xl border-[#E5E0D8]">
+                {years.map((y) => (
+                  <SelectItem key={y} value={y} className="text-lg py-3">
+                    {y}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </div>
 
-      <div className={cn("grid grid-cols-3 gap-3 md:gap-4", disabled && "opacity-70")}>
-
-        {/* --- JOUR --- */}
-        <div className="space-y-2">
-          <Label className="text-lg text-muted-foreground ml-1">Jour</Label>
-          <Select value={day} onValueChange={(v) => update(v, month, year)} disabled={disabled}>
-            <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
-              <SelectValue placeholder="JJ" />
-            </SelectTrigger>
-            <SelectContent className="max-h-[300px] rounded-xl border-[#E5E0D8]">
-              {days.map((d) => (
-                <SelectItem key={d} value={d} className="text-lg py-3">
-                  {d}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      {/* LIGNE DE SÉPARATION "LUXE" */}
+      <div className="relative py-4 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-[#E5E0D8]" />
         </div>
-
-        {/* --- MOIS (NOMS EN FRANÇAIS) --- */}
-        <div className="space-y-2">
-          <Label className="text-lg text-muted-foreground ml-1">Mois</Label>
-          <Select value={month} onValueChange={(v) => update(day, v, year)} disabled={disabled}>
-            <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
-              <SelectValue placeholder="Mois" />
-            </SelectTrigger>
-            <SelectContent className="max-h-[300px] rounded-xl border-[#E5E0D8]">
-              {months.map((m) => (
-                <SelectItem key={m.value} value={m.value} className="text-lg py-3">
-                  {m.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* --- ANNÉE --- */}
-        <div className="space-y-2">
-          <Label className="text-lg text-muted-foreground ml-1">Année</Label>
-          <Select value={year} onValueChange={(v) => update(day, month, v)} disabled={disabled}>
-            <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
-              <SelectValue placeholder="AAAA" />
-            </SelectTrigger>
-            <SelectContent className="max-h-[300px] rounded-xl border-[#E5E0D8]">
-              {years.map((y) => (
-                <SelectItem key={y} value={y} className="text-lg py-3">
-                  {y}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="relative flex justify-center bg-white px-4">
+          <div className="h-1.5 w-1.5 rotate-45 bg-[hsl(var(--gold))]" />
         </div>
       </div>
     </div>
