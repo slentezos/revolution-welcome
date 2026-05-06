@@ -300,7 +300,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 {profile.postal_code} · {profile.region_name}
               </p>
             )}
-            <p className="text-muted-foreground text-lg mt-5 leading-relaxed">
+            <p className="text-muted-foreground mt-5 leading-relaxed text-xl">
               Votre adresse de référence reste stable pour garantir l'authenticité de votre bassin de rencontre.
             </p>
           </div>
