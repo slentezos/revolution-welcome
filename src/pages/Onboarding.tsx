@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import OnboardingMedia from "@/components/onboarding/OnboardingMedia";
 import OnboardingQuiz from "@/components/onboarding/OnboardingQuiz";
 import OnboardingProfile from "@/components/onboarding/OnboardingProfile";
 import OnboardingPersonality from "@/components/onboarding/OnboardingPersonality";
 import WelcomeRoadmap from "@/components/onboarding/WelcomeRoadmap";
-import { Image, HelpCircle, ClipboardList, Brain, BookOpen, Check } from "lucide-react";
+import { Image, HelpCircle, ClipboardList, Brain, BookOpen, Check, Clock } from "lucide-react";
 import { useCriteriaCooldown } from "@/hooks/useCriteriaCooldown";
 
 type OnboardingStep =
@@ -26,6 +26,8 @@ export default function Onboarding() {
   const [loading, setLoading] = useState(true);
   const [isReturningUser, setIsReturningUser] = useState(false);
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
+  const [showValidationScreen, setShowValidationScreen] = useState(false);
+  const [firstName, setFirstName] = useState<string>("");
 
   const cooldown = useCriteriaCooldown(profileId);
 
@@ -117,7 +119,12 @@ export default function Onboarding() {
       return;
     }
     await cooldown.recordOnboardingComplete();
-    navigate("/dashboard");
+    // Récupérer le prénom pour l'écran de validation
+    if (profileId) {
+      const { data } = await supabase.from("profiles").select("first_name").eq("id", profileId).maybeSingle();
+      if (data?.first_name) setFirstName(data.first_name);
+    }
+    setShowValidationScreen(true);
   };
 
   const handleTabClick = (tabId: string) => {
