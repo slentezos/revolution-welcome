@@ -27,7 +27,7 @@ export const RegistrationLocationHeader = () => {
       )}
       <div>
         <p className="uppercase tracking-[0.2em] font-bold mb-1 text-destructive-foreground text-base">
-          {isPinpoint ? "Localisation précise validée" : "Secteur d'adhésion identifié"}
+          {isPinpoint ? "Localisation" : "Secteur d'adhésion identifié"}
         </p>
         <h2 className="text-2xl font-bold text-white">
           {finalCity} <span className="font-light text-destructive-foreground">({data.zip})</span>
