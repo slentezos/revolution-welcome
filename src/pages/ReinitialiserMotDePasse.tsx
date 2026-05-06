@@ -187,7 +187,7 @@ export default function ReinitialiserMotDePasse() {
           <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-2">
             Nouveau mot de passe
           </h1>
-          <p className="text-muted-foreground mb-8 text-2xl">
+          <p className="text-muted-foreground mb-8 text-xl">
             Choisissez un nouveau mot de passe sécurisé pour votre compte.
           </p>
 

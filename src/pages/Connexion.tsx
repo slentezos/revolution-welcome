@@ -182,7 +182,7 @@ export default function Connexion() {
         <div className="w-12 h-7 bg-muted rounded-full peer-checked:bg-[hsl(var(--gold))] transition-colors duration-300 shadow-inner border border-border peer-checked:border-[hsl(var(--gold))]" />
         <div className="absolute left-1 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 peer-checked:translate-x-5" />
       </div>
-      <span className="text-muted-foreground select-none group-hover:text-foreground transition-colors md:text-xl whitespace-nowrap text-2xl">
+      <span className="text-muted-foreground select-none group-hover:text-foreground transition-colors text-lg md:text-xl whitespace-nowrap">
         {label}
       </span>
     </label>
@@ -199,7 +199,7 @@ export default function Connexion() {
             </Link>
 
             <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-2">Connexion</h1>
-            <p className="text-muted-foreground mb-8 text-2xl">
+            <p className="text-muted-foreground mb-8 text-xl">
               Accédez à votre espace membre pour retrouver vos affinités.
             </p>
 
@@ -239,7 +239,7 @@ export default function Connexion() {
             {method === "email" && (
               <form onSubmit={handleEmailSubmit} className="space-y-5 animate-in fade-in duration-300">
                 <div>
-                  <label className="block font-medium text-foreground mb-2 text-2xl">Adresse email</label>
+                  <label className="block font-medium text-foreground mb-2 text-xl">Adresse email</label>
                   <Input
                     type="email"
                     placeholder="votre@email.com"
@@ -250,7 +250,7 @@ export default function Connexion() {
                   />
                 </div>
                 <div>
-                  <label className="block font-medium text-foreground mb-2 text-2xl">Mot de passe</label>
+                  <label className="block font-medium text-foreground mb-2 text-xl">Mot de passe</label>
                   <PasswordInput
                     placeholder="••••••••"
                     className="h-14 text-xl"
@@ -284,17 +284,17 @@ export default function Connexion() {
                 {!otpSent ? (
                   <>
                     <div>
-                      <label className="block font-medium text-foreground mb-2 text-2xl">
+                      <label className="block font-medium text-foreground mb-2 text-xl">
                         <Phone className="inline h-5 w-5 mr-1.5 -mt-0.5 text-primary" />
                         Numéro de téléphone
                       </label>
                       <div className="flex gap-3">
-                        <div className="h-14 px-4 flex items-center bg-muted rounded-xl font-medium text-foreground shrink-0 border border-border text-2xl">
+                        <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-lg font-medium text-foreground shrink-0 border border-border">
                           🇫🇷 +33
                         </div>
                         <Input
                           placeholder="6 12 34 56 78"
-                          className="h-14 rounded-xl flex-1 text-2xl"
+                          className="h-14 text-xl rounded-xl flex-1"
                           value={phone}
                           onChange={(e) => setPhone(formatPhoneDigits(e.target.value))}
                           inputMode="tel"
