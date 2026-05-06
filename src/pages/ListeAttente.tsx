@@ -22,11 +22,14 @@ export default function ListeAttente() {
 
   const location = getStoredLocation();
 
+  // LOGIQUE DE NETTOYAGE : Détecte si la ville enregistrée est un bassin régional
+  const isBassin = location?.cityName?.toLowerCase().includes("bassin");
+
   useEffect(() => {
     if (!location) {
       navigate("/");
     }
-  }, []);
+  }, [location, navigate]);
 
   if (!location) return null;
 
@@ -34,7 +37,6 @@ export default function ListeAttente() {
     if (!email.includes("@")) return;
     setLoading(true);
     try {
-      // Check if email exists in waitlist
       const { data: existingLead } = await supabase
         .from("waitlist_leads")
         .select("id")
@@ -44,20 +46,14 @@ export default function ListeAttente() {
       if (existingLead) {
         toast({
           title: "Déjà inscrit(e) !",
-          description: "Vous êtes déjà inscrit(e) sur notre liste VIP ! Nous vous contacterons très bientôt.",
+          description: "Vous êtes déjà sur notre liste VIP ! Nous vous contacterons très bientôt.",
         });
         setLoading(false);
         return;
       }
-
-      // Check if email exists in profiles (registered user)
-      const { data: existingUser } = await supabase.from("profiles").select("id").eq("user_id", email).maybeSingle();
-
-      // Also try signUp check - if user already registered, supabase will catch it
       setStep(1);
     } catch (err) {
-      console.error("Check error:", err);
-      setStep(1); // proceed anyway on error
+      setStep(1);
     } finally {
       setLoading(false);
     }
@@ -66,14 +62,13 @@ export default function ListeAttente() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // Check phone duplication if provided
       if (phone.length >= 6) {
         const { data: phoneLead } = await supabase.from("waitlist_leads").select("id").eq("phone", phone).maybeSingle();
 
         if (phoneLead) {
           toast({
             title: "Déjà inscrit(e) !",
-            description: "Vous êtes déjà inscrit(e) sur notre liste VIP ! Nous vous contacterons très bientôt.",
+            description: "Ce numéro est déjà enregistré sur notre liste VIP.",
           });
           setLoading(false);
           return;
@@ -91,7 +86,6 @@ export default function ListeAttente() {
       if (error) throw error;
       setDone(true);
     } catch (err: any) {
-      console.error("Waitlist error:", err);
       toast({
         title: "Erreur",
         description: "Une erreur est survenue. Veuillez réessayer.",
@@ -113,21 +107,25 @@ export default function ListeAttente() {
             <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
               Votre accès VIP est confirmé !
             </h1>
-            <p className="text-muted-foreground mb-4 text-xl">
-              Nous vous préviendrons dès que Kalimera sera disponible à {location.cityName}.
+            <p className="text-muted-foreground mb-4 text-xl leading-relaxed">
+              Nous vous préviendrons dès que Kalimera sera disponible{" "}
+              {isBassin ? `dans le ${location.cityName}` : `à ${location.cityName}`}.
             </p>
             <p className="text-muted-foreground mb-8 text-xl">
-              Votre privilège est d'ores et déjà réservé,{" "}
-              <strong className="text-[hsl(var(--gold))]">3 mois offerts </strong> seront activés automatiquement lors
-              de votre première connexion, une fois le club lancé.
+              Votre privilège est réservé : <strong className="text-[hsl(var(--gold))]">3 mois offerts</strong> seront
+              activés automatiquement lors de votre première connexion.
             </p>
-            <Button onClick={() => navigate("/")} variant="outline" className="h-14 text-base rounded-xl px-8">
+            <Button
+              onClick={() => navigate("/")}
+              variant="outline"
+              className="h-14 text-base rounded-xl px-8 border-[hsl(var(--gold))] text-primary"
+            >
               Retour à l'accueil
             </Button>
           </div>
         </div>
         <div className="hidden lg:block flex-1 relative overflow-hidden">
-          <img decoding="async" src={heroCouple} alt="Couple heureux" className="absolute inset-0 w-full h-full object-cover" />
+          <img src={heroCouple} alt="Couple heureux" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-primary/70" />
         </div>
       </div>
@@ -138,7 +136,6 @@ export default function ListeAttente() {
     <div className="min-h-screen flex">
       <div className="flex-1 flex flex-col px-6 md:px-12 lg:px-20 py-8 overflow-y-auto">
         <div className="max-w-lg w-full mx-auto flex flex-col flex-1">
-          {/* Logo */}
           <button
             onClick={() => navigate("/")}
             className="font-heading text-2xl md:text-3xl font-semibold text-primary mb-8 block text-left"
@@ -146,15 +143,14 @@ export default function ListeAttente() {
             Kalimera
           </button>
 
-          {/* Location badge */}
+          {/* BADGE : Nettoyage de la répétition Bassin/Région */}
           <div className="flex items-center gap-2 mb-8 text-muted-foreground">
             <MapPin className="h-4 w-4 text-[hsl(var(--gold))]" />
-            <span className="text-xl">
-              {location.cityName}, {location.regionName}
+            <span className="text-xl font-medium text-[#1B2333]">
+              {isBassin ? location.cityName : `${location.cityName}, ${location.regionName}`}
             </span>
           </div>
 
-          {/* Progress */}
           <div className="mb-10">
             <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div
@@ -169,12 +165,13 @@ export default function ListeAttente() {
             {step === 0 ? (
               <div className="space-y-8">
                 <div>
-                  <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
+                  <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3 leading-tight">
                     Kalimera arrive bientôt en {location.regionName}.
                   </h1>
-                  <p className="text-muted-foreground text-xl">
-                    Rejoignez les membres de {location.cityName} et réservez votre privilège : 3 mois vous seront
-                    offerts dès notre arrivée.
+                  <p className="text-muted-foreground text-xl leading-relaxed">
+                    Rejoignez les membres {isBassin ? `du ${location.cityName}` : `de ${location.cityName}`} et réservez
+                    votre privilège : <strong className="text-[#1B2333]">3 mois vous seront offerts</strong> dès notre
+                    arrivée.
                   </p>
                 </div>
 
@@ -188,7 +185,7 @@ export default function ListeAttente() {
                     placeholder="votre@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 text-lg rounded-xl"
+                    className="h-14 text-lg rounded-xl border-slate-200 focus:border-[hsl(var(--gold))]"
                     autoFocus
                   />
                 </div>
@@ -196,7 +193,7 @@ export default function ListeAttente() {
                 <Button
                   onClick={handleStep1}
                   disabled={!email.includes("@") || loading}
-                  className="h-14 text-base rounded-xl bg-primary text-primary-foreground px-10"
+                  className="h-14 text-base rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90"
                 >
                   {loading ? "Vérification..." : "Continuer"}
                   {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
@@ -204,82 +201,63 @@ export default function ListeAttente() {
               </div>
             ) : (
               <div className="space-y-8">
-                <div>
-                  <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
-                    Souhaitez-vous être prévenu(e) en priorité dès notre arrivée ?
-                  </h1>
-                </div>
+                <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
+                  Souhaitez-vous être prévenu(e) en priorité ?
+                </h1>
 
                 <div className="max-w-sm space-y-6">
                   <div>
                     <label className="block font-medium text-foreground mb-3 text-xl">
                       <Phone className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
-                      Numéro de téléphone (optionnel)
+                      Téléphone (optionnel)
                     </label>
                     <div className="flex gap-3">
-                      <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-base font-medium text-foreground shrink-0">
+                      <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-base font-medium shrink-0">
                         🇫🇷 +33
                       </div>
                       <Input
                         type="tel"
                         placeholder="6 12 34 56 78"
                         value={phone}
-                        onChange={(e) => {
-                          const val = e.target.value.replace(/\D/g, "").slice(0, 10);
-                          setPhone(val);
-                        }}
+                        onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
                         className="h-14 text-lg rounded-xl flex-1"
-                        inputMode="tel"
-                        autoFocus
                       />
                     </div>
                   </div>
 
                   {phone.length >= 6 && (
-                    <div className="animate-fade-in">
-                      <p className="font-medium text-foreground mb-4 text-xl">
-                        Comment préférez-vous être informé(e) ?
-                      </p>
-                      <div className="space-y-3">
-                        <label className="flex items-center justify-between gap-3 p-4 rounded-xl border border-border hover:border-gold/40 transition-colors cursor-pointer">
-                          <span className="text-xl">💬 Par SMS</span>
-                          <Switch
-                            checked={prefersSms}
-                            onCheckedChange={setPrefersSms}
-                            className="data-[state=checked]:bg-[#C5A059]"
-                          />
-                        </label>
-                        <label className="flex items-center justify-between gap-3 p-4 rounded-xl border border-border hover:border-gold/40 transition-colors cursor-pointer">
-                          <span className="text-xl">📞 Appel de courtoisie de l'équipe</span>
-                          <Switch
-                            checked={prefersCall}
-                            onCheckedChange={setPrefersCall}
-                            className="data-[state=checked]:bg-[#C5A059]"
-                          />
-                        </label>
-                      </div>
+                    <div className="animate-fade-in space-y-4">
+                      <p className="font-medium text-foreground text-xl">Préférence de contact :</p>
+                      <label className="flex items-center justify-between p-4 rounded-xl border border-border hover:border-[hsl(var(--gold))]/40 cursor-pointer">
+                        <span className="text-xl">💬 Par SMS</span>
+                        <Switch
+                          checked={prefersSms}
+                          onCheckedChange={setPrefersSms}
+                          className="data-[state=checked]:bg-[#C5A059]"
+                        />
+                      </label>
+                      <label className="flex items-center justify-between p-4 rounded-xl border border-border hover:border-[hsl(var(--gold))]/40 cursor-pointer">
+                        <span className="text-xl">📞 Appel de courtoisie</span>
+                        <Switch
+                          checked={prefersCall}
+                          onCheckedChange={setPrefersCall}
+                          className="data-[state=checked]:bg-[#C5A059]"
+                        />
+                      </label>
                     </div>
                   )}
                 </div>
 
-                {/* Trust text */}
-                <p className="text-muted-foreground flex items-center gap-1.5 text-lg">
-                  <Lock className="h-3.5 w-3.5" />
-                  Vos informations sont strictement confidentielles et ne seront jamais partagées.
-                </p>
-
                 <div className="flex gap-4 max-w-sm">
                   <Button variant="outline" onClick={() => setStep(0)} className="h-14 text-base rounded-xl flex-1">
-                    <ArrowLeft className="mr-2 h-5 w-5" />
-                    Retour
+                    <ArrowLeft className="mr-2 h-5 w-5" /> Retour
                   </Button>
                   <Button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="h-14 text-base rounded-xl flex-[2] bg-[hsl(var(--gold))] text-primary hover:opacity-90"
+                    className="h-14 text-base rounded-xl flex-[2] bg-[hsl(var(--gold))] text-primary font-bold"
                   >
                     {loading ? "Envoi..." : "Valider mon accès VIP"}
-                    <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </div>
               </div>
@@ -288,9 +266,8 @@ export default function ListeAttente() {
         </div>
       </div>
 
-      {/* Right image */}
       <div className="hidden lg:block flex-1 relative overflow-hidden">
-        <img decoding="async" src={heroCouple} alt="Couple heureux" className="absolute inset-0 w-full h-full object-cover" />
+        <img src={heroCouple} alt="Couple" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-primary/70" />
         <div className="absolute inset-0 flex items-center justify-center p-16">
           <div className="text-center text-primary-foreground relative z-10">
