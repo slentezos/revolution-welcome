@@ -19,7 +19,7 @@ export const RegistrationLocationHeader = () => {
   const isPinpoint = !!PINPOINT_MAPPING[data.zip];
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-10 p-6 bg-[#1B2333] border-l-4 border-[hsl(var(--gold))] rounded-r-2xl shadow-2xl flex items-center gap-4 animate-in fade-in zoom-in-95">
+    <div className="w-full max-w-2xl mx-auto mb-10 p-6 border-l-4 border-[hsl(var(--gold))] rounded-r-2xl shadow-2xl flex items-center gap-4 animate-in fade-in zoom-in-95 bg-slate-50/[0.03]">
       {isPinpoint ? (
         <CheckCircle2 className="h-8 w-8 text-[hsl(var(--gold))]" />
       ) : (

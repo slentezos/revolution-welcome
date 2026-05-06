@@ -245,17 +245,17 @@ export default function Inscription() {
             <div className="flex justify-center gap-12 mb-16">
               <div>
                 <div className="text-5xl font-heading font-bold text-[hsl(var(--gold))] mb-1">40+</div>
-                <div className="text-primary-foreground/60 text-sm uppercase tracking-widest font-bold">Rubriques</div>
+                <div className="text-primary-foreground/60 text-sm uppercase tracking-widest font-bold text-slate-50">Rubriques</div>
               </div>
               <div>
                 <div className="text-5xl font-heading font-bold text-[hsl(var(--gold))] mb-1">300+</div>
-                <div className="text-primary-foreground/60 text-sm uppercase tracking-widest font-bold">Critères</div>
+                <div className="text-primary-foreground/60 text-sm uppercase tracking-widest font-bold text-slate-50">Critères</div>
               </div>
             </div>
 
             {/* POSITIONNEMENT FINAL DU LIEN DE CONNEXION */}
             <div className="pt-8 border-t border-white/10 animate-in fade-in zoom-in-95 duration-700">
-              <p className="text-white/60 text-lg mb-2">Déjà membre de notre club ?</p>
+              <p className="text-lg mb-2 text-slate-50">Déjà membre de notre club ?</p>
               <Link
                 to="/connexion"
                 className="inline-block px-10 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white font-bold text-xl hover:bg-white/20 transition-all active:scale-[0.98]"
