@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import OnboardingMedia from "@/components/onboarding/OnboardingMedia";
 import OnboardingQuiz from "@/components/onboarding/OnboardingQuiz";
 import OnboardingProfile from "@/components/onboarding/OnboardingProfile";
 import OnboardingPersonality from "@/components/onboarding/OnboardingPersonality";
 import WelcomeRoadmap from "@/components/onboarding/WelcomeRoadmap";
-import { Image, HelpCircle, ClipboardList, Brain, BookOpen, Check } from "lucide-react";
+import { Image, HelpCircle, ClipboardList, Brain, BookOpen, Check, Clock } from "lucide-react";
 import { useCriteriaCooldown } from "@/hooks/useCriteriaCooldown";
 
 type OnboardingStep =
@@ -26,6 +26,8 @@ export default function Onboarding() {
   const [loading, setLoading] = useState(true);
   const [isReturningUser, setIsReturningUser] = useState(false);
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
+  const [showValidationScreen, setShowValidationScreen] = useState(false);
+  const [firstName, setFirstName] = useState<string>("");
 
   const cooldown = useCriteriaCooldown(profileId);
 
@@ -117,7 +119,12 @@ export default function Onboarding() {
       return;
     }
     await cooldown.recordOnboardingComplete();
-    navigate("/dashboard");
+    // Récupérer le prénom pour l'écran de validation
+    if (profileId) {
+      const { data } = await supabase.from("profiles").select("first_name").eq("id", profileId).maybeSingle();
+      if (data?.first_name) setFirstName(data.first_name);
+    }
+    setShowValidationScreen(true);
   };
 
   const handleTabClick = (tabId: string) => {
@@ -141,6 +148,37 @@ export default function Onboarding() {
   const currentTabIndex = tabs.findIndex((t) => t.id === effectiveTab);
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
+
+  if (showValidationScreen) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background px-6 py-12">
+        <div className="max-w-xl w-full text-center bg-white rounded-2xl border border-[#E5E0D8] shadow-[var(--shadow-luxury)] p-10 md:p-14">
+          <Link to="/" className="font-heading text-3xl font-semibold text-primary mb-8 block">
+            Kalimera
+          </Link>
+          <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
+            <Clock className="h-10 w-10 text-[hsl(var(--gold))]" />
+          </div>
+          <h1 className="font-heading text-4xl font-semibold mb-4 text-[#1B2333]">
+            Félicitations{firstName ? `, ${firstName}` : ""} !
+          </h1>
+          <p className="text-foreground text-2xl mb-4 leading-relaxed">
+            Votre profil est complet.
+          </p>
+          <p className="text-muted-foreground text-xl mb-8 leading-relaxed">
+            Notre équipe procède à une vérification attentive de votre profil. Vous recevrez une notification dès son
+            activation, généralement <span className="font-semibold text-foreground">sous 24 heures</span>.
+          </p>
+          <button
+            onClick={() => navigate("/")}
+            className="inline-block bg-[#1B2333] text-white px-10 py-4 font-bold rounded-xl text-lg transition-all hover:scale-[1.02] min-h-[56px]"
+          >
+            Retour à l'accueil
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
