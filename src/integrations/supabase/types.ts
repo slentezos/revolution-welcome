@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -55,52 +55,70 @@ export type Database = {
       profiles: {
         Row: {
           account_status: string
+          active_location: string
           birth_date: string | null
           city_name: string | null
           created_at: string
           first_name: string | null
           gender: string | null
           id: string
+          last_location_switch: string | null
           last_name: string | null
+          last_secondary_update: string | null
           looking_for: string | null
           onboarding_step: string
           phone: string | null
           postal_code: string | null
           region_name: string | null
+          secondary_city_name: string | null
+          secondary_postal_code: string | null
+          secondary_region_name: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           account_status?: string
+          active_location?: string
           birth_date?: string | null
           city_name?: string | null
           created_at?: string
           first_name?: string | null
           gender?: string | null
           id?: string
+          last_location_switch?: string | null
           last_name?: string | null
+          last_secondary_update?: string | null
           looking_for?: string | null
           onboarding_step?: string
           phone?: string | null
           postal_code?: string | null
           region_name?: string | null
+          secondary_city_name?: string | null
+          secondary_postal_code?: string | null
+          secondary_region_name?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           account_status?: string
+          active_location?: string
           birth_date?: string | null
           city_name?: string | null
           created_at?: string
           first_name?: string | null
           gender?: string | null
           id?: string
+          last_location_switch?: string | null
           last_name?: string | null
+          last_secondary_update?: string | null
           looking_for?: string | null
           onboarding_step?: string
           phone?: string | null
           postal_code?: string | null
           region_name?: string | null
+          secondary_city_name?: string | null
+          secondary_postal_code?: string | null
+          secondary_region_name?: string | null
           updated_at?: string
           user_id?: string
         }

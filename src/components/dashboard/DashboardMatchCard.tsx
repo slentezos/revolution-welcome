@@ -80,9 +80,23 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
               <h4 className="font-heading text-3xl lg:text-4xl text-foreground tracking-tight">
                 {match.name}, <span className="text-muted-foreground">{match.age} ans</span>
               </h4>
-              <div className="flex items-center gap-2 mt-1.5">
-                <MapPin className="h-4 w-4 text-gold" />
-                <span className="text-muted-foreground font-medium text-xl">{match.location}</span>
+              <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-lg font-medium text-foreground">
+                  <MapPin className="h-4 w-4 text-gold" />
+                  {match.location} <span className="text-muted-foreground">(Résidence)</span>
+                </span>
+                {(match as any).secondaryLocation && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-lg font-medium text-foreground">
+                    <MapPin className="h-4 w-4 text-gold" />
+                    {(match as any).secondaryLocation} <span className="text-muted-foreground">(Secondaire)</span>
+                  </span>
+                )}
+                {(match as any).inYourRegion && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200/60 px-3 py-1 text-lg font-medium text-emerald-800">
+                    <Sparkles className="h-4 w-4" />
+                    Actuellement dans votre région
+                  </span>
+                )}
               </div>
             </div>
             <div className="hidden lg:flex flex-col items-end gap-1">

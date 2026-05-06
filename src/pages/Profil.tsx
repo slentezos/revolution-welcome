@@ -138,7 +138,9 @@ export default function Profil() {
           userEmail={user?.email || ""}
           saving={saving}
           onSave={handleSave}
-          onContactTab={() => setActiveTab("contact")} />
+          onContactTab={() => setActiveTab("contact")}
+          profile={profile}
+          onProfileUpdated={(next) => setProfile((prev: any) => ({ ...(prev || {}), ...next }))} />
 
         }
         {activeTab === "questionnaires" &&
