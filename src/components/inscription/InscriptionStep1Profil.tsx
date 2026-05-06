@@ -139,10 +139,10 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 type="button"
                 onClick={() => update("gender", opt.value)}
                 className={cn(
-                  "h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
+                  "h-14 px-3 rounded-xl text-lg md:text-xl font-medium whitespace-nowrap transition-all duration-300 border-[#1B2333] bg-[#1B2333] text-white border",
                   formData.gender === opt.value
                     ? "border-[#1B2333] bg-[#1B2333] text-white"
-                    : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
+                    : "border-[#1B2333] bg-[#1B2333] text-white border",
                 )}
               >
                 {opt.label}
@@ -164,10 +164,10 @@ export default function InscriptionStep1Profil({ formData, setFormData, onNext, 
                 type="button"
                 onClick={() => update("lookingFor", opt.value)}
                 className={cn(
-                  "h-14 px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
+                  "h-14 px-3 rounded-xl text-lg md:text-xl font-medium whitespace-nowrap transition-all duration-300 border-[#1B2333] bg-[#1B2333] text-white border",
                   formData.lookingFor === opt.value
                     ? "border-[#1B2333] bg-[#1B2333] text-white"
-                    : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
+                    : "border-[#1B2333] bg-[#1B2333] text-white border",
                 )}
               >
                 {opt.label}
