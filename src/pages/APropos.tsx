@@ -101,7 +101,7 @@ export default function APropos() {
 
             <div data-reveal data-reveal-delay="250" className="divider-gold mb-10" />
 
-            <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
+            <div className="space-y-6 text-muted-foreground leading-relaxed text-xl">
               <p data-reveal data-reveal-delay="350" className="font-sans text-xl">
                 <strong className="text-foreground"> Kalimera </strong> est né en 2020, au cœur du Covid.
               </p>
