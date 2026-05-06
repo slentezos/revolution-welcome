@@ -82,7 +82,8 @@ export default function Profil() {
           last_name: profileData.last_name || "",
           birth_date: profileData.birth_date || "",
           gender: profileData.gender || "",
-          looking_for: profileData.looking_for || ""
+          looking_for: profileData.looking_for || "",
+          phone: profileData.phone || "",
         });
       }
       setLoading(false);
