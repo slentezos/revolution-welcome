@@ -238,7 +238,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
         {/* Toggle de présence */}
         <div className="mb-10">
           <p className="font-bold text-foreground text-xl mb-4 uppercase tracking-widest">Sélecteur de Rayonnement</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-background border-2 border-border rounded-lg p-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 rounded-lg p-2 bg-transparent border-0 border-transparent">
             {(["primary", "secondary"] as const).map((loc) => {
               const isActive = profile.active_location === loc;
               const cityLabel = loc === "primary" ? profile.city_name : profile.secondary_city_name;
