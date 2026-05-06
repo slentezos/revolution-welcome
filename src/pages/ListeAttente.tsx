@@ -173,7 +173,7 @@ export default function ListeAttente() {
                 </div>
 
                 <div className="max-w-sm">
-                  <label className="block font-medium text-foreground mb-3 text-xl">
+                  <label className="block font-medium text-foreground mb-3 text-2xl">
                     <Mail className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
                     Votre adresse email *
                   </label>
