@@ -108,7 +108,7 @@ export default function ListeAttente() {
             <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
               Votre accès VIP est confirmé !
             </h1>
-            <p className="text-muted-foreground mb-4 text-xl leading-relaxed">
+            <p className="text-muted-foreground mb-4 text-2xl leading-relaxed">
               Nous vous préviendrons dès que Kalimera sera disponible
               {isPinpoint ? ` à ${displayLocation}` : ` dans le ${displayLocation}`}.
             </p>
