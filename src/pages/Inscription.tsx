@@ -307,6 +307,7 @@ export default function Inscription() {
           </div>
         </div>
       </div>
+      </div>
     </div>
   );
 }
