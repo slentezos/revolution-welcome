@@ -579,7 +579,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
               <Pause className="h-8 w-8 text-[hsl(var(--gold))]" />
             </div>
             <h2 className="font-heading text-3xl md:text-4xl text-foreground leading-tight">Le saviez-vous ?</h2>
-            <p className="text-muted-foreground text-lg md:text-2xl">
+            <p className="text-muted-foreground text-2xl md:text-2xl">
               Vous n'êtes pas obligé(e) de tout effacer. Mettez votre profil en{" "}
               <span className="font-medium text-foreground">pause sérénité</span>.
             </p>
