@@ -31,6 +31,7 @@ export default function GiftPopup() {
   };
 
   return (
+    <>
     <Dialog open={open} onOpenChange={(v) => {if (!v) handleDismiss();}}>
       <DialogContent className="sm:max-w-4xl w-[calc(100%-2rem)] p-0 overflow-hidden gap-0">
         <div className="grid grid-cols-1 md:grid-cols-2 min-h-[480px]">
