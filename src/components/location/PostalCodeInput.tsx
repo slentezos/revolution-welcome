@@ -63,18 +63,22 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
         </button>
       </div>
 
-      {/* City/Region display */}
+      {/* City/Region display - UPDATED WITH UX EXPLANATION */}
       {locationInfo && (
-        <div className="mt-3 animate-fade-in">
-          <p className="font-bold text-2xl">
-            📍 {locationInfo.cityName}, {locationInfo.regionName}
+        <div className="mt-4 p-4 bg-[#222a39]/50 border border-[hsl(var(--gold))/20] rounded-xl animate-fade-in text-left">
+          <p className="font-bold text-2xl text-[hsl(var(--gold))] mb-2 flex items-center gap-2">
+            📍 Bassin de {locationInfo.regionName}
+          </p>
+          <p className="text-base text-primary-foreground/80 leading-relaxed">
+            Votre code postal ({postalCode}) a bien été identifié. Pour vous garantir des mises en relation pertinentes,
+            vous êtes rattaché(e) au bassin de rencontre de <strong>{locationInfo.regionName} et ses alentours</strong>.
           </p>
         </div>
       )}
 
       {/* Helper text */}
       <p
-        className={`text-lg mt-3 flex items-center gap-1.5 ${isHero ? "text-muted-foreground justify-center" : "text-primary-foreground/60"}`}
+        className={`text-lg mt-4 flex items-center gap-1.5 ${isHero ? "text-muted-foreground justify-center" : "text-primary-foreground/60"}`}
       >
         <Lock className="h-3.5 w-3.5" />
         Vérification de la proximité pour garantir des rencontres authentiques.
