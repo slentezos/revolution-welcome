@@ -289,7 +289,7 @@ export default function Connexion() {
                         Numéro de téléphone
                       </label>
                       <div className="flex gap-3">
-                        <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-lg font-medium text-foreground shrink-0 bg-transparent border-[#e4dfd7]">
+                        <div className="h-14 px-4 flex items-center bg-muted rounded-xl font-medium text-foreground shrink-0 bg-transparent border-[#e4dfd7] text-xl">
                           🇫🇷 +33
                         </div>
                         <Input
