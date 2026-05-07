@@ -213,14 +213,27 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       }
     }
 
-    if (!cityInput.trim()) {
+    const country = COUNTRIES.find((c) => c.code === countryInput);
+
+    if (!isFrance) {
+      if (!countryInput || !country) {
+        toast.error("Veuillez sélectionner un pays.");
+        return;
+      }
+      if (!cityInput.trim()) {
+        toast.error("Veuillez indiquer le nom de la ville.");
+        return;
+      }
+    } else if (!cityInput.trim()) {
       toast.error("Veuillez indiquer le nom de la destination.");
       return;
     }
 
     setSubmitting(true);
 
-    const finalCity = cityInput.trim();
+    const finalCity = isFrance
+      ? cityInput.trim()
+      : `${cityInput.trim()}, ${country!.name}`;
     const finalPostal = isFrance ? postalInput.trim() : null; // On annule le CP si c'est à l'étranger
 
     const patch =
