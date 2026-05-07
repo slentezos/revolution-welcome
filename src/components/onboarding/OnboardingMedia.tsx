@@ -60,7 +60,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -194,7 +193,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     }
   };
 
-  const videoSlot = slots[0];
   const photoSlots = slots.slice(1, 5);
 
   if (loading)
@@ -203,32 +201,32 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   return (
     <div className="h-[calc(100vh-140px)] flex flex-col bg-white overflow-hidden">
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 p-6 lg:p-10 min-h-0">
-        {/* SECTION VIDÉO (GAUCHE) */}
-        <div className="flex flex-col gap-6 h-full">
-          <div className="flex items-center justify-between">
+        {/* SECTION VIDÉO */}
+        <div className="flex flex-col gap-6 h-full overflow-hidden">
+          <div className="flex items-center justify-between shrink-0">
             <h2 className="font-heading text-4xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
-            <div className="px-5 py-2 bg-secondary/50 rounded-xl border border-[#E5E0D8]">
+            <div className="px-5 py-2 bg-[#FCF9F5] rounded-xl border border-[#E5E0D8]">
               <span className="text-[#1B2333] font-bold text-2xl">{slots.filter((s) => s.preview).length}</span>
               <span className="text-gray-400 text-2xl"> / 5</span>
             </div>
           </div>
 
           <div
-            className="relative flex-1 rounded-[2.5rem] overflow-hidden border border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all cursor-pointer group"
-            onClick={() => !videoSlot.preview && handleSlotClick("video")}
+            className="relative flex-1 rounded-[2.5rem] overflow-hidden border-2 border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all cursor-pointer group"
+            onClick={() => !slots[0].preview && handleSlotClick("video")}
           >
-            {videoSlot.preview ? (
+            {slots[0].preview ? (
               <div className="relative w-full h-full" onClick={togglePlay}>
                 <video
                   ref={videoRef}
-                  src={videoSlot.preview}
+                  src={slots[0].preview}
                   className="w-full h-full object-cover"
                   muted={isMuted}
                   onEnded={() => setIsPlaying(false)}
                 />
                 {!isPlaying && (
                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                    <div className="w-24 h-24 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
+                    <div className="w-24 h-24 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-2xl">
                       <Play className="h-12 w-12 text-white fill-white" />
                     </div>
                   </div>
@@ -238,9 +236,9 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     e.stopPropagation();
                     setIsMuted(!isMuted);
                   }}
-                  className="absolute bottom-6 left-6 p-3 bg-black/40 backdrop-blur-md text-white rounded-xl z-10"
+                  className="absolute bottom-8 left-8 p-4 bg-black/40 backdrop-blur-md text-white rounded-2xl hover:bg-black/60 transition-all z-10 shadow-lg"
                 >
-                  {isMuted ? <VolumeX /> : <Volume2 />}
+                  {isMuted ? <VolumeX className="h-7 w-7" /> : <Volume2 className="h-7 w-7" />}
                 </button>
                 <button
                   onClick={(e) => {
@@ -249,17 +247,17 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       prev.map((s) => (s.id === "video" ? { ...s, preview: undefined, file: undefined } : s)),
                     );
                   }}
-                  className="absolute top-6 right-6 p-3 bg-red-500 text-white rounded-full z-10"
+                  className="absolute top-8 right-8 p-4 bg-red-500 text-white rounded-full z-10 shadow-xl hover:scale-105 active:scale-95 transition-all"
                 >
-                  <X />
+                  <X className="h-7 w-7" />
                 </button>
               </div>
             ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-6">
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-8">
                 <div className="w-20 h-20 rounded-full bg-white border border-[#E5E0D8] flex items-center justify-center shadow-sm">
                   <Video className="h-10 w-10 text-[hsl(var(--gold))]" />
                 </div>
-                <span className="text-2xl font-bold text-[#1B2333]">+ Ajouter ma vidéo</span>
+                <span className="text-3xl font-bold text-[#1B2333]">+ Ajouter ma vidéo</span>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -277,24 +275,24 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between px-4">
-            <p className="text-slate-500 text-xl italic">Votre sourire est votre plus belle signature.</p>
+          <div className="flex items-center justify-between px-4 shrink-0">
+            <p className="text-slate-500 text-xl italic font-medium">Votre sourire est votre plus belle signature.</p>
             <button
               onClick={() => setShowVideoTutorial(true)}
-              className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold text-xl"
+              className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold text-xl hover:bg-[hsl(var(--gold))]/20 transition-all"
             >
               <Lightbulb className="h-5 w-5" /> Conseils vidéo
             </button>
           </div>
         </div>
 
-        {/* SECTION PHOTOS (DROITE) */}
-        <div className="flex flex-col gap-6 h-full">
-          <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-4">
+        {/* SECTION PHOTOS - GRILLE FIXE HAUTE PERFORMANCE */}
+        <div className="flex flex-col gap-6 h-full overflow-hidden">
+          <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-5">
             {photoSlots.map((slot) => (
               <div
                 key={slot.id}
-                className="relative rounded-[1.8rem] overflow-hidden border border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all cursor-pointer"
+                className="relative rounded-[2rem] overflow-hidden border-2 border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all cursor-pointer group"
                 onClick={() => handleSlotClick(slot.id)}
               >
                 {slot.preview ? (
@@ -307,66 +305,66 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                           prev.map((s) => (s.id === slot.id ? { ...s, preview: undefined, file: undefined } : s)),
                         );
                       }}
-                      className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-full shadow-md"
+                      className="absolute top-4 right-4 p-2.5 bg-red-500 text-white rounded-full shadow-lg hover:scale-105 transition-all"
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-5 w-5" />
                     </button>
                   </>
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                    <div className="w-14 h-14 rounded-full bg-white border border-[#E5E0D8] flex items-center justify-center mb-2">
-                      <Camera className="h-6 w-6 text-slate-400" />
+                    <div className="w-16 h-16 rounded-full bg-white border border-[#E5E0D8] flex items-center justify-center mb-3 shadow-sm">
+                      <Camera className="h-7 w-7 text-slate-400" />
                     </div>
-                    <span className="text-lg font-bold text-[#1B2333]">+ {slot.label}</span>
+                    <span className="text-xl font-bold text-[#1B2333]">+ {slot.label}</span>
                   </div>
                 )}
               </div>
             ))}
           </div>
 
-          {/* BLOC INFO RESTAURÉ */}
-          <div className="bg-slate-50 border border-slate-100 p-5 rounded-2xl flex items-start gap-4">
-            <Info className="h-6 w-6 text-slate-400 shrink-0 mt-1" />
-            <div className="text-slate-500 text-lg leading-snug">
+          {/* BLOC INFO RESTAURÉ - CAC40 STANDARD */}
+          <div className="bg-[#FCF9F5] border border-[#E5E0D8] p-5 rounded-3xl flex items-start gap-4 shadow-sm shrink-0">
+            <Info className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-1" />
+            <div className="text-slate-600 text-lg leading-snug font-medium">
               <p>
-                Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong>.
+                Formats acceptés : <strong className="text-[#1B2333]">JPG, PNG, HEIC</strong> (pas de GIF).
               </p>
               <p>
-                Taille maximale : <strong className="text-slate-700">10 Mo</strong> par photo.
+                Taille maximale : <strong className="text-[#1B2333]">10 Mo</strong> par photo.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* FOOTER & SAUVEGARDE */}
-      <div className="bg-white border-t border-[#E5E0D8] py-8 px-10">
+      {/* FOOTER PREMIUM */}
+      <div className="bg-white border-t border-[#E5E0D8] py-8 px-10 shrink-0">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div
             className={cn(
-              "flex items-center gap-5 p-5 rounded-2xl border transition-all cursor-pointer w-full md:w-auto",
-              confirmedAge ? "bg-emerald-50 border-emerald-200" : "bg-white border-[#E5E0D8]",
+              "flex items-center gap-6 p-6 rounded-3xl border-2 transition-all cursor-pointer w-full md:w-auto",
+              confirmedAge ? "bg-emerald-50 border-emerald-300" : "bg-white border-[#E5E0D8]",
             )}
             onClick={() => setConfirmedAge(!confirmedAge)}
           >
             <div
               className={cn(
-                "h-8 w-8 rounded-lg border-2 flex items-center justify-center transition-all",
-                confirmedAge ? "bg-emerald-500 border-emerald-500" : "bg-white border-slate-300",
+                "h-8 w-8 rounded-xl border-2 flex items-center justify-center transition-all",
+                confirmedAge ? "bg-emerald-600 border-emerald-600 shadow-md" : "bg-white border-slate-300",
               )}
             >
-              {confirmedAge && <Check className="text-white h-6 w-6" />}
+              {confirmedAge && <Check className="text-white h-6 w-6 stroke-[3px]" />}
             </div>
             <p className="text-xl font-bold text-[#1B2333]">
-              Je certifie que mes photos ont <span className="underline text-[hsl(var(--gold))]">moins de 18 mois</span>
-              .
+              Je certifie sur l'honneur que mes photos ont{" "}
+              <span className="underline text-[hsl(var(--gold))]">moins de 18 mois</span>.
             </p>
           </div>
           <div className="flex gap-4 w-full md:w-auto">
             <Button
               variant="outline"
               onClick={handleSave}
-              className="h-16 px-10 rounded-2xl border-[#E5E0D8] font-bold text-xl"
+              className="h-16 px-10 rounded-2xl border-[#E5E0D8] font-bold text-xl hover:bg-slate-50 text-[#1B2333]"
             >
               Enregistrer
             </Button>
@@ -375,16 +373,15 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               disabled={!confirmedAge || uploading}
               className={cn(
                 "h-16 px-12 rounded-2xl font-bold text-xl shadow-xl transition-all flex-1 md:flex-none",
-                confirmedAge ? "bg-[#1B2333] text-white" : "bg-slate-100 text-slate-400",
+                confirmedAge ? "bg-[#1B2333] text-white hover:bg-[#1B2333]/90" : "bg-slate-100 text-slate-400",
               )}
             >
-              {uploading ? <Loader2 className="animate-spin" /> : "Valider mon profil"}
+              {uploading ? <Loader2 className="animate-spin h-6 w-6" /> : "Valider mon profil"}
             </Button>
           </div>
         </div>
       </div>
 
-      {/* INPUT TECHNIQUE */}
       <input
         key={activeSlotId}
         ref={fileInputRef}
@@ -394,20 +391,19 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         onChange={handleFileChange}
       />
 
-      {/* MODAL SUCCÈS */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem]">
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
-              <Check className="h-10 w-10 text-emerald-600" />
+        <DialogContent className="max-w-md p-10 text-center rounded-[3rem] border-0 shadow-3xl bg-white">
+          <div className="flex flex-col items-center gap-8">
+            <div className="w-24 h-24 rounded-full bg-emerald-100 flex items-center justify-center shadow-inner">
+              <Check className="h-12 w-12 text-emerald-600" />
             </div>
-            <DialogTitle className="text-3xl font-bold text-[#1B2333]">Profil enregistré !</DialogTitle>
+            <DialogTitle className="text-3xl font-bold text-[#1B2333] font-heading">Profil enregistré !</DialogTitle>
             <Button
               onClick={() => {
                 setShowSaveDialog(false);
                 onComplete();
               }}
-              className="w-full h-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl"
+              className="w-full h-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl hover:scale-[1.02] transition-transform"
             >
               Continuer
             </Button>
