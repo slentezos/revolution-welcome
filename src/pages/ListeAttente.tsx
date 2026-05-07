@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Phone, Lock, ArrowRight, ArrowLeft, CheckCircle, MapPin } from "lucide-react";
+import { Mail, Phone, ArrowRight, ArrowLeft, CheckCircle, MapPin, Check, ShieldCheck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { getStoredLocation } from "@/data/frenchPostalCodes";
 import { useToast } from "@/hooks/use-toast";
@@ -14,7 +13,7 @@ export default function ListeAttente() {
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [prefersSms, setPrefersSms] = useState(true);
+  const [prefersSms, setPrefersSms] = useState(true); // Coché par défaut pour encourager l'opt-in
   const [prefersCall, setPrefersCall] = useState(false);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
@@ -138,7 +137,7 @@ export default function ListeAttente() {
         <div className="max-w-lg w-full mx-auto flex flex-col min-h-full">
           <button
             onClick={() => navigate("/")}
-            className="font-heading text-2xl md:text-3xl font-semibold text-primary mb-8 block text-left"
+            className="font-heading text-2xl md:text-3xl font-semibold text-[#1B2333] mb-8 block text-left"
           >
             Kalimera
           </button>
@@ -149,23 +148,23 @@ export default function ListeAttente() {
           </div>
 
           <div className="mb-10">
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
+            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
               <div
                 className="h-full bg-[hsl(var(--gold))] rounded-full transition-all duration-500"
                 style={{ width: `${((step + 1) / 2) * 100}%` }}
               />
             </div>
-            <p className="text-muted-foreground mt-2 text-xl">Étape {step + 1} sur 2</p>
+            <p className="text-slate-400 font-medium mt-2 text-lg">Étape {step + 1} sur 2</p>
           </div>
 
           <div className="flex-1">
             {step === 0 ? (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
                 <div>
-                  <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3 leading-tight">
+                  <h1 className="font-heading text-3xl md:text-4xl font-bold text-[#1B2333] mb-4 leading-tight">
                     Kalimera arrive bientôt en {location.regionName}.
                   </h1>
-                  <p className="text-muted-foreground text-xl leading-relaxed">
+                  <p className="text-slate-500 text-xl leading-relaxed">
                     Rejoignez les membres {isPinpoint ? `de ${displayLocation}` : `du ${displayLocation}`} et réservez
                     votre privilège :<strong className="text-[#1B2333]"> 3 mois vous seront offerts </strong> dès notre
                     arrivée.
@@ -173,8 +172,8 @@ export default function ListeAttente() {
                 </div>
 
                 <div className="max-w-sm">
-                  <label className="block font-medium text-foreground mb-3 text-xl">
-                    <Mail className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
+                  <label className="block font-medium text-[#1B2333] mb-3 text-xl">
+                    <Mail className="inline h-5 w-5 mr-2 -mt-0.5 text-[hsl(var(--gold))]" />
                     Votre adresse email *
                   </label>
                   <Input
@@ -182,7 +181,7 @@ export default function ListeAttente() {
                     placeholder="votre@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 rounded-xl border-slate-200 focus:border-[hsl(var(--gold))] text-xl text-primary"
+                    className="h-16 rounded-xl border-2 border-slate-200 focus:border-[hsl(var(--gold))] text-xl text-[#1B2333]"
                     autoFocus
                   />
                 </div>
@@ -190,26 +189,26 @@ export default function ListeAttente() {
                 <Button
                   onClick={handleStep1}
                   disabled={!email.includes("@") || loading}
-                  className="h-14 rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90 text-xl"
+                  className="h-16 rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90 text-xl font-bold transition-all shadow-md"
                 >
                   {loading ? "Vérification..." : "Continuer"}
-                  {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
+                  {!loading && <ArrowRight className="ml-2 h-6 w-6" />}
                 </Button>
               </div>
             ) : (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
-                <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
+                <h1 className="font-heading text-3xl md:text-4xl font-bold text-[#1B2333] mb-3">
                   Souhaitez-vous être prévenu(e) en priorité ?
                 </h1>
 
-                <div className="max-w-sm space-y-6">
+                <div className="max-w-md space-y-6">
                   <div>
-                    <label className="block font-medium text-foreground mb-3 text-xl">
-                      <Phone className="inline h-5 w-5 mr-1 -mt-0.5 text-[hsl(var(--gold))]" />
+                    <label className="block font-medium text-[#1B2333] mb-3 text-xl">
+                      <Phone className="inline h-5 w-5 mr-2 -mt-0.5 text-[hsl(var(--gold))]" />
                       Téléphone (optionnel)
                     </label>
                     <div className="flex gap-3">
-                      <div className="h-14 px-4 flex items-center bg-muted rounded-xl font-medium shrink-0 text-xl">
+                      <div className="h-16 px-5 flex items-center bg-slate-50 border-2 border-slate-200 rounded-xl font-bold shrink-0 text-xl text-[#1B2333]">
                         🇫🇷 +33
                       </div>
                       <Input
@@ -217,46 +216,87 @@ export default function ListeAttente() {
                         placeholder="6 12 34 56 78"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                        className="h-14 rounded-xl flex-1 text-xl"
+                        className="h-16 rounded-xl flex-1 text-xl border-2 border-slate-200 focus:border-[hsl(var(--gold))] font-medium text-[#1B2333]"
+                        autoFocus
                       />
+                    </div>
+
+                    {/* ENCART DE CONFIDENTIALITÉ PREMIUM */}
+                    <div className="mt-4 p-5 bg-slate-50 border border-slate-200 rounded-xl flex gap-4 items-start shadow-sm">
+                      <ShieldCheck className="h-6 w-6 text-[hsl(var(--gold-dark))] shrink-0 mt-0.5" />
+                      <p className="text-slate-600 text-lg leading-relaxed">
+                        <strong className="font-bold text-[#1B2333]">Engagement de confidentialité :</strong> Votre
+                        numéro ne sera jamais utilisé pour du démarchage ni cédé à des tiers. Il sert exclusivement à
+                        vous prévenir de l'ouverture du club.
+                      </p>
                     </div>
                   </div>
 
                   {phone.length >= 6 && (
-                    <div className="animate-fade-in space-y-4">
-                      <p className="font-medium text-foreground text-xl">Préférence de contact :</p>
-                      <label className="flex items-center justify-between p-4 rounded-xl border border-border hover:border-[hsl(var(--gold))]/40 cursor-pointer transition-all">
-                        <span className="text-xl">💬 Par SMS</span>
-                        <Switch
-                          checked={prefersSms}
-                          onCheckedChange={setPrefersSms}
-                          className="data-[state=checked]:bg-[#C5A059]"
-                        />
-                      </label>
-                      <label className="flex items-center justify-between p-4 rounded-xl border border-border hover:border-[hsl(var(--gold))]/40 cursor-pointer transition-all">
-                        <span className="text-xl">📞 Appel de courtoisie</span>
-                        <Switch
-                          checked={prefersCall}
-                          onCheckedChange={setPrefersCall}
-                          className="data-[state=checked]:bg-[#C5A059]"
-                        />
-                      </label>
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4 pt-2">
+                      <p className="font-bold text-[#1B2333] text-xl mb-3">Vos préférences de contact :</p>
+
+                      {/* TICK BOX 1 : SMS */}
+                      <button
+                        type="button"
+                        onClick={() => setPrefersSms(!prefersSms)}
+                        className={`w-full flex items-center gap-4 p-5 rounded-xl border-2 text-left transition-all ${
+                          prefersSms
+                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5"
+                            : "border-slate-200 hover:border-slate-300 bg-white"
+                        }`}
+                      >
+                        <div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center border-2 shrink-0 transition-colors ${
+                            prefersSms ? "bg-[hsl(var(--gold))] border-[hsl(var(--gold))]" : "border-slate-300 bg-white"
+                          }`}
+                        >
+                          {prefersSms && <Check className="h-5 w-5 text-white" />}
+                        </div>
+                        <span className="text-xl font-medium text-[#1B2333]">
+                          J'accepte de recevoir un SMS d'invitation
+                        </span>
+                      </button>
+
+                      {/* TICK BOX 2 : APPEL */}
+                      <button
+                        type="button"
+                        onClick={() => setPrefersCall(!prefersCall)}
+                        className={`w-full flex items-center gap-4 p-5 rounded-xl border-2 text-left transition-all ${
+                          prefersCall
+                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5"
+                            : "border-slate-200 hover:border-slate-300 bg-white"
+                        }`}
+                      >
+                        <div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center border-2 shrink-0 transition-colors ${
+                            prefersCall
+                              ? "bg-[hsl(var(--gold))] border-[hsl(var(--gold))]"
+                              : "border-slate-300 bg-white"
+                          }`}
+                        >
+                          {prefersCall && <Check className="h-5 w-5 text-white" />}
+                        </div>
+                        <span className="text-xl font-medium text-[#1B2333]">
+                          J'accepte un court appel lors du lancement
+                        </span>
+                      </button>
                     </div>
                   )}
                 </div>
 
-                <div className="flex gap-4 max-w-sm">
+                <div className="flex gap-4 max-w-md pt-4">
                   <Button
                     variant="outline"
                     onClick={() => setStep(0)}
-                    className="h-14 text-base rounded-xl flex-1 border-slate-200"
+                    className="h-16 text-xl rounded-xl flex-1 border-2 border-slate-200 text-slate-500 hover:text-[#1B2333] hover:border-slate-300 font-bold"
                   >
-                    <ArrowLeft className="mr-2 h-5 w-5" /> Retour
+                    <ArrowLeft className="mr-2 h-6 w-6" /> Retour
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    disabled={loading}
-                    className="h-14 text-base rounded-xl flex-[2] bg-[hsl(var(--gold))] text-primary font-bold"
+                    disabled={loading || (phone.length >= 6 && !prefersSms && !prefersCall)}
+                    className="h-16 text-xl rounded-xl flex-[2] bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold-dark))] text-white font-bold shadow-md disabled:opacity-50 transition-all"
                   >
                     {loading ? "Envoi..." : "Valider mon accès VIP"}
                   </Button>
@@ -272,10 +312,10 @@ export default function ListeAttente() {
 
         <div className="absolute inset-0 flex items-center justify-center p-16">
           <div className="text-center text-primary-foreground relative z-10">
-            <h2 className="font-heading text-5xl font-semibold mb-6 leading-tight text-white">
+            <h2 className="font-heading text-5xl font-bold mb-6 leading-tight text-white">
               Rejoignez le Cercle Kalimera
             </h2>
-            <p className="text-white/90 max-w-md mx-auto text-2xl leading-relaxed">
+            <p className="text-white/90 max-w-md mx-auto text-2xl leading-relaxed font-medium">
               Des rencontres authentiques et vérifiées pour les seniors exigeants.
             </p>
           </div>
@@ -283,9 +323,9 @@ export default function ListeAttente() {
 
         {/* LIEN CONNEXION EN BAS À DROITE DE L'IMAGE */}
         <div className="absolute bottom-10 right-10 z-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <p className="text-white/80 text-xl backdrop-blur-md bg-black/20 px-6 py-4 rounded-2xl border border-white/10 shadow-2xl">
+          <p className="text-white/90 text-xl font-medium backdrop-blur-md bg-[#1B2333]/40 px-6 py-4 rounded-2xl border border-white/10 shadow-2xl">
             Déjà membre ?{" "}
-            <Link to="/connexion" className="text-[hsl(var(--gold))] font-bold hover:underline">
+            <Link to="/connexion" className="text-[hsl(var(--gold-light))] font-bold hover:underline">
               Connectez-vous
             </Link>
           </p>
