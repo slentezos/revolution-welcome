@@ -226,7 +226,7 @@ export default function CancellationFlow({ open, onOpenChange, firstName }: Canc
                 stopRecording();
                 setStep("reason");
               }}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-xl"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground font-medium transition-colors uppercase tracking-wider text-2xl"
             >
               <ArrowLeft className="h-5 w-5" /> Retour
             </button>
