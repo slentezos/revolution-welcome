@@ -405,11 +405,7 @@ export default function Messages() {
       // TEMP: auth redirects disabled for design work
       // if (!session) { navigate("/connexion"); return; }
       if (session) {
-        await supabase
-          .from("profiles")
-          .select("onboarding_step")
-          .eq("user_id", session.user.id)
-          .maybeSingle();
+        await supabase.from("profiles").select("onboarding_step").eq("user_id", session.user.id).maybeSingle();
         // if (!profile || profile.onboarding_step !== "completed") { navigate("/onboarding"); return; }
       }
       setLoading(false);
@@ -767,13 +763,14 @@ export default function Messages() {
                       </div>
                     ) : (
                       <>
-                        <div className="flex items-center gap-3 my-4">
+                        {/* <div className="flex items-center gap-3 my-4">
                           <div className="flex-1 h-px bg-amber-100/50" />
                           <span className="text-muted-foreground font-medium px-4 py-1.5 rounded-full bg-white border border-amber-100/40 text-lg">
                             Aujourd'hui
                           </span>
                           <div className="flex-1 h-px bg-amber-100/50" />
                         </div>
+                        */}
                         {mockMessages.map((msg) => (
                           <div key={msg.id} className={`flex ${msg.sender === "me" ? "justify-end" : "justify-start"}`}>
                             {msg.sender === "them" && (
