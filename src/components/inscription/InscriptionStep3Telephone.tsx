@@ -90,7 +90,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
               Numéro de téléphone *
             </label>
             <div className="flex gap-3">
-              <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-base font-medium text-foreground shrink-0">
+              <div className="h-14 px-4 flex items-center rounded-xl font-medium text-foreground shrink-0 text-xl bg-white border-[#e4dfd8]">
                 🇫🇷 +33
               </div>
               <Input
