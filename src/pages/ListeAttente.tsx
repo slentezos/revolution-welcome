@@ -209,7 +209,7 @@ export default function ListeAttente() {
                       Téléphone (optionnel)
                     </label>
                     <div className="flex gap-3">
-                      <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-base font-medium shrink-0">
+                      <div className="h-14 px-4 flex items-center bg-muted rounded-xl font-medium shrink-0 text-xl">
                         🇫🇷 +33
                       </div>
                       <Input
@@ -217,7 +217,7 @@ export default function ListeAttente() {
                         placeholder="6 12 34 56 78"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                        className="h-14 text-lg rounded-xl flex-1"
+                        className="h-14 rounded-xl flex-1 text-xl"
                       />
                     </div>
                   </div>
