@@ -331,11 +331,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             {/* PHOTOS */}
             <div className="min-h-0 flex flex-col gap-4">
               <div className="flex-1 grid grid-cols-2 gap-4">
-                {photoSlots.map((slot) => (
-                  <div key={slot.id} className="min-h-0 flex flex-col gap-2">
+             {photoSlots.map((slot) => (
+                  <div key={slot.id} className="relative aspect-square">
                     <div
                       className={cn(
-                        "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
+                        "absolute inset-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
                         slot.preview ? "border-transparent" : "bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
                       )}
                       onClick={() => handleSlotClick(slot.id)}
@@ -615,7 +615,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
-      <input
+    <input
+        key={activeSlotId} // FORCE LE REFRESH DE L'ATTRIBUT ACCEPT
         ref={fileInputRef}
         type="file"
         className="hidden"
