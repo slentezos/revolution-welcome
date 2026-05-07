@@ -292,17 +292,10 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
           <span className="font-medium tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 block text-lg">
             Géographie du club
           </span>
-          <div className="flex items-center gap-3 mb-3">
+          <div className="mb-3">
             <h3 className="font-heading text-3xl md:text-4xl text-[#1B2333] leading-tight font-bold">
               Mes Lieux de Vie
             </h3>
-            <button
-              onClick={() => setInfoModalOpen(true)}
-              className="text-slate-400 hover:text-[hsl(var(--gold))] transition-colors p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))] focus:ring-offset-2"
-              title="Guide de Mobilité"
-            >
-              <Info className="h-7 w-7" />
-            </button>
           </div>
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-6" />
           <p className="text-slate-500 leading-relaxed text-xl max-w-2xl font-medium">
@@ -459,6 +452,31 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               </div>
             )}
           </div>
+        </div>
+
+        {/* --- Encart d'Information / Aide --- */}
+        <div className="mt-12 p-8 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-white rounded-full shadow-sm shrink-0 mt-1">
+              <Info className="h-8 w-8 text-[hsl(var(--gold-dark))]" />
+            </div>
+            <div>
+              <h4 className="text-[#1B2333] text-xl font-bold mb-1">
+                Besoin de comprendre comment fonctionne la localisation ?
+              </h4>
+              <p className="text-slate-500 text-lg leading-relaxed">
+                Découvrez notre guide détaillé sur les règles de maintien de présence (72h) et d'ancrage (90 jours) pour
+                garantir la qualité de vos échanges.
+              </p>
+            </div>
+          </div>
+          <Button
+            onClick={() => setInfoModalOpen(true)}
+            variant="outline"
+            className="shrink-0 min-h-[56px] px-8 text-xl font-bold border-2 border-[#1B2333] text-[#1B2333] hover:bg-[#1B2333] hover:text-white transition-all w-full md:w-auto"
+          >
+            Lire le guide complet
+          </Button>
         </div>
       </div>
 
