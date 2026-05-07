@@ -69,7 +69,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
             <MapPin className="h-7 w-7" />
           </div>
           <h2 className="font-heading font-bold text-[#1B2333] mb-3 text-3xl sm:text-4xl">Bienvenue chez Kalimera.</h2>
-          <p className="text-center text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-sm sm:text-base">
+          <p className="text-center text-[hsl(var(--gold))] font-bold tracking-widest uppercase sm:text-base text-lg">
             Vérifions que notre Cercle est ouvert dans votre région.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
           {error && <p className="text-red-600 text-sm mt-3 text-center font-medium">{error}</p>}
         </div>
 
-        <p className="text-slate-400 mb-8 text-xs flex items-center justify-center gap-2 italic">
+        <p className="mb-8 flex items-center justify-center gap-2 italic text-xl text-secondary-foreground">
           <Lock className="h-3.5 w-3.5" />
           Vérification de proximité sécurisée.
         </p>
@@ -108,7 +108,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
         <Button
           onClick={handleSubmit}
           disabled={!locationInfo}
-          className="w-full h-14 rounded-xl text-white font-bold text-lg bg-[#1B2333] hover:bg-[#1B2333]/90 shadow-lg transition-all active:scale-[0.97]"
+          className="w-full h-14 rounded-xl text-white font-bold bg-[#1B2333] hover:bg-[#1B2333]/90 shadow-lg transition-all active:scale-[0.97] text-xl"
         >
           Vérifier ma zone
           <ArrowRight className="ml-2 h-5 w-5" />
