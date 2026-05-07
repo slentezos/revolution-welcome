@@ -53,7 +53,7 @@ const SERVICE_STEPS = [
     id: "step-04",
     number: "04",
     icon: Sparkles,
-    title: "Ma personnalité",
+    title: "Mon test de personnalité",
     subtitle: "Mieux vous comprendre",
     preparation: "Soyez simplement vous-même, honnête et spontané.",
     action: "Nous remplissons ensemble votre test de personnalité afin d'analyser votre dynamique relationnelle.",
