@@ -266,7 +266,7 @@ export default function Inscription() {
 
             {/* POSITIONNEMENT FINAL DU LIEN DE CONNEXION */}
             <div className="pt-8 border-t border-white/10 animate-in fade-in zoom-in-95 duration-700">
-              <p className="text-lg mb-2 text-slate-50">Déjà membre de notre club ?</p>
+              <p className="mb-2 text-slate-50 text-2xl">Déjà membre de notre club ?</p>
               <Link
                 to="/connexion"
                 className="inline-block px-10 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white font-bold text-xl hover:bg-white/20 transition-all active:scale-[0.98]"
