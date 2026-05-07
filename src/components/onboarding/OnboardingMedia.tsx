@@ -260,11 +260,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold text-xl leading-tight">
+                        <p className="font-bold leading-tight text-2xl">
                           {" "}
                           Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé{" "}
                         </p>
-                        <p className="opacity-80 underline text-xl">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
+                        <p className="opacity-80 underline text-xl text-primary font-bold">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
