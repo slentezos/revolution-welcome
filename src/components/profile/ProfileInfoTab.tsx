@@ -141,7 +141,9 @@ export default function ProfileInfoTab({
               <label className="block font-medium text-[#1B2333] mb-3 text-xl">Date de naissance *</label>
               <div className="grid grid-cols-3 gap-3">
                 <Select value={birthDay} onValueChange={(v) => updateBirth("d", v)}>
-                  <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
+                  <SelectTrigger
+                    className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}
+                  >
                     <SelectValue placeholder="Jour" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
@@ -154,12 +156,18 @@ export default function ProfileInfoTab({
                 </Select>
 
                 <Select value={birthMonth} onValueChange={(v) => updateBirth("m", v)}>
-                  <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
+                  <SelectTrigger
+                    className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}
+                  >
                     <SelectValue placeholder="Mois" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
                     {months.map((m) => (
-                      <SelectItem key={m.value} value={m.value} className="text-xl py-3 cursor-pointer focus:bg-slate-50">
+                      <SelectItem
+                        key={m.value}
+                        value={m.value}
+                        className="text-xl py-3 cursor-pointer focus:bg-slate-50"
+                      >
                         {m.label}
                       </SelectItem>
                     ))}
@@ -167,7 +175,9 @@ export default function ProfileInfoTab({
                 </Select>
 
                 <Select value={birthYear} onValueChange={(v) => updateBirth("y", v)}>
-                  <SelectTrigger className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}>
+                  <SelectTrigger
+                    className={cn("h-14 text-xl rounded-xl border-[#E5E0D8] bg-white", interactiveClasses)}
+                  >
                     <SelectValue placeholder="Année" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
@@ -196,8 +206,8 @@ export default function ProfileInfoTab({
                     className={cn(
                       "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium whitespace-nowrap transition-all duration-300 border",
                       formData.gender === opt.value
-                        ? "border-[#1B2333] bg-[#e2a336] text-slate-50"
-                        : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
+                        ? "border-[#1B2333] bg-[#1B2333] text-white shadow-md"
+                        : "border-[#E5E0D8] bg-white text-[#1B2333] hover:border-[hsl(var(--gold))]",
                     )}
                   >
                     {opt.label}
