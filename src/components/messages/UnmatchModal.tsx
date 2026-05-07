@@ -20,7 +20,7 @@ export default function UnmatchModal({ open, onOpenChange, name, onConfirmUnmatc
             <EyeOff className="h-6 w-6" />
           </div>
 
-          <h2 className="text-center font-heading text-2xl font-bold text-[#1B2333]">
+          <h2 className="text-center font-heading font-bold text-[#1B2333] text-3xl">
             Retirer {name}
           </h2>
 

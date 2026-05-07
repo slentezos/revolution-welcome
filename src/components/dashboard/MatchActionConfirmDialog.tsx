@@ -90,7 +90,7 @@ export default function MatchActionConfirmDialog({
           </div>
 
           <div className="text-center">
-            <h2 className="font-heading text-2xl font-bold text-[#1B2333]">{config.title}</h2>
+            <h2 className="font-heading font-bold text-[#1B2333] text-3xl">{config.title}</h2>
             <p className="text-foreground text-base mt-1">
               Concernant <span className="font-semibold text-[#1B2333]">{matchName}</span>
             </p>
