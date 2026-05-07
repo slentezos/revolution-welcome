@@ -166,7 +166,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
             <button
               type="button"
               onClick={handleEditPhone}
-              className="text-primary font-medium hover:underline flex items-center gap-1 text-xl"
+              className="text-primary font-medium hover:underline flex items-center gap-1 text-2xl"
             >
               <Edit3 className="h-4 w-4" />
               Modifier le numéro
