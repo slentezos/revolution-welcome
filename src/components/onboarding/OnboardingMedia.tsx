@@ -17,6 +17,7 @@ import {
   CreditCard,
   Loader2,
   MonitorOff,
+  Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,6 +52,10 @@ const getInitialSlots = (): MediaSlot[] => [
   { id: "misc1", type: "misc", label: "Divers", hint: "Loisirs…", required: false },
   { id: "misc2", type: "misc", label: "Divers", hint: "Passions…", required: false },
 ];
+
+// Constantes pour la validation
+const MAX_PHOTO_SIZE = 10 * 1024 * 1024; // 10 Mo
+const ALLOWED_PHOTO_FORMATS = ["image/jpeg", "image/png", "image/webp", "image/heic"];
 
 export default function OnboardingMedia({ profileId, onComplete }: OnboardingMediaProps) {
   const [slots, setSlots] = useState<MediaSlot[]>(getInitialSlots());
@@ -138,6 +143,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     const slot = slots.find((s) => s.id === activeSlotId);
     if (!slot) return;
 
+    // VALIDATION VIDEO
     if (slot.type === "video") {
       const video = document.createElement("video");
       video.preload = "metadata";
@@ -150,7 +156,26 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         };
       });
       if (!isValid) {
-        toast({ title: "Vidéo trop longue", description: "Max 1 mn 30.", variant: "destructive" });
+        toast({ title: "Vidéo trop longue", description: "La durée maximale est de 1 mn 30.", variant: "destructive" });
+        return;
+      }
+    }
+    // VALIDATION PHOTO (Taille & Format)
+    else {
+      if (file.size > MAX_PHOTO_SIZE) {
+        toast({
+          title: "Fichier trop volumineux",
+          description: "Pour garantir une qualité optimale, merci de choisir une photo de moins de 10 Mo.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!ALLOWED_PHOTO_FORMATS.includes(file.type) && !file.name.toLowerCase().endsWith(".heic")) {
+        toast({
+          title: "Format non supporté",
+          description: "Merci d'utiliser les formats JPG, PNG ou HEIC.",
+          variant: "destructive",
+        });
         return;
       }
     }
@@ -248,7 +273,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <div className="w-20 h-20 rounded-full bg-white shadow-sm border border-[#E5E0D8] flex items-center justify-center mb-4">
                         <Video className="h-10 w-10 text-[hsl(var(--gold))]" />
                       </div>
-                      <span className="text-2xl text-[#1B2333] font-semibold">+ Cliquez ici pour ajouter ma vidéo</span>
+                      <span className="text-2xl text-[#1B2333] font-semibold">+ Ajouter ma vidéo</span>
                     </div>
 
                     <button
@@ -260,11 +285,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold leading-tight text-2xl">
-                          {" "}
-                          Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé{" "}
+                        <p className="font-bold text-xl leading-tight">
+                          Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé
                         </p>
-                        <p className="opacity-80 underline text-xl text-primary font-bold">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
+                        <p className="opacity-80 underline text-xl">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -283,45 +307,56 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             </div>
 
             {/* PHOTOS */}
-            <div className="min-h-0 grid grid-cols-2 gap-4">
-              {photoSlots.map((slot) => (
-                <div key={slot.id} className="min-h-0 flex flex-col gap-2">
-                  <div
-                    className={cn(
-                      "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
-                      slot.preview ? "border-transparent" : "bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
-                    )}
-                    onClick={() => handleSlotClick(slot.id)}
-                  >
-                    {slot.preview ? (
-                      <>
-                        <img
-                          decoding="async"
-                          src={slot.preview}
-                          alt={slot.label}
-                          className="w-full h-full object-cover"
-                        />
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveSlot(slot.id);
-                          }}
-                          className="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-full shadow-md"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </>
-                    ) : (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                        <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
-                          <Camera className="h-6 w-6 text-muted-foreground" />
+            <div className="min-h-0 flex flex-col gap-4">
+              <div className="flex-1 grid grid-cols-2 gap-4">
+                {photoSlots.map((slot) => (
+                  <div key={slot.id} className="min-h-0 flex flex-col gap-2">
+                    <div
+                      className={cn(
+                        "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
+                        slot.preview ? "border-transparent" : "bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
+                      )}
+                      onClick={() => handleSlotClick(slot.id)}
+                    >
+                      {slot.preview ? (
+                        <>
+                          <img
+                            decoding="async"
+                            src={slot.preview}
+                            alt={slot.label}
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRemoveSlot(slot.id);
+                            }}
+                            className="absolute top-3 right-3 p-2 bg-red-500 text-white rounded-full shadow-md"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                          <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
+                            <Camera className="h-6 w-6 text-muted-foreground" />
+                          </div>
+                          <span className="text-lg font-bold text-[#1B2333]">+ {slot.label}</span>
                         </div>
-                        <span className="font-bold text-[#1B2333] text-xl">+ {slot.label}</span>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              {/* INFORMATION FORMAT ET TAILLE - CAC40 Mindset: Direct and Clear */}
+              <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl">
+                <Info className="h-5 w-5 text-slate-400 shrink-0" />
+                <p className="text-slate-500 text-lg leading-snug">
+                  Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong>. Taille maximale :{" "}
+                  <strong className="text-slate-700">10 Mo</strong> par photo.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -378,7 +413,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* MODAL STUDIO EXPERT — Senior 60+, fits one screen, no scroll */}
+      {/* MODAL STUDIO EXPERT */}
       <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
         <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl max-h-[92vh] border-0 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] rounded-[24px] bg-white p-0 z-[9999] overflow-hidden gap-0">
           <div className="h-2 w-full bg-[hsl(var(--gold))]" />
@@ -391,7 +426,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <DialogTitle className="tracking-tight font-heading font-bold text-[#1B2333] leading-tight text-3xl sm:text-4xl">
                 Votre voix, votre regard, votre présence
               </DialogTitle>
-              <p className="text-[#1B2333]/80 leading-snug text-2xl">
+              <p className="text-[#1B2333]/80 leading-snug text-xl">
                 Pour vous accompagner, Kalimera vous propose une aide personnalisée.
               </p>
             </div>
@@ -403,7 +438,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 </div>
                 <div>
                   <p className="font-bold text-[#1B2333] leading-tight text-xl">Accompagnement</p>
-                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-xl">
+                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
                     Un expert vous guide pour vos photos et vidéo.
                   </p>
                 </div>
@@ -414,7 +449,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 </div>
                 <div>
                   <p className="font-bold text-[#1B2333] leading-tight text-xl">Confidentialité</p>
-                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-xl">
+                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
                     Via Google Meet. Aucun accès à votre ordinateur.
                   </p>
                 </div>
@@ -424,7 +459,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <span className="inline-flex items-baseline gap-2 bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
                 <span className="text-[#1B2333] font-bold text-2xl">35 €</span>
-                <span className="text-xl text-primary">puis 70 € au 01/10/2026</span>
+                <span className="text-[#1B2333]/60 text-xl">puis 70 € au 01/10/2026</span>
               </span>
             </div>
 
@@ -432,14 +467,14 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <Button
                 onClick={handleStudioPayment}
                 disabled={isProcessingPayment}
-                className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-2xl"
+                className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-xl"
               >
                 {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
                 Réserver ma séance (35€)
               </Button>
               <button
                 onClick={() => setShowStudioModal(false)}
-                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 font-medium transition-colors text-2xl"
+                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 font-medium transition-colors text-xl"
               >
                 Essayer seul(e) d'abord
               </button>
@@ -448,7 +483,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
-      {/* TUTORIAL MODAL (COMPACT) */}
+      {/* TUTORIAL MODAL */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
         <DialogContent className="max-w-5xl p-0 h-auto max-h-[90vh] overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-white z-[9999] outline-none">
           <button
@@ -487,7 +522,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <item.icon className="h-7 w-7 text-[#1B2333]" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-[#1B2333] leading-tight text-3xl">{item.title}</h4>
+                        <h4 className="font-bold text-[#1B2333] text-2xl leading-tight">{item.title}</h4>
                         <p className="text-[#1B2333]/70 text-xl leading-snug">{item.desc}</p>
                       </div>
                     </div>
@@ -497,7 +532,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <div className="flex flex-col gap-3 mt-4 shrink-0 max-w-lg">
                   <Button
                     onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-2xl"
+                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-xl"
                   >
                     J'ai compris, je commence seul(e)
                   </Button>
@@ -514,10 +549,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <Headphones className="h-6 w-6 text-[hsl(var(--gold))] animate-pulse" />
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col">
-                      <p className="font-bold text-[hsl(var(--gold))] leading-snug whitespace-normal text-2xl">
+                      <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
                         Accompagnement personnalisé
                       </p>
-                      <p className="text-[hsl(var(--gold))] opacity-80 text-primary font-semibold text-xl">Nous vous filmons en visio (35€)</p>
+                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
                     </div>
                     <ArrowRight className="h-6 w-6 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-1 transition-transform" />
                   </button>
@@ -562,7 +597,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         ref={fileInputRef}
         type="file"
         className="hidden"
-        accept={activeSlotId === "video" ? "video/*" : "image/*"}
+        accept={activeSlotId === "video" ? "video/*" : "image/jpeg,image/png,image/webp,image/heic"}
         onChange={handleFileChange}
       />
     </div>
