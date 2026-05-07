@@ -26,10 +26,10 @@ export const RegistrationLocationHeader = () => {
         <MapPin className="h-8 w-8 text-[hsl(var(--gold))]" />
       )}
       <div>
-        <p className="uppercase tracking-[0.2em] font-bold mb-1 text-destructive-foreground text-base">
+        <p className="uppercase tracking-[0.2em] font-bold mb-1 text-destructive-foreground text-xl">
           {isPinpoint ? "Localisation précise validée" : "Secteur d'adhésion identifié"}
         </p>
-        <h2 className="text-2xl font-bold text-white">
+        <h2 className="font-bold text-white text-3xl">
           {finalCity} <span className="font-light text-destructive-foreground">({data.zip})</span>
         </h2>
       </div>
