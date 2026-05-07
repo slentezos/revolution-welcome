@@ -715,7 +715,7 @@ export default function Messages() {
                       <div className="bg-[#1B2333] p-6 rounded-[20px] shadow-sm flex flex-col gap-4 text-white">
                         <div className="flex items-center gap-3 text-[hsl(var(--gold-light))]">
                           <ShieldCheck className="h-6 w-6" />
-                          <span className="font-bold uppercase tracking-wider text-sm">Votre Protection</span>
+                          <span className="font-bold uppercase tracking-wider text-xl">Votre Protection</span>
                         </div>
                         <p className="text-white/90 text-xl font-medium leading-snug">
                           Chaque échange est protégé par notre technologie de cryptage. Votre tranquillité est notre
