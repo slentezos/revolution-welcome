@@ -360,6 +360,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
             <p className="text-muted-foreground mt-5 leading-relaxed text-xl">
               Votre adresse de référence reste stable pour garantir l'authenticité de votre bassin de rencontre.
             </p>
+            {renderUndoBanner("primary")}
           </div>
 
           {/* Carte 2 : Secondaire */}
