@@ -585,6 +585,49 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Info / Guide d'utilisation */}
+      <Dialog open={infoModalOpen} onOpenChange={setInfoModalOpen}>
+        <DialogContent className="max-w-lg p-0 overflow-hidden bg-white border-0 rounded-[24px]">
+          <DialogHeader className="bg-[#1B2333] px-8 py-6 text-left">
+            <DialogTitle className="font-heading text-2xl text-white font-bold">
+              Guide d'utilisation : Mobilité
+            </DialogTitle>
+            <DialogDescription className="text-lg text-slate-300 mt-2">
+              Pour garantir l'authenticité des profils, la gestion de votre position géographique est soumise à des règles de stabilité strictes.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="px-8 py-6 space-y-4">
+            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+              <p className="font-bold text-[#1B2333] text-xl mb-2">1. La Déclaration (90 jours)</p>
+              <p className="text-slate-600 text-lg leading-relaxed">
+                L'ajout ou la modification d'une résidence vous engage sur cette adresse pour une durée de 90 jours.
+              </p>
+            </div>
+            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+              <p className="font-bold text-[#1B2333] text-xl mb-2">2. Le Sélecteur (72 heures)</p>
+              <p className="text-slate-600 text-lg leading-relaxed">
+                Chaque bascule manuelle d'une région à l'autre est maintenue pour un minimum de 72 heures.
+              </p>
+            </div>
+            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+              <p className="font-bold text-[#1B2333] text-xl mb-2">3. Suppression</p>
+              <p className="text-slate-600 text-lg leading-relaxed">
+                La suppression d'une adresse ne réinitialise pas le cycle de 90 jours en cours.
+              </p>
+            </div>
+          </div>
+          <DialogFooter className="px-8 pb-8">
+            <Button
+              type="button"
+              onClick={() => setInfoModalOpen(false)}
+              className="w-full h-14 bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl rounded-xl"
+            >
+              J'ai compris
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
