@@ -628,7 +628,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               </p>
               <div className="bg-slate-50 border-l-4 border-[#1B2333] p-5 rounded-r-xl">
                 <p className="text-xl text-[#1B2333] font-medium">Pourquoi les ajouter ?</p>
-                <p className="text-lg text-slate-600 mt-2">
+                <p className="text-slate-600 mt-2 text-xl">
                   Ces villes s'affichent sur votre profil et créent d'excellents points de discussion ("Vous allez
                   souvent à Rome ? Moi aussi !"). Bien qu'elles ne modifient pas votre bassin de rencontre immédiat,
                   elles nous permettent d'affiner vos affinités pour l'avenir.
