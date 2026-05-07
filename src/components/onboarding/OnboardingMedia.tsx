@@ -497,7 +497,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <div className="flex flex-col gap-3 mt-4 shrink-0 max-w-lg">
                   <Button
                     onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-xl"
+                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-2xl"
                   >
                     J'ai compris, je commence seul(e)
                   </Button>
@@ -514,7 +514,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <Headphones className="h-6 w-6 text-[hsl(var(--gold))] animate-pulse" />
                     </div>
                     <div className="flex-1 min-w-0 flex flex-col">
-                      <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
+                      <p className="font-bold text-[hsl(var(--gold))] leading-snug whitespace-normal text-2xl">
                         Accompagnement personnalisé
                       </p>
                       <p className="text-[hsl(var(--gold))] opacity-80 text-primary font-semibold text-xl">On vous filme en visio (35€)</p>
