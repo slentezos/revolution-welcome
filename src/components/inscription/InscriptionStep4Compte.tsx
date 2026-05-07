@@ -146,7 +146,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
           onCheckedChange={(checked) => update("acceptTerms", !!checked)}
           className="mt-0.5 h-5 w-5" />
         
-        <label htmlFor="terms" className="text-muted-foreground leading-relaxed cursor-pointer text-lg">
+        <label htmlFor="terms" className="text-muted-foreground leading-relaxed cursor-pointer text-xl">
           J'accepte les{" "}
           <a href="/conditions" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">
             conditions générales
