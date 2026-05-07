@@ -353,7 +353,7 @@ export default function ProfileGiftTab() {
                         Mode Invisible, accusés de lecture, alertes Conciergerie.
                       </p>
                       {addVip && (
-                        <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg mt-3">
+                        <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium mt-3 text-xl">
                           <Check className="h-5 w-5" /> Inclus dans le cadeau
                         </div>
                       )}
