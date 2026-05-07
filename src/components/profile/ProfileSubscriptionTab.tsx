@@ -319,7 +319,7 @@ export default function ProfileSubscriptionTab({
                     Votre offre actuelle
                   </p>
                   <p className="font-heading text-2xl md:text-3xl text-foreground leading-tight">{planLabel}</p>
-                  <p className="text-muted-foreground text-lg mt-2">
+                  <p className="text-muted-foreground text-xl mt-2">
                     {hasFreeTrial ? "Période offerte jusqu'au" : "Expire le"}{" "}
                     <span className="text-foreground font-semibold">{formatFrenchDate(expiryDate)}</span>
                   </p>
