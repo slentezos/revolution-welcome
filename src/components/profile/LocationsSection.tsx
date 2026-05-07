@@ -423,7 +423,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               <MapPin className="w-32 h-32 text-[#1B2333]" />
             </div>
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-sm font-bold uppercase tracking-widest mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 font-bold uppercase tracking-widest mb-6 text-xl">
                 <Lock className="w-4 h-4" /> Principale
               </div>
               <h4 className="font-heading text-3xl font-bold text-[#1B2333] mb-2">
@@ -446,7 +446,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
             {profile.secondary_city_name ? (
               <>
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold-dark))] text-sm font-bold uppercase tracking-widest mb-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold-dark))] font-bold uppercase tracking-widest mb-6 text-lg">
                     <Home className="w-4 h-4" /> Secondaire
                   </div>
                   <h4 className="font-heading text-3xl font-bold text-[#1B2333] mb-2">{profile.secondary_city_name}</h4>
@@ -495,7 +495,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 ) : (
                   <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center">
                     <Lock className="h-8 w-8 text-slate-400 mx-auto mb-3" />
-                    <p className="text-[#1B2333] font-bold text-xl mb-1">Période de stabilisation</p>
+                    <p className="text-[#1B2333] font-bold mb-1 text-2xl">Période de stabilisation</p>
                     <p className="text-slate-500 text-lg">
                       Nouvelle déclaration possible dans{" "}
                       <span className="font-bold">{formatDays(secondaryLockMsRemaining)} jours</span>.
@@ -515,10 +515,10 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               <Info className="h-8 w-8 text-[hsl(var(--gold-dark))]" />
             </div>
             <div>
-              <h4 className="text-[#1B2333] text-xl font-bold mb-1">
+              <h4 className="text-[#1B2333] font-bold mb-1 text-2xl">
                 Besoin de comprendre comment fonctionne la localisation ?
               </h4>
-              <p className="text-slate-500 text-lg leading-relaxed">
+              <p className="text-slate-500 leading-relaxed text-xl">
                 Découvrez notre guide détaillé sur les règles de maintien de présence (72h) et d'ancrage (90 jours) pour
                 garantir la qualité de vos échanges.
               </p>
