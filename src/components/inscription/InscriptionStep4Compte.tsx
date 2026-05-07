@@ -136,7 +136,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
           minLength={6} />
         
         {errors.password && <p className="text-destructive text-sm mt-2">{errors.password}</p>}
-        <p className="text-muted-foreground mt-2 text-lg">Au moins 6 caractères</p>
+        <p className="text-muted-foreground mt-2 text-xl">Au moins 6 caractères</p>
       </div>
 
       <div className="flex items-start gap-3 py-2">
