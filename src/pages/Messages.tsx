@@ -584,7 +584,7 @@ export default function Messages() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <h4 className="font-heading font-semibold text-[#1B2333] text-2xl truncate">
+                        <h4 className="font-heading font-semibold text-[#1B2333] text-3xl truncate">
                           {conv.name}, {conv.age}
                         </h4>
                         <span className="text-muted-foreground font-medium text-xl shrink-0 ml-2">{conv.time}</span>
