@@ -289,9 +289,9 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
             <div>
               <p className="text-xl font-bold text-[#1B2333]">{city}</p>
               {postal ? (
-                <p className="text-slate-500 font-medium">🇫🇷 {postal}</p>
+                <p className="text-slate-500 font-medium text-xl">🇫🇷 {postal}</p>
               ) : (
-                <p className="text-slate-500 font-medium">🌍 International</p>
+                <p className="text-slate-500 font-medium text-xl">🌍 International</p>
               )}
             </div>
           </div>
