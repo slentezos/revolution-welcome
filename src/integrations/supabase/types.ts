@@ -68,6 +68,10 @@ export type Database = {
           looking_for: string | null
           nationality: string | null
           onboarding_step: string
+          other_city_1: string | null
+          other_city_2: string | null
+          other_postal_code_1: string | null
+          other_postal_code_2: string | null
           phone: string | null
           postal_code: string | null
           region_name: string | null
@@ -92,6 +96,10 @@ export type Database = {
           looking_for?: string | null
           nationality?: string | null
           onboarding_step?: string
+          other_city_1?: string | null
+          other_city_2?: string | null
+          other_postal_code_1?: string | null
+          other_postal_code_2?: string | null
           phone?: string | null
           postal_code?: string | null
           region_name?: string | null
@@ -116,6 +124,10 @@ export type Database = {
           looking_for?: string | null
           nationality?: string | null
           onboarding_step?: string
+          other_city_1?: string | null
+          other_city_2?: string | null
+          other_postal_code_1?: string | null
+          other_postal_code_2?: string | null
           phone?: string | null
           postal_code?: string | null
           region_name?: string | null
