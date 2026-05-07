@@ -145,7 +145,7 @@ export default function ListeAttente() {
 
           <div className="flex items-center gap-2 mb-8 text-muted-foreground">
             <MapPin className="h-4 w-4 text-[hsl(var(--gold))]" />
-            <span className="text-xl font-bold text-[#1B2333]">{displayLocation}</span>
+            <span className="font-bold text-[#1B2333] text-2xl">{displayLocation}</span>
           </div>
 
           <div className="mb-10">
