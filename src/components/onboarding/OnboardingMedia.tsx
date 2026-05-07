@@ -487,7 +487,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <item.icon className="h-7 w-7 text-[#1B2333]" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-[#1B2333] text-2xl leading-tight">{item.title}</h4>
+                        <h4 className="font-bold text-[#1B2333] leading-tight text-3xl">{item.title}</h4>
                         <p className="text-[#1B2333]/70 text-xl leading-snug">{item.desc}</p>
                       </div>
                     </div>
@@ -517,7 +517,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
                         Accompagnement personnalisé
                       </p>
-                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg text-primary font-semibold">On vous filme en visio (35€)</p>
+                      <p className="text-[hsl(var(--gold))] opacity-80 text-primary font-semibold text-xl">On vous filme en visio (35€)</p>
                     </div>
                     <ArrowRight className="h-6 w-6 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-1 transition-transform" />
                   </button>
