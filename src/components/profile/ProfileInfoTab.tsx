@@ -238,7 +238,7 @@ export default function ProfileInfoTab({
                 Numéro de téléphone *
               </label>
               <div className="flex gap-3">
-                <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-lg font-medium text-foreground shrink-0">
+                <div className="h-14 px-4 flex items-center bg-muted rounded-xl text-lg font-medium text-foreground shrink-0 bg-transparent">
                   🇫🇷 +33
                 </div>
                 <Input
