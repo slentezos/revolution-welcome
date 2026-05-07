@@ -64,6 +64,9 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [confirmedAge, setConfirmedAge] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [videoRef = useRef<HTMLVideoElement>(null);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -143,8 +146,17 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     const slot = slots.find((s) => s.id === activeSlotId);
     if (!slot) return;
 
-    // VALIDATION VIDEO
+    // VALIDATION VIDEO STRICTE (Max 50 Mo)
     if (slot.type === "video") {
+      if (!file.type.startsWith("video/")) {
+        toast({ title: "Action impossible", description: "Veuillez sélectionner un fichier vidéo.", variant: "destructive" });
+        return;
+      }
+      if (file.size > 50 * 1024 * 1024) { // 50 Mo
+        toast({ title: "Vidéo trop lourde", description: "La taille maximale est de 50 Mo.", variant: "destructive" });
+        return;
+      }
+      
       const video = document.createElement("video");
       video.preload = "metadata";
       const objectUrl = URL.createObjectURL(file);
@@ -152,7 +164,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       const isValid = await new Promise<boolean>((resolve) => {
         video.onloadedmetadata = () => {
           URL.revokeObjectURL(objectUrl);
-          resolve(video.duration <= 90);
+          resolve(video.duration <= 95); // 1mn30 + 5s marge technique
         };
       });
       if (!isValid) {
@@ -160,8 +172,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         return;
       }
     }
-    // VALIDATION PHOTO (Taille & Format)
+    // VALIDATION PHOTO STRICTE (Max 10 Mo, Pas de GIF)
     else {
+      if (!file.type.startsWith("image/") || file.type === "image/gif") {
+        toast({ title: "Action impossible", description: "Veuillez choisir une photo valide (pas de vidéo ni de GIF).", variant: "destructive" });
+        return;
+      }
       if (file.size > MAX_PHOTO_SIZE) {
         toast({
           title: "Fichier trop volumineux",
@@ -179,6 +195,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         return;
       }
     }
+
+    const preview = URL.createObjectURL(file);
+    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    setActiveSlotId(null);
+  };
 
     const preview = URL.createObjectURL(file);
     setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
