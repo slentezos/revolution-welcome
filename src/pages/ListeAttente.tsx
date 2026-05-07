@@ -145,7 +145,7 @@ export default function ListeAttente() {
 
           <div className="flex items-center gap-2 mb-8 text-muted-foreground">
             <MapPin className="h-4 w-4 text-[hsl(var(--gold))]" />
-            <span className="text-xl font-bold text-[#1B2333]">{displayLocation}</span>
+            <span className="font-bold text-[#1B2333] text-2xl">{displayLocation}</span>
           </div>
 
           <div className="mb-10">
@@ -182,7 +182,7 @@ export default function ListeAttente() {
                     placeholder="votre@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 text-lg rounded-xl border-slate-200 focus:border-[hsl(var(--gold))]"
+                    className="h-14 rounded-xl border-slate-200 focus:border-[hsl(var(--gold))] text-xl"
                     autoFocus
                   />
                 </div>
@@ -190,7 +190,7 @@ export default function ListeAttente() {
                 <Button
                   onClick={handleStep1}
                   disabled={!email.includes("@") || loading}
-                  className="h-14 text-base rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90"
+                  className="h-14 rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90 text-xl"
                 >
                   {loading ? "Vérification..." : "Continuer"}
                   {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
