@@ -127,7 +127,7 @@ export default function VisualComfortToggle() {
           {/* Confirm Button */}
           <button
           onClick={handleConfirm}
-          className="mt-5 w-full py-3 bg-slate-900 text-white text-[13px] uppercase tracking-widest font-bold rounded-full hover:bg-slate-800 transition-all duration-300 shadow-md active:scale-[0.98]">
+          className="mt-5 w-full py-3 bg-slate-900 text-white uppercase tracking-widest font-bold rounded-full hover:bg-slate-800 transition-all duration-300 shadow-md active:scale-[0.98] text-xl">
           
             Confirmer
           </button>
