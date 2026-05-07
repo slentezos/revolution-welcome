@@ -136,7 +136,7 @@ export default function Onboarding() {
     { id: "profile", label: "Mon profil / son profil", icon: ClipboardList },
     {
       id: "personality",
-      label: isOnboardingCompleted ? "Ma personnalité" : "Test de personnalité",
+      label: isOnboardingCompleted ? "Mon test de personnalité" : "Test de personnalité",
       icon: Brain,
     },
   ];

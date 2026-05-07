@@ -27,7 +27,7 @@ const questionnaires = [
     href: "/onboarding?step=profile",
   },
   {
-    title: "Ma personnalité",
+    title: "Mon test de personnalité",
     subtitle: "40 questions",
     editable: false,
     href: "/onboarding?step=personality-results",
