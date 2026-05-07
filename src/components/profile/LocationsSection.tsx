@@ -459,7 +459,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               <Plane className="h-6 w-6 text-[hsl(var(--gold-dark))]" />
             </div>
             <div>
-              <p className="text-xl font-bold text-[#1B2333]">{city}</p>
+              <p className="text-xl text-[#1B2333] font-semibold">{city}</p>
               {postal ? (
                 <p className="text-slate-500 font-medium text-xl">🇫🇷 {postal}</p>
               ) : (
@@ -667,7 +667,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
 
                   {/* Nom de la ville (qui se pré-remplit mais reste modifiable) */}
                   <div className="space-y-3 pt-2 border-t border-slate-100">
-                    <Label className="text-xl font-bold text-[#1B2333]">Nom de la ville *</Label>
+                    <Label className="text-xl text-[#1B2333] font-semibold">Nom de la ville *</Label>
                     <Input
                       value={cityInput}
                       onChange={handleCityChange}
@@ -680,7 +680,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 <>
                   {/* Mode International */}
                   <div className="space-y-3">
-                    <Label className="text-xl font-bold text-[#1B2333]">Pays *</Label>
+                    <Label className="text-xl text-[#1B2333] font-semibold">Pays *</Label>
                     <Popover open={countryPopoverOpen} onOpenChange={setCountryPopoverOpen}>
                       <PopoverTrigger asChild>
                         <Button
@@ -734,7 +734,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-xl font-bold text-[#1B2333]">Nom de la ville précise *</Label>
+                    <Label className="text-xl text-[#1B2333] font-semibold">Nom de la ville précise *</Label>
                     <Input
                       value={cityInput}
                       onChange={handleCityChange}
