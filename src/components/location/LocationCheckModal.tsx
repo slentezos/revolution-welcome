@@ -91,7 +91,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
                 {locationInfo.isPinpoint && <CheckCircle2 className="h-5 w-5 text-green-600" />}
                 <p className="text-[#1B2333] font-bold text-xl leading-tight">{locationInfo.cityName}</p>
               </div>
-              <p className="text-slate-500 text-sm font-medium">
+              <p className="text-slate-500 font-medium text-lg">
                 {locationInfo.isPinpoint ? "Zone prioritaire identifiée" : "Région disponible"}
               </p>
             </div>
