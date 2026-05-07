@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MapPin, Lock, Plus, Trash2, Pencil, Undo2, Home, Sparkles, Clock, Info } from "lucide-react";
+import { MapPin, Lock, Plus, Trash2, Pencil, Undo2, Home, Sparkles, Clock, Info, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -50,6 +50,45 @@ type Snapshot = Pick<
 const formatDays = (ms: number) => Math.max(1, Math.ceil(ms / (24 * 60 * 60 * 1000)));
 const formatHours = (ms: number) => Math.max(1, Math.ceil(ms / (60 * 60 * 1000)));
 
+// Composant interne pour afficher le message de succès façon HomePage
+function LocationSuccessDisplay({
+  postalCode,
+  cityName,
+  regionName,
+}: {
+  postalCode: string;
+  cityName: string;
+  regionName: string;
+}) {
+  const isPinpoint = !!PINPOINT_MAPPING[postalCode];
+  const displayCity = PINPOINT_MAPPING[postalCode] || cityName;
+
+  return (
+    <div className="bg-[#1B2333] border border-[hsl(var(--gold))] p-6 rounded-xl shadow-lg mt-4 animate-in fade-in zoom-in-95 duration-300">
+      <div className="flex items-start gap-4">
+        <div className="bg-[hsl(var(--gold))]/20 p-2 rounded-full mt-1 shrink-0">
+          <CheckCircle2 className="h-6 w-6 text-[hsl(var(--gold))]" />
+        </div>
+        <div>
+          <h4 className="text-white font-bold text-xl mb-1 flex items-center gap-2">Localisation : {displayCity}</h4>
+          {isPinpoint ? (
+            <p className="text-slate-300 text-lg leading-relaxed">
+              Votre code postal ({postalCode}) a bien été identifié. Vous bénéficiez d'un{" "}
+              <strong className="text-[hsl(var(--gold))]">accès prioritaire</strong> pour le secteur de{" "}
+              <strong className="text-white">{displayCity}</strong>.
+            </p>
+          ) : (
+            <p className="text-slate-300 text-lg leading-relaxed">
+              Votre code postal ({postalCode}) a bien été identifié. Vous êtes rattaché(e) au bassin de rencontre de{" "}
+              <strong className="text-white">{regionName}</strong> et ses alentours.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function LocationsSection({ profile, onProfileUpdated }: LocationsSectionProps) {
   const [now, setNow] = useState(() => Date.now());
   const [addOpen, setAddOpen] = useState(false);
@@ -57,7 +96,10 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [switchTarget, setSwitchTarget] = useState<"primary" | "secondary" | null>(null);
+
+  // State for the postal input and its validation
   const [postalInput, setPostalInput] = useState("");
+  const [validatedLocation, setValidatedLocation] = useState<{ cityName: string; regionName: string } | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -69,13 +111,28 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   } | null>(null);
   const [undoNow, setUndoNow] = useState(() => Date.now());
 
-  // Actualisation toutes les minutes pour les cooldowns standards
+  // Handle Postal Code Input with instant lookup
+  const handlePostalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, "").slice(0, 5);
+    setPostalInput(val);
+
+    if (val.length === 5) {
+      const info = lookupPostalCode(val);
+      if (info) {
+        setValidatedLocation({ cityName: info.cityName, regionName: info.regionName });
+      } else {
+        setValidatedLocation(null);
+      }
+    } else {
+      setValidatedLocation(null);
+    }
+  };
+
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(t);
   }, []);
 
-  // Actualisation chaque seconde si un bandeau Undo est actif
   useEffect(() => {
     if (!undoBanner) return;
     setUndoNow(Date.now());
@@ -147,23 +204,16 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   };
 
   const handleAddOrEdit = async () => {
-    const cleaned = postalInput.replace(/\D/g, "").slice(0, 5);
-    if (cleaned.length !== 5) {
-      toast.error("Saisissez un code postal à 5 chiffres.");
+    if (!validatedLocation || postalInput.length !== 5) {
       return;
     }
-    const info = lookupPostalCode(cleaned);
-    if (!info) {
-      toast.error("Code postal inconnu. Vérifiez votre saisie.");
-      return;
-    }
-    if (cleaned === profile.postal_code) {
+    if (postalInput === profile.postal_code) {
       toast.error("Votre résidence secondaire doit différer de la résidence principale.");
       return;
     }
-    const preciseCity = PINPOINT_MAPPING[cleaned] || info.cityName;
 
-    // Contexte Avant -> Après pour le Undo Banner
+    const preciseCity = PINPOINT_MAPPING[postalInput] || validatedLocation.cityName;
+
     const oldCity = snapshot.secondary_city_name || "Aucune";
     const successMessage = editMode
       ? `Résidence secondaire mise à jour (${oldCity} ➔ ${preciseCity}).`
@@ -171,9 +221,9 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
 
     const ok = await persist(
       {
-        secondary_postal_code: cleaned,
+        secondary_postal_code: postalInput,
         secondary_city_name: preciseCity,
-        secondary_region_name: info.regionName,
+        secondary_region_name: validatedLocation.regionName,
         last_secondary_update: new Date().toISOString(),
       },
       successMessage,
@@ -184,12 +234,11 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       setAddOpen(false);
       setEditMode(false);
       setPostalInput("");
+      setValidatedLocation(null);
     }
   };
 
   const handleDelete = async () => {
-    // Suppression : on garde last_secondary_update (anti-bypass)
-    // Contexte de ce qui a été supprimé
     const oldCity = snapshot.secondary_city_name;
     const successMessage = `Résidence secondaire supprimée (${oldCity}).`;
 
@@ -244,20 +293,25 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
 
   const openEdit = () => {
     setEditMode(true);
-    setPostalInput(profile.secondary_postal_code || "");
+    const cp = profile.secondary_postal_code || "";
+    setPostalInput(cp);
+    if (cp.length === 5) {
+      const info = lookupPostalCode(cp);
+      if (info) setValidatedLocation({ cityName: info.cityName, regionName: info.regionName });
+    }
     setAddOpen(true);
   };
 
   const openAdd = () => {
     setEditMode(false);
     setPostalInput("");
+    setValidatedLocation(null);
     setAddOpen(true);
   };
 
   const renderUndoBanner = (target: "primary" | "secondary") => {
     if (!undoBanner || undoBanner.target !== target) return null;
 
-    // Split the message to make the transition part bold (e.g., "(Paris ➔ Lyon).")
     const messageParts = undoBanner.message.split("(");
     const mainText = messageParts[0];
     const transitionText = messageParts.length > 1 ? `(${messageParts[1]}` : "";
@@ -553,7 +607,17 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       </Dialog>
 
       {/* Modale Ajout / Modification */}
-      <Dialog open={addOpen} onOpenChange={(o) => !o && (setAddOpen(false), setEditMode(false))}>
+      <Dialog
+        open={addOpen}
+        onOpenChange={(o) => {
+          if (!o) {
+            setAddOpen(false);
+            setEditMode(false);
+            setPostalInput("");
+            setValidatedLocation(null);
+          }
+        }}
+      >
         <DialogContent className="max-w-md p-0 overflow-hidden bg-white border-0 rounded-[24px]">
           <div className="bg-[#1B2333] px-8 py-6">
             <DialogTitle className="font-heading text-2xl text-white font-bold">
@@ -565,7 +629,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               Pour assurer la stabilité des rencontres, cette adresse sera définie comme votre résidence secondaire
               officielle pour les <strong className="text-[#1B2333]">90 prochains jours</strong>.
             </p>
-            <div className="space-y-4 mb-8">
+            <div className="space-y-4 mb-4">
               <Label htmlFor="secondary_postal" className="text-xl font-bold text-[#1B2333]">
                 Code postal
               </Label>
@@ -574,12 +638,23 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 inputMode="numeric"
                 maxLength={5}
                 value={postalInput}
-                onChange={(e) => setPostalInput(e.target.value.replace(/\D/g, "").slice(0, 5))}
+                onChange={handlePostalChange}
                 className="h-16 text-2xl font-medium bg-slate-50 border-2 rounded-xl focus:border-[hsl(var(--gold))] focus:ring-0"
                 placeholder="Ex: 13150"
               />
             </div>
-            <div className="flex justify-end gap-4">
+
+            <div className="min-h-[140px]">
+              {validatedLocation && (
+                <LocationSuccessDisplay
+                  postalCode={postalInput}
+                  cityName={validatedLocation.cityName}
+                  regionName={validatedLocation.regionName}
+                />
+              )}
+            </div>
+
+            <div className="flex justify-end gap-4 mt-6">
               <Button
                 variant="ghost"
                 onClick={() => setAddOpen(false)}
@@ -589,8 +664,8 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               </Button>
               <Button
                 onClick={handleAddOrEdit}
-                disabled={submitting || postalInput.length !== 5}
-                className="h-14 px-8 text-xl bg-[#1B2333] text-white hover:bg-[#1B2333]/90 font-bold rounded-xl"
+                disabled={submitting || !validatedLocation}
+                className="h-14 px-8 text-xl bg-[#1B2333] text-white hover:bg-[#1B2333]/90 font-bold rounded-xl disabled:opacity-50"
               >
                 Confirmer
               </Button>
