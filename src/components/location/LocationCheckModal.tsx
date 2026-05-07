@@ -108,7 +108,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
         <Button
           onClick={handleSubmit}
           disabled={!locationInfo}
-          className="w-full h-14 rounded-xl text-white font-bold text-lg bg-[#1B2333] hover:bg-[#1B2333]/90 shadow-lg transition-all active:scale-[0.97]"
+          className="w-full h-14 rounded-xl text-white font-bold bg-[#1B2333] hover:bg-[#1B2333]/90 shadow-lg transition-all active:scale-[0.97] text-xl"
         >
           Vérifier ma zone
           <ArrowRight className="ml-2 h-5 w-5" />
