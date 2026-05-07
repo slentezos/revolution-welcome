@@ -278,7 +278,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     submitting ||
     (destType === "france"
       ? postalInput.length !== 5 || !validatedLocation || cityInput.trim() === ""
-      : cityInput.trim() === "");
+      : cityInput.trim() === "" || countryInput === "");
 
   const renderDestinationSlot = (slot: 1 | 2) => {
     const city = slot === 1 ? profile.other_city_1 : profile.other_city_2;
