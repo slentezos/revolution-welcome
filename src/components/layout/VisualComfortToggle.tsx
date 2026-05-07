@@ -112,7 +112,7 @@ export default function VisualComfortToggle() {
                   
                     Aa
                   </span>
-                  <span className={`text-lg font-medium ${isActive ? "text-slate-900" : "text-slate-600"}`}>
+                  <span className={`font-medium text-slate-600 text-xl ${isActive ? "text-slate-900" : "text-slate-600"}`}>
                     {option.label}
                   </span>
                   {option.hint &&
