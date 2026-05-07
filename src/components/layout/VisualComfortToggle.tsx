@@ -87,7 +87,7 @@ export default function VisualComfortToggle() {
       {isOpen &&
       <div className="absolute right-0 mt-2 z-50 w-[340px] bg-white rounded-xl shadow-xl border border-amber-100/60 p-5 animate-fade-in">
           {/* Header */}
-          <p className="leading-relaxed mb-5 text-lg text-secondary-foreground">
+          <p className="leading-relaxed mb-5 text-secondary-foreground text-xl">
             Pour votre confort de lecture, nous vous proposons d'ajuster la taille du texte.
           </p>
 
@@ -112,11 +112,11 @@ export default function VisualComfortToggle() {
                   
                     Aa
                   </span>
-                  <span className={`text-lg font-medium ${isActive ? "text-slate-900" : "text-slate-600"}`}>
+                  <span className={`font-medium text-slate-600 text-xl ${isActive ? "text-slate-900" : "text-slate-600"}`}>
                     {option.label}
                   </span>
                   {option.hint &&
-                <span className="text-[11px] text-slate-400 ml-auto tracking-wide">{option.hint}</span>
+                <span className="text-slate-400 ml-auto tracking-wide text-xl">{option.hint}</span>
                 }
                   {isActive && <span className="ml-auto w-2 h-2 rounded-full bg-amber-500" />}
                 </button>);
@@ -127,7 +127,7 @@ export default function VisualComfortToggle() {
           {/* Confirm Button */}
           <button
           onClick={handleConfirm}
-          className="mt-5 w-full py-3 bg-slate-900 text-white text-[13px] uppercase tracking-widest font-bold rounded-full hover:bg-slate-800 transition-all duration-300 shadow-md active:scale-[0.98]">
+          className="mt-5 w-full py-3 bg-slate-900 text-white uppercase tracking-widest font-bold rounded-full hover:bg-slate-800 transition-all duration-300 shadow-md active:scale-[0.98] text-xl">
           
             Confirmer
           </button>
