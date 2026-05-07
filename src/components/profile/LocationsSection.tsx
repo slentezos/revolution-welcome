@@ -216,6 +216,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       },
       `Présence active : ${switchTarget === "secondary" ? profile.secondary_city_name : profile.city_name}.`,
       snapshot,
+      switchTarget,
     );
     if (ok) setSwitchTarget(null);
   };
