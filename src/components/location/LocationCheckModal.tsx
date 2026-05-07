@@ -100,7 +100,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
           {error && <p className="text-red-600 text-sm mt-3 text-center font-medium">{error}</p>}
         </div>
 
-        <p className="text-slate-400 mb-8 text-xs flex items-center justify-center gap-2 italic">
+        <p className="mb-8 flex items-center justify-center gap-2 italic text-xl text-secondary-foreground">
           <Lock className="h-3.5 w-3.5" />
           Vérification de proximité sécurisée.
         </p>
