@@ -153,7 +153,47 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     setDestType("france");
     setCityInput("");
     setPostalInput("");
+    setCountryInput("");
     setValidatedLocation(null);
+    setAddOpen(true);
+  };
+
+  const openEdit = (slot: 1 | 2) => {
+    setEditSlot(slot);
+    const city = slot === 1 ? profile.other_city_1 || "" : profile.other_city_2 || "";
+    const postal = slot === 1 ? profile.other_postal_code_1 || "" : profile.other_postal_code_2 || "";
+
+    setPostalInput(postal);
+
+    // Si un code postal existe, c'est une adresse en France
+    if (postal && postal.length === 5) {
+      setDestType("france");
+      setCityInput(city);
+      setCountryInput("");
+      const info = lookupPostalCode(postal);
+      if (info) setValidatedLocation({ cityName: info.cityName, regionName: info.regionName });
+    } else if (city) {
+      // Sinon, c'est à l'étranger : tenter de séparer "Ville, Pays"
+      setDestType("international");
+      setValidatedLocation(null);
+      const commaIdx = city.lastIndexOf(",");
+      if (commaIdx > -1) {
+        const cityPart = city.slice(0, commaIdx).trim();
+        const countryPart = city.slice(commaIdx + 1).trim();
+        const matched = COUNTRIES.find((c) => c.name.toLowerCase() === countryPart.toLowerCase());
+        setCityInput(cityPart);
+        setCountryInput(matched ? matched.code : "");
+      } else {
+        setCityInput(city);
+        setCountryInput("");
+      }
+    } else {
+      setDestType("france");
+      setCityInput(city);
+      setCountryInput("");
+      setValidatedLocation(null);
+    }
+
     setAddOpen(true);
   };
 
