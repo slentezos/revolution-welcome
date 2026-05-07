@@ -69,7 +69,7 @@ export default function LocationCheckModal({ open, onClose }: LocationCheckModal
             <MapPin className="h-7 w-7" />
           </div>
           <h2 className="font-heading font-bold text-[#1B2333] mb-3 text-3xl sm:text-4xl">Bienvenue chez Kalimera.</h2>
-          <p className="text-center text-[hsl(var(--gold))] font-bold tracking-widest uppercase text-sm sm:text-base">
+          <p className="text-center text-[hsl(var(--gold))] font-bold tracking-widest uppercase sm:text-base text-lg">
             Vérifions que notre Cercle est ouvert dans votre région.
           </p>
         </div>
