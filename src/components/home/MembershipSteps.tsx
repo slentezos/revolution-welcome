@@ -35,7 +35,7 @@ export default function MembershipSteps() {
           <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
             Mon adhésion en 4 étapes
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-xl max-w-2xl mx-auto">
             Un processus simple et efficace pour trouver l'amour.
           </p>
         </div>
