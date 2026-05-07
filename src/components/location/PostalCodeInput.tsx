@@ -73,7 +73,7 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
 
       {locationInfo && (
         <div className="mt-4 p-4 bg-[#222a39]/50 border border-[hsl(var(--gold))/20] rounded-xl animate-fade-in text-left">
-          <p className="font-bold text-2xl text-[hsl(var(--gold))] mb-2 flex items-center gap-2">
+          <p className="font-bold text-[hsl(var(--gold))] mb-2 flex items-center gap-2 text-2xl">
             <MapPin className="h-6 w-6" />
             {isPinpoint ? `Localisation : ${locationInfo.cityName}` : `Bassin de ${locationInfo.regionName}`}
           </p>
