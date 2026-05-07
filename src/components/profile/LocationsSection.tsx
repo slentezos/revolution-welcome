@@ -268,7 +268,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
           type="button"
           onClick={handleUndo}
           disabled={submitting}
-          className="inline-flex items-center gap-2 min-h-[48px] px-4 rounded-md text-lg font-semibold text-foreground underline underline-offset-4 decoration-[hsl(var(--gold))]/60 hover:text-[hsl(var(--gold))] hover:decoration-[hsl(var(--gold))] transition-colors disabled:opacity-50"
+          className="inline-flex items-center gap-2 min-h-[48px] px-4 rounded-md font-semibold text-foreground underline underline-offset-4 decoration-[hsl(var(--gold))]/60 hover:text-[hsl(var(--gold))] hover:decoration-[hsl(var(--gold))] transition-colors disabled:opacity-50 text-xl"
         >
           <Undo2 className="h-5 w-5" />
           Annuler ({undoCountdownLabel})
