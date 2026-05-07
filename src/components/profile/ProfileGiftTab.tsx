@@ -367,7 +367,7 @@ export default function ProfileGiftTab() {
 
               <Button
                 onClick={handleSubmit}
-                className="btn-primary py-5 px-10 text-lg h-auto min-h-[60px] w-full"
+                className="btn-primary py-5 px-10 h-auto min-h-[60px] w-full text-xl"
               >
                 <Gift className="h-5 w-5 mr-3" />
                 Offrir cet abonnement
