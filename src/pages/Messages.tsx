@@ -598,7 +598,7 @@ export default function Messages() {
               <div className="p-5 border-t border-amber-100/40 bg-amber-50/20 flex flex-col gap-3">
                 <button
                   onClick={() => setShowConseils(true)}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl hover:bg-amber-50/60 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl hover:bg-amber-50/60 transition-colors text-2xl"
                 >
                   <ShieldCheck className="h-5 w-5 text-[hsl(var(--gold))]" />
                   <span className="font-medium text-xl text-[#1a2232]">9 conseils de sécurité</span>
