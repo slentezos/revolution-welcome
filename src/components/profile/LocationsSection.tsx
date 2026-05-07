@@ -117,13 +117,23 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     [profile],
   );
 
-  const showUndo = (snap: Snapshot, message: string) => {
+  const showUndo = (
+    snap: Snapshot,
+    message: string,
+    target: "primary" | "secondary",
+  ) => {
     if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
-    setUndoBanner({ snapshot: snap, message });
+    const expiresAt = Date.now() + 5 * 60 * 1000;
+    setUndoBanner({ snapshot: snap, message, target, expiresAt });
     undoTimerRef.current = setTimeout(() => setUndoBanner(null), 5 * 60 * 1000);
   };
 
-  const persist = async (patch: Partial<ProfileLocationData>, successMessage: string, prevSnap: Snapshot) => {
+  const persist = async (
+    patch: Partial<ProfileLocationData>,
+    successMessage: string,
+    prevSnap: Snapshot,
+    target: "primary" | "secondary",
+  ) => {
     setSubmitting(true);
     const { data, error } = await supabase
       .from("profiles")
@@ -137,7 +147,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       return false;
     }
     onProfileUpdated(data as ProfileLocationData);
-    showUndo(prevSnap, successMessage);
+    showUndo(prevSnap, successMessage, target);
     return true;
   };
 
