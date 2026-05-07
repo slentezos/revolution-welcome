@@ -517,7 +517,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
                         Accompagnement personnalisé
                       </p>
-                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
+                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg text-primary font-semibold">On vous filme en visio (35€)</p>
                     </div>
                     <ArrowRight className="h-6 w-6 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-1 transition-transform" />
                   </button>
