@@ -426,6 +426,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 </div>
               </>
             )}
+            {renderUndoBanner("secondary")}
           </div>
         </div>
       </div>
