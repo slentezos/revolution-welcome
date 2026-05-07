@@ -75,7 +75,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
         <h1 className="font-heading text-3xl md:text-5xl font-semibold text-foreground mb-3">
           {codeSent ? "Entrez le code reçu" : "Vérification du téléphone"}
         </h1>
-        <p className="text-muted-foreground text-xl">
+        <p className="text-muted-foreground text-2xl">
           {codeSent
             ? <>Un code à 6 chiffres a été envoyé au<br />+33 {formData.phone}</>
             : "Pour votre sécurité, nous vérifions votre numéro de téléphone"}
