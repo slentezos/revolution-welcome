@@ -202,12 +202,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     setActiveSlotId(null);
   };
 
-    const preview = URL.createObjectURL(file);
-    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
-    if (fileInputRef.current) fileInputRef.current.value = "";
-    setActiveSlotId(null);
-  };
-
   const handleSave = async () => {
     if (!confirmedAge) {
       toast({
