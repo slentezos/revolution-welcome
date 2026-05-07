@@ -191,7 +191,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       return;
     }
 
-    onProfileUpdated(data as ProfileLocationData);
+    onProfileUpdated(data as unknown as ProfileLocationData);
     setAddOpen(false);
     toast.success(`La destination ${finalCity} a été enregistrée.`);
   };
@@ -211,7 +211,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       return;
     }
 
-    onProfileUpdated(data as ProfileLocationData);
+    onProfileUpdated(data as unknown as ProfileLocationData);
     toast.success("Destination retirée de votre profil.");
   };
 
@@ -374,7 +374,6 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
         onOpenChange={(o) => {
           if (!o) {
             setAddOpen(false);
-            setEditMode(false);
             setPostalInput("");
             setCityInput("");
             setValidatedLocation(null);
