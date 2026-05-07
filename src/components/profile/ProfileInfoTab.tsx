@@ -194,7 +194,7 @@ export default function ProfileInfoTab({
                     type="button"
                     onClick={() => update("gender", opt.value)}
                     className={cn(
-                      "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
+                      "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium whitespace-nowrap transition-all duration-300 border",
                       formData.gender === opt.value
                         ? "border-[#1B2333] bg-[#e2a336] text-slate-50"
                         : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
@@ -219,7 +219,7 @@ export default function ProfileInfoTab({
                     type="button"
                     onClick={() => update("looking_for", opt.value)}
                     className={cn(
-                      "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
+                      "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium whitespace-nowrap transition-all duration-300 border",
                       formData.looking_for === opt.value
                         ? "border-[#1B2333] bg-[#e2a336] text-slate-50"
                         : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
