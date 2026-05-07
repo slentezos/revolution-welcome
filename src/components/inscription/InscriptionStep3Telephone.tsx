@@ -157,7 +157,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
             <button
               type="button"
               onClick={handleResend}
-              className="text-primary font-medium hover:underline flex items-center gap-1 text-xl"
+              className="text-primary font-medium hover:underline flex items-center gap-1 text-2xl"
               disabled={sending}
             >
               <RefreshCw className="h-4 w-4" />
