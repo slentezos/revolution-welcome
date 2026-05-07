@@ -55,6 +55,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   const [addOpen, setAddOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
   const [switchTarget, setSwitchTarget] = useState<"primary" | "secondary" | null>(null);
   const [postalInput, setPostalInput] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -67,7 +68,6 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     expiresAt: number;
   } | null>(null);
   const [undoNow, setUndoNow] = useState(() => Date.now());
-  const [infoModalOpen, setInfoModalOpen] = useState(false);
 
   // Actualisation toutes les minutes pour les cooldowns standards
   useEffect(() => {
@@ -297,10 +297,9 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               Mes Lieux de Vie
             </h3>
             <button
-              type="button"
               onClick={() => setInfoModalOpen(true)}
-              aria-label="Guide d'utilisation"
-              className="inline-flex items-center justify-center h-12 w-12 rounded-full text-slate-400 hover:text-[#1B2333] hover:bg-slate-100 transition-colors"
+              className="text-slate-400 hover:text-[hsl(var(--gold))] transition-colors p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-[hsl(var(--gold))] focus:ring-offset-2"
+              title="Guide de Mobilité"
             >
               <Info className="h-7 w-7" />
             </button>
@@ -465,6 +464,76 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
 
       {/* --- Modales --- */}
 
+      {/* Modale d'Information (Guide de Mobilité) */}
+      <Dialog open={infoModalOpen} onOpenChange={setInfoModalOpen}>
+        <DialogContent className="max-w-3xl p-0 overflow-hidden bg-white border-0 rounded-[28px] shadow-2xl">
+          <div className="bg-[#1B2333] px-10 py-8">
+            <DialogTitle className="font-heading text-3xl font-bold text-white mb-2">
+              Guide de Mobilité : Rayonnement & Stabilité
+            </DialogTitle>
+            <DialogDescription className="text-xl text-slate-300 leading-relaxed">
+              Pour préserver l'excellence de notre réseau et garantir des rencontres authentiques, votre localisation
+              répond à des règles de stabilité algorithmique.
+            </DialogDescription>
+          </div>
+          <div className="p-10 max-h-[70vh] overflow-y-auto bg-slate-50/50">
+            {/* Bloc 1 */}
+            <div className="bg-white border-2 border-slate-100 rounded-2xl p-8 mb-8 shadow-sm">
+              <h4 className="text-2xl font-bold text-[#1B2333] mb-4">1. L'Ancrage de 90 jours (Déclaration)</h4>
+              <p className="text-xl text-slate-600 mb-6 leading-relaxed">
+                L'ajout ou la modification d'une résidence secondaire verrouille cette adresse pour une durée de 90
+                jours. Cela empêche le tourisme virtuel et garantit aux autres membres que vous fréquentez réellement
+                cette région.
+              </p>
+              <div className="bg-slate-50 border-l-4 border-[hsl(var(--gold))] p-5 rounded-r-xl">
+                <p className="text-xl text-slate-700 italic">
+                  Exemple : Si vous déclarez une adresse à Deauville le 1er Juin, celle-ci restera votre résidence
+                  secondaire officielle jusqu'au 1er Septembre. Vous ne pourrez pas la remplacer par Cannes entre-temps.
+                </p>
+              </div>
+            </div>
+
+            {/* Bloc 2 */}
+            <div className="bg-white border-2 border-slate-100 rounded-2xl p-8 mb-8 shadow-sm">
+              <h4 className="text-2xl font-bold text-[#1B2333] mb-4">2. Le Maintien de 72 heures (Déplacement)</h4>
+              <p className="text-xl text-slate-600 mb-6 leading-relaxed">
+                Lorsque vous signalez votre arrivée dans l'une de vos deux résidences, votre profil rayonne
+                exclusivement dans cette zone. Ce choix est maintenu pour un minimum de 72 heures.
+              </p>
+              <div className="bg-slate-50 border-l-4 border-[hsl(var(--gold))] p-5 rounded-r-xl">
+                <p className="text-xl text-slate-700 italic">
+                  Exemple : Vous arrivez à Deauville un vendredi et l'indiquez sur votre profil. Vous serez visible
+                  exclusivement par les membres de cette région durant tout le week-end, attestant de votre présence
+                  réelle sur place.
+                </p>
+              </div>
+            </div>
+
+            {/* Bloc 3 */}
+            <div className="bg-white border-2 border-slate-100 rounded-2xl p-8 mb-8 shadow-sm">
+              <h4 className="text-2xl font-bold text-[#1B2333] mb-4">3. Suppression & Intégrité</h4>
+              <p className="text-xl text-slate-600 mb-6 leading-relaxed">
+                Vous conservez le droit de supprimer votre résidence secondaire à tout moment pour ne plus y apparaître.
+                Toutefois, cette suppression n'annule pas le délai de 90 jours en cours.
+              </p>
+              <div className="bg-slate-50 border-l-4 border-[hsl(var(--gold))] p-5 rounded-r-xl">
+                <p className="text-xl text-slate-700 italic">
+                  Exemple : Si vous supprimez votre adresse secondaire après seulement 30 jours, il vous faudra tout de
+                  même patienter 60 jours supplémentaires avant de pouvoir en déclarer une nouvelle.
+                </p>
+              </div>
+            </div>
+
+            <Button
+              onClick={() => setInfoModalOpen(false)}
+              className="w-full h-16 bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl font-bold rounded-xl shadow-md transition-all"
+            >
+              Fermer le guide
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Modale Ajout / Modification */}
       <Dialog open={addOpen} onOpenChange={(o) => !o && (setAddOpen(false), setEditMode(false))}>
         <DialogContent className="max-w-md p-0 overflow-hidden bg-white border-0 rounded-[24px]">
@@ -583,49 +652,6 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               </Button>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Info / Guide d'utilisation */}
-      <Dialog open={infoModalOpen} onOpenChange={setInfoModalOpen}>
-        <DialogContent className="max-w-lg p-0 overflow-hidden bg-white border-0 rounded-[24px]">
-          <DialogHeader className="bg-[#1B2333] px-8 py-6 text-left">
-            <DialogTitle className="font-heading text-2xl text-white font-bold">
-              Guide d'utilisation : Mobilité
-            </DialogTitle>
-            <DialogDescription className="text-lg text-slate-300 mt-2">
-              Pour garantir l'authenticité des profils, la gestion de votre position géographique est soumise à des règles de stabilité strictes.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="px-8 py-6 space-y-4">
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <p className="font-bold text-[#1B2333] text-xl mb-2">1. La Déclaration (90 jours)</p>
-              <p className="text-slate-600 text-lg leading-relaxed">
-                L'ajout ou la modification d'une résidence vous engage sur cette adresse pour une durée de 90 jours.
-              </p>
-            </div>
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <p className="font-bold text-[#1B2333] text-xl mb-2">2. Le Sélecteur (72 heures)</p>
-              <p className="text-slate-600 text-lg leading-relaxed">
-                Chaque bascule manuelle d'une région à l'autre est maintenue pour un minimum de 72 heures.
-              </p>
-            </div>
-            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <p className="font-bold text-[#1B2333] text-xl mb-2">3. Suppression</p>
-              <p className="text-slate-600 text-lg leading-relaxed">
-                La suppression d'une adresse ne réinitialise pas le cycle de 90 jours en cours.
-              </p>
-            </div>
-          </div>
-          <DialogFooter className="px-8 pb-8">
-            <Button
-              type="button"
-              onClick={() => setInfoModalOpen(false)}
-              className="w-full h-14 bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl rounded-xl"
-            >
-              J'ai compris
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </section>
