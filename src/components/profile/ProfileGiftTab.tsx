@@ -359,7 +359,7 @@ export default function ProfileGiftTab() {
                       )}
                     </div>
                     <span className="font-heading text-2xl md:text-3xl font-semibold text-foreground shrink-0">
-                      +12€<span className="text-muted-foreground text-xl font-normal"> /mois</span>
+                      +12€<span className="text-muted-foreground font-normal text-2xl"> /mois</span>
                     </span>
                   </div>
                 </button>
