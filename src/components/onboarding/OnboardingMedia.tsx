@@ -66,7 +66,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -195,12 +195,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         return;
       }
     }
-
-    const preview = URL.createObjectURL(file);
-    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
-    if (fileInputRef.current) fileInputRef.current.value = "";
-    setActiveSlotId(null);
-  };
 
     const preview = URL.createObjectURL(file);
     setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
