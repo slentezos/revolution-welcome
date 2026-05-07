@@ -66,7 +66,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoRef = useRef<HTMLVideoElement>(null);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -202,6 +202,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     setActiveSlotId(null);
   };
 
+    const preview = URL.createObjectURL(file);
+    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    setActiveSlotId(null);
+  };
+
   const handleSave = async () => {
     if (!confirmedAge) {
       toast({
@@ -325,11 +331,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             {/* PHOTOS */}
             <div className="min-h-0 flex flex-col gap-4">
               <div className="flex-1 grid grid-cols-2 gap-4">
-             {photoSlots.map((slot) => (
-                  <div key={slot.id} className="relative aspect-square">
+                {photoSlots.map((slot) => (
+                  <div key={slot.id} className="min-h-0 flex flex-col gap-2">
                     <div
                       className={cn(
-                        "absolute inset-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
+                        "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
                         slot.preview ? "border-transparent" : "bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
                       )}
                       onClick={() => handleSlotClick(slot.id)}
@@ -609,8 +615,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
-    <input
-        key={activeSlotId} // FORCE LE REFRESH DE L'ATTRIBUT ACCEPT
+      <input
         ref={fileInputRef}
         type="file"
         className="hidden"
