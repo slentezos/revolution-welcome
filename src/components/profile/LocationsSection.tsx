@@ -201,6 +201,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       },
       "Résidence secondaire supprimée.",
       snapshot,
+      "secondary",
     );
     if (ok) setDeleteOpen(false);
   };
