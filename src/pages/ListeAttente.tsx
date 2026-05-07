@@ -249,7 +249,7 @@ export default function ListeAttente() {
                         >
                           {isOptedIn && <Check className="h-5 w-5 text-white" />}
                         </div>
-                        <span className="text-xl font-bold text-[#1B2333]">
+                        <span className="text-xl text-[#1B2333] font-semibold">
                           Je souhaite être prévenu(e) en priorité lors du lancement
                         </span>
                       </button>
