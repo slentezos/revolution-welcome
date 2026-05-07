@@ -261,7 +261,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
         aria-live="polite"
         className="mt-5 rounded-lg border border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 px-5 py-4 flex flex-wrap items-center gap-4 animate-in fade-in slide-in-from-top-1"
       >
-        <span className="text-foreground text-lg leading-relaxed flex-1 min-w-[200px]">
+        <span className="text-foreground leading-relaxed flex-1 min-w-[200px] text-xl">
           {undoBanner.message}
         </span>
         <button
