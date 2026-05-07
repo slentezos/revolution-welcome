@@ -201,7 +201,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   return (
     <div className="h-[calc(100vh-140px)] flex flex-col bg-white overflow-hidden">
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 p-6 lg:p-10 min-h-0">
-        {/* SECTION VIDÉO */}
+        {/* SECTION VIDÉO - GAUCHE */}
         <div className="flex flex-col gap-6 h-full overflow-hidden">
           <div className="flex items-center justify-between shrink-0">
             <h2 className="font-heading text-4xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
@@ -238,7 +238,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   }}
                   className="absolute bottom-8 left-8 p-4 bg-black/40 backdrop-blur-md text-white rounded-2xl hover:bg-black/60 transition-all z-10 shadow-lg"
                 >
-                  {isMuted ? <VolumeX className="h-7 w-7" /> : <Volume2 className="h-7 w-7" />}
+                  {isMuted ? <VolumeX /> : <Volume2 />}
                 </button>
                 <button
                   onClick={(e) => {
@@ -246,6 +246,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     setSlots((prev) =>
                       prev.map((s) => (s.id === "video" ? { ...s, preview: undefined, file: undefined } : s)),
                     );
+                    setIsPlaying(false);
                   }}
                   className="absolute top-8 right-8 p-4 bg-red-500 text-white rounded-full z-10 shadow-xl hover:scale-105 active:scale-95 transition-all"
                 >
@@ -286,13 +287,13 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
           </div>
         </div>
 
-        {/* SECTION PHOTOS - GRILLE FIXE HAUTE PERFORMANCE */}
+        {/* SECTION PHOTOS - DROITE (FIXÉE) */}
         <div className="flex flex-col gap-6 h-full overflow-hidden">
-          <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-5">
+          <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-5 min-h-0">
             {photoSlots.map((slot) => (
               <div
                 key={slot.id}
-                className="relative rounded-[2rem] overflow-hidden border-2 border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all cursor-pointer group"
+                className="relative aspect-square rounded-[2rem] overflow-hidden border-2 border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all cursor-pointer group"
                 onClick={() => handleSlotClick(slot.id)}
               >
                 {slot.preview ? (
@@ -322,7 +323,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             ))}
           </div>
 
-          {/* BLOC INFO RESTAURÉ - CAC40 STANDARD */}
           <div className="bg-[#FCF9F5] border border-[#E5E0D8] p-5 rounded-3xl flex items-start gap-4 shadow-sm shrink-0">
             <Info className="h-6 w-6 text-[hsl(var(--gold))] shrink-0 mt-1" />
             <div className="text-slate-600 text-lg leading-snug font-medium">
@@ -337,7 +337,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
-      {/* FOOTER PREMIUM */}
+      {/* FOOTER */}
       <div className="bg-white border-t border-[#E5E0D8] py-8 px-10 shrink-0">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div
