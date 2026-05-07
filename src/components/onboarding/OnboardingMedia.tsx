@@ -11,10 +11,10 @@ import {
   Sun,
   Heart,
   Volume2,
-  VolumeX,
   Headphones,
   ArrowRight,
   ShieldCheck,
+  CreditCard,
   Loader2,
   MonitorOff,
   Info,
@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
 
 // Assets
 import coupleGarden from "@/assets/couple-garden.jpg";
+import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
 
 interface OnboardingMediaProps {
   profileId: string;
@@ -52,7 +53,8 @@ const getInitialSlots = (): MediaSlot[] => [
   { id: "misc2", type: "misc", label: "Divers", hint: "Passions…", required: false },
 ];
 
-const MAX_PHOTO_SIZE = 10 * 1024 * 1024;
+// Constantes pour la validation
+const MAX_PHOTO_SIZE = 10 * 1024 * 1024; // 10 Mo
 const ALLOWED_PHOTO_FORMATS = ["image/jpeg", "image/png", "image/webp", "image/heic"];
 
 export default function OnboardingMedia({ profileId, onComplete }: OnboardingMediaProps) {
@@ -64,8 +66,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeSlotId, setActiveSlotId] = useState<string | null>(null);
   const { toast } = useToast();
@@ -90,8 +90,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               else if (media.media_type === "portrait") slotIndex = 1;
               else if (media.media_type === "silhouette") slotIndex = 2;
               else if (media.media_type === "misc") {
-                if (!updated[3].preview) slotIndex = 3;
-                else if (!updated[4].preview) slotIndex = 4;
+                if (!updated[3].uploaded && !updated[3].preview) slotIndex = 3;
+                else if (!updated[4].uploaded && !updated[4].preview) slotIndex = 4;
               }
               if (slotIndex >= 0) {
                 const {
@@ -103,6 +103,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             return updated;
           });
         }
+      } catch (error) {
+        console.error("Error loading existing media:", error);
       } finally {
         setLoading(false);
       }
@@ -110,10 +112,22 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     loadExistingMedia();
   }, [profileId]);
 
+  const handleStudioPayment = async () => {
+    setIsProcessingPayment(true);
+    setTimeout(() => {
+      setIsProcessingPayment(false);
+      setShowStudioModal(false);
+      setShowVideoTutorial(false);
+      toast({
+        title: "Réservation confirmée !",
+        description: "Notre équipe vous appellera dans les prochaines 24h.",
+      });
+    }, 2000);
+  };
+
   const handleSlotClick = (slotId: string) => {
     setActiveSlotId(slotId);
-    // Délai technique pour laisser le browser charger l'attribut accept
-    setTimeout(() => fileInputRef.current?.click(), 50);
+    fileInputRef.current?.click();
   };
 
   const handleRemoveSlot = (slotId: string) => {
@@ -129,27 +143,39 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     const slot = slots.find((s) => s.id === activeSlotId);
     if (!slot) return;
 
-    if (file.type === "image/gif") {
-      toast({
-        title: "Format refusé",
-        description: "Les images animées (GIF) ne sont pas autorisées.",
-        variant: "destructive",
-      });
-      return;
-    }
-
+    // VALIDATION VIDEO
     if (slot.type === "video") {
-      if (!file.type.startsWith("video/")) {
-        toast({ title: "Erreur", description: "Veuillez choisir une vidéo.", variant: "destructive" });
+      const video = document.createElement("video");
+      video.preload = "metadata";
+      const objectUrl = URL.createObjectURL(file);
+      video.src = objectUrl;
+      const isValid = await new Promise<boolean>((resolve) => {
+        video.onloadedmetadata = () => {
+          URL.revokeObjectURL(objectUrl);
+          resolve(video.duration <= 90);
+        };
+      });
+      if (!isValid) {
+        toast({ title: "Vidéo trop longue", description: "La durée maximale est de 1 mn 30.", variant: "destructive" });
         return;
       }
-    } else {
-      if (!file.type.startsWith("image/")) {
-        toast({ title: "Erreur", description: "Veuillez choisir une image.", variant: "destructive" });
-        return;
-      }
+    }
+    // VALIDATION PHOTO (Taille & Format)
+    else {
       if (file.size > MAX_PHOTO_SIZE) {
-        toast({ title: "Fichier trop lourd", description: "Maximum 10 Mo.", variant: "destructive" });
+        toast({
+          title: "Fichier trop volumineux",
+          description: "Pour garantir une qualité optimale, merci de choisir une photo de moins de 10 Mo.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!ALLOWED_PHOTO_FORMATS.includes(file.type) && !file.name.toLowerCase().endsWith(".heic")) {
+        toast({
+          title: "Format non supporté",
+          description: "Merci d'utiliser les formats JPG, PNG ou HEIC.",
+          variant: "destructive",
+        });
         return;
       }
     }
@@ -174,7 +200,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      if (!session) return;
+      if (!session) throw new Error("Non authentifié");
       for (const slot of slots) {
         if (slot.file && !slot.uploaded) {
           const fileExt = slot.file.name.split(".").pop();
@@ -199,18 +225,21 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
   const videoSlot = slots[0];
   const photoSlots = slots.slice(1, 5);
+  const uploadedCount = slots.filter((s) => s.file || s.uploaded).length;
 
   if (loading)
-    return <div className="h-screen flex items-center justify-center text-xl animate-pulse">Chargement...</div>;
+    return (
+      <div className="h-screen flex items-center justify-center text-xl font-medium animate-pulse">Chargement...</div>
+    );
 
   return (
     <div className="h-[calc(100vh-140px)] flex flex-col overflow-hidden bg-white">
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-0 min-h-0">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-0 min-h-0">
         <div className="flex-1 min-h-0 p-4 lg:p-10 flex flex-col gap-6 text-left">
           <div className="flex items-center justify-between">
             <h2 className="font-heading text-4xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
             <div className="px-5 py-2 bg-secondary/50 rounded-xl border border-[#E5E0D8]">
-              <span className="text-[#1B2333] font-bold text-2xl">{slots.filter((s) => s.preview).length}</span>
+              <span className="text-[#1B2333] font-bold text-2xl">{uploadedCount}</span>
               <span className="text-gray-500 text-2xl"> / 5</span>
             </div>
           </div>
@@ -220,32 +249,20 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <div className="min-h-0 flex flex-col gap-4">
               <div
                 className="relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[2.5rem] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all duration-500"
-                onClick={() => !videoSlot?.preview && handleSlotClick("video")}
+                onClick={() => !videoSlot?.preview && handleSlotClick(videoSlot?.id)}
               >
                 {videoSlot?.preview ? (
                   <>
-                    <video
-                      src={videoSlot.preview}
-                      className="w-full h-full object-cover"
-                      autoPlay
-                      loop
-                      muted={isMuted}
-                    />
+                    <video src={videoSlot.preview} className="w-full h-full object-cover" muted />
+                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                      <Play className="h-20 w-20 text-white drop-shadow-2xl" />
+                    </div>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        setIsMuted(!isMuted);
+                        handleRemoveSlot(videoSlot.id);
                       }}
-                      className="absolute bottom-6 left-6 p-4 bg-black/40 backdrop-blur-md text-white rounded-2xl z-10"
-                    >
-                      {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveSlot("video");
-                      }}
-                      className="absolute top-6 right-6 p-4 bg-red-500 text-white rounded-full z-10"
+                      className="absolute top-6 right-6 p-4 bg-red-500 text-white rounded-full"
                     >
                       <X className="h-6 w-6" />
                     </button>
@@ -259,7 +276,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <span className="text-2xl text-[#1B2333] font-semibold">+ Ajouter ma vidéo</span>
                     </div>
 
-                    {/* BOUTON STUDIO RESTAURÉ */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -281,7 +297,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               </div>
               <div className="flex items-center justify-between px-4">
                 <p className="text-muted-foreground mb-8 text-xl">Votre sourire est votre plus belle signature.</p>
-                {/* BOUTON CONSEILS RESTAURÉ */}
                 <button
                   onClick={() => setShowVideoTutorial(true)}
                   className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold hover:bg-[hsl(var(--gold))]/20 transition-all text-xl"
@@ -293,19 +308,24 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
             {/* PHOTOS */}
             <div className="min-h-0 flex flex-col gap-4">
-              <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-4">
+              <div className="flex-1 grid grid-cols-2 gap-4">
                 {photoSlots.map((slot) => (
-                  <div key={slot.id} className="relative aspect-square">
+                  <div key={slot.id} className="min-h-0 flex flex-col gap-2">
                     <div
                       className={cn(
-                        "absolute inset-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
+                        "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
                         slot.preview ? "border-transparent" : "bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
                       )}
                       onClick={() => handleSlotClick(slot.id)}
                     >
                       {slot.preview ? (
                         <>
-                          <img src={slot.preview} alt={slot.label} className="w-full h-full object-cover" />
+                          <img
+                            decoding="async"
+                            src={slot.preview}
+                            alt={slot.label}
+                            className="w-full h-full object-cover"
+                          />
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -317,7 +337,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                           </button>
                         </>
                       ) : (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
                           <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
                             <Camera className="h-6 w-6 text-muted-foreground" />
                           </div>
@@ -328,9 +348,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   </div>
                 ))}
               </div>
+
+              {/* INFORMATION FORMAT ET TAILLE - CAC40 Mindset: Direct and Clear */}
               <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl">
                 <Info className="h-5 w-5 text-slate-400 shrink-0" />
-                <p className="text-slate-500 text-lg">
+                <p className="text-slate-500 text-lg leading-snug">
                   Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong>. Taille maximale :{" "}
                   <strong className="text-slate-700">10 Mo</strong> par photo.
                 </p>
@@ -341,7 +363,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       </div>
 
       {/* FOOTER */}
-      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20 text-left">
+      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20 text-left shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
         <div className="max-w-5xl mx-auto space-y-6">
           <div
             className={cn(
@@ -358,20 +380,21 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             >
               {confirmedAge && <Check className="text-white h-6 w-6" />}
             </div>
-            <p className="text-xl font-medium text-[#1B2333]">
-              Je certifie sur l'honneur que mes photos ont moins de{" "}
-              <span className="font-bold underline text-[hsl(var(--gold))]">18 mois</span>.
+            <p className="text-xl font-medium text-[#1B2333] select-none">
+              Je certifie sur l'honneur que mes photos ont été prises il y a{" "}
+              <span className="font-bold underline text-[hsl(var(--gold))]">moins de 18 mois</span>.
             </p>
           </div>
+
           <div className="flex items-center justify-between">
             <p className="font-medium text-gray-400 hidden md:block text-2xl">
               Votre sécurité est notre priorité absolue.
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-4 w-full md:w-auto">
               <Button
                 variant="outline"
                 onClick={handleSave}
-                className="h-16 px-10 rounded-2xl border-[#E5E0D8] font-bold text-xl"
+                className="flex-1 md:flex-none h-16 px-10 rounded-2xl border-[#E5E0D8] font-bold text-xl"
               >
                 Enregistrer
               </Button>
@@ -379,7 +402,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 onClick={handleSave}
                 disabled={!confirmedAge || uploading}
                 className={cn(
-                  "h-16 px-12 rounded-2xl font-bold text-xl shadow-xl transition-all",
+                  "flex-1 md:flex-none h-16 px-12 rounded-2xl font-bold text-xl shadow-xl transition-all",
                   confirmedAge ? "bg-[#1B2333] text-white" : "bg-gray-100 text-gray-400",
                 )}
               >
@@ -390,89 +413,193 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </div>
       </div>
 
+      {/* MODAL STUDIO EXPERT */}
+      <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
+        <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl max-h-[92vh] border-0 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] rounded-[24px] bg-white p-0 z-[9999] overflow-hidden gap-0">
+          <div className="h-2 w-full bg-[hsl(var(--gold))]" />
+
+          <div className="px-6 py-5 sm:px-8 sm:py-6 flex flex-col gap-4">
+            <div className="flex flex-col items-center gap-3 text-center">
+              <div className="w-14 h-14 rounded-full bg-[hsl(var(--cream))] flex items-center justify-center border-2 border-[hsl(var(--gold))]/40 shrink-0">
+                <Video className="h-7 w-7 text-[#1B2333]" />
+              </div>
+              <DialogTitle className="tracking-tight font-heading font-bold text-[#1B2333] leading-tight text-3xl sm:text-4xl">
+                Votre voix, votre regard, votre présence
+              </DialogTitle>
+              <p className="text-[#1B2333]/80 leading-snug text-xl">
+                Pour vous accompagner, Kalimera vous propose une aide personnalisée.
+              </p>
+            </div>
+
+            <div className="bg-[#1B2333]/5 rounded-2xl p-4 sm:p-5 border border-[#1B2333]/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-start gap-3">
+                <div className="bg-[hsl(var(--gold))] rounded-full p-2 shrink-0">
+                  <ShieldCheck className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-[#1B2333] leading-tight text-xl">Accompagnement</p>
+                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
+                    Un expert vous guide pour vos photos et vidéo.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="bg-[hsl(var(--gold))] rounded-full p-2 shrink-0">
+                  <MonitorOff className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-[#1B2333] leading-tight text-xl">Confidentialité</p>
+                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
+                    Via Google Meet. Aucun accès à votre ordinateur.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <span className="inline-flex items-baseline gap-2 bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
+                <span className="text-[#1B2333] font-bold text-2xl">35 €</span>
+                <span className="text-[#1B2333]/60 text-xl">puis 70 € au 01/10/2026</span>
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <Button
+                onClick={handleStudioPayment}
+                disabled={isProcessingPayment}
+                className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-xl"
+              >
+                {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
+                Réserver ma séance (35€)
+              </Button>
+              <button
+                onClick={() => setShowStudioModal(false)}
+                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 font-medium transition-colors text-xl"
+              >
+                Essayer seul(e) d'abord
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* TUTORIAL MODAL */}
+      <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
+        <DialogContent className="max-w-5xl p-0 h-auto max-h-[90vh] overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-white z-[9999] outline-none">
+          <button
+            onClick={() => setShowVideoTutorial(false)}
+            className="absolute right-6 top-6 md:right-8 md:top-8 z-[10000] p-3 rounded-full bg-white/90 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-md group shrink-0"
+          >
+            <X className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
+          </button>
+
+          <div className="flex flex-col lg:flex-row h-full overflow-hidden">
+            <div className="flex-1 p-8 lg:p-10 bg-white relative flex flex-col justify-center gap-4 h-full">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
+
+              <div className="relative z-10 flex flex-col gap-4">
+                <header className="shrink-0">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-3">
+                    <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
+                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-lg">
+                      Guide Privé
+                    </span>
+                  </div>
+                  <DialogTitle className="font-heading text-4xl md:text-5xl text-[#1B2333] leading-[1.1]">
+                    L'art de se <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
+                  </DialogTitle>
+                </header>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 shrink-0">
+                  {[
+                    { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
+                    { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
+                    { icon: Heart, title: "L'Émotion", desc: "Parlez de vos vraies passions." },
+                    { icon: Volume2, title: "La Sérénité", desc: "Le silence pour être écouté(e)." },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-4">
+                      <div className="w-14 h-14 shrink-0 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
+                        <item.icon className="h-7 w-7 text-[#1B2333]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-[#1B2333] text-2xl leading-tight">{item.title}</h4>
+                        <p className="text-[#1B2333]/70 text-xl leading-snug">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex flex-col gap-3 mt-4 shrink-0 max-w-lg">
+                  <Button
+                    onClick={() => setShowVideoTutorial(false)}
+                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-xl"
+                  >
+                    J'ai compris, je commence seul(e)
+                  </Button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowVideoTutorial(false);
+                      setShowStudioModal(true);
+                    }}
+                    className="w-full flex items-center gap-4 p-4 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)] text-left shrink-0 min-h-[64px]"
+                  >
+                    <div className="shrink-0 w-12 h-12 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
+                      <Headphones className="h-6 w-6 text-[hsl(var(--gold))] animate-pulse" />
+                    </div>
+                    <div className="flex-1 min-w-0 flex flex-col">
+                      <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
+                        Accompagnement personnalisé
+                      </p>
+                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
+                    </div>
+                    <ArrowRight className="h-6 w-6 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="hidden lg:block w-[360px] shrink-0 relative h-full">
+              <img
+                decoding="async"
+                src={coupleGarden}
+                className="absolute inset-0 w-full h-full object-cover"
+                alt="Couple"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/30 via-transparent to-transparent" />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem] z-[9999] outline-none">
+          <div className="flex flex-col items-center gap-6">
+            <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
+              <Check className="h-10 w-10 text-emerald-600" />
+            </div>
+            <DialogTitle className="font-heading text-3xl text-[#1B2333] font-bold">C'est enregistré !</DialogTitle>
+            <Button
+              onClick={() => {
+                setShowSaveDialog(false);
+                onComplete();
+              }}
+              className="w-full h-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl"
+            >
+              Continuer
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <input
-        key={activeSlotId}
         ref={fileInputRef}
         type="file"
         className="hidden"
         accept={activeSlotId === "video" ? "video/*" : "image/jpeg,image/png,image/webp,image/heic"}
         onChange={handleFileChange}
       />
-
-      {/* MODAL STUDIO EXPERT */}
-      <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
-        <DialogContent className="max-w-2xl rounded-[24px]">
-          <DialogTitle className="text-3xl font-bold text-[#1B2333] mb-4 text-center">
-            Accompagnement personnalisé
-          </DialogTitle>
-          <p className="text-xl text-slate-600 mb-8 text-center">
-            Un expert vous guide pour réaliser vos meilleurs clichés.
-          </p>
-          <Button
-            onClick={() => {
-              setIsProcessingPayment(true);
-              setTimeout(() => {
-                setIsProcessingPayment(false);
-                setShowStudioModal(false);
-                toast({ title: "Réservation confirmée" });
-              }, 1500);
-            }}
-            className="h-16 w-full bg-[#1B2333] text-white font-bold rounded-xl text-xl"
-          >
-            {isProcessingPayment ? <Loader2 className="animate-spin" /> : "Réserver ma séance (35€)"}
-          </Button>
-        </DialogContent>
-      </Dialog>
-
-      {/* MODAL CONSEILS VIDÉO */}
-      <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        <DialogContent className="max-w-4xl p-0 rounded-[3rem] overflow-hidden">
-          <div className="flex h-full">
-            <div className="flex-1 p-10">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-3">
-                <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-lg">
-                  Guide Privé
-                </span>
-              </div>
-              <DialogTitle className="text-4xl font-bold text-[#1B2333] mb-6">
-                L'art de se <span className="italic text-[hsl(var(--gold))]">présenter</span>
-              </DialogTitle>
-              <div className="grid grid-cols-1 gap-6 mb-8 text-xl text-slate-600">
-                <div className="flex gap-4">
-                  <Eye className="text-[#1B2333]" /> <p>Le Regard : face à l'objectif.</p>
-                </div>
-                <div className="flex gap-4">
-                  <Sun className="text-[#1B2333]" /> <p>La Lumière : face à une fenêtre.</p>
-                </div>
-              </div>
-              <Button
-                onClick={() => setShowVideoTutorial(false)}
-                className="h-16 w-full bg-[#1B2333] text-white font-bold rounded-2xl text-xl"
-              >
-                J'ai compris
-              </Button>
-            </div>
-            <img src={coupleGarden} className="hidden lg:block w-[320px] object-cover" />
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem] outline-none">
-          <Check className="h-16 w-16 text-emerald-600 mx-auto mb-6" />
-          <DialogTitle className="text-3xl font-bold text-[#1B2333] mb-6">C'est enregistré !</DialogTitle>
-          <Button
-            onClick={() => {
-              setShowSaveDialog(false);
-              onComplete();
-            }}
-            className="w-full h-16 bg-[#1B2333] text-white text-xl font-bold rounded-2xl"
-          >
-            Continuer
-          </Button>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
