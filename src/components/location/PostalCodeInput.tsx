@@ -58,7 +58,7 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
           placeholder="Entrer votre code postal"
           value={postalCode}
           onChange={(e) => handleChange(e.target.value)}
-          className="flex-1 h-14 px-5 outline-none tracking-wider font-medium text-primary-foreground text-xl border-0 bg-[#222a39]"
+          className="flex-1 h-14 px-5 outline-none tracking-wider font-medium text-primary-foreground border-0 bg-[#222a39] text-2xl"
         />
 
         <button
@@ -73,11 +73,11 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
 
       {locationInfo && (
         <div className="mt-4 p-4 bg-[#222a39]/50 border border-[hsl(var(--gold))/20] rounded-xl animate-fade-in text-left">
-          <p className="font-bold text-2xl text-[hsl(var(--gold))] mb-2 flex items-center gap-2">
+          <p className="font-bold text-[hsl(var(--gold))] mb-2 flex items-center gap-2 text-2xl">
             <MapPin className="h-6 w-6" />
             {isPinpoint ? `Localisation : ${locationInfo.cityName}` : `Bassin de ${locationInfo.regionName}`}
           </p>
-          <p className="text-base text-primary-foreground/80 leading-relaxed">
+          <p className="text-primary-foreground/80 leading-relaxed text-2xl">
             Votre code postal ({postalCode}) a bien été identifié.
             {isPinpoint ? (
               <>
