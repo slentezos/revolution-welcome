@@ -601,7 +601,7 @@ export default function Messages() {
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl hover:bg-amber-50/60 transition-colors"
                 >
                   <ShieldCheck className="h-5 w-5 text-[hsl(var(--gold))]" />
-                  <span className="font-medium text-muted-foreground text-xl">9 conseils de sécurité</span>
+                  <span className="font-medium text-xl text-[#1a2232]">9 conseils de sécurité</span>
                 </button>
 
                 {/* TOOLTIP CERCLE PRIVÉ */}
