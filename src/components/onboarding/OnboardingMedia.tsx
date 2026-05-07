@@ -4,7 +4,6 @@ import {
   Video,
   X,
   Play,
-  Pause,
   Lightbulb,
   Check,
   Sparkles,
@@ -57,17 +56,15 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [slots, setSlots] = useState<MediaSlot[]>(getInitialSlots());
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [confirmedAge, setConfirmedAge] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-  // États vidéo
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeSlotId, setActiveSlotId] = useState<string | null>(null);
   const { toast } = useToast();
@@ -75,38 +72,33 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   useEffect(() => {
     const loadExistingMedia = async () => {
       try {
-        const { data: existingMedia, error } = await supabase
+        const { data: existingMedia } = await supabase
           .from("profile_media")
           .select("*")
           .eq("profile_id", profileId)
           .order("display_order");
-
-        if (error) throw error;
-
         if (existingMedia && existingMedia.length > 0) {
           setSlots((prev) => {
             const updated = [...prev];
             existingMedia.forEach((media) => {
-              let slotIndex = -1;
-              if (media.media_type === "video") slotIndex = 0;
-              else if (media.media_type === "portrait") slotIndex = 1;
-              else if (media.media_type === "silhouette") slotIndex = 2;
+              let idx = -1;
+              if (media.media_type === "video") idx = 0;
+              else if (media.media_type === "portrait") idx = 1;
+              else if (media.media_type === "silhouette") idx = 2;
               else if (media.media_type === "misc") {
-                if (!updated[3].uploaded && !updated[3].preview) slotIndex = 3;
-                else if (!updated[4].uploaded && !updated[4].preview) slotIndex = 4;
+                if (!updated[3].preview) idx = 3;
+                else if (!updated[4].preview) idx = 4;
               }
-              if (slotIndex >= 0) {
+              if (idx >= 0) {
                 const {
                   data: { publicUrl },
                 } = supabase.storage.from("profile-media").getPublicUrl(media.file_path);
-                updated[slotIndex] = { ...updated[slotIndex], preview: publicUrl, uploaded: true };
+                updated[idx] = { ...updated[idx], preview: publicUrl, uploaded: true };
               }
             });
             return updated;
           });
         }
-      } catch (error) {
-        console.error("Error loading existing media:", error);
       } finally {
         setLoading(false);
       }
@@ -115,24 +107,14 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   }, [profileId]);
 
   useEffect(() => {
-    if (activeSlotId && fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    if (activeSlotId && fileInputRef.current) fileInputRef.current.click();
   }, [activeSlotId]);
 
-  const handleSlotClick = (slotId: string) => {
+  const handleSlotClick = (id: string) => {
     setActiveSlotId(null);
-    setTimeout(() => setActiveSlotId(slotId), 10);
+    setTimeout(() => setActiveSlotId(id), 10);
   };
 
-  const handleRemoveSlot = (slotId: string) => {
-    const initial = getInitialSlots().find((s) => s.id === slotId);
-    if (initial) {
-      setSlots((prev) => prev.map((s) => (s.id === slotId ? initial : s)));
-    }
-  };
-
-  // Logique de lecture vidéo
   const togglePlay = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!videoRef.current) return;
@@ -145,41 +127,30 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     }
   };
 
-  const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsMuted(!isMuted);
-  };
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !activeSlotId) {
       setActiveSlotId(null);
       return;
     }
-
     const slot = slots.find((s) => s.id === activeSlotId);
     if (!slot) return;
 
     if (file.type === "image/gif") {
-      toast({ title: "Format non autorisé", description: "Les GIFs ne sont pas acceptés.", variant: "destructive" });
+      toast({ title: "Format refusé", description: "Les GIFs ne sont pas autorisés.", variant: "destructive" });
       setActiveSlotId(null);
       return;
     }
 
     if (slot.type === "video") {
       if (!file.type.startsWith("video/")) {
-        toast({ title: "Action impossible", description: "Merci de choisir une vidéo.", variant: "destructive" });
+        toast({ title: "Erreur", description: "Veuillez choisir une vidéo.", variant: "destructive" });
         setActiveSlotId(null);
         return;
       }
     } else {
-      if (!file.type.startsWith("image/")) {
-        toast({ title: "Action impossible", description: "Merci de choisir une photo.", variant: "destructive" });
-        setActiveSlotId(null);
-        return;
-      }
       if (file.size > MAX_PHOTO_SIZE) {
-        toast({ title: "Fichier trop lourd", description: "Max 10 Mo.", variant: "destructive" });
+        toast({ title: "Fichier trop lourd", description: "Maximum 10 Mo par photo.", variant: "destructive" });
         setActiveSlotId(null);
         return;
       }
@@ -201,11 +172,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      if (!session) throw new Error("Session expirée");
+      if (!session) return;
       for (const slot of slots) {
         if (slot.file && !slot.uploaded) {
-          const fileExt = slot.file.name.split(".").pop();
-          const fileName = `${session.user.id}/${slot.id}-${Date.now()}.${fileExt}`;
+          const fileName = `${session.user.id}/${slot.id}-${Date.now()}.${slot.file.name.split(".").pop()}`;
           await supabase.storage.from("profile-media").upload(fileName, slot.file);
           await supabase.from("profile_media").insert({
             user_id: session.user.id,
@@ -217,8 +187,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         }
       }
       setShowSaveDialog(true);
-    } catch (error: any) {
-      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+    } catch (err: any) {
+      toast({ title: "Erreur", description: err.message, variant: "destructive" });
     } finally {
       setUploading(false);
     }
@@ -226,29 +196,28 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
   const videoSlot = slots[0];
   const photoSlots = slots.slice(1, 5);
-  const uploadedCount = slots.filter((s) => s.file || s.uploaded).length;
 
   if (loading)
-    return <div className="h-screen flex items-center justify-center text-xl animate-pulse">Chargement...</div>;
+    return <div className="h-screen flex items-center justify-center animate-pulse text-[#1B2333]">Chargement...</div>;
 
   return (
-    <div className="h-[calc(100vh-140px)] flex flex-col overflow-hidden bg-white">
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-6 lg:gap-10 p-4 lg:p-10 min-h-0 overflow-y-auto lg:overflow-hidden">
-        {/* COLONNE GAUCHE : VIDÉO */}
-        <div className="flex flex-col gap-6 h-full min-h-[400px]">
+    <div className="h-[calc(100vh-140px)] flex flex-col bg-white overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-8 p-6 lg:p-10 min-h-0">
+        {/* SECTION VIDÉO (GAUCHE) */}
+        <div className="flex flex-col gap-6 h-full">
           <div className="flex items-center justify-between">
             <h2 className="font-heading text-4xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
             <div className="px-5 py-2 bg-secondary/50 rounded-xl border border-[#E5E0D8]">
-              <span className="text-[#1B2333] font-bold text-2xl">{uploadedCount}</span>
-              <span className="text-gray-500 text-2xl"> / 5</span>
+              <span className="text-[#1B2333] font-bold text-2xl">{slots.filter((s) => s.preview).length}</span>
+              <span className="text-gray-400 text-2xl"> / 5</span>
             </div>
           </div>
 
           <div
-            className="relative flex-1 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[2.5rem] bg-[#FCF9F5] hover:border-[#C5A059] transition-all"
-            onClick={() => !videoSlot?.preview && handleSlotClick("video")}
+            className="relative flex-1 rounded-[2.5rem] overflow-hidden border border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all cursor-pointer group"
+            onClick={() => !videoSlot.preview && handleSlotClick("video")}
           >
-            {videoSlot?.preview ? (
+            {videoSlot.preview ? (
               <div className="relative w-full h-full" onClick={togglePlay}>
                 <video
                   ref={videoRef}
@@ -257,8 +226,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   muted={isMuted}
                   onEnded={() => setIsPlaying(false)}
                 />
-
-                {/* Overlay contrôles */}
                 {!isPlaying && (
                   <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                     <div className="w-24 h-24 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
@@ -266,69 +233,68 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     </div>
                   </div>
                 )}
-
-                {/* Bouton Mute - Premium placement */}
-                <button
-                  onClick={toggleMute}
-                  className="absolute bottom-6 left-6 p-3 bg-black/40 backdrop-blur-md text-white rounded-xl hover:bg-black/60 transition-all z-10"
-                >
-                  {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
-                </button>
-
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleRemoveSlot("video");
-                    setIsPlaying(false);
+                    setIsMuted(!isMuted);
                   }}
-                  className="absolute top-6 right-6 p-3 bg-red-500 text-white rounded-full hover:scale-110 transition-transform z-10 shadow-lg"
+                  className="absolute bottom-6 left-6 p-3 bg-black/40 backdrop-blur-md text-white rounded-xl z-10"
                 >
-                  <X className="h-6 w-6" />
+                  {isMuted ? <VolumeX /> : <Volume2 />}
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSlots((prev) =>
+                      prev.map((s) => (s.id === "video" ? { ...s, preview: undefined, file: undefined } : s)),
+                    );
+                  }}
+                  className="absolute top-6 right-6 p-3 bg-red-500 text-white rounded-full z-10"
+                >
+                  <X />
                 </button>
               </div>
             ) : (
-              <div className="absolute inset-0 flex flex-col items-center justify-center space-y-8 p-6 text-center">
-                <div className="flex flex-col items-center">
-                  <div className="w-20 h-20 rounded-full bg-white shadow-sm border border-[#E5E0D8] flex items-center justify-center mb-4">
-                    <Video className="h-10 w-10 text-[#C5A059]" />
-                  </div>
-                  <span className="text-2xl text-[#1B2333] font-bold">+ Ajouter ma vidéo</span>
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-6">
+                <div className="w-20 h-20 rounded-full bg-white border border-[#E5E0D8] flex items-center justify-center shadow-sm">
+                  <Video className="h-10 w-10 text-[hsl(var(--gold))]" />
                 </div>
+                <span className="text-2xl font-bold text-[#1B2333]">+ Ajouter ma vidéo</span>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowStudioModal(true);
                   }}
-                  className="flex items-center gap-4 px-8 py-5 bg-white border border-[#C5A059]/40 text-[#C5A059] rounded-2xl shadow-sm hover:shadow-lg transition-all"
+                  className="flex items-center gap-4 px-8 py-5 bg-white border border-[hsl(var(--gold))/0.4] text-[hsl(var(--gold))] rounded-2xl shadow-sm hover:shadow-lg transition-all"
                 >
                   <Headphones className="h-7 w-7 animate-pulse" />
                   <div className="text-left">
-                    <p className="font-bold text-xl leading-tight">Besoin d'aide ?</p>
+                    <p className="font-bold text-xl">Besoin d'aide ?</p>
                     <p className="opacity-80 underline text-lg">Séance guidée : 35€</p>
                   </div>
+                  <ArrowRight className="h-6 w-6 ml-2" />
                 </button>
               </div>
             )}
           </div>
-
           <div className="flex items-center justify-between px-4">
             <p className="text-slate-500 text-xl italic">Votre sourire est votre plus belle signature.</p>
             <button
               onClick={() => setShowVideoTutorial(true)}
-              className="flex items-center gap-2 px-6 py-3 bg-[#C5A059]/10 border border-[#C5A059] text-[#C5A059] rounded-full font-bold text-xl"
+              className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold text-xl"
             >
               <Lightbulb className="h-5 w-5" /> Conseils vidéo
             </button>
           </div>
         </div>
 
-        {/* COLONNE DROITE : PHOTOS - Grille fixe garantie */}
+        {/* SECTION PHOTOS (DROITE) */}
         <div className="flex flex-col gap-6 h-full">
-          <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-4 min-h-[400px]">
+          <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-4">
             {photoSlots.map((slot) => (
               <div
                 key={slot.id}
-                className="relative overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] bg-[#FCF9F5] hover:border-[#C5A059] transition-all aspect-square lg:aspect-auto"
+                className="relative rounded-[1.8rem] overflow-hidden border border-[#E5E0D8] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all cursor-pointer"
                 onClick={() => handleSlotClick(slot.id)}
               >
                 {slot.preview ? (
@@ -337,7 +303,9 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleRemoveSlot(slot.id);
+                        setSlots((prev) =>
+                          prev.map((s) => (s.id === slot.id ? { ...s, preview: undefined, file: undefined } : s)),
+                        );
                       }}
                       className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-full shadow-md"
                     >
@@ -346,7 +314,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   </>
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
-                    <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
+                    <div className="w-14 h-14 rounded-full bg-white border border-[#E5E0D8] flex items-center justify-center mb-2">
                       <Camera className="h-6 w-6 text-slate-400" />
                     </div>
                     <span className="text-lg font-bold text-[#1B2333]">+ {slot.label}</span>
@@ -356,22 +324,27 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             ))}
           </div>
 
-          <div className="flex items-center gap-3 px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl">
-            <Info className="h-6 w-6 text-slate-400 shrink-0" />
-            <p className="text-slate-500 text-lg">
-              Formats : <strong className="text-slate-700">JPG, PNG, HEIC</strong> (pas de GIF). <br />
-              Max : <strong className="text-slate-700">10 Mo</strong> par photo.
-            </p>
+          {/* BLOC INFO RESTAURÉ */}
+          <div className="bg-slate-50 border border-slate-100 p-5 rounded-2xl flex items-start gap-4">
+            <Info className="h-6 w-6 text-slate-400 shrink-0 mt-1" />
+            <div className="text-slate-500 text-lg leading-snug">
+              <p>
+                Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong>.
+              </p>
+              <p>
+                Taille maximale : <strong className="text-slate-700">10 Mo</strong> par photo.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* FOOTER & MODALS (Zéro changement de couleur) */}
-      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20 shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
-        <div className="max-w-5xl mx-auto space-y-6">
+      {/* FOOTER & SAUVEGARDE */}
+      <div className="bg-white border-t border-[#E5E0D8] py-8 px-10">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div
             className={cn(
-              "flex items-center gap-5 p-6 rounded-3xl border transition-all cursor-pointer",
+              "flex items-center gap-5 p-5 rounded-2xl border transition-all cursor-pointer w-full md:w-auto",
               confirmedAge ? "bg-emerald-50 border-emerald-200" : "bg-white border-[#E5E0D8]",
             )}
             onClick={() => setConfirmedAge(!confirmedAge)}
@@ -385,34 +358,33 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               {confirmedAge && <Check className="text-white h-6 w-6" />}
             </div>
             <p className="text-xl font-bold text-[#1B2333]">
-              Je certifie que mes photos ont <span className="underline text-[#C5A059]">moins de 18 mois</span>.
+              Je certifie que mes photos ont <span className="underline text-[hsl(var(--gold))]">moins de 18 mois</span>
+              .
             </p>
           </div>
-          <div className="flex items-center justify-between">
-            <p className="text-slate-400 font-bold text-2xl hidden md:block">Votre sécurité est notre priorité.</p>
-            <div className="flex gap-4 w-full md:w-auto">
-              <Button
-                variant="outline"
-                onClick={handleSave}
-                className="flex-1 md:flex-none h-16 px-10 rounded-2xl border-[#E5E0D8] font-bold text-xl"
-              >
-                Enregistrer
-              </Button>
-              <Button
-                onClick={handleSave}
-                disabled={!confirmedAge || uploading}
-                className={cn(
-                  "flex-1 md:flex-none h-16 px-12 rounded-2xl font-bold text-xl shadow-xl transition-all",
-                  confirmedAge ? "bg-[#1B2333] text-white" : "bg-slate-100 text-slate-400",
-                )}
-              >
-                {uploading ? <Loader2 className="animate-spin" /> : "Valider mon profil"}
-              </Button>
-            </div>
+          <div className="flex gap-4 w-full md:w-auto">
+            <Button
+              variant="outline"
+              onClick={handleSave}
+              className="h-16 px-10 rounded-2xl border-[#E5E0D8] font-bold text-xl"
+            >
+              Enregistrer
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={!confirmedAge || uploading}
+              className={cn(
+                "h-16 px-12 rounded-2xl font-bold text-xl shadow-xl transition-all flex-1 md:flex-none",
+                confirmedAge ? "bg-[#1B2333] text-white" : "bg-slate-100 text-slate-400",
+              )}
+            >
+              {uploading ? <Loader2 className="animate-spin" /> : "Valider mon profil"}
+            </Button>
           </div>
         </div>
       </div>
 
+      {/* INPUT TECHNIQUE */}
       <input
         key={activeSlotId}
         ref={fileInputRef}
@@ -422,6 +394,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         onChange={handleFileChange}
       />
 
+      {/* MODAL SUCCÈS */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem]">
           <div className="flex flex-col items-center gap-6">
@@ -441,7 +414,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
           </div>
         </DialogContent>
       </Dialog>
-      {/* Autres modals inchangées... */}
     </div>
   );
 }
