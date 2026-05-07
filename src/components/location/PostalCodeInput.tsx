@@ -77,7 +77,7 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
             <MapPin className="h-6 w-6" />
             {isPinpoint ? `Localisation : ${locationInfo.cityName}` : `Bassin de ${locationInfo.regionName}`}
           </p>
-          <p className="text-base text-primary-foreground/80 leading-relaxed">
+          <p className="text-primary-foreground/80 leading-relaxed text-2xl">
             Votre code postal ({postalCode}) a bien été identifié.
             {isPinpoint ? (
               <>
