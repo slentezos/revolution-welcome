@@ -315,10 +315,10 @@ export default function ProfileGiftTab() {
                           <p className="font-heading text-xl md:text-2xl font-semibold text-foreground">
                             {plan.label}
                           </p>
-                          <p className="text-muted-foreground text-xl mt-1">{plan.duration}</p>
-                          <p className="text-muted-foreground text-base mt-1">{plan.note}</p>
+                          <p className="text-muted-foreground mt-1 text-2xl">{plan.duration}</p>
+                          <p className="text-muted-foreground mt-1 text-xl">{plan.note}</p>
                           {active && (
-                            <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg mt-3">
+                            <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium mt-3 text-xl">
                               <Check className="h-5 w-5" /> Sélectionnée
                             </div>
                           )}
