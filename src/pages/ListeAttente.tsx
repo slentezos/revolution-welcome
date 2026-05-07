@@ -182,7 +182,7 @@ export default function ListeAttente() {
                     placeholder="votre@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-14 text-lg rounded-xl border-slate-200 focus:border-[hsl(var(--gold))]"
+                    className="h-14 rounded-xl border-slate-200 focus:border-[hsl(var(--gold))] text-xl"
                     autoFocus
                   />
                 </div>
