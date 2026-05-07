@@ -347,10 +347,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold text-xl leading-tight">
+                        <p className="font-bold leading-tight text-xl">
                           Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé
                         </p>
-                        <p className="opacity-80 underline text-xl">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
+                        <p className="opacity-80 underline text-xl text-primary font-medium">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -404,7 +404,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                           <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
                             <Camera className="h-6 w-6 text-muted-foreground" />
                           </div>
-                          <span className="text-lg font-bold text-[#1B2333]">+ {slot.label}</span>
+                          <span className="font-bold text-[#1B2333] text-xl">+ {slot.label}</span>
                         </div>
                       )}
                     </div>
@@ -415,7 +415,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               {/* INFORMATION FORMAT ET TAILLE */}
               <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl">
                 <Info className="h-5 w-5 text-slate-400 shrink-0" />
-                <p className="text-slate-500 text-lg leading-snug">
+                <p className="text-slate-500 leading-snug text-xl">
                   Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong>. Taille maximale :{" "}
                   <strong className="text-slate-700">10 Mo</strong> par photo.
                 </p>
@@ -443,7 +443,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             >
               {confirmedAge && <Check className="text-white h-6 w-6" />}
             </div>
-            <p className="text-xl font-medium text-[#1B2333] select-none">
+            <p className="font-medium text-[#1B2333] select-none text-2xl">
               Je certifie que mes photos ont été prises il y a{" "}
               <span className="font-bold underline text-[hsl(var(--gold))]">moins de 18 mois</span>.
             </p>
