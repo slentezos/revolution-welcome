@@ -196,7 +196,7 @@ export default function ProfileInfoTab({
                     className={cn(
                       "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
                       formData.gender === opt.value
-                        ? "border-[#1B2333] bg-[#1B2333] text-white"
+                        ? "border-[#1B2333] bg-[#e2a336] text-slate-50"
                         : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
                     )}
                   >
@@ -221,7 +221,7 @@ export default function ProfileInfoTab({
                     className={cn(
                       "min-h-[64px] px-3 rounded-xl text-lg md:text-xl font-medium border-2 whitespace-nowrap transition-all duration-300",
                       formData.looking_for === opt.value
-                        ? "border-[#1B2333] bg-[#1B2333] text-white"
+                        ? "border-[#1B2333] bg-[#e2a336] text-slate-50"
                         : "border-[#E5E0D8] bg-background text-[#1B2333] hover:border-[hsl(var(--gold))]",
                     )}
                   >
