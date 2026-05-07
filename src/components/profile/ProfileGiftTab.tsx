@@ -315,10 +315,10 @@ export default function ProfileGiftTab() {
                           <p className="font-heading text-xl md:text-2xl font-semibold text-foreground">
                             {plan.label}
                           </p>
-                          <p className="text-muted-foreground text-xl mt-1">{plan.duration}</p>
-                          <p className="text-muted-foreground text-base mt-1">{plan.note}</p>
+                          <p className="text-muted-foreground mt-1 text-2xl">{plan.duration}</p>
+                          <p className="text-muted-foreground mt-1 text-xl">{plan.note}</p>
                           {active && (
-                            <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg mt-3">
+                            <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium mt-3 text-xl">
                               <Check className="h-5 w-5" /> Sélectionnée
                             </div>
                           )}
@@ -353,13 +353,13 @@ export default function ProfileGiftTab() {
                         Mode Invisible, accusés de lecture, alertes Conciergerie.
                       </p>
                       {addVip && (
-                        <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg mt-3">
+                        <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium mt-3 text-xl">
                           <Check className="h-5 w-5" /> Inclus dans le cadeau
                         </div>
                       )}
                     </div>
                     <span className="font-heading text-2xl md:text-3xl font-semibold text-foreground shrink-0">
-                      +12€<span className="text-muted-foreground text-xl font-normal"> /mois</span>
+                      +12€<span className="text-muted-foreground font-normal text-2xl"> /mois</span>
                     </span>
                   </div>
                 </button>
@@ -367,7 +367,7 @@ export default function ProfileGiftTab() {
 
               <Button
                 onClick={handleSubmit}
-                className="btn-primary py-5 px-10 text-lg h-auto min-h-[60px] w-full"
+                className="btn-primary py-5 px-10 h-auto min-h-[60px] w-full text-xl"
               >
                 <Gift className="h-5 w-5 mr-3" />
                 Offrir cet abonnement
