@@ -180,6 +180,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       },
       editMode ? "Résidence secondaire mise à jour." : "Résidence secondaire ajoutée.",
       snapshot,
+      "secondary",
     );
     if (ok) {
       setAddOpen(false);
