@@ -78,7 +78,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       return;
     }
 
-    onProfileUpdated(data as ProfileLocationData);
+    onProfileUpdated(data as unknown as ProfileLocationData);
     setAddOpen(false);
     toast.success(`La destination ${cityInput} a été ajoutée à votre profil.`);
   };
@@ -98,7 +98,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       return;
     }
 
-    onProfileUpdated(data as ProfileLocationData);
+    onProfileUpdated(data as unknown as ProfileLocationData);
     toast.success("Destination retirée de votre profil.");
   };
 
