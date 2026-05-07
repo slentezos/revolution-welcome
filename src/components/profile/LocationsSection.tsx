@@ -18,10 +18,37 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { lookupPostalCode } from "@/data/frenchPostalCodes";
 import { PINPOINT_MAPPING } from "@/data/locationData";
 import { toast } from "sonner";
+
+const COUNTRIES: { code: string; name: string; flag: string }[] = [
+  { code: "DE", name: "Allemagne", flag: "🇩🇪" },
+  { code: "GB", name: "Angleterre", flag: "🇬🇧" },
+  { code: "AT", name: "Autriche", flag: "🇦🇹" },
+  { code: "BE", name: "Belgique", flag: "🇧🇪" },
+  { code: "BR", name: "Brésil", flag: "🇧🇷" },
+  { code: "CA", name: "Canada", flag: "🇨🇦" },
+  { code: "ES", name: "Espagne", flag: "🇪🇸" },
+  { code: "US", name: "États-Unis", flag: "🇺🇸" },
+  { code: "GR", name: "Grèce", flag: "🇬🇷" },
+  { code: "IE", name: "Irlande", flag: "🇮🇪" },
+  { code: "IT", name: "Italie", flag: "🇮🇹" },
+  { code: "JP", name: "Japon", flag: "🇯🇵" },
+  { code: "LU", name: "Luxembourg", flag: "🇱🇺" },
+  { code: "MA", name: "Maroc", flag: "🇲🇦" },
+  { code: "MC", name: "Monaco", flag: "🇲🇨" },
+  { code: "NL", name: "Pays-Bas", flag: "🇳🇱" },
+  { code: "PT", name: "Portugal", flag: "🇵🇹" },
+  { code: "CZ", name: "République Tchèque", flag: "🇨🇿" },
+  { code: "CH", name: "Suisse", flag: "🇨🇭" },
+  { code: "TN", name: "Tunisie", flag: "🇹🇳" },
+];
 
 export interface ProfileLocationData {
   id: string;
