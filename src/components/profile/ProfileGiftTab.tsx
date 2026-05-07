@@ -349,7 +349,7 @@ export default function ProfileGiftTab() {
                           Ajouter le Carré VIP
                         </p>
                       </div>
-                      <p className="text-muted-foreground text-lg">
+                      <p className="text-muted-foreground text-xl">
                         Mode Invisible, accusés de lecture, alertes Conciergerie.
                       </p>
                       {addVip && (
