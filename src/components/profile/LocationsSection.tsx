@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MapPin, Lock, Plus, Trash2, Pencil, Undo2, Home, Sparkles, Clock } from "lucide-react";
+import { MapPin, Lock, Plus, Trash2, Pencil, Undo2, Home, Sparkles, Clock, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -67,6 +67,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     expiresAt: number;
   } | null>(null);
   const [undoNow, setUndoNow] = useState(() => Date.now());
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
 
   // Actualisation toutes les minutes pour les cooldowns standards
   useEffect(() => {
@@ -291,9 +292,19 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
           <span className="font-medium tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 block text-lg">
             Géographie du club
           </span>
-          <h3 className="font-heading text-3xl md:text-4xl text-[#1B2333] mb-3 leading-tight font-bold">
-            Mes Lieux de Vie
-          </h3>
+          <div className="flex items-center gap-3 mb-3">
+            <h3 className="font-heading text-3xl md:text-4xl text-[#1B2333] leading-tight font-bold">
+              Mes Lieux de Vie
+            </h3>
+            <button
+              type="button"
+              onClick={() => setInfoModalOpen(true)}
+              aria-label="Guide d'utilisation"
+              className="inline-flex items-center justify-center h-12 w-12 rounded-full text-slate-400 hover:text-[#1B2333] hover:bg-slate-100 transition-colors"
+            >
+              <Info className="h-7 w-7" />
+            </button>
+          </div>
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-6" />
           <p className="text-slate-500 leading-relaxed text-xl max-w-2xl font-medium">
             Déclarez votre résidence principale et, le cas échéant, votre résidence secondaire. Vous choisissez où votre
