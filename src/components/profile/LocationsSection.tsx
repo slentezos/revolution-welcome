@@ -574,7 +574,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               <Info className="h-8 w-8 text-[#1B2333]" />
             </div>
             <div>
-              <h4 className="text-[#1B2333] font-bold mb-2 text-2xl">Comment fonctionne la localisation ?</h4>
+              <h4 className="text-[#1B2333] font-bold mb-2 text-3xl">Comment fonctionne la localisation ?</h4>
               <p className="text-slate-500 leading-relaxed text-xl">
                 Découvrez pourquoi nous séparons votre adresse principale de vos destinations de cœur, et comment cela
                 impacte vos futures rencontres.
