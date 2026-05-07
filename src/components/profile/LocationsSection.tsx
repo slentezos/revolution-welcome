@@ -115,6 +115,8 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   const [destType, setDestType] = useState<"france" | "international">("france");
   const [cityInput, setCityInput] = useState("");
   const [postalInput, setPostalInput] = useState("");
+  const [countryInput, setCountryInput] = useState("");
+  const [countryPopoverOpen, setCountryPopoverOpen] = useState(false);
   const [validatedLocation, setValidatedLocation] = useState<{ cityName: string; regionName: string } | null>(null);
 
   // Auto-majuscule
