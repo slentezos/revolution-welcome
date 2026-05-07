@@ -22,7 +22,7 @@ export default function IntroSection() {
         <div className="inline-block">
           <span className="badge-navy mb-4">Nos services</span>
           <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-6">Our Core Services</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
+          <p className="text-muted-foreground text-xl max-w-2xl mx-auto mb-8">
             We have a range of fitness services and nutrition plans with our personalized in-store fitness functions.
           </p>
           <Link to="/notre-démarche">
