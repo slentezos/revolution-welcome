@@ -411,7 +411,7 @@ export default function ProfileSubscriptionTab({
                 <span className="font-heading text-3xl md:text-4xl text-foreground">+12€</span>
                 <span className="text-muted-foreground text-xl">/ mois</span>
               </div>
-              <p className="text-muted-foreground text-lg">Mode Invisible, accusés de lecture, alertes Conciergerie.</p>
+              <p className="text-muted-foreground text-xl">Mode Invisible, accusés de lecture, alertes Conciergerie.</p>
             </button>
 
             {/* Reassurance */}
