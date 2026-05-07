@@ -119,14 +119,9 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   const [countryPopoverOpen, setCountryPopoverOpen] = useState(false);
   const [validatedLocation, setValidatedLocation] = useState<{ cityName: string; regionName: string } | null>(null);
 
-  // Auto-majuscule
+  // Tout en majuscules pour le nom de la ville
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    if (val.length > 0) {
-      setCityInput(val.charAt(0).toUpperCase() + val.slice(1));
-    } else {
-      setCityInput("");
-    }
+    setCityInput(e.target.value.toUpperCase());
   };
 
   // Traitement du code postal avec pré-remplissage du nom de la ville
