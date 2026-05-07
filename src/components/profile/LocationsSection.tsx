@@ -18,10 +18,37 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { lookupPostalCode } from "@/data/frenchPostalCodes";
 import { PINPOINT_MAPPING } from "@/data/locationData";
 import { toast } from "sonner";
+
+const COUNTRIES: { code: string; name: string; flag: string }[] = [
+  { code: "DE", name: "Allemagne", flag: "🇩🇪" },
+  { code: "GB", name: "Angleterre", flag: "🇬🇧" },
+  { code: "AT", name: "Autriche", flag: "🇦🇹" },
+  { code: "BE", name: "Belgique", flag: "🇧🇪" },
+  { code: "BR", name: "Brésil", flag: "🇧🇷" },
+  { code: "CA", name: "Canada", flag: "🇨🇦" },
+  { code: "ES", name: "Espagne", flag: "🇪🇸" },
+  { code: "US", name: "États-Unis", flag: "🇺🇸" },
+  { code: "GR", name: "Grèce", flag: "🇬🇷" },
+  { code: "IE", name: "Irlande", flag: "🇮🇪" },
+  { code: "IT", name: "Italie", flag: "🇮🇹" },
+  { code: "JP", name: "Japon", flag: "🇯🇵" },
+  { code: "LU", name: "Luxembourg", flag: "🇱🇺" },
+  { code: "MA", name: "Maroc", flag: "🇲🇦" },
+  { code: "MC", name: "Monaco", flag: "🇲🇨" },
+  { code: "NL", name: "Pays-Bas", flag: "🇳🇱" },
+  { code: "PT", name: "Portugal", flag: "🇵🇹" },
+  { code: "CZ", name: "République Tchèque", flag: "🇨🇿" },
+  { code: "CH", name: "Suisse", flag: "🇨🇭" },
+  { code: "TN", name: "Tunisie", flag: "🇹🇳" },
+];
 
 export interface ProfileLocationData {
   id: string;
@@ -88,6 +115,8 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   const [destType, setDestType] = useState<"france" | "international">("france");
   const [cityInput, setCityInput] = useState("");
   const [postalInput, setPostalInput] = useState("");
+  const [countryInput, setCountryInput] = useState("");
+  const [countryPopoverOpen, setCountryPopoverOpen] = useState(false);
   const [validatedLocation, setValidatedLocation] = useState<{ cityName: string; regionName: string } | null>(null);
 
   // Auto-majuscule
@@ -124,6 +153,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     setDestType("france");
     setCityInput("");
     setPostalInput("");
+    setCountryInput("");
     setValidatedLocation(null);
     setAddOpen(true);
   };
@@ -133,25 +163,40 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     const city = slot === 1 ? profile.other_city_1 || "" : profile.other_city_2 || "";
     const postal = slot === 1 ? profile.other_postal_code_1 || "" : profile.other_postal_code_2 || "";
 
-    setCityInput(city);
     setPostalInput(postal);
 
     // Si un code postal existe, c'est une adresse en France
     if (postal && postal.length === 5) {
       setDestType("france");
+      setCityInput(city);
+      setCountryInput("");
       const info = lookupPostalCode(postal);
       if (info) setValidatedLocation({ cityName: info.cityName, regionName: info.regionName });
     } else if (city) {
-      // Sinon, c'est à l'étranger
+      // Sinon, c'est à l'étranger : tenter de séparer "Ville, Pays"
       setDestType("international");
       setValidatedLocation(null);
+      const commaIdx = city.lastIndexOf(",");
+      if (commaIdx > -1) {
+        const cityPart = city.slice(0, commaIdx).trim();
+        const countryPart = city.slice(commaIdx + 1).trim();
+        const matched = COUNTRIES.find((c) => c.name.toLowerCase() === countryPart.toLowerCase());
+        setCityInput(cityPart);
+        setCountryInput(matched ? matched.code : "");
+      } else {
+        setCityInput(city);
+        setCountryInput("");
+      }
     } else {
       setDestType("france");
+      setCityInput(city);
+      setCountryInput("");
       setValidatedLocation(null);
     }
 
     setAddOpen(true);
   };
+
 
   const handleSave = async () => {
     const isFrance = destType === "france";
@@ -168,14 +213,27 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       }
     }
 
-    if (!cityInput.trim()) {
+    const country = COUNTRIES.find((c) => c.code === countryInput);
+
+    if (!isFrance) {
+      if (!countryInput || !country) {
+        toast.error("Veuillez sélectionner un pays.");
+        return;
+      }
+      if (!cityInput.trim()) {
+        toast.error("Veuillez indiquer le nom de la ville.");
+        return;
+      }
+    } else if (!cityInput.trim()) {
       toast.error("Veuillez indiquer le nom de la destination.");
       return;
     }
 
     setSubmitting(true);
 
-    const finalCity = cityInput.trim();
+    const finalCity = isFrance
+      ? cityInput.trim()
+      : `${cityInput.trim()}, ${country!.name}`;
     const finalPostal = isFrance ? postalInput.trim() : null; // On annule le CP si c'est à l'étranger
 
     const patch =
@@ -220,7 +278,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     submitting ||
     (destType === "france"
       ? postalInput.length !== 5 || !validatedLocation || cityInput.trim() === ""
-      : cityInput.trim() === "");
+      : cityInput.trim() === "" || countryInput === "");
 
   const renderDestinationSlot = (slot: 1 | 2) => {
     const city = slot === 1 ? profile.other_city_1 : profile.other_city_2;
@@ -458,12 +516,66 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 <>
                   {/* Mode International */}
                   <div className="space-y-3">
-                    <Label className="text-xl font-bold text-[#1B2333]">Nom de la ville ou du pays *</Label>
+                    <Label className="text-xl font-bold text-[#1B2333]">Pays *</Label>
+                    <Popover open={countryPopoverOpen} onOpenChange={setCountryPopoverOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={countryPopoverOpen}
+                          className="h-16 w-full text-xl font-medium bg-slate-50 border-2 rounded-xl justify-between hover:bg-slate-50 hover:border-[hsl(var(--gold))]"
+                        >
+                          {countryInput ? (
+                            <span className="flex items-center gap-2">
+                              <span>{COUNTRIES.find((c) => c.code === countryInput)?.flag}</span>
+                              <span>{COUNTRIES.find((c) => c.code === countryInput)?.name}</span>
+                            </span>
+                          ) : (
+                            <span className="text-slate-400">Sélectionner un pays...</span>
+                          )}
+                          <ChevronsUpDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                        <Command>
+                          <CommandInput placeholder="Rechercher un pays..." className="text-lg h-12" />
+                          <CommandList>
+                            <CommandEmpty>Aucun pays trouvé.</CommandEmpty>
+                            <CommandGroup>
+                              {COUNTRIES.map((c) => (
+                                <CommandItem
+                                  key={c.code}
+                                  value={c.name}
+                                  onSelect={() => {
+                                    setCountryInput(c.code);
+                                    setCountryPopoverOpen(false);
+                                  }}
+                                  className="text-lg py-3"
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-5 w-5",
+                                      countryInput === c.code ? "opacity-100" : "opacity-0",
+                                    )}
+                                  />
+                                  <span className="mr-2">{c.flag}</span>
+                                  {c.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label className="text-xl font-bold text-[#1B2333]">Nom de la ville précise *</Label>
                     <Input
                       value={cityInput}
                       onChange={handleCityChange}
                       className="h-16 text-2xl font-medium bg-slate-50 border-2 rounded-xl focus:border-[hsl(var(--gold))] focus:ring-0"
-                      placeholder="Ex: Genève, Rome, New York..."
+                      placeholder="Ex: Rome, New York..."
                     />
                   </div>
                 </>
