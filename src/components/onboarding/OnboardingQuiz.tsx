@@ -250,48 +250,12 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
           <div className="rounded-[24px] border p-6 md:p-10 transition-all duration-500 ease-out relative opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card">
             {/* Question header */}
             <div className="flex items-center gap-4 mb-8">
-              <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-2xl">
+              <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-3xl">
                 {(currentPage + 1).toString().padStart(2, "0")}
               </span>
-              <h3 className="font-heading text-3xl md:text-3xl font-bold text-[#1B2333] leading-snug">
-                {currentCategory.label}
-              </h3>
-            </div>
-
-            {/* Inputs */}
-            <div className="space-y-4 md:ml-14">
-              {[0, 1, 2].map((index) => (
-                <Input
-                  key={index}
-                  placeholder={`${currentCategory.placeholder} ${index + 1}`}
-                  value={preferences[currentCategory.id][index]}
-                  onChange={(e) => handleInputChange(currentCategory.id, index, e.target.value)}
-                  maxLength={40}
-                  className="bg-[hsl(35,15%,97%)] border-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-14 text-xl placeholder:text-muted-foreground placeholder:font-light border-[#7a7a7a]"
-                />
-              ))}
-            </div>
-
-            {/* Suggestions */}
-            <div className="mt-6 md:ml-14">
-              <p className="text-muted-foreground mb-2.5 italic text-base">Inspirations :</p>
-              <div className="flex flex-wrap gap-2">
-                {currentCategory.suggestions.map((suggestion) => (
-                  <span
-                    key={suggestion}
-                    className="px-4 py-1.5 rounded-full font-medium bg-accent text-accent-foreground border border-border text-xl"
-                  >
-                    {suggestion}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="rounded-[24px] border p-6 md:p-10 transition-all duration-500 ease-out relative opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card">
-            {/* Question header */}
+...
             <div className="flex items-center gap-4 mb-8">
-              <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-2xl">
+              <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-3xl">
                 11
               </span>
               <h3 className="font-heading font-bold text-[#1B2333] leading-snug text-3xl md:text-3xl">
