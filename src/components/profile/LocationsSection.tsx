@@ -197,30 +197,6 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     setAddOpen(true);
   };
 
-  const openEdit = (slot: 1 | 2) => {
-    setEditSlot(slot);
-    const city = slot === 1 ? profile.other_city_1 || "" : profile.other_city_2 || "";
-    const postal = slot === 1 ? profile.other_postal_code_1 || "" : profile.other_postal_code_2 || "";
-
-    setCityInput(city);
-    setPostalInput(postal);
-
-    // Si un code postal existe, c'est une adresse en France
-    if (postal && postal.length === 5) {
-      setDestType("france");
-      const info = lookupPostalCode(postal);
-      if (info) setValidatedLocation({ cityName: info.cityName, regionName: info.regionName });
-    } else if (city) {
-      // Sinon, c'est à l'étranger
-      setDestType("international");
-      setValidatedLocation(null);
-    } else {
-      setDestType("france");
-      setValidatedLocation(null);
-    }
-
-    setAddOpen(true);
-  };
 
   const handleSave = async () => {
     const isFrance = destType === "france";
