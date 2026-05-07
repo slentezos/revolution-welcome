@@ -192,7 +192,6 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     setAddOpen(true);
   };
 
-
   const handleSave = async () => {
     const isFrance = destType === "france";
 
@@ -226,9 +225,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
 
     setSubmitting(true);
 
-    const finalCity = isFrance
-      ? cityInput.trim()
-      : `${cityInput.trim()}, ${country!.name}`;
+    const finalCity = isFrance ? cityInput.trim() : `${cityInput.trim()}, ${country!.name}`;
     const finalPostal = isFrance ? postalInput.trim() : null; // On annule le CP si c'est à l'étranger
 
     const patch =
@@ -446,7 +443,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                   setDestType("france");
                   setValidatedLocation(null);
                 }}
-                className={`h-14 rounded-xl text-lg font-bold border-2 transition-all ${
+                className={`h-14 rounded-xl text-2xl font-bold border-2 transition-all ${
                   destType === "france"
                     ? "bg-[#1B2333] text-white border-[#1B2333]"
                     : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
@@ -461,7 +458,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                   setPostalInput("");
                   setValidatedLocation(null);
                 }}
-                className={`h-14 rounded-xl text-2lg font-bold border-2 transition-all ${
+                className={`h-14 rounded-xl text-2xl font-bold border-2 transition-all ${
                   destType === "international"
                     ? "bg-[#1B2333] text-white border-[#1B2333]"
                     : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
