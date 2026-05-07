@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Phone, ArrowRight, ArrowLeft, CheckCircle, MapPin, Check, ShieldCheck } from "lucide-react";
+import { Mail, Phone, ArrowRight, ArrowLeft, CheckCircle, MapPin, Check, ShieldCheck, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,16 +13,16 @@ export default function ListeAttente() {
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  // Simplification : une seule option d'adhésion pour être prévenu
   const [isOptedIn, setIsOptedIn] = useState(true);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const location = getStoredLocation();
 
-  // LOGIQUE DE SÉCURITÉ GÉOGRAPHIQUE
   const isPinpoint = location && !!PINPOINT_MAPPING[location.postalCode];
   const displayLocation = isPinpoint
     ? PINPOINT_MAPPING[location?.postalCode || ""]
@@ -41,6 +41,8 @@ export default function ListeAttente() {
   const handleStep1 = async () => {
     if (!email.includes("@")) return;
     setLoading(true);
+    setEmailError(null);
+
     try {
       const { data: existingLead } = await supabase
         .from("waitlist_leads")
@@ -49,10 +51,8 @@ export default function ListeAttente() {
         .maybeSingle();
 
       if (existingLead) {
-        toast({
-          title: "Déjà inscrit(e) !",
-          description: "Vous êtes déjà sur notre liste VIP ! Nous vous contacterons très bientôt.",
-        });
+        // Au lieu d'un popup, on affiche le message directement sous l'input
+        setEmailError("Cette adresse est déjà enregistrée dans nos membres prioritaires.");
         setLoading(false);
         return;
       }
@@ -71,8 +71,8 @@ export default function ListeAttente() {
         const { data: phoneLead } = await supabase.from("waitlist_leads").select("id").eq("phone", phone).maybeSingle();
         if (phoneLead) {
           toast({
-            title: "Déjà inscrit(e) !",
-            description: "Ce numéro est déjà enregistré sur notre liste VIP.",
+            title: "Inscription déjà enregistrée",
+            description: "Ce numéro de téléphone est déjà associé à un accès prioritaire.",
           });
           setLoading(false);
           return;
@@ -90,7 +90,11 @@ export default function ListeAttente() {
       if (error) throw error;
       setDone(true);
     } catch (err: any) {
-      toast({ title: "Erreur", description: "Une erreur est survenue.", variant: "destructive" });
+      toast({
+        title: "Information",
+        description: "Une erreur technique est survenue. Veuillez réessayer ultérieurement.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -101,31 +105,31 @@ export default function ListeAttente() {
       <div className="h-screen flex overflow-hidden">
         <div className="flex-1 flex flex-col justify-center px-6 md:px-16 lg:px-24 py-12 overflow-y-auto">
           <div className="max-w-md w-full mx-auto text-center">
-            <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
+            <div className="w-20 h-20 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-10 w-10 text-green-600" />
             </div>
-            <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
-              Votre accès VIP est confirmé !
+            <h1 className="font-heading text-3xl md:text-4xl font-bold text-[#1B2333] mb-4">
+              Votre accès VIP est confirmé
             </h1>
-            <p className="text-muted-foreground mb-4 text-xl leading-relaxed">
-              Nous vous préviendrons dès que Kalimera sera disponible
+            <p className="text-slate-500 mb-4 text-xl leading-relaxed">
+              Nous reviendrons vers vous personnellement dès que Kalimera sera disponible
               {isPinpoint ? ` à ${displayLocation}` : ` dans le ${displayLocation}`}.
             </p>
-            <p className="text-muted-foreground mb-8 text-xl">
-              Votre privilège est réservé : <strong className="text-[hsl(var(--gold))]">3 mois offerts</strong> seront
-              activés automatiquement lors de votre première connexion.
+            <p className="text-slate-600 mb-8 text-xl">
+              Votre privilège est réservé : <strong className="text-[hsl(var(--gold-dark))]">3 mois offerts</strong>{" "}
+              seront activés lors de votre première connexion.
             </p>
             <Button
               onClick={() => navigate("/")}
               variant="outline"
-              className="h-14 text-base rounded-xl px-8 border-[hsl(var(--gold))] text-primary"
+              className="h-14 text-lg font-bold rounded-xl px-8 border-2 border-slate-200 text-[#1B2333] hover:border-[hsl(var(--gold))]"
             >
               Retour à l'accueil
             </Button>
           </div>
         </div>
         <div className="hidden lg:block flex-1 relative overflow-hidden bg-[#1B2333]">
-          <img src={heroCouple} alt="Couple" className="absolute inset-0 w-full h-full object-cover opacity-60" />
+          <img src={heroCouple} alt="Couple Elite" className="absolute inset-0 w-full h-full object-cover opacity-60" />
         </div>
       </div>
     );
@@ -137,13 +141,13 @@ export default function ListeAttente() {
         <div className="max-w-lg w-full mx-auto flex flex-col min-h-full">
           <button
             onClick={() => navigate("/")}
-            className="font-heading text-2xl md:text-3xl font-semibold text-[#1B2333] mb-8 block text-left"
+            className="font-heading text-2xl md:text-3xl font-bold text-[#1B2333] mb-8 block text-left"
           >
             Kalimera
           </button>
 
-          <div className="flex items-center gap-2 mb-8 text-muted-foreground">
-            <MapPin className="h-4 w-4 text-[hsl(var(--gold))]" />
+          <div className="flex items-center gap-2 mb-8 text-slate-500">
+            <MapPin className="h-5 w-5 text-[hsl(var(--gold))]" />
             <span className="font-bold text-[#1B2333] text-2xl">{displayLocation}</span>
           </div>
 
@@ -154,7 +158,7 @@ export default function ListeAttente() {
                 style={{ width: `${((step + 1) / 2) * 100}%` }}
               />
             </div>
-            <p className="text-slate-400 font-medium mt-2 text-xl">Étape {step + 1} sur 2</p>
+            <p className="text-slate-400 font-bold mt-2 text-lg">Étape {step + 1} sur 2</p>
           </div>
 
           <div className="flex-1">
@@ -166,13 +170,12 @@ export default function ListeAttente() {
                   </h1>
                   <p className="text-slate-500 text-xl leading-relaxed">
                     Rejoignez les membres {isPinpoint ? `de ${displayLocation}` : `du ${displayLocation}`} et réservez
-                    votre privilège :<strong className="text-[#1B2333]"> 3 mois vous seront offerts </strong> dès notre
-                    arrivée.
+                    votre privilège :<strong className="text-[#1B2333]"> 3 mois offerts </strong> dès notre arrivée.
                   </p>
                 </div>
 
-                <div className="max-w-sm">
-                  <label className="block font-medium text-[#1B2333] mb-3 text-xl">
+                <div className="max-w-md">
+                  <label className="block font-bold text-[#1B2333] mb-3 text-xl">
                     <Mail className="inline h-5 w-5 mr-2 -mt-0.5 text-[hsl(var(--gold))]" />
                     Votre adresse email *
                   </label>
@@ -180,16 +183,25 @@ export default function ListeAttente() {
                     type="email"
                     placeholder="votre@email.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-16 rounded-xl border-2 border-slate-200 focus:border-[hsl(var(--gold))] text-xl text-[#1B2333]"
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (emailError) setEmailError(null);
+                    }}
+                    className={`h-16 rounded-xl border-2 text-xl text-[#1B2333] ${emailError ? "border-rose-500 bg-rose-50" : "border-slate-200 focus:border-[hsl(var(--gold))]"}`}
                     autoFocus
                   />
+                  {emailError && (
+                    <div className="mt-3 flex items-center gap-2 text-rose-600 animate-in fade-in slide-in-from-top-1">
+                      <AlertCircle className="h-5 w-5" />
+                      <p className="text-lg font-bold">{emailError}</p>
+                    </div>
+                  )}
                 </div>
 
                 <Button
                   onClick={handleStep1}
                   disabled={!email.includes("@") || loading}
-                  className="h-16 rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[hsl(var(--gold))] transition-all text-xl font-bold shadow-md"
+                  className="h-16 rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[hsl(var(--gold))] hover:text-white transition-all text-xl font-bold shadow-md disabled:opacity-50"
                 >
                   {loading ? "Vérification..." : "Continuer"}
                   {!loading && <ArrowRight className="ml-2 h-6 w-6" />}
@@ -197,13 +209,13 @@ export default function ListeAttente() {
               </div>
             ) : (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
-                <h1 className="font-heading text-3xl md:text-4xl font-bold text-[#1B2333] mb-3">
+                <h1 className="font-heading text-3xl md:text-4xl font-bold text-[#1B2333] mb-3 leading-tight">
                   Souhaitez-vous être prévenu(e) en priorité ?
                 </h1>
 
                 <div className="max-w-md space-y-6">
                   <div>
-                    <label className="block font-medium text-[#1B2333] mb-3 text-xl">
+                    <label className="block font-bold text-[#1B2333] mb-3 text-xl">
                       <Phone className="inline h-5 w-5 mr-2 -mt-0.5 text-[hsl(var(--gold))]" />
                       Téléphone (optionnel)
                     </label>
@@ -223,10 +235,10 @@ export default function ListeAttente() {
 
                     <div className="mt-4 p-5 bg-slate-50 border border-slate-200 rounded-xl flex gap-4 items-start shadow-sm">
                       <ShieldCheck className="h-6 w-6 text-[hsl(var(--gold-dark))] shrink-0 mt-0.5" />
-                      <p className="text-slate-600 leading-relaxed text-xl">
+                      <p className="text-slate-600 text-lg leading-relaxed">
                         <strong className="font-bold text-[#1B2333]">Engagement de confidentialité :</strong> Votre
-                        numéro ne sera jamais utilisé pour du démarchage ni cédé à des tiers. Il sert exclusivement à
-                        vous prévenir de l'ouverture du club.
+                        numéro ne sera jamais cédé à des tiers. Il sert exclusivement à vous prévenir de l'ouverture du
+                        club.
                       </p>
                     </div>
                   </div>
@@ -249,11 +261,11 @@ export default function ListeAttente() {
                         >
                           {isOptedIn && <Check className="h-5 w-5 text-white" />}
                         </div>
-                        <span className="text-xl text-[#1B2333] font-semibold">
+                        <span className="text-xl font-bold text-[#1B2333]">
                           Je souhaite être prévenu(e) en priorité lors du lancement
                         </span>
                       </button>
-                      <p className="mt-3 text-slate-400 italic ml-1 text-xl">
+                      <p className="mt-3 text-slate-400 text-base italic ml-1 font-medium">
                         (Par SMS ou court appel de courtoisie)
                       </p>
                     </div>
@@ -283,21 +295,25 @@ export default function ListeAttente() {
       </div>
 
       <div className="hidden lg:block flex-1 relative overflow-hidden bg-[#1B2333]">
-        <img src={heroCouple} alt="Couple" className="absolute inset-0 w-full h-full object-cover opacity-60" />
+        <img
+          src={heroCouple}
+          alt="Couple Kalimera"
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
+        />
 
         <div className="absolute inset-0 flex items-center justify-center p-16">
           <div className="text-center text-primary-foreground relative z-10">
             <h2 className="font-heading text-5xl font-bold mb-6 leading-tight text-white">
               Rejoignez le Cercle Kalimera
             </h2>
-            <p className="text-white/90 max-w-md mx-auto text-2xl leading-relaxed font-medium">
-              Des rencontres authentiques et vérifiées pour les seniors exigeants.
+            <p className="text-white/90 max-w-md mx-auto text-2xl leading-relaxed font-bold">
+              Des rencontres authentiques pour les seniors exigeants.
             </p>
           </div>
         </div>
 
         <div className="absolute bottom-10 right-10 z-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <p className="text-white/90 text-xl font-medium backdrop-blur-md bg-[#1B2333]/40 px-6 py-4 rounded-2xl border border-white/10 shadow-2xl">
+          <p className="text-white/90 text-xl font-bold backdrop-blur-md bg-[#1B2333]/40 px-6 py-4 rounded-2xl border border-white/10 shadow-2xl">
             Déjà membre ?{" "}
             <Link to="/connexion" className="text-[hsl(var(--gold-light))] font-bold hover:underline">
               Connectez-vous
