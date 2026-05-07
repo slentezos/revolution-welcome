@@ -60,7 +60,11 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   const [submitting, setSubmitting] = useState(false);
 
   const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [undoBanner, setUndoBanner] = useState<{ snapshot: Snapshot; message: string } | null>(null);
+  const [undoBanner, setUndoBanner] = useState<
+    | { snapshot: Snapshot; message: string; target: "primary" | "secondary"; expiresAt: number }
+    | null
+  >(null);
+  const [undoNow, setUndoNow] = useState(() => Date.now());
 
   // Tick every minute to refresh cooldown displays
   useEffect(() => {
@@ -68,11 +72,27 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     return () => clearInterval(t);
   }, []);
 
+  // Tick every second while undo banner is active for the countdown
+  useEffect(() => {
+    if (!undoBanner) return;
+    setUndoNow(Date.now());
+    const t = setInterval(() => setUndoNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [undoBanner]);
+
   useEffect(() => {
     return () => {
       if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
     };
   }, []);
+
+  const undoRemainingMs = undoBanner ? Math.max(0, undoBanner.expiresAt - undoNow) : 0;
+  const undoCountdownLabel = (() => {
+    const total = Math.ceil(undoRemainingMs / 1000);
+    const m = Math.floor(total / 60).toString().padStart(2, "0");
+    const s = (total % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  })();
 
   const lastSecondaryMs = profile.last_secondary_update ? new Date(profile.last_secondary_update).getTime() : null;
   const secondaryLockMsRemaining = lastSecondaryMs ? Math.max(0, lastSecondaryMs + NINETY_DAYS_MS - now) : 0;
