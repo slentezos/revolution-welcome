@@ -516,12 +516,66 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 <>
                   {/* Mode International */}
                   <div className="space-y-3">
-                    <Label className="text-xl font-bold text-[#1B2333]">Nom de la ville ou du pays *</Label>
+                    <Label className="text-xl font-bold text-[#1B2333]">Pays *</Label>
+                    <Popover open={countryPopoverOpen} onOpenChange={setCountryPopoverOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={countryPopoverOpen}
+                          className="h-16 w-full text-xl font-medium bg-slate-50 border-2 rounded-xl justify-between hover:bg-slate-50 hover:border-[hsl(var(--gold))]"
+                        >
+                          {countryInput ? (
+                            <span className="flex items-center gap-2">
+                              <span>{COUNTRIES.find((c) => c.code === countryInput)?.flag}</span>
+                              <span>{COUNTRIES.find((c) => c.code === countryInput)?.name}</span>
+                            </span>
+                          ) : (
+                            <span className="text-slate-400">Sélectionner un pays...</span>
+                          )}
+                          <ChevronsUpDown className="ml-2 h-5 w-5 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
+                        <Command>
+                          <CommandInput placeholder="Rechercher un pays..." className="text-lg h-12" />
+                          <CommandList>
+                            <CommandEmpty>Aucun pays trouvé.</CommandEmpty>
+                            <CommandGroup>
+                              {COUNTRIES.map((c) => (
+                                <CommandItem
+                                  key={c.code}
+                                  value={c.name}
+                                  onSelect={() => {
+                                    setCountryInput(c.code);
+                                    setCountryPopoverOpen(false);
+                                  }}
+                                  className="text-lg py-3"
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-5 w-5",
+                                      countryInput === c.code ? "opacity-100" : "opacity-0",
+                                    )}
+                                  />
+                                  <span className="mr-2">{c.flag}</span>
+                                  {c.name}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label className="text-xl font-bold text-[#1B2333]">Nom de la ville précise *</Label>
                     <Input
                       value={cityInput}
                       onChange={handleCityChange}
                       className="h-16 text-2xl font-medium bg-slate-50 border-2 rounded-xl focus:border-[hsl(var(--gold))] focus:ring-0"
-                      placeholder="Ex: Genève, Rome, New York..."
+                      placeholder="Ex: Rome, New York..."
                     />
                   </div>
                 </>
