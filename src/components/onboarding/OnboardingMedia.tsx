@@ -15,7 +15,6 @@ import {
   Headphones,
   ArrowRight,
   ShieldCheck,
-  CreditCard,
   Loader2,
   MonitorOff,
   Info,
@@ -28,7 +27,6 @@ import { cn } from "@/lib/utils";
 
 // Assets
 import coupleGarden from "@/assets/couple-garden.jpg";
-import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
 
 interface OnboardingMediaProps {
   profileId: string;
@@ -66,8 +64,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
-
-  // FIX: État pour le son
   const [isMuted, setIsMuted] = useState(true);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -107,8 +103,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             return updated;
           });
         }
-      } catch (error) {
-        console.error("Error loading existing media:", error);
       } finally {
         setLoading(false);
       }
@@ -116,20 +110,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     loadExistingMedia();
   }, [profileId]);
 
-  const handleStudioPayment = async () => {
-    setIsProcessingPayment(true);
-    setTimeout(() => {
-      setIsProcessingPayment(false);
-      setShowStudioModal(false);
-      setShowVideoTutorial(false);
-      toast({ title: "Réservation confirmée !", description: "Notre équipe vous appellera sous 24h." });
-    }, 2000);
-  };
-
   const handleSlotClick = (slotId: string) => {
     setActiveSlotId(slotId);
-    // On laisse le useEffect ou le cycle de rendu mettre à jour l'accept avant le click
-    setTimeout(() => fileInputRef.current?.click(), 10);
+    // Délai technique pour laisser le browser charger l'attribut accept
+    setTimeout(() => fileInputRef.current?.click(), 50);
   };
 
   const handleRemoveSlot = (slotId: string) => {
@@ -145,7 +129,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     const slot = slots.find((s) => s.id === activeSlotId);
     if (!slot) return;
 
-    // FIX: Bloquer les GIFs
     if (file.type === "image/gif") {
       toast({
         title: "Format refusé",
@@ -157,21 +140,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
     if (slot.type === "video") {
       if (!file.type.startsWith("video/")) {
-        toast({ title: "Erreur", description: "Veuillez choisir un fichier vidéo.", variant: "destructive" });
-        return;
-      }
-      const video = document.createElement("video");
-      video.preload = "metadata";
-      const objectUrl = URL.createObjectURL(file);
-      video.src = objectUrl;
-      const isValid = await new Promise<boolean>((resolve) => {
-        video.onloadedmetadata = () => {
-          URL.revokeObjectURL(objectUrl);
-          resolve(video.duration <= 90);
-        };
-      });
-      if (!isValid) {
-        toast({ title: "Vidéo trop longue", description: "La durée maximale est de 1 mn 30.", variant: "destructive" });
+        toast({ title: "Erreur", description: "Veuillez choisir une vidéo.", variant: "destructive" });
         return;
       }
     } else {
@@ -181,14 +150,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       }
       if (file.size > MAX_PHOTO_SIZE) {
         toast({ title: "Fichier trop lourd", description: "Maximum 10 Mo.", variant: "destructive" });
-        return;
-      }
-      if (!ALLOWED_PHOTO_FORMATS.includes(file.type) && !file.name.toLowerCase().endsWith(".heic")) {
-        toast({
-          title: "Format non supporté",
-          description: "Veuillez utiliser JPG, PNG ou HEIC.",
-          variant: "destructive",
-        });
         return;
       }
     }
@@ -201,7 +162,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
   const handleSave = async () => {
     if (!confirmedAge) {
-      toast({ title: "Action requise", description: "Certifiez l'ancienneté de vos photos.", variant: "destructive" });
+      toast({
+        title: "Action requise",
+        description: "Certifiez que vos photos ont moins de 18 mois.",
+        variant: "destructive",
+      });
       return;
     }
     setUploading(true);
@@ -209,7 +174,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       const {
         data: { session },
       } = await supabase.auth.getSession();
-      if (!session) throw new Error("Non authentifié");
+      if (!session) return;
       for (const slot of slots) {
         if (slot.file && !slot.uploaded) {
           const fileExt = slot.file.name.split(".").pop();
@@ -234,19 +199,18 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
   const videoSlot = slots[0];
   const photoSlots = slots.slice(1, 5);
-  const uploadedCount = slots.filter((s) => s.file || s.uploaded).length;
 
   if (loading)
     return <div className="h-screen flex items-center justify-center text-xl animate-pulse">Chargement...</div>;
 
   return (
     <div className="h-[calc(100vh-140px)] flex flex-col overflow-hidden bg-white">
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-0 min-h-0">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-0 min-h-0">
         <div className="flex-1 min-h-0 p-4 lg:p-10 flex flex-col gap-6 text-left">
           <div className="flex items-center justify-between">
             <h2 className="font-heading text-4xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
             <div className="px-5 py-2 bg-secondary/50 rounded-xl border border-[#E5E0D8]">
-              <span className="text-[#1B2333] font-bold text-2xl">{uploadedCount}</span>
+              <span className="text-[#1B2333] font-bold text-2xl">{slots.filter((s) => s.preview).length}</span>
               <span className="text-gray-500 text-2xl"> / 5</span>
             </div>
           </div>
@@ -256,7 +220,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <div className="min-h-0 flex flex-col gap-4">
               <div
                 className="relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[2.5rem] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all duration-500"
-                onClick={() => !videoSlot?.preview && handleSlotClick(videoSlot?.id)}
+                onClick={() => !videoSlot?.preview && handleSlotClick("video")}
               >
                 {videoSlot?.preview ? (
                   <>
@@ -267,20 +231,19 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       loop
                       muted={isMuted}
                     />
-                    {/* BOUTON SON */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setIsMuted(!isMuted);
                       }}
-                      className="absolute bottom-6 left-6 p-4 bg-black/40 backdrop-blur-md text-white rounded-2xl hover:bg-black/60 transition-all z-10"
+                      className="absolute bottom-6 left-6 p-4 bg-black/40 backdrop-blur-md text-white rounded-2xl z-10"
                     >
                       {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
                     </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleRemoveSlot(videoSlot.id);
+                        handleRemoveSlot("video");
                       }}
                       className="absolute top-6 right-6 p-4 bg-red-500 text-white rounded-full z-10"
                     >
@@ -296,24 +259,29 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <span className="text-2xl text-[#1B2333] font-semibold">+ Ajouter ma vidéo</span>
                     </div>
 
+                    {/* BOUTON STUDIO RESTAURÉ */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setShowStudioModal(true);
                       }}
-                      className="flex items-center gap-4 px-8 py-5 bg-white border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold))] rounded-2xl shadow-sm hover:shadow-lg transition-all"
+                      className="flex items-center gap-4 px-8 py-5 bg-white border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold))] rounded-2xl shadow-sm hover:shadow-lg transition-all group"
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold text-xl leading-tight">Besoin d'aide ? Séance guidée : 35€</p>
+                        <p className="font-bold text-xl leading-tight">
+                          Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé
+                        </p>
+                        <p className="opacity-80 underline text-xl">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
                       </div>
-                      <ArrowRight className="h-6 w-6 ml-2" />
+                      <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
                   </div>
                 )}
               </div>
               <div className="flex items-center justify-between px-4">
-                <p className="text-muted-foreground text-xl">Votre sourire est votre plus belle signature.</p>
+                <p className="text-muted-foreground mb-8 text-xl">Votre sourire est votre plus belle signature.</p>
+                {/* BOUTON CONSEILS RESTAURÉ */}
                 <button
                   onClick={() => setShowVideoTutorial(true)}
                   className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold hover:bg-[hsl(var(--gold))]/20 transition-all text-xl"
@@ -323,7 +291,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               </div>
             </div>
 
-            {/* PHOTOS - GRID FIXE */}
+            {/* PHOTOS */}
             <div className="min-h-0 flex flex-col gap-4">
               <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-4">
                 {photoSlots.map((slot) => (
@@ -337,11 +305,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       {slot.preview ? (
                         <>
-                          <img
-                            src={slot.preview}
-                            alt={slot.label}
-                            className="w-full h-full object-cover" // FIX: Remplissage parfait
-                          />
+                          <img src={slot.preview} alt={slot.label} className="w-full h-full object-cover" />
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -353,7 +317,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                           </button>
                         </>
                       ) : (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
                           <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
                             <Camera className="h-6 w-6 text-muted-foreground" />
                           </div>
@@ -364,13 +328,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   </div>
                 ))}
               </div>
-
-              {/* INFOS TECHNIQUES */}
               <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl">
                 <Info className="h-5 w-5 text-slate-400 shrink-0" />
                 <p className="text-slate-500 text-lg">
-                  Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong> (pas de GIF). <br />
-                  Taille maximale : <strong className="text-slate-700">10 Mo</strong> par photo.
+                  Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong>. Taille maximale :{" "}
+                  <strong className="text-slate-700">10 Mo</strong> par photo.
                 </p>
               </div>
             </div>
@@ -379,8 +341,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       </div>
 
       {/* FOOTER */}
-      <div className="bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20 text-left">
+        <div className="max-w-5xl mx-auto space-y-6">
           <div
             className={cn(
               "flex items-center gap-5 p-6 rounded-3xl border transition-all cursor-pointer",
@@ -401,25 +363,33 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <span className="font-bold underline text-[hsl(var(--gold))]">18 mois</span>.
             </p>
           </div>
-          <div className="flex gap-4">
-            <Button variant="outline" onClick={handleSave} className="h-16 px-10 rounded-2xl font-bold text-xl">
-              Enregistrer
-            </Button>
-            <Button
-              onClick={handleSave}
-              disabled={!confirmedAge || uploading}
-              className={cn(
-                "h-16 px-12 rounded-2xl font-bold text-xl shadow-xl transition-all",
-                confirmedAge ? "bg-[#1B2333] text-white" : "bg-gray-100 text-gray-400",
-              )}
-            >
-              {uploading ? "Envoi..." : "Valider mon profil"}
-            </Button>
+          <div className="flex items-center justify-between">
+            <p className="font-medium text-gray-400 hidden md:block text-2xl">
+              Votre sécurité est notre priorité absolue.
+            </p>
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                onClick={handleSave}
+                className="h-16 px-10 rounded-2xl border-[#E5E0D8] font-bold text-xl"
+              >
+                Enregistrer
+              </Button>
+              <Button
+                onClick={handleSave}
+                disabled={!confirmedAge || uploading}
+                className={cn(
+                  "h-16 px-12 rounded-2xl font-bold text-xl shadow-xl transition-all",
+                  confirmedAge ? "bg-[#1B2333] text-white" : "bg-gray-100 text-gray-400",
+                )}
+              >
+                {uploading ? "Envoi..." : "Valider mon profil"}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* INPUT TECHNIQUE - FIX: KEY DYNAMIQUE */}
       <input
         key={activeSlotId}
         ref={fileInputRef}
@@ -429,9 +399,9 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         onChange={handleFileChange}
       />
 
-      {/* MODALES */}
+      {/* MODAL STUDIO EXPERT */}
       <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
-        <DialogContent className="sm:max-w-2xl rounded-[24px]">
+        <DialogContent className="max-w-2xl rounded-[24px]">
           <DialogTitle className="text-3xl font-bold text-[#1B2333] mb-4 text-center">
             Accompagnement personnalisé
           </DialogTitle>
@@ -439,7 +409,14 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             Un expert vous guide pour réaliser vos meilleurs clichés.
           </p>
           <Button
-            onClick={handleStudioPayment}
+            onClick={() => {
+              setIsProcessingPayment(true);
+              setTimeout(() => {
+                setIsProcessingPayment(false);
+                setShowStudioModal(false);
+                toast({ title: "Réservation confirmée" });
+              }, 1500);
+            }}
             className="h-16 w-full bg-[#1B2333] text-white font-bold rounded-xl text-xl"
           >
             {isProcessingPayment ? <Loader2 className="animate-spin" /> : "Réserver ma séance (35€)"}
@@ -447,14 +424,27 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
+      {/* MODAL CONSEILS VIDÉO */}
       <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        <DialogContent className="max-w-5xl p-0 rounded-[3rem] overflow-hidden">
+        <DialogContent className="max-w-4xl p-0 rounded-[3rem] overflow-hidden">
           <div className="flex h-full">
             <div className="flex-1 p-10">
-              <DialogTitle className="text-4xl font-bold text-[#1B2333] mb-6">L'art de se présenter</DialogTitle>
-              <div className="grid grid-cols-2 gap-6 mb-8 text-xl text-slate-600">
-                <p>• Le Regard : face à l'objectif.</p>
-                <p>• La Lumière : face à une fenêtre.</p>
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-3">
+                <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
+                <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-lg">
+                  Guide Privé
+                </span>
+              </div>
+              <DialogTitle className="text-4xl font-bold text-[#1B2333] mb-6">
+                L'art de se <span className="italic text-[hsl(var(--gold))]">présenter</span>
+              </DialogTitle>
+              <div className="grid grid-cols-1 gap-6 mb-8 text-xl text-slate-600">
+                <div className="flex gap-4">
+                  <Eye className="text-[#1B2333]" /> <p>Le Regard : face à l'objectif.</p>
+                </div>
+                <div className="flex gap-4">
+                  <Sun className="text-[#1B2333]" /> <p>La Lumière : face à une fenêtre.</p>
+                </div>
               </div>
               <Button
                 onClick={() => setShowVideoTutorial(false)}
@@ -469,7 +459,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       </Dialog>
 
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem]">
+        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem] outline-none">
           <Check className="h-16 w-16 text-emerald-600 mx-auto mb-6" />
           <DialogTitle className="text-3xl font-bold text-[#1B2333] mb-6">C'est enregistré !</DialogTitle>
           <Button
