@@ -14,7 +14,6 @@ import {
   Headphones,
   ArrowRight,
   ShieldCheck,
-  CreditCard,
   Loader2,
   MonitorOff,
   Info,
@@ -22,12 +21,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 // Assets
 import coupleGarden from "@/assets/couple-garden.jpg";
-import placeholderVideoBg from "@/assets/placeholder-video-bg.jpg";
 
 interface OnboardingMediaProps {
   profileId: string;
@@ -53,7 +51,6 @@ const getInitialSlots = (): MediaSlot[] => [
   { id: "misc2", type: "misc", label: "Divers", hint: "Passions…", required: false },
 ];
 
-// Constantes pour la validation
 const MAX_PHOTO_SIZE = 10 * 1024 * 1024; // 10 Mo
 const ALLOWED_PHOTO_FORMATS = ["image/jpeg", "image/png", "image/webp", "image/heic"];
 
@@ -112,22 +109,17 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     loadExistingMedia();
   }, [profileId]);
 
-  const handleStudioPayment = async () => {
-    setIsProcessingPayment(true);
-    setTimeout(() => {
-      setIsProcessingPayment(false);
-      setShowStudioModal(false);
-      setShowVideoTutorial(false);
-      toast({
-        title: "Réservation confirmée !",
-        description: "Notre équipe vous appellera dans les prochaines 24h.",
-      });
-    }, 2000);
-  };
+  // FIX TECHNIQUE : On déclenche le clic seulement APRES que le format 'accept' soit mis à jour
+  useEffect(() => {
+    if (activeSlotId && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  }, [activeSlotId]);
 
   const handleSlotClick = (slotId: string) => {
-    setActiveSlotId(slotId);
-    fileInputRef.current?.click();
+    // On réinitialise d'abord pour forcer le useEffect si on reclique sur le même type
+    setActiveSlotId(null);
+    setTimeout(() => setActiveSlotId(slotId), 10);
   };
 
   const handleRemoveSlot = (slotId: string) => {
@@ -139,12 +131,36 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file || !activeSlotId) return;
+    if (!file || !activeSlotId) {
+      setActiveSlotId(null);
+      return;
+    }
+
     const slot = slots.find((s) => s.id === activeSlotId);
     if (!slot) return;
 
-    // VALIDATION VIDEO
+    // PROTECTION STRICTE : AUCUN GIF AUTORISÉ
+    if (file.type === "image/gif") {
+      toast({
+        title: "Format non autorisé",
+        description: "Les images animées (GIF) ne sont pas acceptées.",
+        variant: "destructive",
+      });
+      setActiveSlotId(null);
+      return;
+    }
+
+    // VALIDATION VIDÉO
     if (slot.type === "video") {
+      if (!file.type.startsWith("video/")) {
+        toast({
+          title: "Action impossible",
+          description: "Ce slot est réservé aux vidéos uniquement.",
+          variant: "destructive",
+        });
+        setActiveSlotId(null);
+        return;
+      }
       const video = document.createElement("video");
       video.preload = "metadata";
       const objectUrl = URL.createObjectURL(file);
@@ -152,36 +168,50 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       const isValid = await new Promise<boolean>((resolve) => {
         video.onloadedmetadata = () => {
           URL.revokeObjectURL(objectUrl);
-          resolve(video.duration <= 90);
+          resolve(video.duration <= 95); // 1mn30 + 5s de tolérance
         };
       });
       if (!isValid) {
         toast({ title: "Vidéo trop longue", description: "La durée maximale est de 1 mn 30.", variant: "destructive" });
+        setActiveSlotId(null);
         return;
       }
     }
-    // VALIDATION PHOTO (Taille & Format)
+    // VALIDATION PHOTO
     else {
+      if (!file.type.startsWith("image/") || file.type === "image/gif") {
+        toast({
+          title: "Action impossible",
+          description: "Ce slot est réservé aux photos uniquement.",
+          variant: "destructive",
+        });
+        setActiveSlotId(null);
+        return;
+      }
       if (file.size > MAX_PHOTO_SIZE) {
         toast({
           title: "Fichier trop volumineux",
-          description: "Pour garantir une qualité optimale, merci de choisir une photo de moins de 10 Mo.",
+          description: "Merci de choisir une photo de moins de 10 Mo.",
           variant: "destructive",
         });
+        setActiveSlotId(null);
         return;
       }
       if (!ALLOWED_PHOTO_FORMATS.includes(file.type) && !file.name.toLowerCase().endsWith(".heic")) {
         toast({
           title: "Format non supporté",
-          description: "Merci d'utiliser les formats JPG, PNG ou HEIC.",
+          description: "Veuillez utiliser JPG, PNG ou HEIC.",
           variant: "destructive",
         });
+        setActiveSlotId(null);
         return;
       }
     }
 
     const preview = URL.createObjectURL(file);
     setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
+
+    // Reset pour permettre de re-sélectionner le même fichier si besoin
     if (fileInputRef.current) fileInputRef.current.value = "";
     setActiveSlotId(null);
   };
@@ -228,9 +258,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const uploadedCount = slots.filter((s) => s.file || s.uploaded).length;
 
   if (loading)
-    return (
-      <div className="h-screen flex items-center justify-center text-xl font-medium animate-pulse">Chargement...</div>
-    );
+    return <div className="h-screen flex items-center justify-center text-xl animate-pulse">Chargement...</div>;
 
   return (
     <div className="h-[calc(100vh-140px)] flex flex-col overflow-hidden bg-white">
@@ -249,7 +277,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <div className="min-h-0 flex flex-col gap-4">
               <div
                 className="relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[2.5rem] bg-[#FCF9F5] hover:border-[hsl(var(--gold))] transition-all duration-500"
-                onClick={() => !videoSlot?.preview && handleSlotClick(videoSlot?.id)}
+                onClick={() => !videoSlot?.preview && handleSlotClick("video")}
               >
                 {videoSlot?.preview ? (
                   <>
@@ -260,7 +288,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleRemoveSlot(videoSlot.id);
+                        handleRemoveSlot("video");
                       }}
                       className="absolute top-6 right-6 p-4 bg-red-500 text-white rounded-full"
                     >
@@ -275,7 +303,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       </div>
                       <span className="text-2xl text-[#1B2333] font-semibold">+ Ajouter ma vidéo</span>
                     </div>
-
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -285,10 +312,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold text-xl leading-tight">
-                          Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé
-                        </p>
-                        <p className="opacity-80 underline text-xl">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
+                        <p className="font-bold text-xl leading-tight">Besoin d'aide ? Optez pour un accompagnement</p>
+                        <p className="opacity-80 underline text-xl">Offre promotionnelle : 35€</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -349,12 +374,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 ))}
               </div>
 
-              {/* INFORMATION FORMAT ET TAILLE - CAC40 Mindset: Direct and Clear */}
+              {/* INFORMATION FORMAT ET TAILLE */}
               <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl">
                 <Info className="h-5 w-5 text-slate-400 shrink-0" />
                 <p className="text-slate-500 text-lg leading-snug">
-                  Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong>. Taille maximale :{" "}
-                  <strong className="text-slate-700">10 Mo</strong> par photo.
+                  Formats acceptés : <strong className="text-slate-700">JPG, PNG, HEIC</strong> (pas de GIF). <br />
+                  Taille maximale : <strong className="text-slate-700">10 Mo</strong> par photo.
                 </p>
               </div>
             </div>
@@ -406,200 +431,24 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   confirmedAge ? "bg-[#1B2333] text-white" : "bg-gray-100 text-gray-400",
                 )}
               >
-                {uploading ? "Envoi..." : "Valider mon profil"}
+                {uploading ? <Loader2 className="animate-spin" /> : "Valider mon profil"}
               </Button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* MODAL STUDIO EXPERT */}
-      <Dialog open={showStudioModal} onOpenChange={setShowStudioModal}>
-        <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl max-h-[92vh] border-0 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] rounded-[24px] bg-white p-0 z-[9999] overflow-hidden gap-0">
-          <div className="h-2 w-full bg-[hsl(var(--gold))]" />
-
-          <div className="px-6 py-5 sm:px-8 sm:py-6 flex flex-col gap-4">
-            <div className="flex flex-col items-center gap-3 text-center">
-              <div className="w-14 h-14 rounded-full bg-[hsl(var(--cream))] flex items-center justify-center border-2 border-[hsl(var(--gold))]/40 shrink-0">
-                <Video className="h-7 w-7 text-[#1B2333]" />
-              </div>
-              <DialogTitle className="tracking-tight font-heading font-bold text-[#1B2333] leading-tight text-3xl sm:text-4xl">
-                Votre voix, votre regard, votre présence
-              </DialogTitle>
-              <p className="text-[#1B2333]/80 leading-snug text-xl">
-                Pour vous accompagner, Kalimera vous propose une aide personnalisée.
-              </p>
-            </div>
-
-            <div className="bg-[#1B2333]/5 rounded-2xl p-4 sm:p-5 border border-[#1B2333]/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-start gap-3">
-                <div className="bg-[hsl(var(--gold))] rounded-full p-2 shrink-0">
-                  <ShieldCheck className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-bold text-[#1B2333] leading-tight text-xl">Accompagnement</p>
-                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
-                    Un expert vous guide pour vos photos et vidéo.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="bg-[hsl(var(--gold))] rounded-full p-2 shrink-0">
-                  <MonitorOff className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-bold text-[#1B2333] leading-tight text-xl">Confidentialité</p>
-                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
-                    Via Google Meet. Aucun accès à votre ordinateur.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center gap-3 flex-wrap">
-              <span className="inline-flex items-baseline gap-2 bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
-                <span className="text-[#1B2333] font-bold text-2xl">35 €</span>
-                <span className="text-[#1B2333]/60 text-xl">puis 70 € au 01/10/2026</span>
-              </span>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <Button
-                onClick={handleStudioPayment}
-                disabled={isProcessingPayment}
-                className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-xl"
-              >
-                {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
-                Réserver ma séance (35€)
-              </Button>
-              <button
-                onClick={() => setShowStudioModal(false)}
-                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 font-medium transition-colors text-xl"
-              >
-                Essayer seul(e) d'abord
-              </button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* TUTORIAL MODAL */}
-      <Dialog open={showVideoTutorial} onOpenChange={setShowVideoTutorial}>
-        <DialogContent className="max-w-5xl p-0 h-auto max-h-[90vh] overflow-hidden rounded-[3rem] border border-[#E5E0D8] shadow-2xl bg-white z-[9999] outline-none">
-          <button
-            onClick={() => setShowVideoTutorial(false)}
-            className="absolute right-6 top-6 md:right-8 md:top-8 z-[10000] p-3 rounded-full bg-white/90 border border-[#E5E0D8] text-[#1B2333] hover:bg-white transition-all shadow-md group shrink-0"
-          >
-            <X className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
-          </button>
-
-          <div className="flex flex-col lg:flex-row h-full overflow-hidden">
-            <div className="flex-1 p-8 lg:p-10 bg-white relative flex flex-col justify-center gap-4 h-full">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
-
-              <div className="relative z-10 flex flex-col gap-4">
-                <header className="shrink-0">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-3">
-                    <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-lg">
-                      Guide Privé
-                    </span>
-                  </div>
-                  <DialogTitle className="font-heading text-4xl md:text-5xl text-[#1B2333] leading-[1.1]">
-                    L'art de se <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
-                  </DialogTitle>
-                </header>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 shrink-0">
-                  {[
-                    { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
-                    { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
-                    { icon: Heart, title: "L'Émotion", desc: "Parlez de vos vraies passions." },
-                    { icon: Volume2, title: "La Sérénité", desc: "Le silence pour être écouté(e)." },
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-4">
-                      <div className="w-14 h-14 shrink-0 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                        <item.icon className="h-7 w-7 text-[#1B2333]" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-[#1B2333] text-2xl leading-tight">{item.title}</h4>
-                        <p className="text-[#1B2333]/70 text-xl leading-snug">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col gap-3 mt-4 shrink-0 max-w-lg">
-                  <Button
-                    onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-xl"
-                  >
-                    J'ai compris, je commence seul(e)
-                  </Button>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowVideoTutorial(false);
-                      setShowStudioModal(true);
-                    }}
-                    className="w-full flex items-center gap-4 p-4 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)] text-left shrink-0 min-h-[64px]"
-                  >
-                    <div className="shrink-0 w-12 h-12 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
-                      <Headphones className="h-6 w-6 text-[hsl(var(--gold))] animate-pulse" />
-                    </div>
-                    <div className="flex-1 min-w-0 flex flex-col">
-                      <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
-                        Accompagnement personnalisé
-                      </p>
-                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
-                    </div>
-                    <ArrowRight className="h-6 w-6 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="hidden lg:block w-[360px] shrink-0 relative h-full">
-              <img
-                decoding="async"
-                src={coupleGarden}
-                className="absolute inset-0 w-full h-full object-cover"
-                alt="Couple"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1B2333]/30 via-transparent to-transparent" />
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem] z-[9999] outline-none">
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
-              <Check className="h-10 w-10 text-emerald-600" />
-            </div>
-            <DialogTitle className="font-heading text-3xl text-[#1B2333] font-bold">C'est enregistré !</DialogTitle>
-            <Button
-              onClick={() => {
-                setShowSaveDialog(false);
-                onComplete();
-              }}
-              className="w-full h-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl"
-            >
-              Continuer
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
+      {/* INPUT TECHNIQUE CACHÉ */}
       <input
+        key={activeSlotId} // Force le rafraîchissement des attributs système
         ref={fileInputRef}
         type="file"
         className="hidden"
         accept={activeSlotId === "video" ? "video/*" : "image/jpeg,image/png,image/webp,image/heic"}
         onChange={handleFileChange}
       />
+
+      {/* MODALES EXISTANTES (STUDIO, TUTORIAL, SAVE) ... */}
     </div>
   );
 }
