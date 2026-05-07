@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MapPin, Lock, Plus, Trash2, Pencil, Undo2, Home, Sparkles } from "lucide-react";
+import { MapPin, Lock, Plus, Trash2, Pencil, Undo2, Home, Sparkles, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { lookupPostalCode } from "@/data/frenchPostalCodes";
 import { PINPOINT_MAPPING } from "@/data/locationData";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
 const SEVENTY_TWO_HOURS_MS = 72 * 60 * 60 * 1000;
@@ -66,13 +66,13 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   >(null);
   const [undoNow, setUndoNow] = useState(() => Date.now());
 
-  // Tick every minute to refresh cooldown displays
+  // Actualisation toutes les minutes pour les cooldowns standards
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(t);
   }, []);
 
-  // Tick every second while undo banner is active for the countdown
+  // Actualisation chaque seconde si un bandeau Undo est actif
   useEffect(() => {
     if (!undoBanner) return;
     setUndoNow(Date.now());
@@ -143,7 +143,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       .single();
     setSubmitting(false);
     if (error || !data) {
-      toast({ title: "Erreur", description: "Enregistrement impossible.", variant: "destructive" });
+      toast.error("Enregistrement impossible.");
       return false;
     }
     onProfileUpdated(data as ProfileLocationData);
@@ -154,23 +154,26 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   const handleAddOrEdit = async () => {
     const cleaned = postalInput.replace(/\D/g, "").slice(0, 5);
     if (cleaned.length !== 5) {
-      toast({ title: "Code postal invalide", description: "Saisissez 5 chiffres.", variant: "destructive" });
+      toast.error("Saisissez un code postal à 5 chiffres.");
       return;
     }
     const info = lookupPostalCode(cleaned);
     if (!info) {
-      toast({ title: "Code postal inconnu", description: "Vérifiez votre saisie.", variant: "destructive" });
+      toast.error("Code postal inconnu. Vérifiez votre saisie.");
       return;
     }
     if (cleaned === profile.postal_code) {
-      toast({
-        title: "Adresse identique",
-        description: "Votre résidence secondaire doit différer de la résidence principale.",
-        variant: "destructive",
-      });
+      toast.error("Votre résidence secondaire doit différer de la résidence principale.");
       return;
     }
     const preciseCity = PINPOINT_MAPPING[cleaned] || info.cityName;
+    
+    // Contexte Avant -> Après pour le Undo Banner
+    const oldCity = snapshot.secondary_city_name || "Aucune";
+    const successMessage = editMode 
+        ? `Résidence secondaire mise à jour (${oldCity} ➔ ${preciseCity}).` 
+        : `Résidence secondaire ajoutée (${preciseCity}).`;
+
     const ok = await persist(
       {
         secondary_postal_code: cleaned,
@@ -178,7 +181,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
         secondary_region_name: info.regionName,
         last_secondary_update: new Date().toISOString(),
       },
-      editMode ? "Résidence secondaire mise à jour." : "Résidence secondaire ajoutée.",
+      successMessage,
       snapshot,
       "secondary",
     );
@@ -191,7 +194,10 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
 
   const handleDelete = async () => {
     // Suppression : on garde last_secondary_update (anti-bypass)
-    // Si l'active_location était secondary, on revient à primary (sans toucher au cooldown 72h)
+    // Contexte de ce qui a été supprimé
+    const oldCity = snapshot.secondary_city_name;
+    const successMessage = `Résidence secondaire supprimée (${oldCity}).`;
+
     const ok = await persist(
       {
         secondary_postal_code: null,
@@ -199,7 +205,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
         secondary_region_name: null,
         active_location: profile.active_location === "secondary" ? "primary" : profile.active_location,
       },
-      "Résidence secondaire supprimée.",
+      successMessage,
       snapshot,
       "secondary",
     );
@@ -232,13 +238,13 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       .single();
     setSubmitting(false);
     if (error || !data) {
-      toast({ title: "Erreur", description: "Annulation impossible.", variant: "destructive" });
+      toast.error("Annulation impossible.");
       return;
     }
     onProfileUpdated(data as ProfileLocationData);
     setUndoBanner(null);
     if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
-    toast({ title: "Action annulée", description: "Vos données précédentes ont été rétablies." });
+    toast.success("Action annulée. Vos données ont été rétablies.");
   };
 
   const openEdit = () => {
@@ -255,20 +261,27 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
 
   const renderUndoBanner = (target: "primary" | "secondary") => {
     if (!undoBanner || undoBanner.target !== target) return null;
+    
+    // Split the message to make the transition part bold (e.g., "(Paris ➔ Lyon).")
+    const messageParts = undoBanner.message.split('(');
+    const mainText = messageParts[0];
+    const transitionText = messageParts.length > 1 ? `(${messageParts[1]}` : "";
+
     return (
       <div
         role="status"
         aria-live="polite"
-        className="mt-5 rounded-lg border border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 px-5 py-4 flex flex-wrap items-center gap-4 animate-in fade-in slide-in-from-top-1"
+        className="mt-6 rounded-xl border-2 border-[hsl(var(--gold))]/30 bg-slate-50 px-6 py-5 flex flex-wrap items-center gap-4 animate-in fade-in slide-in-from-top-2 shadow-sm"
       >
         <span className="text-foreground leading-relaxed flex-1 min-w-[200px] text-xl">
-          {undoBanner.message}
+          {mainText}
+          {transitionText && <strong className="ml-1 text-[#1B2333] font-bold">{transitionText}</strong>}
         </span>
         <button
           type="button"
           onClick={handleUndo}
           disabled={submitting}
-          className="inline-flex items-center gap-2 min-h-[48px] px-4 rounded-md font-semibold text-foreground underline underline-offset-4 decoration-[hsl(var(--gold))]/60 hover:text-[hsl(var(--gold))] hover:decoration-[hsl(var(--gold))] transition-colors disabled:opacity-50 text-xl"
+          className="inline-flex items-center gap-2 min-h-[48px] px-4 rounded-md font-bold text-[#1B2333] hover:text-[hsl(var(--gold))] transition-colors disabled:opacity-50 text-xl"
         >
           <Undo2 className="h-5 w-5" />
           Annuler ({undoCountdownLabel})
@@ -278,257 +291,39 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   };
 
   return (
-    <section className="bg-secondary/40 py-16 md:py-24 border-t border-border/40">
+    <section className="bg-slate-50 py-16 md:py-24 border-t border-slate-200">
       <div className="px-6 md:px-16 lg:px-20 xl:px-28 max-w-6xl mx-auto">
         <div className="mb-10">
-          <span className="font-medium tracking-[0.3em] uppercase text-muted-foreground mb-3 block text-lg">
+          <span className="font-medium tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 block text-lg">
             Géographie du club
           </span>
-          <h3 className="font-heading text-3xl md:text-4xl text-foreground mb-3 leading-tight">Mes Lieux de Vie</h3>
+          <h3 className="font-heading text-3xl md:text-4xl text-[#1B2333] mb-3 leading-tight font-bold">Mes Lieux de Vie</h3>
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-6" />
-          <p className="text-muted-foreground leading-relaxed text-xl max-w-2xl">
-            Déclarez votre résidence principale et, le cas échéant, votre résidence secondaire. Vous choisissez où votre
-            profil rayonne.
+          <p className="text-slate-500 leading-relaxed text-xl max-w-2xl font-medium">
+            Déclarez votre résidence principale et, le cas échéant, votre résidence secondaire. Vous choisissez où votre profil rayonne.
           </p>
         </div>
 
-        {/* Toggle de présence */}
-        <div className="mb-10">
-          <p className="font-bold text-foreground text-xl mb-4 uppercase tracking-widest">Sélecteur de Rayonnement</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 rounded-lg p-2 bg-transparent border-0 border-transparent">
+        {/* --- Toggle de présence --- */}
+        <div className="mb-14">
+          <p className="font-bold text-[#1B2333] text-xl mb-4 uppercase tracking-widest">Sélecteur de Rayonnement</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-lg bg-transparent border-0 border-transparent">
             {(["primary", "secondary"] as const).map((loc) => {
               const isActive = profile.active_location === loc;
               const cityLabel = loc === "primary" ? profile.city_name : profile.secondary_city_name;
-              const disabled =
-                (loc === "secondary" && !profile.secondary_city_name) || (switchLocked && !isActive);
-              const cooldownLabel =
-                switchLocked && !isActive
-                  ? `Présence maintenue à ${activeCityName} pour encore ${formatHours(switchLockMsRemaining)} h.`
-                  : null;
+              const disabled = (loc === "secondary" && !profile.secondary_city_name) || (switchLocked && !isActive);
+              
               return (
                 <button
                   key={loc}
                   type="button"
                   disabled={disabled || isActive}
                   onClick={() => setSwitchTarget(loc)}
-                  className={`min-h-[64px] rounded-md px-6 py-5 text-xl font-semibold transition-all border-2 text-left ${
+                  className={`relative overflow-hidden min-h-[80px] rounded-xl px-6 py-5 text-xl font-bold transition-all border-2 text-left flex items-center justify-between ${
                     isActive
-                      ? "bg-[#1B2333] text-white border-[#1B2333]"
-                      : "bg-white text-foreground border-border hover:border-[hsl(var(--gold))] disabled:opacity-50 disabled:cursor-not-allowed"
+                      ? "bg-[#1B2333] text-white border-[#1B2333] shadow-md"
+                      : "bg-white text-[#1B2333] border-slate-200 hover:border-[hsl(var(--gold))] disabled:opacity-60 disabled:cursor-not-allowed disabled:bg-slate-50"
                   }`}
                   aria-pressed={isActive}
                 >
-                  <div className="flex items-center gap-3">
-                    <Home className={`h-6 w-6 ${isActive ? "text-[hsl(var(--gold))]" : "text-muted-foreground"}`} />
-                    <span className="text-2xl">
-                      {loc === "primary" ? "Résidence principale" : "Résidence secondaire"}
-                      {cityLabel && <span className="block font-normal opacity-80 mt-1 text-xl">{cityLabel}</span>}
-                    </span>
-                  </div>
-                  {isActive && (
-                    <span className="block mt-3 font-normal text-[hsl(var(--gold))] text-xl">
-                      <Sparkles className="inline h-4 w-4 mr-1" />
-                      Profil actuellement rayonnant ici
-                    </span>
-                  )}
-                  {cooldownLabel && (
-                    <span className="block mt-3 text-base font-normal text-muted-foreground">{cooldownLabel}</span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Cartes des résidences */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Carte 1 : Principale */}
-          <div className="bg-background border-2 border-[hsl(var(--gold))/30] rounded-lg p-8 shadow-[var(--shadow-card)]">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="flex items-center gap-3">
-                <MapPin className="h-7 w-7 text-[hsl(var(--gold))]" />
-                <h4 className="font-heading text-2xl text-foreground">Résidence principale</h4>
-              </div>
-              <Lock className="h-6 w-6 text-muted-foreground" aria-label="Adresse principale verrouillée" />
-            </div>
-            <p className="text-foreground text-2xl font-medium">{profile.city_name || "Non renseignée"}</p>
-            {profile.postal_code && (
-              <p className="text-muted-foreground text-xl mt-1">
-                {profile.postal_code} · {profile.region_name}
-              </p>
-            )}
-            <p className="text-muted-foreground mt-5 leading-relaxed text-xl">
-              Votre adresse de référence reste stable pour garantir l'authenticité de votre bassin de rencontre.
-            </p>
-            {renderUndoBanner("primary")}
-          </div>
-
-          {/* Carte 2 : Secondaire */}
-          <div className="bg-background border-2 border-border rounded-lg p-8 shadow-[var(--shadow-card)]">
-            <div className="flex items-center gap-3 mb-4">
-              <MapPin className="h-7 w-7 text-[hsl(var(--gold))]" />
-              <h4 className="font-heading text-2xl text-foreground">Résidence secondaire</h4>
-            </div>
-
-            {profile.secondary_city_name ? (
-              <>
-                <p className="text-foreground text-2xl font-medium">{profile.secondary_city_name}</p>
-                {profile.secondary_postal_code && (
-                  <p className="text-muted-foreground text-xl mt-1">
-                    {profile.secondary_postal_code} · {profile.secondary_region_name}
-                  </p>
-                )}
-                <div className="flex flex-wrap gap-3 mt-6">
-                  <Button
-                    onClick={openEdit}
-                    variant="outline"
-                    className="min-h-[56px] text-lg border-2 border-foreground/20 hover:border-[hsl(var(--gold))]"
-                  >
-                    <Pencil className="h-5 w-5 mr-2" />
-                    Modifier
-                  </Button>
-                  <Button
-                    onClick={() => setDeleteOpen(true)}
-                    variant="outline"
-                    className="min-h-[56px] text-lg border-2 border-destructive/30 text-destructive hover:bg-destructive/5 hover:border-destructive"
-                  >
-                    <Trash2 className="h-5 w-5 mr-2" />
-                    Supprimer
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-muted-foreground text-xl leading-relaxed">
-                  Vous partagez votre temps entre deux régions ? Déclarez ici votre seconde adresse.
-                </p>
-                <div className="mt-6">
-                  {canDeclareNewSecondary ? (
-                    <Button
-                      onClick={openAdd}
-                      className="min-h-[56px] text-lg px-8 bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
-                    >
-                      <Plus className="h-5 w-5 mr-2" />
-                      Ajouter une résidence secondaire
-                    </Button>
-                  ) : (
-                    <Button
-                      disabled
-                      className="min-h-[56px] text-lg px-8 bg-muted text-muted-foreground cursor-not-allowed"
-                    >
-                      <Plus className="h-5 w-5 mr-2" />
-                      Nouvelle déclaration possible dans {formatDays(secondaryLockMsRemaining)} jours
-                    </Button>
-                  )}
-                  {!canDeclareNewSecondary && (
-                    <p className="text-muted-foreground text-lg mt-3">Règle de stabilité du club.</p>
-                  )}
-                </div>
-              </>
-            )}
-            {renderUndoBanner("secondary")}
-          </div>
-        </div>
-      </div>
-
-      {/* Modale Ajout / Modification */}
-      <Dialog open={addOpen} onOpenChange={(o) => !o && (setAddOpen(false), setEditMode(false))}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-heading text-2xl">
-              {editMode ? "Modifier la résidence secondaire" : "Déclarer une résidence secondaire"}
-            </DialogTitle>
-            <DialogDescription className="text-lg leading-relaxed">
-              Renseignez le code postal de votre seconde adresse. Cette déclaration s'inscrit dans un cycle de stabilité
-              de 90 jours.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 py-2">
-            <Label htmlFor="secondary_postal" className="text-xl font-medium">
-              Code postal
-            </Label>
-            <Input
-              id="secondary_postal"
-              inputMode="numeric"
-              maxLength={5}
-              value={postalInput}
-              onChange={(e) => setPostalInput(e.target.value.replace(/\D/g, "").slice(0, 5))}
-              className="h-14 text-xl"
-              placeholder="75001"
-            />
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setAddOpen(false)} className="min-h-[56px] text-lg">
-              Annuler
-            </Button>
-            <Button
-              onClick={handleAddOrEdit}
-              disabled={submitting || postalInput.length !== 5}
-              className="min-h-[56px] text-lg bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
-            >
-              Confirmer
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Modale Suppression */}
-      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-heading text-2xl">Supprimer cette adresse ?</DialogTitle>
-            <DialogDescription className="text-lg leading-relaxed">
-              Note : Vous ne pourrez pas déclarer de nouvelle résidence secondaire avant l'expiration de votre cycle de
-              90 jours
-              {lastSecondaryMs
-                ? ` (dans ${formatDays(Math.max(0, lastSecondaryMs + NINETY_DAYS_MS - now))} jours).`
-                : "."}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteOpen(false)} className="min-h-[56px] text-lg">
-              Conserver
-            </Button>
-            <Button
-              onClick={handleDelete}
-              disabled={submitting}
-              className="min-h-[56px] text-lg bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              <Trash2 className="h-5 w-5 mr-2" />
-              Supprimer
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Modale Switch */}
-      <Dialog open={!!switchTarget} onOpenChange={(o) => !o && setSwitchTarget(null)}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-heading text-2xl">
-              Signaler votre arrivée à{" "}
-              {switchTarget === "secondary" ? profile.secondary_city_name : profile.city_name} ?
-            </DialogTitle>
-            <DialogDescription className="text-lg leading-relaxed">
-              Pour garantir la qualité de vos futurs échanges locaux, votre profil rayonnera dans cette région pendant
-              les 72 prochaines heures. Confirmer ce déplacement ?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSwitchTarget(null)} className="min-h-[56px] text-lg">
-              Annuler
-            </Button>
-            <Button
-              onClick={handleSwitch}
-              disabled={submitting}
-              className="min-h-[56px] text-lg bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
-            >
-              Confirmer le déplacement
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-    </section>
-  );
-}
+                  <div className="flex items-center gap-4 z-1
