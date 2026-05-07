@@ -515,10 +515,10 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               <Info className="h-8 w-8 text-[hsl(var(--gold-dark))]" />
             </div>
             <div>
-              <h4 className="text-[#1B2333] text-xl font-bold mb-1">
+              <h4 className="text-[#1B2333] font-bold mb-1 text-2xl">
                 Besoin de comprendre comment fonctionne la localisation ?
               </h4>
-              <p className="text-slate-500 text-lg leading-relaxed">
+              <p className="text-slate-500 leading-relaxed text-xl">
                 Découvrez notre guide détaillé sur les règles de maintien de présence (72h) et d'ancrage (90 jours) pour
                 garantir la qualité de vos échanges.
               </p>
