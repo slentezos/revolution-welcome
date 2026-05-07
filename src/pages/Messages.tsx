@@ -830,7 +830,7 @@ export default function Messages() {
                       onClick={() => setComposerOpen(true)}
                       className="w-full min-h-[64px] flex items-center justify-between gap-4 px-5 py-4 rounded-2xl bg-[hsl(var(--cream))] border-2 border-amber-100/70 hover:border-[hsl(var(--gold))] transition-all text-left shadow-sm"
                     >
-                      <span className="flex-1 truncate text-xl text-muted-foreground">
+                      <span className="flex-1 truncate text-xl text-muted-foreground text-slate-950">
                         {safeMessage.length > 0 ? safeMessage : "Écrivez votre message..."}
                       </span>
                       <span className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1B2333] text-white text-lg font-semibold">
