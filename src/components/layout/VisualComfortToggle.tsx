@@ -87,7 +87,7 @@ export default function VisualComfortToggle() {
       {isOpen &&
       <div className="absolute right-0 mt-2 z-50 w-[340px] bg-white rounded-xl shadow-xl border border-amber-100/60 p-5 animate-fade-in">
           {/* Header */}
-          <p className="leading-relaxed mb-5 text-lg text-secondary-foreground">
+          <p className="leading-relaxed mb-5 text-secondary-foreground text-xl">
             Pour votre confort de lecture, nous vous proposons d'ajuster la taille du texte.
           </p>
 
