@@ -391,7 +391,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <DialogTitle className="tracking-tight font-heading font-bold text-[#1B2333] leading-tight text-3xl sm:text-4xl">
                 Votre voix, votre regard, votre présence
               </DialogTitle>
-              <p className="text-[#1B2333]/80 leading-snug text-xl">
+              <p className="text-[#1B2333]/80 leading-snug text-2xl">
                 Pour vous accompagner, Kalimera vous propose une aide personnalisée.
               </p>
             </div>
@@ -403,7 +403,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 </div>
                 <div>
                   <p className="font-bold text-[#1B2333] leading-tight text-xl">Accompagnement</p>
-                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
+                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-xl">
                     Un expert vous guide pour vos photos et vidéo.
                   </p>
                 </div>
@@ -414,7 +414,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 </div>
                 <div>
                   <p className="font-bold text-[#1B2333] leading-tight text-xl">Confidentialité</p>
-                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
+                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-xl">
                     Via Google Meet. Aucun accès à votre ordinateur.
                   </p>
                 </div>
@@ -424,7 +424,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <span className="inline-flex items-baseline gap-2 bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
                 <span className="text-[#1B2333] font-bold text-2xl">35 €</span>
-                <span className="text-[#1B2333]/60 text-xl">puis 70 € au 01/10/2026</span>
+                <span className="text-xl text-primary">puis 70 € au 01/10/2026</span>
               </span>
             </div>
 
@@ -432,14 +432,14 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <Button
                 onClick={handleStudioPayment}
                 disabled={isProcessingPayment}
-                className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-xl"
+                className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-2xl"
               >
                 {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
                 Réserver ma séance (35€)
               </Button>
               <button
                 onClick={() => setShowStudioModal(false)}
-                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 font-medium transition-colors text-xl"
+                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 font-medium transition-colors text-2xl"
               >
                 Essayer seul(e) d'abord
               </button>
