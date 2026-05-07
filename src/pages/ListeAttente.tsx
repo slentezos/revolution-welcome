@@ -243,7 +243,7 @@ export default function ListeAttente() {
                         className={`w-full flex items-center gap-4 p-5 rounded-xl border-2 text-left transition-all ${
                           prefersSms
                             ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5"
-                            : "border-slate-200 hover:border-slate-300 bg-white"
+                            : "border-slate-200 hover:border-[hsl(var(--gold))]/40 bg-slate-50 hover:bg-slate-100"
                         }`}
                       >
                         <div
@@ -265,7 +265,7 @@ export default function ListeAttente() {
                         className={`w-full flex items-center gap-4 p-5 rounded-xl border-2 text-left transition-all ${
                           prefersCall
                             ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5"
-                            : "border-slate-200 hover:border-slate-300 bg-white"
+                            : "border-slate-200 hover:border-[hsl(var(--gold))]/40 bg-slate-50 hover:bg-slate-100"
                         }`}
                       >
                         <div
