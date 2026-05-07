@@ -13,8 +13,8 @@ export default function ListeAttente() {
   const [step, setStep] = useState(0);
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [prefersSms, setPrefersSms] = useState(true); // Coché par défaut pour encourager l'opt-in
-  const [prefersCall, setPrefersCall] = useState(false);
+  // Simplification : une seule option d'adhésion pour être prévenu
+  const [isOptedIn, setIsOptedIn] = useState(true);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const { toast } = useToast();
@@ -22,7 +22,7 @@ export default function ListeAttente() {
 
   const location = getStoredLocation();
 
-  // LOGIQUE DE SÉCURITÉ CAC40
+  // LOGIQUE DE SÉCURITÉ GÉOGRAPHIQUE
   const isPinpoint = location && !!PINPOINT_MAPPING[location.postalCode];
   const displayLocation = isPinpoint
     ? PINPOINT_MAPPING[location?.postalCode || ""]
@@ -82,7 +82,7 @@ export default function ListeAttente() {
       const { error } = await supabase.from("waitlist_leads").insert({
         email,
         phone: phone || null,
-        phone_preference: [prefersSms && "sms", prefersCall && "call"].filter(Boolean).join(",") || null,
+        phone_preference: isOptedIn ? "sms,call" : null,
         postal_code: location.postalCode,
         city_name: displayLocation,
         region_name: location.regionName,
@@ -189,7 +189,7 @@ export default function ListeAttente() {
                 <Button
                   onClick={handleStep1}
                   disabled={!email.includes("@") || loading}
-                  className="h-16 rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90 text-xl font-bold transition-all shadow-md"
+                  className="h-16 rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[hsl(var(--gold))] transition-all text-xl font-bold shadow-md"
                 >
                   {loading ? "Vérification..." : "Continuer"}
                   {!loading && <ArrowRight className="ml-2 h-6 w-6" />}
@@ -221,7 +221,6 @@ export default function ListeAttente() {
                       />
                     </div>
 
-                    {/* ENCART DE CONFIDENTIALITÉ PREMIUM */}
                     <div className="mt-4 p-5 bg-slate-50 border border-slate-200 rounded-xl flex gap-4 items-start shadow-sm">
                       <ShieldCheck className="h-6 w-6 text-[hsl(var(--gold-dark))] shrink-0 mt-0.5" />
                       <p className="text-slate-600 text-lg leading-relaxed">
@@ -233,54 +232,30 @@ export default function ListeAttente() {
                   </div>
 
                   {phone.length >= 6 && (
-                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 space-y-4 pt-2">
-                      <p className="font-bold text-[#1B2333] text-xl mb-3">Vos préférences de contact :</p>
-
-                      {/* TICK BOX 1 : SMS */}
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 pt-2">
                       <button
                         type="button"
-                        onClick={() => setPrefersSms(!prefersSms)}
-                        className={`w-full flex items-center gap-4 p-5 rounded-xl border-2 text-left transition-all ${
-                          prefersSms
+                        onClick={() => setIsOptedIn(!isOptedIn)}
+                        className={`w-full flex items-center gap-4 p-6 rounded-xl border-2 text-left transition-all ${
+                          isOptedIn
                             ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5"
                             : "border-slate-200 hover:border-[hsl(var(--gold))]/40 bg-slate-50 hover:bg-slate-100"
                         }`}
                       >
                         <div
                           className={`w-8 h-8 rounded-lg flex items-center justify-center border-2 shrink-0 transition-colors ${
-                            prefersSms ? "bg-[hsl(var(--gold))] border-[hsl(var(--gold))]" : "border-slate-300 bg-white"
+                            isOptedIn ? "bg-[hsl(var(--gold))] border-[hsl(var(--gold))]" : "border-slate-300 bg-white"
                           }`}
                         >
-                          {prefersSms && <Check className="h-5 w-5 text-white" />}
+                          {isOptedIn && <Check className="h-5 w-5 text-white" />}
                         </div>
-                        <span className="text-xl font-medium text-[#1B2333]">
-                          J'accepte de recevoir un SMS d'invitation
+                        <span className="text-xl font-bold text-[#1B2333]">
+                          Je souhaite être prévenu(e) en priorité lors du lancement
                         </span>
                       </button>
-
-                      {/* TICK BOX 2 : APPEL */}
-                      <button
-                        type="button"
-                        onClick={() => setPrefersCall(!prefersCall)}
-                        className={`w-full flex items-center gap-4 p-5 rounded-xl border-2 text-left transition-all ${
-                          prefersCall
-                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5"
-                            : "border-slate-200 hover:border-[hsl(var(--gold))]/40 bg-slate-50 hover:bg-slate-100"
-                        }`}
-                      >
-                        <div
-                          className={`w-8 h-8 rounded-lg flex items-center justify-center border-2 shrink-0 transition-colors ${
-                            prefersCall
-                              ? "bg-[hsl(var(--gold))] border-[hsl(var(--gold))]"
-                              : "border-slate-300 bg-white"
-                          }`}
-                        >
-                          {prefersCall && <Check className="h-5 w-5 text-white" />}
-                        </div>
-                        <span className="text-xl font-medium text-[#1B2333]">
-                          J'accepte un court appel lors du lancement
-                        </span>
-                      </button>
+                      <p className="mt-3 text-slate-400 text-base italic ml-1">
+                        (Par SMS ou court appel de courtoisie)
+                      </p>
                     </div>
                   )}
                 </div>
@@ -295,8 +270,8 @@ export default function ListeAttente() {
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    disabled={loading || (phone.length >= 6 && !prefersSms && !prefersCall)}
-                    className="h-16 text-xl rounded-xl flex-[2] bg-[hsl(var(--gold))] hover:bg-[hsl(var(--gold-dark))] text-white font-bold shadow-md disabled:opacity-50 transition-all"
+                    disabled={loading || (phone.length >= 6 && !isOptedIn)}
+                    className="h-16 text-xl rounded-xl flex-[2] bg-[#1B2333] text-white hover:bg-[hsl(var(--gold))] hover:text-white font-bold shadow-md disabled:opacity-50 transition-all duration-300"
                   >
                     {loading ? "Envoi..." : "Valider mon accès VIP"}
                   </Button>
@@ -321,7 +296,6 @@ export default function ListeAttente() {
           </div>
         </div>
 
-        {/* LIEN CONNEXION EN BAS À DROITE DE L'IMAGE */}
         <div className="absolute bottom-10 right-10 z-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <p className="text-white/90 text-xl font-medium backdrop-blur-md bg-[#1B2333]/40 px-6 py-4 rounded-2xl border border-white/10 shadow-2xl">
             Déjà membre ?{" "}
