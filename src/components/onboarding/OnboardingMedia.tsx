@@ -350,7 +350,9 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <p className="font-bold leading-tight text-xl">
                           Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé
                         </p>
-                        <p className="opacity-80 underline text-xl text-primary font-medium">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
+                        <p className="opacity-80 underline text-xl text-primary font-medium">
+                          Offre promotionnelle jusqu’au 30 Septembre (35€)
+                        </p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -615,7 +617,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
                         Accompagnement personnalisé
                       </p>
-                      <p className="text-[hsl(var(--gold))] opacity-80 text-xl text-primary font-semibold">On vous filme en visio (35€)</p>
+                      <p className="text-[hsl(var(--gold))] opacity-80 text-lg">Nous vous filmons en visio (35€)</p>
                     </div>
                     <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                   </button>
