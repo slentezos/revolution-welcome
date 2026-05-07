@@ -253,6 +253,30 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     setAddOpen(true);
   };
 
+  const renderUndoBanner = (target: "primary" | "secondary") => {
+    if (!undoBanner || undoBanner.target !== target) return null;
+    return (
+      <div
+        role="status"
+        aria-live="polite"
+        className="mt-5 rounded-lg border border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 px-5 py-4 flex flex-wrap items-center gap-4 animate-in fade-in slide-in-from-top-1"
+      >
+        <span className="text-foreground text-lg leading-relaxed flex-1 min-w-[200px]">
+          {undoBanner.message}
+        </span>
+        <button
+          type="button"
+          onClick={handleUndo}
+          disabled={submitting}
+          className="inline-flex items-center gap-2 min-h-[48px] px-4 rounded-md text-lg font-semibold text-foreground underline underline-offset-4 decoration-[hsl(var(--gold))]/60 hover:text-[hsl(var(--gold))] hover:decoration-[hsl(var(--gold))] transition-colors disabled:opacity-50"
+        >
+          <Undo2 className="h-5 w-5" />
+          Annuler ({undoCountdownLabel})
+        </button>
+      </div>
+    );
+  };
+
   return (
     <section className="bg-secondary/40 py-16 md:py-24 border-t border-border/40">
       <div className="px-6 md:px-16 lg:px-20 xl:px-28 max-w-6xl mx-auto">
