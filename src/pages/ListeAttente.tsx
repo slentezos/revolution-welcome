@@ -190,7 +190,7 @@ export default function ListeAttente() {
                 <Button
                   onClick={handleStep1}
                   disabled={!email.includes("@") || loading}
-                  className="h-14 text-base rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90"
+                  className="h-14 rounded-xl bg-[#1B2333] text-white px-10 hover:bg-[#1B2333]/90 text-xl"
                 >
                   {loading ? "Vérification..." : "Continuer"}
                   {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
