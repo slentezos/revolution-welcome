@@ -280,7 +280,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     <section className="bg-slate-50 py-16 md:py-24 border-t border-slate-200">
       <div className="px-6 md:px-16 lg:px-20 xl:px-28 max-w-6xl mx-auto">
         <div className="mb-12">
-          <span className="font-medium tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 block text-lg">
+          <span className="font-medium tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 block text-xl">
             Géographie & Style de vie
           </span>
           <h3 className="font-heading text-3xl md:text-4xl text-[#1B2333] leading-tight font-bold mb-4">
