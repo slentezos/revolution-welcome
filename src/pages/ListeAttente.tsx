@@ -154,7 +154,7 @@ export default function ListeAttente() {
                 style={{ width: `${((step + 1) / 2) * 100}%` }}
               />
             </div>
-            <p className="text-slate-400 font-medium mt-2 text-lg">Étape {step + 1} sur 2</p>
+            <p className="text-slate-400 font-medium mt-2 text-xl">Étape {step + 1} sur 2</p>
           </div>
 
           <div className="flex-1">
@@ -223,7 +223,7 @@ export default function ListeAttente() {
 
                     <div className="mt-4 p-5 bg-slate-50 border border-slate-200 rounded-xl flex gap-4 items-start shadow-sm">
                       <ShieldCheck className="h-6 w-6 text-[hsl(var(--gold-dark))] shrink-0 mt-0.5" />
-                      <p className="text-slate-600 text-lg leading-relaxed">
+                      <p className="text-slate-600 leading-relaxed text-xl">
                         <strong className="font-bold text-[#1B2333]">Engagement de confidentialité :</strong> Votre
                         numéro ne sera jamais utilisé pour du démarchage ni cédé à des tiers. Il sert exclusivement à
                         vous prévenir de l'ouverture du club.
@@ -253,7 +253,7 @@ export default function ListeAttente() {
                           Je souhaite être prévenu(e) en priorité lors du lancement
                         </span>
                       </button>
-                      <p className="mt-3 text-slate-400 text-base italic ml-1">
+                      <p className="mt-3 text-slate-400 italic ml-1 text-xl">
                         (Par SMS ou court appel de courtoisie)
                       </p>
                     </div>
