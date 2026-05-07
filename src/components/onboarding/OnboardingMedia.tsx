@@ -260,11 +260,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold text-xl leading-tight">
+                        <p className="font-bold leading-tight text-2xl">
                           {" "}
                           Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé{" "}
                         </p>
-                        <p className="opacity-80 underline text-xl">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
+                        <p className="opacity-80 underline text-xl text-primary font-bold">Offre promotionnelle jusqu’au 30 Septembre (35€)</p>
                       </div>
                       <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                     </button>
@@ -316,7 +316,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                         <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
                           <Camera className="h-6 w-6 text-muted-foreground" />
                         </div>
-                        <span className="text-lg font-bold text-[#1B2333]">+ {slot.label}</span>
+                        <span className="font-bold text-[#1B2333] text-xl">+ {slot.label}</span>
                       </div>
                     )}
                   </div>
