@@ -66,7 +66,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
