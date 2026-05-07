@@ -505,14 +505,14 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     <section className="bg-slate-50 py-16 md:py-24 border-t border-slate-200">
       <div className="px-6 md:px-16 lg:px-20 xl:px-28 max-w-6xl mx-auto">
         <div className="mb-12">
-          <span className="font-medium tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 block text-xl">
+          <span className="font-medium tracking-[0.3em] uppercase text-[hsl(var(--gold))] mb-3 block text-2xl">
             Géographie & Style de vie
           </span>
           <h3 className="font-heading text-3xl md:text-4xl text-[#1B2333] leading-tight font-bold mb-4">
             Mes Lieux de Vie
           </h3>
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-6" />
-          <p className="text-slate-500 leading-relaxed max-w-2xl font-medium text-xl">
+          <p className="text-slate-500 leading-relaxed max-w-2xl font-medium text-2xl">
             Votre résidence principale définit votre zone de rencontre. Partagez également vos autres destinations
             habituelles pour enrichir votre profil.
           </p>
@@ -527,7 +527,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
             </div>
             <div className="relative z-10 flex flex-col h-full">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 font-bold uppercase tracking-widest mb-8 text-xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 font-bold uppercase tracking-widest mb-8 text-2xl">
                   <Lock className="w-4 h-4" /> Résidence Principale
                 </div>
                 <h4 className="font-heading text-3xl font-bold text-[#1B2333] mb-2">
@@ -574,7 +574,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               <Info className="h-8 w-8 text-[#1B2333]" />
             </div>
             <div>
-              <h4 className="text-[#1B2333] font-bold mb-2 text-2xl">Comment fonctionne la localisation ?</h4>
+              <h4 className="text-[#1B2333] font-bold mb-2 text-3xl">Comment fonctionne la localisation ?</h4>
               <p className="text-slate-500 leading-relaxed text-xl">
                 Découvrez pourquoi nous séparons votre adresse principale de vos destinations de cœur, et comment cela
                 impacte vos futures rencontres.
