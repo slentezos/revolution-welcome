@@ -699,7 +699,7 @@ export default function Messages() {
                       <div className="bg-white p-6 rounded-[20px] border border-amber-100/40 shadow-sm flex flex-col gap-4">
                         <div className="flex items-center gap-3 text-[hsl(var(--gold-dark))]">
                           <TrendingUp className="h-6 w-6" />
-                          <span className="font-bold uppercase tracking-wider text-sm">Activité du Cercle</span>
+                          <span className="font-bold uppercase tracking-wider text-xl">Activité du Cercle</span>
                         </div>
                         <p className="text-[#1B2333] text-xl font-medium leading-snug">
                           Aujourd'hui,{" "}
