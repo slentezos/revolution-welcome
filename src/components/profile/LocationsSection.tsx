@@ -512,7 +512,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
             Mes Lieux de Vie
           </h3>
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))] to-transparent mb-6" />
-          <p className="text-slate-500 leading-relaxed max-w-2xl font-medium text-xl">
+          <p className="text-slate-500 leading-relaxed max-w-2xl font-medium text-2xl">
             Votre résidence principale définit votre zone de rencontre. Partagez également vos autres destinations
             habituelles pour enrichir votre profil.
           </p>
