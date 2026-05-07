@@ -354,7 +354,7 @@ export default function ProfileSubscriptionTab({
                   <span className="font-heading text-4xl md:text-5xl text-foreground">120€</span>
                   <span className="text-muted-foreground text-xl">/ 3 mois</span>
                 </div>
-                <p className="text-muted-foreground text-lg mb-4">Soit 40€/mois — économisez 30€.</p>
+                <p className="text-muted-foreground text-xl mb-4">Soit 40€/mois — économisez 30€.</p>
                 {selectedPlan === "trimestrielle" && (
                   <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg">
                     <Check className="h-5 w-5" /> Sélectionnée
