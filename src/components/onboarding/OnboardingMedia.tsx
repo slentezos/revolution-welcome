@@ -11,6 +11,7 @@ import {
   Sun,
   Heart,
   Volume2,
+  VolumeX,
   Headphones,
   ArrowRight,
   ShieldCheck,
@@ -64,9 +65,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [confirmedAge, setConfirmedAge] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+
+  // États Vidéo
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -130,13 +134,28 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
   const handleSlotClick = (slotId: string) => {
     setActiveSlotId(slotId);
-    fileInputRef.current?.click();
+    // Timeout pour laisser le DOM appliquer le bon "accept" sur l'input avant le clic
+    setTimeout(() => fileInputRef.current?.click(), 10);
   };
 
   const handleRemoveSlot = (slotId: string) => {
     const initial = getInitialSlots().find((s) => s.id === slotId);
     if (initial) {
       setSlots((prev) => prev.map((s) => (s.id === slotId ? initial : s)));
+      if (slotId === "video") setIsPlaying(false);
+    }
+  };
+
+  // Logique lecture vidéo
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play();
+      setIsPlaying(true);
     }
   };
 
@@ -149,14 +168,18 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     // VALIDATION VIDEO STRICTE (Max 50 Mo)
     if (slot.type === "video") {
       if (!file.type.startsWith("video/")) {
-        toast({ title: "Action impossible", description: "Veuillez sélectionner un fichier vidéo.", variant: "destructive" });
+        toast({
+          title: "Action impossible",
+          description: "Veuillez sélectionner un fichier vidéo.",
+          variant: "destructive",
+        });
         return;
       }
-      if (file.size > 50 * 1024 * 1024) { // 50 Mo
+      if (file.size > 50 * 1024 * 1024) {
         toast({ title: "Vidéo trop lourde", description: "La taille maximale est de 50 Mo.", variant: "destructive" });
         return;
       }
-      
+
       const video = document.createElement("video");
       video.preload = "metadata";
       const objectUrl = URL.createObjectURL(file);
@@ -164,7 +187,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       const isValid = await new Promise<boolean>((resolve) => {
         video.onloadedmetadata = () => {
           URL.revokeObjectURL(objectUrl);
-          resolve(video.duration <= 95); // 1mn30 + 5s marge technique
+          resolve(video.duration <= 95);
         };
       });
       if (!isValid) {
@@ -175,7 +198,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
     // VALIDATION PHOTO STRICTE (Max 10 Mo, Pas de GIF)
     else {
       if (!file.type.startsWith("image/") || file.type === "image/gif") {
-        toast({ title: "Action impossible", description: "Veuillez choisir une photo valide (pas de vidéo ni de GIF).", variant: "destructive" });
+        toast({
+          title: "Action impossible",
+          description: "Veuillez choisir une photo valide (pas de vidéo ni de GIF).",
+          variant: "destructive",
+        });
         return;
       }
       if (file.size > MAX_PHOTO_SIZE) {
@@ -195,12 +222,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         return;
       }
     }
-
-    const preview = URL.createObjectURL(file);
-    setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
-    if (fileInputRef.current) fileInputRef.current.value = "";
-    setActiveSlotId(null);
-  };
 
     const preview = URL.createObjectURL(file);
     setSlots((prev) => prev.map((s) => (s.id === activeSlotId ? { ...s, file, preview, uploaded: false } : s)));
@@ -274,21 +295,40 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 onClick={() => !videoSlot?.preview && handleSlotClick(videoSlot?.id)}
               >
                 {videoSlot?.preview ? (
-                  <>
-                    <video src={videoSlot.preview} className="w-full h-full object-cover" muted />
-                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                      <Play className="h-20 w-20 text-white drop-shadow-2xl" />
-                    </div>
+                  <div className="relative w-full h-full" onClick={togglePlay}>
+                    <video
+                      ref={videoRef}
+                      src={videoSlot.preview}
+                      className="w-full h-full object-cover"
+                      muted={isMuted}
+                      playsInline
+                      onEnded={() => setIsPlaying(false)}
+                    />
+                    {!isPlaying && (
+                      <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+                        <Play className="h-20 w-20 text-white drop-shadow-2xl" />
+                      </div>
+                    )}
+                    {/* BOUTON SON */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsMuted(!isMuted);
+                      }}
+                      className="absolute bottom-6 left-6 p-4 bg-black/40 backdrop-blur-md text-white rounded-2xl hover:bg-black/60 transition-all z-10"
+                    >
+                      {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+                    </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleRemoveSlot(videoSlot.id);
                       }}
-                      className="absolute top-6 right-6 p-4 bg-red-500 text-white rounded-full"
+                      className="absolute top-6 right-6 p-4 bg-red-500 text-white rounded-full z-10"
                     >
                       <X className="h-6 w-6" />
                     </button>
-                  </>
+                  </div>
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center space-y-8 p-6 text-center">
                     <div className="flex flex-col items-center">
@@ -346,6 +386,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                             decoding="async"
                             src={slot.preview}
                             alt={slot.label}
+                            // object-cover assure que la photo remplit la boite SANS déformer la div parente
                             className="w-full h-full object-cover"
                           />
                           <button
@@ -371,7 +412,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 ))}
               </div>
 
-              {/* INFORMATION FORMAT ET TAILLE - CAC40 Mindset: Direct and Clear */}
+              {/* INFORMATION FORMAT ET TAILLE */}
               <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl">
                 <Info className="h-5 w-5 text-slate-400 shrink-0" />
                 <p className="text-slate-500 text-lg leading-snug">
@@ -576,7 +617,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       </p>
                       <p className="text-[hsl(var(--gold))] opacity-80 text-lg">On vous filme en visio (35€)</p>
                     </div>
-                    <ArrowRight className="h-6 w-6 shrink-0 text-[hsl(var(--gold))] group-hover/btn:translate-x-1 transition-transform" />
+                    <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
@@ -615,7 +656,9 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
         </DialogContent>
       </Dialog>
 
+      {/* INPUT TECHNIQUE : KEY POUR FORCER LE RAFRAICHISSEMENT DU TYPE */}
       <input
+        key={activeSlotId}
         ref={fileInputRef}
         type="file"
         className="hidden"
