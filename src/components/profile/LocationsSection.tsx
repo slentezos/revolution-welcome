@@ -206,7 +206,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
           <div className="bg-white border-2 border-slate-200 rounded-[24px] p-8 shadow-sm flex flex-col">
             <div className="mb-8">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold-dark))] font-bold uppercase tracking-widest mb-6 text-lg">
-                <Globe className="w-4 h-4" /> Lieux réguliers
+                <Globe className="w-4 h-4" /> AUTRES DESTINATIONS HABITUELLES
               </div>
               <p className="text-slate-500 text-xl leading-relaxed">
                 Vous voyagez souvent ? Une maison de campagne, un pied-à-terre en Europe ou à l'étranger ? Ajoutez
