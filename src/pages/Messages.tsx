@@ -670,7 +670,7 @@ export default function Messages() {
                       </div>
                       <div className="flex-1 min-w-0 pr-4">
                         <h3 className="font-heading font-bold text-[#1B2333] leading-tight text-2xl lg:text-3xl truncate">
-                          {selectedChat.name}, {selectedChat.age}
+                          {selectedChat.name}
                         </h3>
                         <p className="font-medium text-base lg:text-lg mt-0.5" style={{ color: "hsl(142, 71%, 35%)" }}>
                           En ligne
