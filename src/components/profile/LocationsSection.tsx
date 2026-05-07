@@ -60,7 +60,11 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
   const [submitting, setSubmitting] = useState(false);
 
   const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [undoBanner, setUndoBanner] = useState<{ snapshot: Snapshot; message: string } | null>(null);
+  const [undoBanner, setUndoBanner] = useState<
+    | { snapshot: Snapshot; message: string; target: "primary" | "secondary"; expiresAt: number }
+    | null
+  >(null);
+  const [undoNow, setUndoNow] = useState(() => Date.now());
 
   // Tick every minute to refresh cooldown displays
   useEffect(() => {
@@ -68,11 +72,27 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     return () => clearInterval(t);
   }, []);
 
+  // Tick every second while undo banner is active for the countdown
+  useEffect(() => {
+    if (!undoBanner) return;
+    setUndoNow(Date.now());
+    const t = setInterval(() => setUndoNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, [undoBanner]);
+
   useEffect(() => {
     return () => {
       if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
     };
   }, []);
+
+  const undoRemainingMs = undoBanner ? Math.max(0, undoBanner.expiresAt - undoNow) : 0;
+  const undoCountdownLabel = (() => {
+    const total = Math.ceil(undoRemainingMs / 1000);
+    const m = Math.floor(total / 60).toString().padStart(2, "0");
+    const s = (total % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  })();
 
   const lastSecondaryMs = profile.last_secondary_update ? new Date(profile.last_secondary_update).getTime() : null;
   const secondaryLockMsRemaining = lastSecondaryMs ? Math.max(0, lastSecondaryMs + NINETY_DAYS_MS - now) : 0;
@@ -97,13 +117,23 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     [profile],
   );
 
-  const showUndo = (snap: Snapshot, message: string) => {
+  const showUndo = (
+    snap: Snapshot,
+    message: string,
+    target: "primary" | "secondary",
+  ) => {
     if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
-    setUndoBanner({ snapshot: snap, message });
+    const expiresAt = Date.now() + 5 * 60 * 1000;
+    setUndoBanner({ snapshot: snap, message, target, expiresAt });
     undoTimerRef.current = setTimeout(() => setUndoBanner(null), 5 * 60 * 1000);
   };
 
-  const persist = async (patch: Partial<ProfileLocationData>, successMessage: string, prevSnap: Snapshot) => {
+  const persist = async (
+    patch: Partial<ProfileLocationData>,
+    successMessage: string,
+    prevSnap: Snapshot,
+    target: "primary" | "secondary",
+  ) => {
     setSubmitting(true);
     const { data, error } = await supabase
       .from("profiles")
@@ -117,7 +147,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       return false;
     }
     onProfileUpdated(data as ProfileLocationData);
-    showUndo(prevSnap, successMessage);
+    showUndo(prevSnap, successMessage, target);
     return true;
   };
 
@@ -150,6 +180,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       },
       editMode ? "Résidence secondaire mise à jour." : "Résidence secondaire ajoutée.",
       snapshot,
+      "secondary",
     );
     if (ok) {
       setAddOpen(false);
@@ -170,6 +201,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       },
       "Résidence secondaire supprimée.",
       snapshot,
+      "secondary",
     );
     if (ok) setDeleteOpen(false);
   };
@@ -184,6 +216,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       },
       `Présence active : ${switchTarget === "secondary" ? profile.secondary_city_name : profile.city_name}.`,
       snapshot,
+      switchTarget,
     );
     if (ok) setSwitchTarget(null);
   };
@@ -218,6 +251,30 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
     setEditMode(false);
     setPostalInput("");
     setAddOpen(true);
+  };
+
+  const renderUndoBanner = (target: "primary" | "secondary") => {
+    if (!undoBanner || undoBanner.target !== target) return null;
+    return (
+      <div
+        role="status"
+        aria-live="polite"
+        className="mt-5 rounded-lg border border-[hsl(var(--gold))]/40 bg-[hsl(var(--gold))]/5 px-5 py-4 flex flex-wrap items-center gap-4 animate-in fade-in slide-in-from-top-1"
+      >
+        <span className="text-foreground text-lg leading-relaxed flex-1 min-w-[200px]">
+          {undoBanner.message}
+        </span>
+        <button
+          type="button"
+          onClick={handleUndo}
+          disabled={submitting}
+          className="inline-flex items-center gap-2 min-h-[48px] px-4 rounded-md text-lg font-semibold text-foreground underline underline-offset-4 decoration-[hsl(var(--gold))]/60 hover:text-[hsl(var(--gold))] hover:decoration-[hsl(var(--gold))] transition-colors disabled:opacity-50"
+        >
+          <Undo2 className="h-5 w-5" />
+          Annuler ({undoCountdownLabel})
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -303,6 +360,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
             <p className="text-muted-foreground mt-5 leading-relaxed text-xl">
               Votre adresse de référence reste stable pour garantir l'authenticité de votre bassin de rencontre.
             </p>
+            {renderUndoBanner("primary")}
           </div>
 
           {/* Carte 2 : Secondaire */}
@@ -368,6 +426,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                 </div>
               </>
             )}
+            {renderUndoBanner("secondary")}
           </div>
         </div>
       </div>
@@ -470,20 +529,6 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
         </DialogContent>
       </Dialog>
 
-      {/* Toast persistant d'annulation */}
-      {undoBanner && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#1B2333] text-white shadow-[var(--shadow-luxury)] rounded-lg px-6 py-4 flex items-center gap-4 max-w-md w-[calc(100%-2rem)]">
-          <span className="text-lg flex-1">{undoBanner.message}</span>
-          <Button
-            onClick={handleUndo}
-            variant="outline"
-            className="min-h-[48px] text-base border-[hsl(var(--gold))] text-[hsl(var(--gold))] bg-transparent hover:bg-[hsl(var(--gold))]/10"
-          >
-            <Undo2 className="h-4 w-4 mr-2" />
-            Annuler
-          </Button>
-        </div>
-      )}
     </section>
   );
 }
