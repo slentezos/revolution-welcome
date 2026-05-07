@@ -8,16 +8,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, onChange, ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      // On n'applique pas de formatage sur les emails et mots de passe
       if (type !== "email" && type !== "password" && e.target.value?.length > 0) {
         const input = e.target;
         const start = input.selectionStart;
         const end = input.selectionEnd;
         const currentValue = input.value;
-        const capitalizedValue = currentValue.charAt(0).toUpperCase() + currentValue.slice(1);
 
-        if (currentValue !== capitalizedValue) {
-          input.value = capitalizedValue;
-          input.setSelectionRange(start, end);
+        // Formate : Majuscule au début de chaque mot (après espace ou tiret), le reste en minuscules.
+        // Exemple: "jean-pierre" -> "Jean-Pierre", "LOUIS XAVIER" -> "Louis Xavier"
+        const formattedValue = currentValue.toLowerCase().replace(/(?:^|[\s-])\p{L}/gu, (match) => match.toUpperCase());
+
+        if (currentValue !== formattedValue) {
+          input.value = formattedValue;
+
+          // Prévention du saut de curseur dans les composants contrôlés React
+          window.requestAnimationFrame(() => {
+            if (start !== null && end !== null) {
+              input.setSelectionRange(start, end);
+            }
+          });
         }
       }
       if (onChange) {
