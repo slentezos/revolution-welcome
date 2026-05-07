@@ -116,7 +116,7 @@ export default function Profil() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-muted-foreground text-lg">Chargement...</div>
+        <div className="animate-pulse text-muted-foreground text-xl">Chargement...</div>
       </div>);
 
   }

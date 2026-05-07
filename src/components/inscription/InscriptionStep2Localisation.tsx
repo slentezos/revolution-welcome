@@ -43,7 +43,7 @@ export default function InscriptionStep2Localisation({ formData, setFormData, on
     <div className="space-y-8">
       <div className="text-center mb-10">
         <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">Où habitez-vous ?</h1>
-        <p className="text-muted-foreground text-lg">
+        <p className="text-muted-foreground text-xl">
           Nous avons besoin de votre code postal pour vous proposer des profils proches de chez vous
         </p>
       </div>

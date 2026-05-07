@@ -151,7 +151,7 @@ export default function Inscription() {
               Cliquez sur le lien qu'il contient pour activer votre compte et accéder à votre espace personnel
               (questionnaires, photos et vidéo).
             </p>
-            <p className="text-muted-foreground text-lg mb-8">
+            <p className="text-muted-foreground text-xl mb-8">
               Pensez à vérifier vos courriers indésirables si vous ne le voyez pas.
             </p>
             <Link

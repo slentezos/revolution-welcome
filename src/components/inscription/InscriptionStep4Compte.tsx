@@ -51,7 +51,7 @@ export default function InscriptionStep4Compte({ formData, setFormData, onSubmit
         <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-3">
           Créez votre compte
         </h1>
-        <p className="text-muted-foreground text-lg">
+        <p className="text-muted-foreground text-xl">
           Dernière étape avant de rejoindre la communauté
         </p>
       </div>

@@ -319,7 +319,7 @@ export default function ProfileSubscriptionTab({
                     Votre offre actuelle
                   </p>
                   <p className="font-heading text-2xl md:text-3xl text-foreground leading-tight">{planLabel}</p>
-                  <p className="text-muted-foreground text-lg mt-2">
+                  <p className="text-muted-foreground text-xl mt-2">
                     {hasFreeTrial ? "Période offerte jusqu'au" : "Expire le"}{" "}
                     <span className="text-foreground font-semibold">{formatFrenchDate(expiryDate)}</span>
                   </p>
@@ -354,7 +354,7 @@ export default function ProfileSubscriptionTab({
                   <span className="font-heading text-4xl md:text-5xl text-foreground">120€</span>
                   <span className="text-muted-foreground text-xl">/ 3 mois</span>
                 </div>
-                <p className="text-muted-foreground text-lg mb-4">Soit 40€/mois — économisez 30€.</p>
+                <p className="text-muted-foreground text-xl mb-4">Soit 40€/mois — économisez 30€.</p>
                 {selectedPlan === "trimestrielle" && (
                   <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg">
                     <Check className="h-5 w-5" /> Sélectionnée
@@ -379,7 +379,7 @@ export default function ProfileSubscriptionTab({
                   <span className="font-heading text-4xl md:text-5xl text-foreground">50€</span>
                   <span className="text-muted-foreground text-xl">/ mois</span>
                 </div>
-                <p className="text-muted-foreground text-lg mb-4">Liberté totale, mois par mois.</p>
+                <p className="text-muted-foreground text-xl mb-4">Liberté totale, mois par mois.</p>
                 {selectedPlan === "mensuelle" && (
                   <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg">
                     <Check className="h-5 w-5" /> Sélectionnée
@@ -411,7 +411,7 @@ export default function ProfileSubscriptionTab({
                 <span className="font-heading text-3xl md:text-4xl text-foreground">+12€</span>
                 <span className="text-muted-foreground text-xl">/ mois</span>
               </div>
-              <p className="text-muted-foreground text-lg">Mode Invisible, accusés de lecture, alertes Conciergerie.</p>
+              <p className="text-muted-foreground text-xl">Mode Invisible, accusés de lecture, alertes Conciergerie.</p>
             </button>
 
             {/* Reassurance */}

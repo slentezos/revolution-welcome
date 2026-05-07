@@ -285,7 +285,7 @@ export default function ContactMemberContent() {
             <Send className="h-8 w-8 text-primary" />
           </div>
           <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">Message transmis</h2>
-          <p className="text-muted-foreground text-lg mb-8">
+          <p className="text-muted-foreground text-xl mb-8">
             Notre équipe vous répondra personnellement sous 24 heures ouvrées.
           </p>
           <Button asChild className="btn-primary">

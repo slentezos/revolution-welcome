@@ -62,7 +62,7 @@ export default function DateInput({ value, onChange, className, disabled = false
         <div className={cn("grid grid-cols-3 gap-3 md:gap-4", disabled && "opacity-70")}>
           {/* --- JOUR --- */}
           <div className="space-y-2">
-            <Label className="text-lg text-muted-foreground ml-1">Jour</Label>
+            <Label className="text-xl text-muted-foreground ml-1">Jour</Label>
             <Select value={day} onValueChange={(v) => update(v, month, year)} disabled={disabled}>
               <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
                 <SelectValue placeholder="JJ" />
@@ -79,7 +79,7 @@ export default function DateInput({ value, onChange, className, disabled = false
 
           {/* --- MOIS (NOMS EN FRANÇAIS) --- */}
           <div className="space-y-2">
-            <Label className="text-lg text-muted-foreground ml-1">Mois</Label>
+            <Label className="text-xl text-muted-foreground ml-1">Mois</Label>
             <Select value={month} onValueChange={(v) => update(day, v, year)} disabled={disabled}>
               <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
                 <SelectValue placeholder="Mois" />
@@ -96,7 +96,7 @@ export default function DateInput({ value, onChange, className, disabled = false
 
           {/* --- ANNÉE --- */}
           <div className="space-y-2">
-            <Label className="text-lg text-muted-foreground ml-1">Année</Label>
+            <Label className="text-xl text-muted-foreground ml-1">Année</Label>
             <Select value={year} onValueChange={(v) => update(day, month, v)} disabled={disabled}>
               <SelectTrigger className="h-14 text-lg rounded-xl border-[#E5E0D8] bg-white shadow-none focus:ring-0 focus:border-[hsl(var(--gold))] transition-colors">
                 <SelectValue placeholder="AAAA" />

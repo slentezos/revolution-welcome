@@ -315,7 +315,7 @@ export default function ProfileGiftTab() {
                           <p className="font-heading text-xl md:text-2xl font-semibold text-foreground">
                             {plan.label}
                           </p>
-                          <p className="text-muted-foreground text-lg mt-1">{plan.duration}</p>
+                          <p className="text-muted-foreground text-xl mt-1">{plan.duration}</p>
                           <p className="text-muted-foreground text-base mt-1">{plan.note}</p>
                           {active && (
                             <div className="flex items-center gap-2 text-[hsl(var(--gold))] font-medium text-lg mt-3">
@@ -349,7 +349,7 @@ export default function ProfileGiftTab() {
                           Ajouter le Carré VIP
                         </p>
                       </div>
-                      <p className="text-muted-foreground text-lg">
+                      <p className="text-muted-foreground text-xl">
                         Mode Invisible, accusés de lecture, alertes Conciergerie.
                       </p>
                       {addVip && (
@@ -359,7 +359,7 @@ export default function ProfileGiftTab() {
                       )}
                     </div>
                     <span className="font-heading text-2xl md:text-3xl font-semibold text-foreground shrink-0">
-                      +12€<span className="text-muted-foreground text-lg font-normal"> /mois</span>
+                      +12€<span className="text-muted-foreground text-xl font-normal"> /mois</span>
                     </span>
                   </div>
                 </button>

@@ -67,7 +67,7 @@ export default function MotDePasseOublie() {
             <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
               Vérifiez votre email
             </h1>
-            <p className="text-muted-foreground text-lg mb-8">
+            <p className="text-muted-foreground text-xl mb-8">
               Nous avons envoyé un lien de réinitialisation à <strong>{email}</strong>.
               Cliquez sur le lien pour créer un nouveau mot de passe.
             </p>
@@ -128,7 +128,7 @@ export default function MotDePasseOublie() {
           <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-2">
             Mot de passe oublié ?
           </h1>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-8 text-xl">
             Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.
           </p>
 
