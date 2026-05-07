@@ -382,7 +382,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
       >
         <DialogContent className="max-w-md p-0 overflow-hidden bg-white border-0 rounded-[24px]">
           <div className="bg-[#1B2333] px-8 py-6">
-            <DialogTitle className="font-heading text-2xl text-white font-bold">Une destination régulière</DialogTitle>
+            <DialogTitle className="font-heading text-3xl text-white font-bold">Une destination régulière</DialogTitle>
           </div>
           <div className="p-8">
             {/* Toggle France / International */}
@@ -408,7 +408,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
                   setPostalInput("");
                   setValidatedLocation(null);
                 }}
-                className={`h-14 rounded-xl text-lg font-bold border-2 transition-all ${
+                className={`h-14 rounded-xl text-2lg font-bold border-2 transition-all ${
                   destType === "international"
                     ? "bg-[#1B2333] text-white border-[#1B2333]"
                     : "bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-300"
@@ -422,7 +422,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
               {destType === "france" ? (
                 <>
                   <div className="space-y-3">
-                    <Label className="text-xl font-bold text-[#1B2333]">Code postal *</Label>
+                    <Label className="text-2xl font-bold text-[#1B2333]">Code postal *</Label>
                     <Input
                       id="secondary_postal"
                       inputMode="numeric"
