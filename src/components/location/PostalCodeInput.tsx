@@ -58,7 +58,7 @@ export default function PostalCodeInput({ className = "", variant = "hero" }: Po
           placeholder="Entrer votre code postal"
           value={postalCode}
           onChange={(e) => handleChange(e.target.value)}
-          className="flex-1 h-14 px-5 outline-none tracking-wider font-medium text-primary-foreground border-0 bg-[#222a39] text-2xl"
+          className="flex-1 h-14 px-5 outline-none tracking-wider font-medium border-0 bg-[#222a39] text-2xl text-[#e0e0e0]"
         />
 
         <button
