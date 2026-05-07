@@ -116,7 +116,7 @@ export default function VisualComfortToggle() {
                     {option.label}
                   </span>
                   {option.hint &&
-                <span className="text-[11px] text-slate-400 ml-auto tracking-wide">{option.hint}</span>
+                <span className="text-slate-400 ml-auto tracking-wide text-xl">{option.hint}</span>
                 }
                   {isActive && <span className="ml-auto w-2 h-2 rounded-full bg-amber-500" />}
                 </button>);
