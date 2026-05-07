@@ -5,21 +5,52 @@ import { cn } from "@/lib/utils";
 const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, type, onChange, ...props }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (type !== "email" && type !== "password" && e.target.value?.length > 0) {
+      // Pas de formatage pour les emails, les mots de passe ou les champs tel/number
+      if (
+        type !== "email" &&
+        type !== "password" &&
+        type !== "tel" &&
+        type !== "number" &&
+        e.target.value?.length > 0
+      ) {
         const input = e.target;
         const start = input.selectionStart;
         const end = input.selectionEnd;
         const rawValue = input.value;
 
-        // RÈGLE ÉLITE :
-        // 1. On passe tout en minuscules (No other capital letters allowed)
-        // 2. On met en majuscule la première lettre de chaque mot (Espace ou Tiret)
-        // Résultat : "LOUIS" -> "Louis", "louis xavier" -> "Louis Xavier"
-        const formattedValue = rawValue.toLowerCase().replace(/(?:^|[\s-])\p{L}/gu, (match) => match.toUpperCase());
+        // LOGIQUE DE CAPITALISATION ÉLITE
+        // Sépare par espaces et tirets tout en gardant les séparateurs dans le tableau
+        const parts = rawValue.split(/(\s+|-)/);
+        let wordCount = 0;
+
+        const formattedParts = parts.map((part) => {
+          // Si c'est un séparateur (espace ou tiret), on le garde tel quel
+          if (/^(\s+|-)$/.test(part)) return part;
+          if (!part) return part;
+
+          wordCount++;
+
+          if (wordCount === 1) {
+            // Mot 1 : Capitalisé (Ex: "Belle")
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+          } else if (wordCount === 2) {
+            // Mot 2 : TOUT en minuscules (Ex: "du", "xavier")
+            return part.toLowerCase();
+          } else {
+            // Mot 3 et plus : Capitalisé (Ex: "Seigneur")
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+          }
+        });
+
+        const formattedValue = formattedParts.join("");
 
         if (rawValue !== formattedValue) {
+          // CRUCIAL POUR LA SAUVEGARDE :
+          // On force la valeur formatée dans l'input et dans l'événement avant de l'envoyer au parent
           input.value = formattedValue;
-          // Protection du curseur pour éviter qu'il saute à la fin
+          e.target.value = formattedValue;
+
+          // Empêche le curseur de sauter à la fin pendant la saisie
           window.requestAnimationFrame(() => {
             if (start !== null && end !== null) {
               input.setSelectionRange(start, end);
@@ -28,7 +59,7 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
         }
       }
 
-      // On propage l'événement original
+      // On propage l'événement (qui porte maintenant la valeur propre) au parent
       if (onChange) onChange(e);
     };
 
@@ -37,9 +68,8 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
         type={type}
         onChange={handleChange}
         className={cn(
-          // text-slate-950 : Contraste maximal pour les 60+
-          // placeholder:text-slate-500 : Aide à la lecture renforcée
-          "flex h-14 w-full rounded-xl border border-input bg-background px-4 py-2 text-xl text-slate-950 ring-offset-background file:border-0 file:bg-transparent file:text-xl file:font-medium file:text-foreground placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-xl transition-colors",
+          // Design Prestige : h-14, rounded-xl, texte Noir Profond (slate-950)
+          "flex h-14 w-full rounded-xl border border-input bg-background px-5 py-2 text-xl text-slate-950 ring-offset-background file:border-0 file:bg-transparent file:text-xl file:font-medium file:text-foreground placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-xl transition-all shadow-sm",
           className,
         )}
         ref={ref}
@@ -54,7 +84,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttribut
   ({ className, ...props }, ref) => {
     const [show, setShow] = React.useState(false);
     return (
-      <div className="relative group">
+      <div className="relative group w-full">
         <Input type={show ? "text" : "password"} className={cn("pr-14", className)} ref={ref} {...props} />
         <button
           type="button"
