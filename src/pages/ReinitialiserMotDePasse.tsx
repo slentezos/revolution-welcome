@@ -109,7 +109,7 @@ export default function ReinitialiserMotDePasse() {
             <h1 className="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
               Mot de passe modifié !
             </h1>
-            <p className="text-muted-foreground text-lg mb-8">
+            <p className="text-muted-foreground text-xl mb-8">
               Votre nouveau mot de passe a été enregistré avec succès.
             </p>
 
