@@ -181,7 +181,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
             </div>
             <div className="relative z-10 flex flex-col h-full">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-sm font-bold uppercase tracking-widest mb-8">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 font-bold uppercase tracking-widest mb-8 text-xl">
                   <Lock className="w-4 h-4" /> Résidence Principale
                 </div>
                 <h4 className="font-heading text-3xl font-bold text-[#1B2333] mb-2">
@@ -205,7 +205,7 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
           {/* Carte 2 : Destinations Habituelles (Europe / International) */}
           <div className="bg-white border-2 border-slate-200 rounded-[24px] p-8 shadow-sm flex flex-col">
             <div className="mb-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold-dark))] text-sm font-bold uppercase tracking-widest mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold-dark))] font-bold uppercase tracking-widest mb-6 text-lg">
                 <Globe className="w-4 h-4" /> Lieux réguliers
               </div>
               <p className="text-slate-500 text-xl leading-relaxed">
