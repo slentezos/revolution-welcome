@@ -535,7 +535,7 @@ export default function Messages() {
     <Layout>
       <div className="h-[calc(100vh-64px)] bg-secondary overflow-hidden flex flex-col">
         {/* RETOUR À MAX-W-6XL : Largeur idéale pour le confort visuel senior */}
-        <div className="max-w-6xl mx-auto w-full px-4 md:px-8 py-6 flex-1 overflow-hidden">
+        <div className="max-w-6xl mx-auto w-full px-4 py-6 flex-1 overflow-hidden md:px-0">
           <div className="bg-white rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-amber-50/50 overflow-hidden flex h-full">
             {/* ===== PRIVATE LOUNGE SIDEBAR ===== */}
             <div
