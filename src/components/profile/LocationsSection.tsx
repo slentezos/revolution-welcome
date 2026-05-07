@@ -529,20 +529,6 @@ export default function LocationsSection({ profile, onProfileUpdated }: Location
         </DialogContent>
       </Dialog>
 
-      {/* Toast persistant d'annulation */}
-      {undoBanner && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#1B2333] text-white shadow-[var(--shadow-luxury)] rounded-lg px-6 py-4 flex items-center gap-4 max-w-md w-[calc(100%-2rem)]">
-          <span className="text-lg flex-1">{undoBanner.message}</span>
-          <Button
-            onClick={handleUndo}
-            variant="outline"
-            className="min-h-[48px] text-base border-[hsl(var(--gold))] text-[hsl(var(--gold))] bg-transparent hover:bg-[hsl(var(--gold))]/10"
-          >
-            <Undo2 className="h-4 w-4 mr-2" />
-            Annuler
-          </Button>
-        </div>
-      )}
     </section>
   );
 }
