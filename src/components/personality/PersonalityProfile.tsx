@@ -298,7 +298,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
       <section className="bg-[hsl(var(--cream))]">
         <div className="max-w-2xl mx-auto px-6 py-16 md:py-24 text-center">
           <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto mb-10" />
-          <p className="font-heading text-2xl md:text-3xl text-foreground mb-10">
+          <p className="font-heading text-2xl md:text-3xl text-foreground mb-10 font-sans">
             Prêt·e à trouver votre partenaire idéal·e ?
           </p>
           <Button onClick={onContinue} className="px-12 py-6 text-lg h-auto rounded-xl">
