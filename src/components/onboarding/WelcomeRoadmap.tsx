@@ -252,7 +252,7 @@ export default function WelcomeRoadmap({
                   })()}
                 </div>
                 <div>
-                  <span className="text-gold font-bold uppercase tracking-[0.2em] text-sm">Étape 0{activeStep}</span>
+                  <span className="text-gold font-bold uppercase tracking-[0.2em] text-2xl">Étape 0{activeStep}</span>
                   <h2 className="font-heading text-4xl sm:text-5xl text-foreground">{STEPS[activeStep - 1].title}</h2>
                 </div>
               </div>
