@@ -368,7 +368,7 @@ export default function ContactMemberContent() {
                 <Accordion type="single" collapsible className="w-full">
                   {section.questions.map((faq, idx) => (
                     <AccordionItem key={idx} value={`${section.id}-${idx}`} className="border-border/40 py-2">
-                      <AccordionTrigger className="text-left text-xl md:text-2xl font-semibold text-foreground hover:no-underline hover:text-primary py-4">
+                      <AccordionTrigger className="text-left text-xl md:text-2xl font-semibold text-foreground hover:no-underline hover:text-primary py-4 font-sans">
                         {faq.q}
                       </AccordionTrigger>
                       <AccordionContent className="text-muted-foreground text-xl md:text-2xl leading-relaxed pt-2 pb-6">
