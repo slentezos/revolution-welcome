@@ -208,7 +208,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
                 setStep("intro");
                 if (isListening) forceStopDictation();
               }}
-              className="flex items-center gap-2 text-gray-500 hover:text-[#1B2333] transition-colors text-lg"
+              className="flex items-center gap-2 text-gray-500 hover:text-[#1B2333] transition-colors text-xl"
             >
               <ArrowLeft className="h-5 w-5" />
               Retour
