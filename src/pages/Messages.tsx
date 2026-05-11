@@ -784,7 +784,7 @@ export default function Messages() {
               />
               {isListening && (
                 <div className="absolute top-4 right-4 flex items-center gap-2 bg-[hsl(var(--gold))]/15 px-3 py-1.5 rounded-full">
-                  <span className="text-sm font-semibold text-[hsl(var(--gold))]">En écoute</span>
+                  <span className="font-semibold text-[hsl(var(--gold))] text-xl">En écoute</span>
                 </div>
               )}
             </div>

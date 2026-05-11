@@ -447,7 +447,7 @@ export default function ContactMemberContent() {
                       <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[100%]" style={{ animationDelay: "150ms" }} />
                       <span className="w-1 bg-[hsl(var(--gold))] rounded-full animate-bounce h-[40%]" style={{ animationDelay: "300ms" }} />
                     </div>
-                    <span className="text-sm font-semibold text-[hsl(var(--gold))]">En écoute</span>
+                    <span className="font-semibold text-[hsl(var(--gold))] text-xl">En écoute</span>
                   </div>
                 )}
               </div>
