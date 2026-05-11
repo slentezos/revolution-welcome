@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -103,6 +103,43 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [editUnlocked, setEditUnlocked] = useState(false);
   const { toast } = useToast();
+
+  // Prefill from existing quiz responses
+  useEffect(() => {
+    if (!profileId) return;
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase
+        .from("quiz_responses")
+        .select("question_id, answer_value")
+        .eq("profile_id", profileId);
+      if (cancelled || error || !data) return;
+
+      setPreferences((prev) => {
+        const next = { ...prev };
+        for (const row of data) {
+          if (row.question_id === "why_alone" || row.question_id === "criteria_cooldown_meta") continue;
+          if (!(row.question_id in next)) continue;
+          try {
+            const parsed = JSON.parse(row.answer_value);
+            if (Array.isArray(parsed)) {
+              const filled = ["", "", ""].map((_, i) => (parsed[i] ?? "").toString().slice(0, 40));
+              next[row.question_id] = filled;
+            }
+          } catch {
+            // ignore parse errors
+          }
+        }
+        return next;
+      });
+
+      const why = data.find((r) => r.question_id === "why_alone");
+      if (why?.answer_value) setWhyAlone(why.answer_value);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [profileId]);
 
   // Cooldown: if locked, show toast and block editing
   const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
