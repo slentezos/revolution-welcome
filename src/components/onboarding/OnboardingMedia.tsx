@@ -69,7 +69,24 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   // États Vidéo
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [videoCurrent, setVideoCurrent] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const formatTime = (sec: number) => {
+    if (!isFinite(sec)) return "0:00";
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = Number(e.target.value);
+    if (videoRef.current) {
+      videoRef.current.currentTime = v;
+      setVideoCurrent(v);
+    }
+  };
 
   const [showVideoTutorial, setShowVideoTutorial] = useState(false);
   const [showStudioModal, setShowStudioModal] = useState(false);
