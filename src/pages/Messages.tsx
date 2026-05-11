@@ -909,6 +909,22 @@ export default function Messages() {
         onReportInstead={() => handleReport(unmatchTarget)}
       />
       <BenevolenceModal open={benevolenceModalOpen} onOpenChange={setBenevolenceModalOpen} />
+      <Dialog open={showConseils} onOpenChange={setShowConseils}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto" aria-describedby={undefined}>
+          <div className="flex items-center gap-3 mb-6">
+            <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold))]" />
+            <h2 className="font-heading text-3xl font-semibold text-[#1B2333]">9 conseils de sécurité</h2>
+          </div>
+          <ol className="space-y-4">
+            {conseils.map((c, i) => (
+              <li key={i} className="flex gap-4 text-xl text-[#1B2333] leading-relaxed">
+                <span className="font-heading font-semibold text-[hsl(var(--gold))] shrink-0 text-2xl">{i + 1}.</span>
+                <span>{c}</span>
+              </li>
+            ))}
+          </ol>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 }
