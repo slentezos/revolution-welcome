@@ -401,7 +401,7 @@ export default function ReservationPromesse() {
                 <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center shrink-0">
                   <Check className="h-5 w-5 text-[#1B2333]" />
                 </div>
-                <span className="text-white/90 text-xl font-medium">{item}</span>
+                <span className="text-white/90 font-medium text-2xl">{item}</span>
               </div>
             ))}
           </div>
