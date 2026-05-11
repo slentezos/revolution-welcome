@@ -321,14 +321,14 @@ export default function ReservationPromesse() {
 
                 <div className="space-y-8">
                   <div data-reveal data-reveal-delay="300" className="border-l-4 border-amber-100 pl-8 py-2">
-                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
+                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xl">
                       VOTRE SEULE PRÉPARATION :
                     </span>
                     <p className="text-muted-foreground leading-relaxed text-xl">{step.preparation}</p>
                   </div>
 
                   <div data-reveal data-reveal-delay="400" className="border-l-4 border-amber-100 pl-8 py-2">
-                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
+                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xl">
                       NOTRE ÉCHANGE EN DIRECT :
                     </span>
                     <p className="text-muted-foreground leading-relaxed text-xl">{step.action}</p>
@@ -339,7 +339,7 @@ export default function ReservationPromesse() {
                     data-reveal-delay="500"
                     className="bg-[#1B2333]/5 p-8 rounded-xl border border-border"
                   >
-                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xs">
+                    <span className="font-black tracking-widest uppercase text-[hsl(var(--gold))] mb-3 block text-xl">
                       VOTRE PROFIL FINAL :
                     </span>
                     <p className="text-foreground font-medium leading-relaxed text-xl">{step.result}</p>
