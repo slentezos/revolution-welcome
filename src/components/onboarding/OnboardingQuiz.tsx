@@ -236,7 +236,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
               <div
                 key={idx}
                 className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${
-                  idx === currentPage ? "bg-[#D4AF37]" : idx < currentPage ? "bg-[#1B2333]" : "bg-gray-200"
+                  idx === currentPage ? "bg-[#e2a036]" : idx < currentPage ? "bg-[#1B2333]" : "bg-gray-200"
                 }`}
               />
             ))}
