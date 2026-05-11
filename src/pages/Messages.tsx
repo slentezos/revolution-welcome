@@ -812,7 +812,6 @@ export default function Messages() {
                 <span className="font-semibold text-[#1B2333]">« point d'exclamation »</span> ou{" "}
                 <span className="font-semibold text-[#1B2333]">« à la ligne »</span>.
               </p>
-            </div>
           </div>
 
           <div className="px-6 lg:px-8 pb-7 pt-4 bg-gradient-to-b from-transparent to-[hsl(var(--cream))]/40">
