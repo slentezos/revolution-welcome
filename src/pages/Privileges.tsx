@@ -238,7 +238,7 @@ export default function Privileges() {
                   {cerclePriveFeatures.map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
                       <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-1" />
-                      <span className="text-primary-foreground/80 leading-relaxed text-2xl">{feature}</span>
+                      <span className="text-primary-foreground/80 leading-relaxed text-2xl text-slate-950">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -304,7 +304,7 @@ export default function Privileges() {
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
                       <Check className="h-5 w-5 text-[hsl(var(--gold))] shrink-0 mt-1" />
-                      <span className="text-primary-foreground/80 leading-relaxed text-2xl">{feature}</span>
+                      <span className="text-primary-foreground/80 leading-relaxed text-2xl text-slate-950">{feature}</span>
                     </li>
                   ))}
                 </ul>
