@@ -36,22 +36,24 @@ import ChatTooltipOverlay from "@/components/messages/ChatTooltipOverlay";
 import BenevolenceModal from "@/components/messages/BenevolenceModal";
 import { checkMessage } from "@/utils/wordFilter";
 
-// Parseur de ponctuation et de mise en forme pour le français
+// Parseur de ponctuation amélioré pour le français (Correction "à la ligne")
 const formatSpeech = (text: string) => {
   if (!text) return "";
-  return text
-    .replace(/\bpoints? d['']interrogation\b/gi, "?")
-    .replace(/\bpoints? d['']exclamation\b/gi, "!")
-    .replace(/\bpoints de suspension\b/gi, "...")
-    .replace(/\bnouveau paragraphe\b/gi, "\n\n")
-    .replace(/\b(à|a) la ligne\b/gi, "\n")
-    .replace(/\bretour (à|a) la ligne\b/gi, "\n")
-    .replace(/\bvirgule\b/gi, ",")
-    .replace(/\bpoint-virgule\b/gi, ";")
-    .replace(/\bdeux points\b/gi, ":")
-    .replace(/\bpoint\b/gi, ".")
-    .replace(/\s+([,;:?.!])/g, "$1")
-    .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`);
+  return (
+    text
+      .replace(/\bpoints? d['']interrogation\b/gi, "?")
+      .replace(/\bpoints? d['']exclamation\b/gi, "!")
+      .replace(/\bpoints de suspension\b/gi, "...")
+      .replace(/\bnouveau paragraphe\b/gi, "\n\n")
+      // Capture agressive de toutes les variantes pour "à la ligne"
+      .replace(/\b(?:aller|retour)?\s*(?:à|a)\s*la\s*ligne\b/gi, "\n")
+      .replace(/\bvirgule\b/gi, ",")
+      .replace(/\bpoint-virgule\b/gi, ";")
+      .replace(/\bdeux points\b/gi, ":")
+      .replace(/\bpoint\b/gi, ".")
+      .replace(/\s+([,;:?.!])/g, "$1") // Supprime l'espace avant la ponctuation
+      .replace(/([?.!])\s*([a-zà-ÿ])/gi, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`)
+  ); // Majuscule après ponctuation forte
 };
 
 const capitalizeFirst = (str: string) => {
@@ -184,7 +186,6 @@ export default function Messages() {
   useEffect(() => {
     audioRef.current = new Audio("/sounds/new-message.mp3");
 
-    // Charger les infos de résidence pour la statistique personnalisée
     const fetchUserLocation = async () => {
       const {
         data: { session },
@@ -236,10 +237,12 @@ export default function Messages() {
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = "fr-FR";
+
     recognition.onresult = (event: any) => {
       if (!listeningRef.current) return;
       let finalSegment = "";
       let interimSegment = "";
+
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
         const transcript = result?.[0]?.transcript || "";
@@ -247,32 +250,40 @@ export default function Messages() {
         if (result.isFinal) finalSegment += transcript + " ";
         else interimSegment += transcript;
       }
+
       if (finalSegment) {
         setMessage((prev) => {
           const currentVal = prev || "";
           let formattedFinal = formatSpeech(finalSegment).trim();
+
           if (currentVal.trim() === "" || /[.!?]\s*$/.test(currentVal)) {
             formattedFinal = capitalizeFirst(formattedFinal);
           }
+
           const needsSpace =
             currentVal.length > 0 &&
             !currentVal.endsWith(" ") &&
-            !currentVal.endsWith("\n") &&
+            !currentVal.endsWith("\n") && // Si on vient de faire "à la ligne", pas d'espace
             !formattedFinal.startsWith(",") &&
             !formattedFinal.startsWith(".");
+
           return currentVal + (needsSpace ? " " : "") + formattedFinal;
         });
       }
+
       setInterimText(formatSpeech(interimSegment));
       setTimeout(adjustTextareaHeight, 0);
     };
+
     recognition.onerror = () => {
       setIsListening(false);
       setInterimText("");
     };
+
     recognition.onend = () => {
       setIsListening(false);
     };
+
     recognitionRef.current = recognition;
     return () => {
       try {
@@ -298,7 +309,7 @@ export default function Messages() {
       setInterimText("");
     } else {
       if (!recognitionRef.current) {
-        toast.error("Dictée vocale non supportée.");
+        toast.error("Dictée vocale non supportée par votre navigateur.");
         return;
       }
       setInterimText("");
@@ -770,10 +781,14 @@ export default function Messages() {
           </div>
 
           <div className="px-6 lg:px-8 pt-7 pb-3">
-            {/* NOVEL: "En écoute" banner positioned safely above textarea */}
+            {/* Bannière d'écoute repensée pour UX Senior (Fade in, icônes sonores) */}
             {isListening && (
-              <div className="flex items-center gap-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/30 text-[hsl(var(--gold-dark))] px-5 py-3 rounded-2xl mb-4 animate-in slide-in-from-top-2 duration-300">
-                <span className="w-2.5 h-2.5 bg-[hsl(var(--gold))] rounded-full animate-ping" />
+              <div className="flex items-center gap-4 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/30 text-[hsl(var(--gold-dark))] px-5 py-3 rounded-2xl mb-4 animate-in fade-in duration-500">
+                <div className="flex items-center gap-1">
+                  <span className="w-1.5 h-4 bg-[hsl(var(--gold))] rounded-full animate-[pulse_1s_ease-in-out_infinite]" />
+                  <span className="w-1.5 h-6 bg-[hsl(var(--gold))] rounded-full animate-[pulse_1.2s_ease-in-out_infinite_100ms]" />
+                  <span className="w-1.5 h-3 bg-[hsl(var(--gold))] rounded-full animate-[pulse_0.8s_ease-in-out_infinite_200ms]" />
+                </div>
                 <span className="font-semibold text-xl tracking-wide">Parlez librement, nous vous écoutons...</span>
               </div>
             )}
@@ -785,31 +800,40 @@ export default function Messages() {
                 placeholder={`Bonjour ${selectedChat?.name ?? ""}, …`}
                 value={displayValue}
                 onChange={handleTextareaChange}
-                className={`w-full min-h-[240px] resize-none bg-[hsl(var(--cream))]/60 border-2 rounded-2xl font-medium px-6 py-5 leading-relaxed transition-all ${isListening ? "border-[hsl(var(--gold))]" : "border-amber-100/80 focus:border-[hsl(var(--gold))]"}`}
+                className={`w-full min-h-[240px] resize-none bg-[hsl(var(--cream))]/60 border-2 rounded-2xl font-medium px-6 py-5 leading-relaxed transition-all duration-300 ${isListening ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5 shadow-[inset_0_0_10px_rgba(var(--gold),0.05)]" : "border-amber-100/80 focus:border-[hsl(var(--gold))]"}`}
                 style={{ fontSize: `${Math.max(chatFontSize, 20)}px` }}
               />
             </div>
-            <p className="mt-3 text-muted-foreground text-xl leading-relaxed">
-              💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
-              <span className="font-semibold text-foreground">« point »</span>,{" "}
-              <span className="font-semibold text-foreground">« point d'interrogation »</span>,{" "}
-              <span className="font-semibold text-foreground">« point d'exclamation »</span> ou{" "}
-              <span className="font-semibold text-foreground">« à la ligne »</span>.
-            </p>
+
+            <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl mt-4">
+              <Lightbulb className="h-5 w-5 text-[hsl(var(--gold))] shrink-0" />
+              <p className="text-slate-600 text-base leading-snug">
+                💡 Astuce dictée : dites <span className="font-semibold text-[#1B2333]">« virgule »</span>,{" "}
+                <span className="font-semibold text-[#1B2333]">« point »</span>,{" "}
+                <span className="font-semibold text-[#1B2333]">« point d'interrogation »</span>,{" "}
+                <span className="font-semibold text-[#1B2333]">« point d'exclamation »</span> ou{" "}
+                <span className="font-semibold text-[#1B2333]">« à la ligne »</span>.
+              </p>
+            </div>
           </div>
+
           <div className="px-6 lg:px-8 pb-7 pt-4 bg-gradient-to-b from-transparent to-[hsl(var(--cream))]/40">
             <div className="flex flex-col sm:flex-row gap-3">
-              {/* NOVEL: Glowing effect logic on the 'isListening' state */}
+              {/* Effet "Glow" luxueux et respirant sur le bouton actif */}
               <button
                 onClick={toggleListening}
-                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl xl:text-xl font-semibold transition-all duration-300 ${
+                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl xl:text-xl font-semibold transition-all duration-700 ease-out ${
                   isListening
-                    ? "bg-[hsl(var(--gold))] text-white shadow-[0_0_15px_rgba(var(--gold),0.6)] ring-4 ring-[hsl(var(--gold))]/30"
+                    ? "bg-[#1B2333] text-white shadow-[0_0_20px_rgba(197,160,89,0.4)] border border-[hsl(var(--gold))]/50 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]"
                     : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))]"
                 }`}
               >
-                {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6 text-[hsl(var(--gold))]" />}
-                {isListening ? "Arrêter" : "Dicter"}
+                {isListening ? (
+                  <MicOff className="h-6 w-6 text-[hsl(var(--gold))]" />
+                ) : (
+                  <Mic className="h-6 w-6 text-[hsl(var(--gold))]" />
+                )}
+                {isListening ? "Arrêter la dictée" : "Dicter"}
               </button>
               <Button
                 onClick={() => setComposerOpen(false)}
