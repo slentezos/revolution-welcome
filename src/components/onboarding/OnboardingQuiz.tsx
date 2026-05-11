@@ -288,19 +288,19 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
             </div>
           </div>
         ) : (
-          <div className="rounded-[24px] border p-6 md:p-10 transition-all duration-500 ease-out relative opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card py-0 px-0">
+          <div className="rounded-[24px] border p-6 md:p-8 transition-all duration-500 ease-out relative opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card">
             {/* Question header */}
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-4 mb-4">
               <span className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[#1B2333] shrink-0 text-2xl">
                 11
               </span>
-              <h3 className="font-heading font-bold text-[#1B2333] leading-snug text-3xl md:text-3xl">
+              <h3 className="font-heading font-bold text-[#1B2333] leading-snug text-2xl md:text-3xl">
                 Pourquoi êtes-vous seul(e) aujourd'hui ?
               </h3>
             </div>
 
             <div className="md:ml-14">
-              <span className="italic mb-6 block text-gray-600 text-xl">
+              <span className="italic mb-3 block text-gray-600 text-lg">
                 A cette étape de votre désir de nouvelle vie, ne serait-il pas utile de faire le point avec vous-même et
                 de vous demander en toute sincérité pourquoi vous êtes seule aujourd'hui. (information confidentielle
                 non partagée)
@@ -310,7 +310,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
                 placeholder="Partagez votre histoire si vous le souhaitez..."
                 value={whyAlone}
                 onChange={(e) => setWhyAlone(e.target.value)}
-                rows={8}
+                rows={4}
               />
             </div>
           </div>
