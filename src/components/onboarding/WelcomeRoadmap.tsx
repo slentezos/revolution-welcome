@@ -219,7 +219,7 @@ export default function WelcomeRoadmap({
             <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-gold/30 bg-gold/5 mb-4">
               <Sparkles className="h-5 w-5 text-gold" />
               <span className="font-bold tracking-[0.2em] uppercase text-gold text-sm sm:text-base">
-                Tutoriel Privé
+                BIENVENUE SUR LE TUTORIEL KALIMERA\n
               </span>
             </div>
             <h1 className="font-heading text-4xl sm:text-6xl text-foreground leading-[1.1]">
