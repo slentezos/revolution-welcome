@@ -258,10 +258,10 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
                   </h2>
                   <div className="w-12 h-px bg-[hsl(var(--gold))] mb-10" />
 
-                  <h3 className="font-heading text-2xl font-semibold text-foreground mb-5">
+                  <h3 className="font-heading font-semibold text-foreground mb-5 text-3xl">
                     {profile.attractions.comfortTitle}
                   </h3>
-                  <ul className="space-y-4 mb-10">
+                  <ul className="space-y-4 mb-10 text-2xl">
                     {profile.attractions.comfort.map((item, i) => (
                       <li key={i} className="flex items-start gap-4">
                         <span className="w-7 h-7 rounded-full bg-[hsl(var(--gold))]/15 flex items-center justify-center shrink-0 mt-1">
@@ -272,7 +272,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
                     ))}
                   </ul>
 
-                  <h3 className="font-heading text-2xl font-semibold text-foreground mb-5">
+                  <h3 className="font-heading font-semibold text-foreground mb-5 text-3xl">
                     {profile.attractions.drainTitle}
                   </h3>
                   <ul className="space-y-4">
