@@ -53,7 +53,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
   const sections: { subtitle: string; title: string; paragraphs: string[]; image: string }[] = [
     {
       subtitle: "Votre façon d'aimer",
-      title: "1. Votre vision de l'amour",
+      title: "Votre vision de l'amour",
       paragraphs: [g(profile.loveVision)],
       image: imageUrl(profile.imageSlug, gender, "love", fallbackLove),
     },
@@ -147,7 +147,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
       {/* CE QUI VOUS DISTINGUE — Strengths (gold) / Weaknesses (dark) */}
       <section className="grid lg:grid-cols-2 gap-0">
         <div className="bg-[hsl(var(--cream))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
-          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
+          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
             Ce qui vous distingue
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-10">Vos points forts</h2>
@@ -164,7 +164,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
         </div>
 
         <div className="bg-[hsl(var(--navy))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
-          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
+          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
             Ce qui vous fragilise
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-[hsl(var(--cream))] mb-10">
@@ -191,13 +191,13 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
         const textBlock = (
           <div className="flex items-center px-8 md:px-16 lg:px-20 py-16 md:py-20 bg-[hsl(var(--cream))]">
             <div className="max-w-xl">
-              <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
+              <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
                 {section.subtitle}
               </p>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">{section.title}</h2>
               <div className="w-12 h-px bg-[hsl(var(--gold))] mb-8" />
               {section.paragraphs.map((p, i) => (
-                <p key={i} className="text-xl text-muted-foreground leading-relaxed mb-6 last:mb-0">
+                <p key={i} className="text-muted-foreground leading-relaxed mb-6 last:mb-0 text-2xl">
                   {p}
                 </p>
               ))}
@@ -250,7 +250,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
                   />
                 </div>
                 <div className="bg-[hsl(var(--cream))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
-                  <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
+                  <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
                     Ce qui vous attire
                   </p>
                   <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">
