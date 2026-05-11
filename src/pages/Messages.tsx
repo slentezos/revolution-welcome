@@ -805,7 +805,7 @@ export default function Messages() {
               />
             </div>
 
-              <p className="text-slate-600 leading-snug text-xl">
+              <p className="text-slate-600 leading-snug text-xl py-0 pt-[10px]">
                 Astuce dictée : dites <span className="font-semibold text-[#1B2333]">« virgule »</span>,{" "}
                 <span className="font-semibold text-[#1B2333]">« point »</span>,{" "}
                 <span className="font-semibold text-[#1B2333]">« point d'interrogation »</span>,{" "}
