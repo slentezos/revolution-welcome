@@ -118,7 +118,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
                 className="bg-[hsl(var(--cream))]/10 backdrop-blur-md border border-[hsl(var(--cream))]/20 rounded-full px-6 md:px-8 py-3 md:py-4 shadow-lg"
               >
                 <span className="text-[hsl(var(--cream))] md:text-xl font-medium text-2xl">{m.label}</span>
-                <span className="text-[hsl(var(--gold))] text-lg md:text-xl font-bold ml-3">{m.value}%</span>
+                <span className="text-[hsl(var(--gold))] md:text-xl font-bold ml-3 text-2xl">{m.value}%</span>
               </div>
             ))}
           </div>
