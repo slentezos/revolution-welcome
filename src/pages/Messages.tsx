@@ -808,7 +808,7 @@ export default function Messages() {
               <p className="text-slate-600 leading-snug text-xl">
                 Astuce dictée : dites <span className="font-semibold text-[#1B2333]">« virgule »</span>,{" "}
                 <span className="font-semibold text-[#1B2333]">« point »</span>,{" "}
-                <span className="font-semibold text-[#1B2333]">« point d'interrogation »</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span className="font-semibold text-[#1B2333]">« point d'interrogation »</span>,{" "}
                 <span className="font-semibold text-[#1B2333]">« point d'exclamation »</span> ou{" "}
                 <span className="font-semibold text-[#1B2333]">« à la ligne »</span>.
               </p>
