@@ -53,7 +53,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
   const sections: { subtitle: string; title: string; paragraphs: string[]; image: string }[] = [
     {
       subtitle: "Votre façon d'aimer",
-      title: "1. Votre vision de l'amour",
+      title: "1. Vos affinités et vos rejets",
       paragraphs: [g(profile.loveVision)],
       image: imageUrl(profile.imageSlug, gender, "love", fallbackLove),
     },
