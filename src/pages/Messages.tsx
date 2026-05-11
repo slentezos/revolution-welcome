@@ -807,7 +807,7 @@ export default function Messages() {
 
             <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl mt-4">
               <Lightbulb className="h-5 w-5 text-[hsl(var(--gold))] shrink-0" />
-              <p className="text-slate-600 text-base leading-snug">
+              <p className="text-slate-600 leading-snug text-xl">
                 💡 Astuce dictée : dites <span className="font-semibold text-[#1B2333]">« virgule »</span>,{" "}
                 <span className="font-semibold text-[#1B2333]">« point »</span>,{" "}
                 <span className="font-semibold text-[#1B2333]">« point d'interrogation »</span>,{" "}
@@ -824,7 +824,7 @@ export default function Messages() {
                 onClick={toggleListening}
                 className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl xl:text-xl font-semibold transition-all duration-700 ease-out ${
                   isListening
-                    ? "bg-[#1B2333] text-white shadow-[0_0_20px_rgba(197,160,89,0.4)] border border-[hsl(var(--gold))]/50 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]"
+                    ? "text-white shadow-[0_0_20px_rgba(197,160,89,0.4)] border border-[hsl(var(--gold))]/50 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite] bg-[#da9e3e]"
                     : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))]"
                 }`}
               >
