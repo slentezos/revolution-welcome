@@ -757,9 +757,6 @@ export default function Messages() {
                   alt={selectedChat.name}
                   className="w-20 h-20 lg:w-24 lg:h-24 rounded-full object-cover ring-4 ring-[hsl(var(--gold))]/40 shadow-lg"
                 />
-                {isListening && (
-                  <span className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-[hsl(var(--gold))] border-[3px] border-[#1B2333] rounded-full animate-pulse" />
-                )}
               </div>
             )}
             <div className="relative flex-1 min-w-0">
@@ -771,7 +768,16 @@ export default function Messages() {
               </h2>
             </div>
           </div>
+
           <div className="px-6 lg:px-8 pt-7 pb-3">
+            {/* NOVEL: "En écoute" banner positioned safely above textarea */}
+            {isListening && (
+              <div className="flex items-center gap-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))]/30 text-[hsl(var(--gold-dark))] px-5 py-3 rounded-2xl mb-4 animate-in slide-in-from-top-2 duration-300">
+                <span className="w-2.5 h-2.5 bg-[hsl(var(--gold))] rounded-full animate-ping" />
+                <span className="font-semibold text-xl tracking-wide">Parlez librement, nous vous écoutons...</span>
+              </div>
+            )}
+
             <div className="relative">
               <Textarea
                 autoFocus
@@ -782,11 +788,6 @@ export default function Messages() {
                 className={`w-full min-h-[240px] resize-none bg-[hsl(var(--cream))]/60 border-2 rounded-2xl font-medium px-6 py-5 leading-relaxed transition-all ${isListening ? "border-[hsl(var(--gold))]" : "border-amber-100/80 focus:border-[hsl(var(--gold))]"}`}
                 style={{ fontSize: `${Math.max(chatFontSize, 20)}px` }}
               />
-              {isListening && (
-                <div className="absolute top-4 right-4 flex items-center gap-2 bg-[hsl(var(--gold))]/15 px-3 py-1.5 rounded-full">
-                  <span className="font-semibold text-[hsl(var(--gold))] text-xl">En écoute</span>
-                </div>
-              )}
             </div>
             <p className="mt-3 text-muted-foreground text-xl leading-relaxed">
               💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
@@ -798,9 +799,14 @@ export default function Messages() {
           </div>
           <div className="px-6 lg:px-8 pb-7 pt-4 bg-gradient-to-b from-transparent to-[hsl(var(--cream))]/40">
             <div className="flex flex-col sm:flex-row gap-3">
+              {/* NOVEL: Glowing effect logic on the 'isListening' state */}
               <button
                 onClick={toggleListening}
-                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl xl:text-xl font-semibold transition-all ${isListening ? "bg-[hsl(var(--gold))] text-white shadow-lg" : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))]"}`}
+                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl xl:text-xl font-semibold transition-all duration-300 ${
+                  isListening
+                    ? "bg-[hsl(var(--gold))] text-white shadow-[0_0_15px_rgba(var(--gold),0.6)] ring-4 ring-[hsl(var(--gold))]/30"
+                    : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))]"
+                }`}
               >
                 {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6 text-[hsl(var(--gold))]" />}
                 {isListening ? "Arrêter" : "Dicter"}
@@ -808,14 +814,14 @@ export default function Messages() {
               <Button
                 onClick={() => setComposerOpen(false)}
                 variant="outline"
-                className="min-h-[60px] rounded-2xl text-xl xl:text-xl px-6"
+                className="min-h-[60px] rounded-2xl text-xl xl:text-xl px-6 border-[#1B2333]/15"
               >
                 Fermer
               </Button>
               <Button
                 onClick={handleSend}
                 disabled={isSent || (!message.trim() && !isListening)}
-                className="min-h-[60px] sm:min-w-[180px] rounded-2xl text-xl xl:text-xl font-semibold gap-2 bg-[#1B2333]"
+                className="min-h-[60px] sm:min-w-[180px] rounded-2xl text-xl xl:text-xl font-semibold gap-2 bg-[#1B2333] text-white hover:bg-[#1B2333]/90"
               >
                 {isSent ? "Envoyé" : "Envoyer"}
               </Button>
