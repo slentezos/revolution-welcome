@@ -245,7 +245,7 @@ export default function OnboardingQuiz({ profileId, onComplete, cooldown }: Onbo
       </div>
 
       {/* ══════ QUESTION CARDS ══════ */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-40 py-[20px]">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-32 py-[20px]">
         {!isWhyAlonePage && currentCategory ? (
           <div className="rounded-[24px] border p-6 md:p-10 transition-all duration-500 ease-out relative opacity-100 shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 pointer-events-auto border-[hsl(var(--gold))] bg-card py-0 px-0">
             {/* Question header */}
