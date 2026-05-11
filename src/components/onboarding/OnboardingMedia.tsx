@@ -410,12 +410,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
 
             {/* PHOTOS */}
             <div className="min-h-0 flex flex-col gap-4">
-              <div className="flex-1 grid grid-cols-2 gap-4">
+              <div className="flex-1 min-h-0 grid grid-cols-2 grid-rows-2 gap-4 h-full">
                 {photoSlots.map((slot) => (
-                  <div key={slot.id} className="min-h-0 flex flex-col gap-2">
+                  <div key={slot.id} className="min-h-0 h-full flex flex-col gap-2">
                     <div
                       className={cn(
-                        "relative flex-1 min-h-0 overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
+                        "relative flex-1 min-h-0 h-full w-full aspect-square overflow-hidden cursor-pointer group border border-[#E5E0D8] rounded-[1.8rem] transition-all duration-500",
                         slot.preview ? "border-transparent" : "bg-[#FCF9F5] hover:border-[hsl(var(--gold))]",
                       )}
                       onClick={() => handleSlotClick(slot.id)}
@@ -426,8 +426,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                             decoding="async"
                             src={slot.preview}
                             alt={slot.label}
-                            // object-cover assure que la photo remplit la boite SANS déformer la div parente
-                            className="w-full h-full object-cover"
+                            className="absolute inset-0 w-full h-full object-cover"
                           />
                           <button
                             onClick={(e) => {
