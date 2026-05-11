@@ -78,7 +78,7 @@ function PricingModal({
               <div className="bg-card border border-border p-10 flex flex-col h-full shadow-[var(--shadow-card)] rounded-sm">
                 <div className="flex items-center gap-4 mb-8">
                   <Star className="h-7 w-7 text-gold" />
-                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-xl">
+                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-2xl">
                     Mode Autonome
                   </span>
                 </div>
