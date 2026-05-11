@@ -443,7 +443,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                           <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-2 border border-[#E5E0D8]">
                             <Camera className="h-6 w-6 text-muted-foreground" />
                           </div>
-                          <span className="font-bold text-[#1B2333] text-xl">+ {slot.label}</span>
+                          <span className="font-bold text-[#1B2333] text-2xl">+ {slot.label}</span>
                         </div>
                       )}
                     </div>
