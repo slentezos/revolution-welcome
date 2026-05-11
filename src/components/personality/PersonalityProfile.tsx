@@ -100,35 +100,35 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-[hsl(var(--navy))] opacity-70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))] via-transparent to-transparent opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))] via-transparent to-transparent opacity-60" />
 
         <div className="relative z-10 text-center px-6 py-16 max-w-5xl mx-auto w-full flex flex-col items-center">
-          <p className="text-[hsl(var(--gold))] tracking-[0.3em] uppercase font-medium mb-6 text-xl">
+          <p className="text-[hsl(var(--gold))] tracking-[0.3em] uppercase font-medium mb-4 md:mb-6 text-sm md:text-lg lg:text-xl">
             Votre profil de personnalité
           </p>
 
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-[hsl(var(--cream))] leading-tight mb-8">
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-[hsl(var(--cream))] leading-tight mb-10">
             {profile.title}
           </h1>
 
-          <div className="flex flex-wrap justify-center gap-3 md:gap-5 mt-8 mb-16">
+          <div className="flex flex-wrap justify-center gap-3 md:gap-5 mt-6 mb-16">
             {profile.metrics.map((m) => (
               <div
                 key={m.label}
-                className="bg-[hsl(var(--cream))]/10 backdrop-blur-sm border border-[hsl(var(--cream))]/20 rounded-full px-5 md:px-7 py-2.5 md:py-3"
+                className="bg-[hsl(var(--cream))]/10 backdrop-blur-md border border-[hsl(var(--cream))]/20 rounded-full px-6 md:px-8 py-3 md:py-4 shadow-lg"
               >
-                <span className="text-[hsl(var(--cream))] text-2xl md:text-lg font-medium">{m.label}</span>
-                <span className="text-[hsl(var(--gold))] text-2xl md:text-lg font-bold ml-2">{m.value}%</span>
+                <span className="text-[hsl(var(--cream))] text-lg md:text-xl font-medium">{m.label}</span>
+                <span className="text-[hsl(var(--gold))] text-lg md:text-xl font-bold ml-3">{m.value}%</span>
               </div>
             ))}
           </div>
 
           <button onClick={scrollToIntro} className="flex flex-col items-center gap-4 group cursor-pointer mt-8">
-            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity text-2xl">
+            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity text-sm md:text-base">
               Lire votre analyse
             </span>
-            <div className="w-16 h-16 rounded-full border-2 border-[hsl(var(--gold))]/30 flex items-center justify-center animate-slow-float bg-[hsl(var(--gold))]/5 group-hover:bg-[hsl(var(--gold))]/20 transition-all">
-              <ArrowDown className="h-8 w-8 text-[hsl(var(--gold))]" />
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-[hsl(var(--gold))]/30 flex items-center justify-center animate-slow-float bg-[hsl(var(--gold))]/5 group-hover:bg-[hsl(var(--gold))]/20 transition-all shadow-[0_0_15px_rgba(var(--gold),0.1)]">
+              <ArrowDown className="h-6 w-6 md:h-8 md:w-8 text-[hsl(var(--gold))]" />
             </div>
           </button>
         </div>
