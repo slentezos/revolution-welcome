@@ -122,7 +122,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
             <div className="mt-4 flex items-start gap-3 bg-secondary/60 rounded-xl p-4 border-l-2 border-gold">
               <Heart className="h-5 w-5 text-gold flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-foreground uppercase tracking-wider mb-1 font-bold text-base">Votre point commun</p>
+                <p className="text-foreground uppercase tracking-wider mb-1 font-bold text-xl">Votre point commun</p>
                 <p className="leading-relaxed text-xl text-secondary-foreground">{match.commonPoint}</p>
               </div>
             </div>
