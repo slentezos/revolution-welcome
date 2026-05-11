@@ -111,7 +111,7 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
               <Badge
                 key={tag}
                 variant="secondary"
-                className="inline-flex items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-secondary/80 px-4 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/60 font-medium text-lg"
+                className="inline-flex items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-secondary/80 px-4 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/60 font-medium text-xl"
               >
                 {tag}
               </Badge>
