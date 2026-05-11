@@ -219,7 +219,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
             </div>
 
             <h2 className="text-center font-heading font-bold text-[#1B2333] text-3xl">Que s'est-il passé ?</h2>
-            <p className="text-center text-foreground text-lg">
+            <p className="text-center text-foreground text-xl">
               Sélectionnez un motif et décrivez la situation en détail.
             </p>
 
