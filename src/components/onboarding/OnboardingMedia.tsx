@@ -561,7 +561,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <span className="inline-flex items-baseline gap-2 bg-amber-50 px-4 py-2 rounded-full border border-amber-200">
                 <span className="text-[#1B2333] font-bold text-2xl">35 €</span>
-                <span className="text-[#1B2333]/60 text-xl">puis 70 € au 01/10/2026</span>
+                <span className="text-[#1B2333]/60 text-2xl">puis 70 € au 01/10/2026</span>
               </span>
             </div>
 
