@@ -226,7 +226,7 @@ export default function WelcomeRoadmap({
               Votre parcours <br /> en 4 étapes clés
             </h1>
             <p className="text-muted-foreground text-xl sm:text-2xl max-w-2xl mx-auto leading-relaxed italic font-light">
-              "L'inscription prend quelques minutes, mais elle est le fondement de vos futures rencontres."
+              "L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd'hui peuvent faire toute la différence demain.\n"
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
               <button
