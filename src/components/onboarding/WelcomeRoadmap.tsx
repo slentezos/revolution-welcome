@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   Star,
@@ -8,14 +8,13 @@ import {
   Camera,
   ClipboardList,
   Brain,
-  ArrowDown,
-  ArrowUp,
+  ArrowLeft,
   ArrowRight,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 
-/* ─── PRICING MODAL ─── */
-
+/* ─── PRICING MODAL (Inchangée) ─── */
 const CONCIERGE_BENEFITS = [
   "Un entretien téléphonique privé de 45 minutes",
   "Nous remplissons l'intégralité ensemble de votre profil pour vous",
@@ -35,7 +34,6 @@ function PricingModal({
   onStartConcierge: () => void;
 }) {
   const [view, setView] = useState<"story" | "pricing">("story");
-
   return (
     <Dialog
       open={open}
@@ -68,42 +66,29 @@ function PricingModal({
         ) : (
           <div className="flex flex-col flex-1 animate-in slide-in-from-bottom-4 duration-500">
             <div className="text-center px-8 pt-12 pb-8 border-b border-border/60">
-              <span className="text-center font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-2xl">
+              <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground mb-6 text-2xl">
                 Votre accueil
               </span>
               <h2 className="font-heading text-4xl sm:text-5xl text-foreground mt-4 leading-tight">
                 Comment souhaitez-vous débuter ?
               </h2>
               <div className="divider-gold mx-auto mt-6" />
-              <p className="text-muted-foreground mt-6 text-xl sm:text-2xl max-w-2xl mx-auto leading-relaxed">
-                Deux chemins, une même destination : votre épanouissement.
-              </p>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 sm:px-12 py-10 bg-[hsl(var(--cream))]/40">
-              {/* ─── Mode Autonome ─── */}
-              <div className="bg-card border border-border p-10 flex flex-col h-full shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-luxury)] transition-shadow rounded-sm">
+              <div className="bg-card border border-border p-10 flex flex-col h-full shadow-[var(--shadow-card)] rounded-sm">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-14 h-14 bg-secondary flex items-center justify-center rounded-sm">
-                    <Star className="h-7 w-7 text-gold" />
-                  </div>
+                  <Star className="h-7 w-7 text-gold" />
                   <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-xl">
                     Mode Autonome
                   </span>
                 </div>
-
-                <h3 className="font-heading text-3xl sm:text-4xl text-foreground mb-3 leading-tight">
-                  À votre rythme
-                </h3>
+                <h3 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">À votre rythme</h3>
                 <p className="text-gold font-medium text-xl mb-6">Inclus dans vos 3 mois offerts</p>
                 <div className="divider-gold mb-8" />
-
                 <p className="text-foreground/80 leading-relaxed flex-grow mb-10 text-xl">
-                  Vous complétez votre portrait sereinement, étape par étape : un <strong>quiz ludique</strong>, vos
-                  plus belles <strong>photos</strong>, une courte <strong>vidéo</strong> guidée, votre{" "}
-                  <strong>profil</strong> et votre <strong>test de personnalité</strong>.
+                  Vous complétez votre portrait sereinement, étape par étape : quiz, photos, vidéo, profil et test de
+                  personnalité.
                 </p>
-
                 <button
                   onClick={onStartAutonomous}
                   className="w-full btn-outline min-h-[64px] py-5 font-medium text-xl rounded-sm"
@@ -111,53 +96,33 @@ function PricingModal({
                   Je débute à mon rythme
                 </button>
               </div>
-
-              {/* ─── Service Conciergerie ─── */}
               <div className="bg-primary text-primary-foreground p-10 flex flex-col h-full relative shadow-[var(--shadow-luxury)] rounded-sm overflow-hidden">
-                <div className="absolute -top-3 right-6 bg-[hsl(var(--gold))] text-primary px-4 py-1 font-bold tracking-[0.2em] uppercase rounded-full text-base">
+                <div className="absolute top-2 right-6 bg-[hsl(var(--gold))] text-primary px-4 py-1 font-bold tracking-[0.2em] uppercase rounded-full text-sm">
                   Recommandé
                 </div>
-
                 <div className="flex items-center gap-4 mb-8 mt-4">
-                  <div className="w-14 h-14 bg-white/10 flex items-center justify-center rounded-sm">
-                    <Phone className="h-7 w-7 text-gold-light" />
-                  </div>
-                  <span className="font-medium tracking-[0.2em] uppercase text-white/80 text-xl">
-                    Conciergerie
-                  </span>
+                  <Phone className="h-7 w-7 text-gold-light" />
+                  <span className="font-medium tracking-[0.2em] uppercase text-white/80 text-xl">Conciergerie</span>
                 </div>
-
-                <h3 className="font-heading text-3xl sm:text-4xl text-primary-foreground mb-3 leading-tight">
+                <h3 className="font-heading text-3xl sm:text-4xl text-primary-foreground mb-3">
                   L'Accompagnement Privé
                 </h3>
                 <p className="text-gold-light font-medium text-xl mb-6">89 € — une fois</p>
-                <div className="h-px w-16 bg-white/30 mb-8" />
-
                 <ul className="space-y-5 mb-10 flex-grow">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
                     <li key={i} className="flex items-start gap-4">
                       <Check className="h-6 w-6 text-gold-light shrink-0 mt-1" />
-                      <span className="text-white/95 leading-relaxed text-xl">{benefit}</span>
+                      <span className="text-white/95 text-xl">{benefit}</span>
                     </li>
                   ))}
                 </ul>
-
                 <button
                   onClick={onStartConcierge}
-                  className="w-full bg-gold text-white min-h-[64px] py-5 font-semibold hover:brightness-110 transition-all shadow-lg text-xl rounded-sm"
+                  className="w-full bg-gold text-white min-h-[64px] py-5 font-semibold text-xl rounded-sm"
                 >
                   Choisir l'accompagnement privé
                 </button>
               </div>
-            </div>
-
-            <div className="text-center py-6 border-t border-border/60 bg-background">
-              <button
-                onClick={() => setView("story")}
-                className="text-muted-foreground hover:text-foreground underline underline-offset-4 text-xl min-h-[56px] px-6"
-              >
-                ← Revoir notre engagement de sérénité
-              </button>
             </div>
           </div>
         )}
@@ -166,228 +131,40 @@ function PricingModal({
   );
 }
 
-/* ─── STEP DATA ─── */
-
 const STEPS = [
   {
     number: "01",
     icon: HelpCircle,
     title: "Le Quiz des 3 Préférences",
     duration: "3 minutes",
-    description:
-      "Un court questionnaire ludique de 10 questions pour mieux comprendre ce que vous recherchez. Trois questions simples, trois réponses sincères.",
-    highlights: [
-      "Questions simples et bienveillantes",
-      "Aucune mauvaise réponse possible",
-      "Aide notre équipe à mieux vous connaître",
-      "Résultats confidentiels et sécurisés",
-    ],
-    nextLabel: "Ensuite : vos photos & vidéo",
+    description: "Un court questionnaire ludique pour mieux comprendre vos attentes.",
+    highlights: ["Questions bienveillantes", "Aucune mauvaise réponse", "Résultats confidentiels"],
   },
   {
     number: "02",
     icon: Camera,
     title: "Photos & Vidéo",
-    duration: "5 à 10 minutes",
-    description:
-      "Montrez qui vous êtes vraiment. Ajoutez vos plus belles photos, et enregistrez une courte vidéo de présentation.",
-    highlights: [
-      "Jusqu'à 4 photos pour illustrer votre quotidien",
-      "Une vidéo pour révéler votre personnalité",
-      "Tutoriel pour réussir votre vidéo inclus",
-      "Un message sonore pour faire entendre votre voix",
-    ],
-    nextLabel: "Ensuite : votre profil détaillé",
+    duration: "5 à 10 min",
+    description: "Montrez qui vous êtes vraiment. Ajoutez vos plus belles photos.",
+    highlights: ["Jusqu'à 4 photos", "Vidéo de personnalité", "Tutoriel inclus"],
   },
   {
     number: "03",
     icon: ClipboardList,
-    title: "Mon Profil & Le Profil Idéal",
-    duration: "15 à 20 minutes",
-    description: "Décrivez-vous en détail et esquissez le portrait de la personne que vous aimeriez rencontrer.",
-    highlights: [
-      "Votre description personnelle approfondie",
-      "Le portrait de votre partenaire idéal(e)",
-      "Vos valeurs, passions et style de vie",
-      "Critères de recherche personnalisés",
-    ],
-    nextLabel: "Ensuite : test de personnalité",
+    title: "Mon Profil",
+    duration: "15 à 20 min",
+    description: "Décrivez-vous en détail et esquissez votre partenaire idéal(e).",
+    highlights: ["Description approfondie", "Portrait de l'autre", "Vos valeurs et passions"],
   },
   {
     number: "04",
     icon: Brain,
-    title: "Le Test de Personnalité",
-    duration: "15 à 20 minutes",
-    description: "Un test psychologique simple pour affiner vos correspondances et révéler vos traits dominants.",
-    highlights: [
-      "Basé sur des méthodes éprouvées",
-      "Révèle vos traits dominants",
-      "Améliore la qualité des correspondances",
-      "Résultats personnalisés et détaillés",
-    ],
-    nextLabel: "",
+    title: "Test de Personnalité",
+    duration: "15 à 20 min",
+    description: "Un test psychologique simple pour affiner vos correspondances.",
+    highlights: ["Méthode éprouvée", "Traits dominants", "Qualité des affinités"],
   },
 ];
-
-/* ─── PROGRESS BAR ─── */
-
-function ProgressBar({ activeStep, onStepClick }: { activeStep: number; onStepClick: (i: number) => void }) {
-  return (
-    <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border py-[50px] pt-[20px] pb-[50px]">
-      <div className="max-w-4xl mx-auto px-4 py-5">
-        <div className="flex items-center justify-between">
-          {STEPS.map((step, i) => {
-            const Icon = step.icon;
-            const isActive = activeStep === i + 1;
-            const isPast = activeStep > i + 1;
-            return (
-              <button
-                key={i}
-                onClick={() => onStepClick(i)}
-                className="flex flex-col items-center gap-2 group transition-all"
-              >
-                <div
-                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-500 border-2 ${
-                    isActive
-                      ? "bg-gold border-gold text-white scale-110 shadow-lg"
-                      : isPast
-                        ? "bg-primary border-primary text-primary-foreground"
-                        : "bg-secondary border-border text-muted-foreground group-hover:border-gold/50"
-                  }`}
-                >
-                  {isPast ? <Check className="h-6 w-6" /> : <Icon className="h-6 w-6" />}
-                </div>
-                <span
-                  className={`text-base sm:text-2xl font-medium transition-colors text-center leading-tight ${
-                    isActive ? "text-foreground" : "text-muted-foreground"
-                  }`}
-                >
-                  <span className="block sm:hidden">{i + 1}</span>
-                  <span className="hidden sm:block">Étape {i + 1}</span>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        <div className="relative mt-[-42px] sm:mt-[-46px] mx-[32px] sm:mx-[36px] -z-10">
-          <div className="h-0.5 bg-border w-full" />
-          <div
-            className="h-0.5 bg-gold absolute top-0 left-0 transition-all duration-700"
-            style={{ width: `${(Math.max(0, activeStep - 1) / (STEPS.length - 1)) * 100}%` }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── STEP CARD (Redesigned with built-in buttons) ─── */
-
-function StepCard({
-  step,
-  stepIndex,
-  totalSteps,
-  isLast,
-  onNextClick,
-  onPrevClick,
-  onStartClick,
-  viewOnly,
-}: {
-  step: (typeof STEPS)[0];
-  stepIndex: number;
-  totalSteps: number;
-  isLast: boolean;
-  onNextClick?: () => void;
-  onPrevClick?: () => void;
-  onStartClick?: () => void;
-  viewOnly?: boolean;
-}) {
-  const Icon = step.icon;
-  const showPrev = stepIndex > 0 && !isLast;
-
-  return (
-    <section className="relative w-full flex items-center py-16 md:py-24 pb-0">
-      <div className="max-w-5xl mx-auto px-6 md:px-12 w-full">
-        <div className="flex items-center gap-5 mb-10">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center shrink-0">
-            <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
-          </div>
-          <div>
-            <span className="text-gold font-semibold tracking-wider uppercase text-xl sm:text-xl">
-              Étape {step.number}
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl text-foreground leading-tight">
-              {step.title}
-            </h2>
-          </div>
-        </div>
-
-        <div className="inline-flex items-center gap-3 bg-secondary border border-border rounded-full px-6 py-3 mb-10">
-          <span className="text-2xl leading-none">⏱️</span>
-          <span className="text-2xl lg:text-2xl text-foreground font-semibold">Durée : {step.duration}</span>
-        </div>
-
-        <p className="text-xl sm:text-2xl leading-relaxed text-muted-foreground max-w-2xl mb-12">{step.description}</p>
-
-        <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-10">
-          {step.highlights.map((h, i) => (
-            <div
-              key={i}
-              className="flex items-start gap-4 p-6 bg-card border border-border rounded-lg shadow-soft transition-all hover:shadow-card"
-            >
-              <div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5">
-                <Check className="h-4 w-4 text-gold" />
-              </div>
-              <span className="leading-snug text-foreground font-medium text-2xl">{h}</span>
-            </div>
-          ))}
-        </div>
-
-        {!isLast ? (
-          <div className="mt-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            {showPrev ? (
-              <button
-                onClick={onPrevClick}
-                className="flex items-center justify-center gap-3 bg-white border-2 border-[#E5E0D8] px-8 h-16 rounded-full shadow-sm hover:shadow-md hover:border-[hsl(var(--gold))] transition-all group w-full sm:w-auto"
-              >
-                <ArrowUp className="h-6 w-6 text-[hsl(var(--gold))] group-hover:-translate-y-1 transition-transform" />
-                <span className="font-heading text-[#1B2333] font-semibold text-2xl">
-                  Revenir à l'étape {stepIndex}
-                </span>
-              </button>
-            ) : (
-              <span className="hidden sm:block" />
-            )}
-
-            <button
-              onClick={onNextClick}
-              aria-label={`Aller à l'étape ${stepIndex + 2}`}
-              className="flex items-center justify-center gap-4 bg-[hsl(var(--gold))] text-white px-10 h-16 rounded-full shadow-xl hover:bg-[hsl(var(--gold))]/90 hover:shadow-2xl transition-all group w-full sm:w-auto sm:ml-auto"
-            >
-              <span className="font-heading text-2xl font-bold tracking-wide">Étape {stepIndex + 2}</span>
-              <ArrowDown className="h-6 w-6 text-white group-hover:translate-y-1 transition-transform" />
-            </button>
-          </div>
-        ) : (
-          !viewOnly &&
-          onStartClick && (
-            <div className="mt-14 flex justify-center">
-              <button
-                onClick={onStartClick}
-                className="animate-float flex items-center justify-center gap-4 bg-[#1B2333] text-white px-12 py-5 rounded-full shadow-xl hover:bg-[#1B2333]/90 transition-all group"
-              >
-                <span className="font-heading text-xl font-bold tracking-wide sm:text-3xl">Commencer mon parcours</span>
-                <ChevronRight className="h-6 w-6 text-[hsl(var(--gold))] group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          )
-        )}
-      </div>
-    </section>
-  );
-}
-
-/* ─── MAIN COMPONENT ─── */
 
 export default function WelcomeRoadmap({
   onStartAutonomous,
@@ -400,154 +177,160 @@ export default function WelcomeRoadmap({
   showPricingInitially?: boolean;
   viewOnly?: boolean;
 }) {
+  const [activeStep, setActiveStep] = useState(0); // 0 = Welcome screen
   const [isModalOpen, setIsModalOpen] = useState(showPricingInitially);
-  const [activeStep, setActiveStep] = useState(0);
-  const [revealedSteps, setRevealedSteps] = useState<Set<number>>(new Set([0]));
-
-  const heroRef = useRef<HTMLDivElement>(null);
-  const stepRefs = [
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-  ];
-
-  const scrollTo = (ref: React.RefObject<HTMLDivElement>) => {
-    const y = (ref.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 140;
-    window.scrollTo({ top: y, behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    // 1. Observer pour l'animation d'apparition (Déclenche tôt pour un bel effet)
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            stepRefs.forEach((ref, i) => {
-              if (entry.target === ref.current) {
-                setRevealedSteps((prev) => new Set(prev).add(i + 1));
-              }
-            });
-          }
-        });
-      },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0 },
-    );
-
-    // 2. Observer strict pour la barre de progression (L'élément doit être au milieu de l'écran)
-    const spyObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (entry.target === heroRef.current) setActiveStep(0);
-            stepRefs.forEach((ref, i) => {
-              if (entry.target === ref.current) setActiveStep(i + 1);
-            });
-          }
-        });
-      },
-      { rootMargin: "-40% 0px -40% 0px", threshold: 0 },
-    );
-
-    const allRefs = [heroRef, ...stepRefs];
-    allRefs.forEach((ref) => {
-      if (ref.current) {
-        revealObserver.observe(ref.current);
-        spyObserver.observe(ref.current);
-      }
-    });
-
-    return () => {
-      allRefs.forEach((ref) => {
-        if (ref.current) {
-          revealObserver.unobserve(ref.current);
-          spyObserver.unobserve(ref.current);
-        }
-      });
-    };
-  }, []);
 
   return (
-    <div className="relative">
-      {/* ─── HERO ─── */}
-      <section
-        ref={heroRef}
-        className="section-luxury text-center pb-16 animate-in fade-in slide-in-from-bottom-8 duration-1000"
-      >
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="max-w-4xl mx-auto">
-            <span className="tracking-[0.3em] uppercase text-muted-foreground block mb-6 text-xl sm:text-2xl font-medium">
-              BIENVENUE SUR LE TUTORIEL KALIMERA
-            </span>
-            <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight mb-6">
-              Votre parcours en 4 étapes <br className="hidden sm:block" /> vers de belles rencontres
-            </h1>
-            <div className="divider-gold mx-auto mb-8" />
-            <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-6 font-medium">
-              4 étapes simples et guidées pour composer votre profil.
-            </p>
-            <p className="text-muted-foreground text-xl sm:text-2xl leading-relaxed mb-14">
-              L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes
-              aujourd'hui peuvent faire toute la différence demain.
-            </p>
-          </div>
+    <div className="fixed inset-0 bg-background flex flex-col overflow-hidden">
+      {/* ─── HEADER / PROGRESS BAR (TOUJOURS VISIBLE) ─── */}
+      <header className="bg-background/95 backdrop-blur-md border-b border-border py-4 px-6 shrink-0">
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
+          <button
+            onClick={() => setActiveStep(0)}
+            className="font-heading font-bold text-2xl text-foreground hover:text-gold transition-colors"
+          >
+            KALIMERA
+          </button>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-14">
-            {STEPS.map((step, i) => {
-              const Icon = step.icon;
-              return (
-                <button
-                  key={i}
-                  onClick={() => scrollTo(stepRefs[i])}
-                  className="group bg-card border border-border rounded-xl p-6 sm:p-8 hover:border-gold/50 hover:shadow-card transition-all duration-300 text-left flex flex-col h-full"
+          <div className="flex items-center gap-2 sm:gap-8">
+            {STEPS.map((step, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveStep(i + 1)}
+                className={`group flex flex-col items-center gap-1 transition-all ${activeStep === i + 1 ? "opacity-100" : "opacity-40 hover:opacity-70"}`}
+              >
+                <div
+                  className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 ${activeStep === i + 1 ? "bg-gold border-gold text-white shadow-md" : "bg-secondary border-border text-muted-foreground"}`}
                 >
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gold/10 flex items-center justify-center mb-6 group-hover:bg-gold/20 transition-colors shrink-0">
-                    <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-gold" />
-                  </div>
-                  <div className="flex-grow">
-                    <span className="text-gold text-2xl sm:text-2xl font-semibold tracking-wide block mb-2">
-                      Étape {step.number}
-                    </span>
-                    <span className="text-foreground font-heading text-2xl sm:text-3xl leading-snug block mb-4">
-                      {step.title}
-                    </span>
-                  </div>
-                  <span className="flex items-center gap-2 mt-auto pt-4 border-t border-border/50 text-2xl text-primary">
-                    <span className="text-2xl">⏱️</span> {step.duration}
-                  </span>
-                </button>
-              );
-            })}
+                  {activeStep > i + 1 ? <Check className="h-5 w-5" /> : <step.icon className="h-5 w-5" />}
+                </div>
+                <span className="hidden sm:block text-xs font-bold uppercase tracking-tighter">Étape {i + 1}</span>
+              </button>
+            ))}
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* ─── PROGRESS BAR ─── */}
-      <ProgressBar activeStep={activeStep} onStepClick={(i) => scrollTo(stepRefs[i])} />
-
-      {/* ─── STEPS ─── */}
-      <div className="pb-16">
-        {STEPS.map((step, i) => (
-          <div
-            key={i}
-            ref={stepRefs[i]}
-            className={`transition-all duration-1000 ease-out transform ${
-              revealedSteps.has(i + 1) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
-            } ${i === STEPS.length - 1 ? "" : "border-b border-border/40"}`}
-          >
-            <StepCard
-              step={step}
-              stepIndex={i}
-              totalSteps={STEPS.length}
-              isLast={i === STEPS.length - 1}
-              onNextClick={() => scrollTo(stepRefs[i + 1])}
-              onPrevClick={() => scrollTo(stepRefs[i - 1])}
-              onStartClick={() => setIsModalOpen(true)}
-              viewOnly={viewOnly}
-            />
+      {/* ─── MAIN CONTENT AREA (DYNAMIC) ─── */}
+      <main className="flex-1 relative flex items-center justify-center p-4 sm:p-8 bg-[hsl(var(--cream))]/10">
+        {/* ÉCRAN DE BIENVENUE (STEP 0) */}
+        {activeStep === 0 && (
+          <div className="max-w-4xl w-full text-center space-y-8 animate-in zoom-in-95 duration-500">
+            <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-gold/30 bg-gold/5 mb-4">
+              <Sparkles className="h-5 w-5 text-gold" />
+              <span className="font-bold tracking-[0.2em] uppercase text-gold text-sm sm:text-base">
+                Tutoriel Privé
+              </span>
+            </div>
+            <h1 className="font-heading text-4xl sm:text-6xl text-foreground leading-[1.1]">
+              Votre parcours <br /> en 4 étapes clés
+            </h1>
+            <p className="text-muted-foreground text-xl sm:text-2xl max-w-2xl mx-auto leading-relaxed italic font-light">
+              "L'inscription prend quelques minutes, mais elle est le fondement de vos futures rencontres."
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
+              <button
+                onClick={() => setActiveStep(1)}
+                className="btn-primary px-12 py-5 text-2xl shadow-xl w-full sm:w-auto flex items-center gap-3"
+              >
+                Découvrir le parcours <ArrowRight className="h-6 w-6" />
+              </button>
+            </div>
           </div>
-        ))}
-      </div>
+        )}
+
+        {/* ÉTAPES (STEP 1 À 4) */}
+        {activeStep > 0 && (
+          <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center animate-in slide-in-from-right-8 duration-500">
+            {/* Gauche: Détails */}
+            <div className="space-y-8">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-gold/10 flex items-center justify-center border border-gold/20 shadow-inner">
+                  {(() => {
+                    const Icon = STEPS[activeStep - 1].icon;
+                    return <Icon className="h-8 w-8 text-gold" />;
+                  })()}
+                </div>
+                <div>
+                  <span className="text-gold font-bold uppercase tracking-[0.2em] text-sm">Étape 0{activeStep}</span>
+                  <h2 className="font-heading text-4xl sm:text-5xl text-foreground">{STEPS[activeStep - 1].title}</h2>
+                </div>
+              </div>
+
+              <div className="bg-white/50 backdrop-blur-sm border border-border p-6 rounded-2xl space-y-4 shadow-sm">
+                <div className="flex items-center gap-2 text-gold">
+                  <span className="text-xl">⏱️</span>{" "}
+                  <span className="font-bold uppercase tracking-wider text-sm">
+                    Durée estimée : {STEPS[activeStep - 1].duration}
+                  </span>
+                </div>
+                <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed">
+                  {STEPS[activeStep - 1].description}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                {STEPS[activeStep - 1].highlights.map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 p-4 bg-background border border-border rounded-xl shadow-soft"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">
+                      <Check className="h-4 w-4 text-gold" />
+                    </div>
+                    <span className="text-lg font-medium text-foreground">{h}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Droite: Navigation Action */}
+            <div className="bg-primary p-10 rounded-[2.5rem] shadow-2xl flex flex-col items-center text-center space-y-8 relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold via-transparent to-transparent"></div>
+              <div className="w-32 h-32 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                <span className="font-heading text-6xl text-gold-light">{activeStep}</span>
+              </div>
+              <h3 className="text-white text-3xl font-heading">On continue ?</h3>
+
+              <div className="flex flex-col w-full gap-4 relative z-10">
+                {activeStep < 4 ? (
+                  <button
+                    onClick={() => setActiveStep(activeStep + 1)}
+                    className="bg-gold text-white h-20 rounded-2xl font-bold text-2xl shadow-xl hover:brightness-110 transition-all flex items-center justify-center gap-3"
+                  >
+                    Voir l'étape {activeStep + 1} <ArrowRight className="h-7 w-7" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="bg-white text-primary h-20 rounded-2xl font-bold text-2xl shadow-xl hover:bg-gold hover:text-white transition-all flex items-center justify-center gap-3"
+                  >
+                    Démarrer mon parcours <Sparkles className="h-7 w-7" />
+                  </button>
+                )}
+                <button
+                  onClick={() => setActiveStep(activeStep - 1)}
+                  className="text-white/60 hover:text-white flex items-center justify-center gap-2 text-lg font-medium transition-colors"
+                >
+                  <ArrowLeft className="h-4 w-4" /> Revenir à l'étape {activeStep === 1 ? "accueil" : activeStep - 1}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* ─── FOOTER ÉLITE ─── */}
+      <footer className="bg-background border-t border-border py-4 px-10 shrink-0 hidden sm:block">
+        <div className="max-w-6xl mx-auto flex items-center justify-between text-muted-foreground text-sm font-medium tracking-widest uppercase">
+          <span>SÉCURITÉ ABSOLUE</span>
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-gold" />
+            <span>STANDARD EXCELLENCE 2027</span>
+          </div>
+          <span>CONFIDENTIALITÉ GARANTIE</span>
+        </div>
+      </footer>
 
       {!viewOnly && (
         <PricingModal
