@@ -320,19 +320,40 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                       muted={isMuted}
                       playsInline
                       onEnded={() => setIsPlaying(false)}
+                      onTimeUpdate={(e) => setVideoCurrent(e.currentTarget.currentTime)}
+                      onLoadedMetadata={(e) => setVideoDuration(e.currentTarget.duration)}
                     />
                     {!isPlaying && (
                       <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
                         <Play className="h-20 w-20 text-white drop-shadow-2xl" />
                       </div>
                     )}
+                    {/* SEEK BAR */}
+                    <div
+                      className="absolute bottom-0 left-0 right-0 px-6 py-4 bg-gradient-to-t from-black/70 to-transparent z-10"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex items-center gap-3 text-white text-lg font-medium">
+                        <span className="tabular-nums w-12">{formatTime(videoCurrent)}</span>
+                        <input
+                          type="range"
+                          min={0}
+                          max={videoDuration || 0}
+                          step={0.1}
+                          value={videoCurrent}
+                          onChange={handleSeek}
+                          className="flex-1 h-2 rounded-full appearance-none bg-white/30 accent-[hsl(var(--gold))] cursor-pointer"
+                        />
+                        <span className="tabular-nums w-12 text-right">{formatTime(videoDuration)}</span>
+                      </div>
+                    </div>
                     {/* BOUTON SON */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setIsMuted(!isMuted);
                       }}
-                      className="absolute bottom-6 left-6 p-4 bg-black/40 backdrop-blur-md text-white rounded-2xl hover:bg-black/60 transition-all z-10"
+                      className="absolute top-6 left-6 p-4 bg-black/40 backdrop-blur-md text-white rounded-2xl hover:bg-black/60 transition-all z-10"
                     >
                       {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
                     </button>
