@@ -703,9 +703,9 @@ export default function Messages() {
                         </div>
                         <p className="text-[#1B2333] text-xl font-medium leading-snug">
                           Aujourd'hui,{" "}
-                          <span className="text-[hsl(var(--gold-dark))] font-bold">14 nouveaux membres certifiés</span>{" "}
+                          <span className="text-[hsl(var(--gold-dark))] font-bold text-2xl">14 nouveaux membres certifiés</span>{" "}
                           ont rejoint votre bassin de rencontre
-                          <span className="text-[hsl(var(--gold-dark))] font-bold">
+                          <span className="text-[hsl(var(--gold-dark))] font-bold text-2xl">
                             {" "}
                             ({userProfile?.city_name || userProfile?.region_name || "votre région"}).
                           </span>
