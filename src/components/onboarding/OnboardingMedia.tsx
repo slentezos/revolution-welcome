@@ -569,7 +569,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <Button
                 onClick={handleStudioPayment}
                 disabled={isProcessingPayment}
-                className="h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-xl"
+                className="whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 px-4 py-2 h-16 w-full rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white font-bold shadow-md transition-transform active:scale-95 flex items-center justify-center gap-2 text-2xl"
               >
                 {isProcessingPayment ? <Loader2 className="animate-spin h-6 w-6" /> : <Check className="h-6 w-6" />}
                 Réserver ma séance (35€)
