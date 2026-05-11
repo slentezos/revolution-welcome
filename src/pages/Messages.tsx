@@ -703,7 +703,9 @@ export default function Messages() {
                         </div>
                         <p className="text-[#1B2333] text-xl font-medium leading-snug">
                           Aujourd'hui,{" "}
-                          <span className="text-[hsl(var(--gold-dark))] font-bold text-2xl">14 nouveaux membres certifiés</span>{" "}
+                          <span className="text-[hsl(var(--gold-dark))] font-bold text-2xl">
+                            14 nouveaux membres certifiés
+                          </span>{" "}
                           ont rejoint votre bassin de rencontre
                           <span className="text-[hsl(var(--gold-dark))] font-bold text-2xl">
                             {" "}
@@ -788,7 +790,10 @@ export default function Messages() {
             </div>
             <p className="mt-3 text-muted-foreground text-xl leading-relaxed">
               💡 Astuce dictée : dites <span className="font-semibold text-foreground">« virgule »</span>,{" "}
-              <span className="font-semibold text-foreground">« point »</span>.
+              <span className="font-semibold text-foreground">« point »</span>,{" "}
+              <span className="font-semibold text-foreground">« point d'interrogation »</span>,{" "}
+              <span className="font-semibold text-foreground">« point d'exclamation »</span> ou{" "}
+              <span className="font-semibold text-foreground">« à la ligne »</span>.
             </p>
           </div>
           <div className="px-6 lg:px-8 pb-7 pt-4 bg-gradient-to-b from-transparent to-[hsl(var(--cream))]/40">
@@ -877,39 +882,6 @@ export default function Messages() {
         onReportInstead={() => handleReport(unmatchTarget)}
       />
       <BenevolenceModal open={benevolenceModalOpen} onOpenChange={setBenevolenceModalOpen} />
-
-      {/* 9 conseils de sécurité */}
-      <Dialog open={showConseils} onOpenChange={setShowConseils}>
-        <DialogContent className="max-w-2xl p-0 overflow-hidden rounded-[24px] border-0 shadow-2xl bg-white">
-          <div className="bg-[#1B2333] px-8 py-6 flex items-center gap-3">
-            <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold-light))]" />
-            <h2 className="font-heading font-semibold text-white text-3xl">9 conseils de sécurité</h2>
-          </div>
-          <div className="px-8 py-8 max-h-[70vh] overflow-y-auto">
-            <p className="text-muted-foreground mb-6 text-2xl">
-              Pour des échanges sereins et bienveillants au sein de votre Cercle Privé.
-            </p>
-            <ol className="space-y-4">
-              {conseils.map((conseil, i) => (
-                <li key={i} className="flex items-start gap-4">
-                  <span className="shrink-0 w-10 h-10 rounded-full bg-[hsl(var(--gold))]/15 text-[hsl(var(--gold))] font-heading font-semibold text-xl flex items-center justify-center">
-                    {i + 1}
-                  </span>
-                  <p className="text-[#1B2333] text-xl leading-relaxed pt-1">{conseil}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <div className="px-8 py-5 border-t border-amber-100/40 bg-amber-50/20">
-            <Button
-              onClick={() => setShowConseils(false)}
-              className="w-full h-14 rounded-xl bg-[#1B2333] hover:bg-[#1B2333]/90 text-white text-xl font-medium"
-            >
-              J'ai bien compris
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </Layout>
   );
 }
