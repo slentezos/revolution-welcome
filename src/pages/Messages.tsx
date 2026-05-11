@@ -822,7 +822,7 @@ export default function Messages() {
               {/* Effet "Glow" luxueux et respirant sur le bouton actif */}
               <button
                 onClick={toggleListening}
-                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl xl:text-xl font-semibold transition-all duration-700 ease-out ${
+                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl xl:text-xl font-semibold transition-all duration-1000 ease-out ${
                   isListening
                     ? "text-white shadow-[0_0_20px_rgba(197,160,89,0.4)] border border-[hsl(var(--gold))]/50 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite] bg-[#da9e3e]"
                     : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))]"
