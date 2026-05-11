@@ -210,7 +210,7 @@ export default function PersonalityResultModal({ open, onClose, answers }: Perso
           </div>
 
           <DialogHeader className="space-y-1">
-            <p className="text-sm font-medium text-[hsl(var(--gold))] tracking-widest uppercase text-center">
+            <p className="font-semibold text-[hsl(var(--gold))] text-2xl tracking-widest uppercase text-center">
               Votre profil
             </p>
             <DialogTitle className="text-center font-heading text-2xl md:text-3xl font-bold text-[#1B2333]">
