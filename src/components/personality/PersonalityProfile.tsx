@@ -147,7 +147,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
       {/* CE QUI VOUS DISTINGUE — Strengths (gold) / Weaknesses (dark) */}
       <section className="grid lg:grid-cols-2 gap-0">
         <div className="bg-[hsl(var(--cream))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
-          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
+          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
             Ce qui vous distingue
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-10">Vos points forts</h2>
