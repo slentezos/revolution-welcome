@@ -27,19 +27,24 @@ function PricingModal({
   onOpenChange,
   onStartAutonomous,
   onStartConcierge,
+  initialView = "story",
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   onStartAutonomous: () => void;
   onStartConcierge: () => void;
+  initialView?: "story" | "pricing";
 }) {
-  const [view, setView] = useState<"story" | "pricing">("story");
+  const [view, setView] = useState<"story" | "pricing">(initialView);
+  useEffect(() => {
+    if (open) setView(initialView);
+  }, [open, initialView]);
   return (
     <Dialog
       open={open}
       onOpenChange={(v) => {
         onOpenChange(v);
-        if (!v) setView("story");
+        if (!v) setView(initialView);
       }}
     >
       <DialogContent className="max-w-6xl w-[calc(100%-2rem)] rounded-sm border-border shadow-[var(--shadow-luxury)] p-0 gap-0 bg-background max-h-[90vh] overflow-y-auto flex flex-col z-[100]">
@@ -338,6 +343,7 @@ export default function WelcomeRoadmap({
           onOpenChange={setIsModalOpen}
           onStartAutonomous={onStartAutonomous}
           onStartConcierge={onStartConcierge}
+          initialView={showPricingInitially ? "pricing" : "story"}
         />
       )}
     </div>
