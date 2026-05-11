@@ -78,14 +78,14 @@ function PricingModal({
               <div className="bg-card border border-border p-10 flex flex-col h-full shadow-[var(--shadow-card)] rounded-sm">
                 <div className="flex items-center gap-4 mb-8">
                   <Star className="h-7 w-7 text-gold" />
-                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-xl">
+                  <span className="font-medium tracking-[0.2em] uppercase text-muted-foreground text-2xl">
                     Mode Autonome
                   </span>
                 </div>
                 <h3 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">À votre rythme</h3>
-                <p className="text-gold font-medium text-xl mb-6">Inclus dans vos 3 mois offerts</p>
+                <p className="text-gold font-medium mb-6 text-2xl">Inclus dans vos 3 mois offerts</p>
                 <div className="divider-gold mb-8" />
-                <p className="text-foreground/80 leading-relaxed flex-grow mb-10 text-xl">
+                <p className="text-foreground/80 leading-relaxed flex-grow mb-10 text-2xl">
                   Vous complétez votre portrait sereinement, étape par étape : quiz, photos, vidéo, profil et test de
                   personnalité.
                 </p>
@@ -102,7 +102,7 @@ function PricingModal({
                 </div>
                 <div className="flex items-center gap-4 mb-8 mt-4">
                   <Phone className="h-7 w-7 text-gold-light" />
-                  <span className="font-medium tracking-[0.2em] uppercase text-white/80 text-xl">Conciergerie</span>
+                  <span className="font-medium tracking-[0.2em] uppercase text-white/80 text-2xl">Conciergerie</span>
                 </div>
                 <h3 className="font-heading text-3xl sm:text-4xl text-primary-foreground mb-3">
                   L'Accompagnement Privé
