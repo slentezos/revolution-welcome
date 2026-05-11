@@ -540,7 +540,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 </div>
                 <div>
                   <p className="font-bold text-[#1B2333] leading-tight text-xl">Accompagnement</p>
-                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-lg">
+                  <p className="text-[#1B2333]/70 leading-snug mt-1 text-2xl">
                     Un expert vous guide pour vos photos et vidéo.
                   </p>
                 </div>
