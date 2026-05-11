@@ -763,7 +763,7 @@ export default function Messages() {
               </div>
             )}
             <div className="relative flex-1 min-w-0">
-              <p className="text-[hsl(var(--gold-light))] lg:text-base uppercase tracking-[0.18em] font-medium mb-1 text-2xl">
+              <p className="text-[hsl(var(--gold-light))] text-sm lg:text-base uppercase tracking-[0.18em] font-medium mb-1">
                 Nouveau message
               </p>
               <h2 className="font-heading font-semibold text-white text-2xl lg:text-3xl truncate">
@@ -800,7 +800,7 @@ export default function Messages() {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={toggleListening}
-                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-lg lg:text-xl font-semibold transition-all ${isListening ? "bg-[hsl(var(--gold))] text-white shadow-lg" : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))]"}`}
+                className={`min-h-[60px] flex-1 flex items-center justify-center gap-3 rounded-2xl text-xl xl:text-xl font-semibold transition-all ${isListening ? "bg-[hsl(var(--gold))] text-white shadow-lg" : "bg-white border-2 border-[#1B2333]/15 text-[#1B2333] hover:border-[hsl(var(--gold))]"}`}
               >
                 {isListening ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6 text-[hsl(var(--gold))]" />}
                 {isListening ? "Arrêter" : "Dicter"}
@@ -808,14 +808,14 @@ export default function Messages() {
               <Button
                 onClick={() => setComposerOpen(false)}
                 variant="outline"
-                className="min-h-[60px] rounded-2xl text-lg lg:text-xl px-6"
+                className="min-h-[60px] rounded-2xl text-xl xl:text-xl px-6"
               >
                 Fermer
               </Button>
               <Button
                 onClick={handleSend}
                 disabled={isSent || (!message.trim() && !isListening)}
-                className="min-h-[60px] sm:min-w-[180px] rounded-2xl text-lg lg:text-xl font-semibold gap-2 bg-[#1B2333]"
+                className="min-h-[60px] sm:min-w-[180px] rounded-2xl text-xl xl:text-xl font-semibold gap-2 bg-[#1B2333]"
               >
                 {isSent ? "Envoyé" : "Envoyer"}
               </Button>
