@@ -252,7 +252,7 @@ export default function WelcomeRoadmap({
                   })()}
                 </div>
                 <div>
-                  <span className="text-gold font-bold uppercase tracking-[0.2em] text-sm">Étape 0{activeStep}</span>
+                  <span className="text-gold font-bold uppercase tracking-[0.2em] text-xl">Étape 0{activeStep}</span>
                   <h2 className="font-heading text-4xl sm:text-5xl text-foreground">{STEPS[activeStep - 1].title}</h2>
                 </div>
               </div>
@@ -260,7 +260,7 @@ export default function WelcomeRoadmap({
               <div className="bg-white/50 backdrop-blur-sm border border-border p-6 rounded-2xl space-y-4 shadow-sm">
                 <div className="flex items-center gap-2 text-gold">
                   <span className="text-xl">⏱️</span>{" "}
-                  <span className="font-bold uppercase tracking-wider text-sm">
+                  <span className="font-bold uppercase tracking-wider text-xl">
                     Durée estimée : {STEPS[activeStep - 1].duration}
                   </span>
                 </div>
@@ -278,7 +278,7 @@ export default function WelcomeRoadmap({
                     <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">
                       <Check className="h-4 w-4 text-gold" />
                     </div>
-                    <span className="text-lg font-medium text-foreground">{h}</span>
+                    <span className="font-medium text-foreground text-xl">{h}</span>
                   </div>
                 ))}
               </div>
@@ -310,7 +310,7 @@ export default function WelcomeRoadmap({
                 )}
                 <button
                   onClick={() => setActiveStep(activeStep - 1)}
-                  className="text-white/60 hover:text-white flex items-center justify-center gap-2 text-lg font-medium transition-colors"
+                  className="text-white/60 hover:text-white flex items-center justify-center gap-2 font-medium transition-colors text-2xl"
                 >
                   <ArrowLeft className="h-4 w-4" /> Revenir à l'étape {activeStep === 1 ? "accueil" : activeStep - 1}
                 </button>
