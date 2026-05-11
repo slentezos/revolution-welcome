@@ -528,7 +528,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               <DialogTitle className="tracking-tight font-heading font-bold text-[#1B2333] leading-tight text-3xl sm:text-4xl">
                 Votre voix, votre regard, votre présence
               </DialogTitle>
-              <p className="text-[#1B2333]/80 leading-snug text-xl">
+              <p className="text-[#1B2333]/80 leading-snug text-2xl">
                 Pour vous accompagner, Kalimera vous propose une aide personnalisée.
               </p>
             </div>
