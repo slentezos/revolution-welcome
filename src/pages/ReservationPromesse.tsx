@@ -386,7 +386,7 @@ export default function ReservationPromesse() {
           <h2 data-reveal className="font-heading text-5xl md:text-7xl mb-8">
             Tout est inclus pour 89 €
           </h2>
-          <p data-reveal data-reveal-delay="100" className="text-white/50 mb-20 text-2xl font-light">
+          <p data-reveal data-reveal-delay="100" className="mb-20 text-2xl text-white font-normal">
             Un paiement unique, sans abonnement, sans surprise.
           </p>
 
@@ -401,7 +401,7 @@ export default function ReservationPromesse() {
                 <div className="w-8 h-8 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center shrink-0">
                   <Check className="h-5 w-5 text-[#1B2333]" />
                 </div>
-                <span className="text-white/90 text-xl font-medium">{item}</span>
+                <span className="text-white/90 font-medium text-2xl">{item}</span>
               </div>
             ))}
           </div>
