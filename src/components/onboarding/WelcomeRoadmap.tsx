@@ -278,7 +278,7 @@ export default function WelcomeRoadmap({
                     <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">
                       <Check className="h-4 w-4 text-gold" />
                     </div>
-                    <span className="text-lg font-medium text-foreground">{h}</span>
+                    <span className="text-2xl font-medium text-foreground">{h}</span>
                   </div>
                 ))}
               </div>
