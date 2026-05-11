@@ -883,10 +883,10 @@ export default function Messages() {
         <DialogContent className="max-w-2xl p-0 overflow-hidden rounded-[24px] border-0 shadow-2xl bg-white">
           <div className="bg-[#1B2333] px-8 py-6 flex items-center gap-3">
             <ShieldCheck className="h-7 w-7 text-[hsl(var(--gold-light))]" />
-            <h2 className="font-heading text-2xl font-semibold text-white">9 conseils de sécurité</h2>
+            <h2 className="font-heading font-semibold text-white text-3xl">9 conseils de sécurité</h2>
           </div>
           <div className="px-8 py-8 max-h-[70vh] overflow-y-auto">
-            <p className="text-muted-foreground text-xl mb-6">
+            <p className="text-muted-foreground mb-6 text-2xl">
               Pour des échanges sereins et bienveillants au sein de votre Cercle Privé.
             </p>
             <ol className="space-y-4">
