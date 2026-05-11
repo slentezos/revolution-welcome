@@ -248,12 +248,7 @@ export default function MatchProfileModal({
                   {/* Identity bar */}
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-[hsl(var(--gold))]/30 flex-shrink-0">
-                      <img
-                        decoding="async"
-                        src={match.avatar}
-                        alt={match.name}
-                        className="w-full h-full object-cover"
-                      />
+                      <img decoding="async" src={match.avatar} alt={match.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
@@ -339,14 +334,13 @@ export default function MatchProfileModal({
                   </div>
                 </div>
 
-                {/* Right: Profile attributes & Navigation Action */}
-                <div className="lg:w-[50%] flex flex-col p-5 lg:p-6 bg-[hsl(var(--cream))] relative">
+                {/* Right: Profile attributes */}
+                <div className="lg:w-[50%] flex flex-col p-5 lg:p-6 bg-[hsl(var(--cream))]">
                   <h3 className="font-heading text-2xl font-semibold text-foreground mb-4 flex items-center gap-2">
                     <span className="w-8 h-[2px] bg-[hsl(var(--gold))]" />
                     Informations
                   </h3>
-
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-3 flex-1 mb-6">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-3 flex-1">
                     {profileAttributes.map((attr, idx) => (
                       <div key={idx} className="flex items-center gap-3 py-2 border-b border-border/20 last:border-b-0">
                         <div className="w-9 h-9 rounded-lg bg-primary/8 flex items-center justify-center flex-shrink-0">
@@ -361,31 +355,19 @@ export default function MatchProfileModal({
                       </div>
                     ))}
                   </div>
-
-                  {/* Explicit Navigation Button for Seniors */}
-                  <div className="mt-auto pt-4 border-t border-border/20 flex justify-end">
-                    <Button
-                      onClick={() => setActiveTab("quiz")}
-                      className="bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/30 rounded-xl px-8 py-6 h-auto text-xl font-semibold transition-all group"
-                    >
-                      Découvrir ses réponses au Quiz
-                      <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </div>
                 </div>
               </div>
             )}
 
             {/* ── QUIZ TAB ── */}
             {activeTab === "quiz" && (
-              <div className="flex flex-col min-h-full bg-[hsl(var(--cream))] p-5 lg:p-6 pb-10 relative">
+              <div className="flex flex-col min-h-full bg-[hsl(var(--cream))] p-5 lg:p-6 pb-10">
                 <div className="flex items-center gap-3 mb-6">
                   <span className="w-8 h-[2px] bg-[hsl(var(--gold))]" />
                   <h3 className="font-heading font-semibold text-foreground text-3xl">Quiz des 3 préférences</h3>
                   <span className="text-muted-foreground text-2xl">— Ce que {match.name} apprécie</span>
                 </div>
-
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 flex-1 mb-8">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 flex-1">
                   {quizCategories.map((cat, idx) => (
                     <div
                       key={idx}
@@ -408,39 +390,15 @@ export default function MatchProfileModal({
                     </div>
                   ))}
                 </div>
-
-                {/* Explicit Navigation Buttons for Seniors */}
-                <div className="mt-auto pt-6 border-t border-border/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <Button
-                    onClick={() => setActiveTab("profile")}
-                    variant="outline"
-                    className="border-[hsl(var(--gold))]/30 text-foreground hover:bg-[hsl(var(--gold))]/10 rounded-xl px-8 py-6 h-auto text-xl font-semibold transition-all group w-full sm:w-auto"
-                  >
-                    <ChevronLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-                    Retour au Profil
-                  </Button>
-                  <Button
-                    onClick={() => setActiveTab("personality")}
-                    className="bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold))]/20 border border-[hsl(var(--gold))]/30 rounded-xl px-8 py-6 h-auto text-xl font-semibold transition-all group w-full sm:w-auto"
-                  >
-                    Voir son analyse de Personnalité
-                    <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </div>
               </div>
             )}
 
             {/* ── PERSONALITY TAB ── */}
             {activeTab === "personality" && (
-              <div className="min-h-full pb-10 relative bg-[hsl(var(--cream))]">
+              <div className="min-h-full pb-10">
                 {/* Hero section */}
                 <div className="relative h-[320px] lg:h-[360px] flex items-center justify-center overflow-hidden">
-                  <img
-                    decoding="async"
-                    src={personalityHero}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
+                  <img decoding="async" src={personalityHero} alt="" className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-primary/70" />
                   <div className="relative z-10 text-center px-8">
                     <p className="text-[hsl(var(--gold))] font-heading tracking-[4px] uppercase mb-3 text-3xl">
@@ -463,7 +421,7 @@ export default function MatchProfileModal({
                 </div>
 
                 {/* Temperament text */}
-                <div className="px-8 lg:px-16 py-10">
+                <div className="bg-[hsl(var(--cream))] px-8 lg:px-16 py-10">
                   <p className="text-foreground text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto font-normal">
                     {matchPersonality.temperament}
                   </p>
@@ -502,7 +460,7 @@ export default function MatchProfileModal({
                 </div>
 
                 {/* Compatibility note */}
-                <div className="px-8 lg:px-16 py-10 mb-8">
+                <div className="bg-[hsl(var(--cream))] px-8 lg:px-16 py-10">
                   <div className="max-w-3xl mx-auto bg-background rounded-xl p-8 border border-border/20 shadow-[var(--shadow-soft)]">
                     <p className="text-[hsl(var(--gold))] font-heading text-sm tracking-[3px] uppercase mb-3">
                       Compatibilité
@@ -513,18 +471,6 @@ export default function MatchProfileModal({
                     </p>
                   </div>
                 </div>
-
-                {/* Explicit Navigation Button for Seniors */}
-                <div className="px-8 lg:px-16 flex justify-start">
-                  <Button
-                    onClick={() => setActiveTab("quiz")}
-                    variant="outline"
-                    className="border-[hsl(var(--gold))]/30 text-foreground hover:bg-[hsl(var(--gold))]/10 rounded-xl px-8 py-6 h-auto text-xl font-semibold transition-all group"
-                  >
-                    <ChevronLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-                    Retour au Quiz
-                  </Button>
-                </div>
               </div>
             )}
           </div>
@@ -532,7 +478,7 @@ export default function MatchProfileModal({
           {/* ═══ Bottom action bar — luxury style ═══ */}
           {!hideActions && (
             <div className="border-t border-border/20 px-6 lg:px-10 py-4 flex items-center justify-between bg-primary flex-shrink-0 z-20">
-              {/* REPOSITIONED RED REPORT BUTTON */}
+              {/* REPOSITIONED RED REPORT BUTTON - replace descriptive text */}
               {onReport && (
                 <Button
                   onClick={() => onReport()}
