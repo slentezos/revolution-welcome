@@ -295,7 +295,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   return (
     <div className="h-[calc(100vh-140px)] flex flex-col overflow-hidden bg-white">
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-0 min-h-0">
-        <div className="flex-1 min-h-0 p-4 lg:p-10 flex flex-col gap-6 text-left">
+        <div className="flex-1 min-h-0 p-4 lg:p-10 flex flex-col gap-6 text-left py-0 my-0">
           <div className="flex items-center justify-between">
             <h2 className="font-heading text-4xl font-bold text-[#1B2333]">Vos photos & vidéo</h2>
             <div className="px-5 py-2 bg-secondary/50 rounded-xl border border-[#E5E0D8]">
@@ -397,7 +397,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   </div>
                 )}
               </div>
-              <div className="flex items-center justify-between px-4">
+              <div className="flex items-center justify-between px-4 py-0 my-0">
                 <p className="text-muted-foreground mb-8 text-xl">Votre sourire est votre plus belle signature.</p>
                 <button
                   onClick={() => setShowVideoTutorial(true)}
@@ -465,11 +465,11 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       </div>
 
       {/* FOOTER */}
-      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] py-8 px-6 lg:px-20 text-left shadow-[0_-10px_40px_rgba(0,0,0,0.02)]">
+      <div className="flex-shrink-0 bg-white border-t border-[#E5E0D8] px-6 lg:px-20 text-left shadow-[0_-10px_40px_rgba(0,0,0,0.02)] py-0">
         <div className="max-w-5xl mx-auto space-y-6">
           <div
             className={cn(
-              "flex items-center gap-5 p-6 rounded-3xl border transition-all cursor-pointer",
+              "flex items-center gap-5 p-6 rounded-3xl border transition-all cursor-pointer py-0 my-0",
               confirmedAge ? "bg-emerald-50/50 border-emerald-200" : "bg-white border-[#E5E0D8]",
             )}
             onClick={() => setConfirmedAge(!confirmedAge)}
