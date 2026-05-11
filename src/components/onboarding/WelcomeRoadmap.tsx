@@ -85,7 +85,7 @@ function PricingModal({
                 <h3 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">À votre rythme</h3>
                 <p className="text-gold font-medium mb-6 text-2xl">Inclus dans vos 3 mois offerts</p>
                 <div className="divider-gold mb-8" />
-                <p className="text-foreground/80 leading-relaxed flex-grow mb-10 text-xl">
+                <p className="text-foreground/80 leading-relaxed flex-grow mb-10 text-2xl">
                   Vous complétez votre portrait sereinement, étape par étape : quiz, photos, vidéo, profil et test de
                   personnalité.
                 </p>
