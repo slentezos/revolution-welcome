@@ -805,8 +805,6 @@ export default function Messages() {
               />
             </div>
 
-            <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl mt-4">
-              <Lightbulb className="h-5 w-5 text-[hsl(var(--gold))] shrink-0" />
               <p className="text-slate-600 leading-snug text-xl">
                 💡 Astuce dictée : dites <span className="font-semibold text-[#1B2333]">« virgule »</span>,{" "}
                 <span className="font-semibold text-[#1B2333]">« point »</span>,{" "}
