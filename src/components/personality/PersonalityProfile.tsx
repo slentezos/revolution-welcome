@@ -53,7 +53,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
   const sections: { subtitle: string; title: string; paragraphs: string[]; image: string }[] = [
     {
       subtitle: "Votre façon d'aimer",
-      title: "Vos affinités et vos rejets",
+      title: "1. Votre vision de l'amour",
       paragraphs: [g(profile.loveVision)],
       image: imageUrl(profile.imageSlug, gender, "love", fallbackLove),
     },
@@ -185,7 +185,9 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
 
       {/* ALTERNATING SECTIONS (1, 2, 4, 5) */}
       {sections.map((section, idx) => {
-        const imageLeft = idx % 2 === 0;
+        // MODIFICATION ICI: Inversion du motif pour basculer les images des sections 4 et 5
+        const imageLeft = idx === 0 || idx === 3;
+
         const textBlock = (
           <div className="flex items-center px-8 md:px-16 lg:px-20 py-16 md:py-20 bg-[hsl(var(--cream))]">
             <div className="max-w-xl">
