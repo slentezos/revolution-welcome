@@ -103,7 +103,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))] via-transparent to-transparent opacity-60" />
 
         <div className="relative z-10 text-center px-6 py-16 max-w-5xl mx-auto w-full flex flex-col items-center">
-          <p className="text-[hsl(var(--gold))] tracking-[0.3em] uppercase font-medium mb-4 md:mb-6 text-sm md:text-lg lg:text-xl">
+          <p className="text-[hsl(var(--gold))] tracking-[0.3em] uppercase font-medium mb-4 md:mb-6 md:text-lg lg:text-xl text-2xl">
             Votre profil de personnalité
           </p>
 
