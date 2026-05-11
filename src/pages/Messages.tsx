@@ -771,7 +771,7 @@ export default function Messages() {
               </div>
             )}
             <div className="relative flex-1 min-w-0">
-              <p className="text-[hsl(var(--gold-light))] text-sm lg:text-base uppercase tracking-[0.18em] font-medium mb-1">
+              <p className="text-[hsl(var(--gold-light))] lg:text-base uppercase tracking-[0.18em] font-medium mb-1 text-xl">
                 Nouveau message
               </p>
               <h2 className="font-heading font-semibold text-white text-2xl lg:text-3xl truncate">
