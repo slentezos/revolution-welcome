@@ -450,7 +450,7 @@ export default function ReservationPromesse() {
             <button
               data-reveal
               data-reveal-delay="500"
-              onClick={() => navigate("/onboarding")}
+              onClick={() => navigate("/onboarding?step=welcome&showPricing=true")}
               className="text-muted-foreground hover:text-foreground underline underline-offset-8 text-lg"
             >
               ← Revenir à l'option gratuite
