@@ -42,7 +42,7 @@ export default function UnmatchModal({ open, onOpenChange, name, onConfirmUnmatc
             }}
             className="flex items-start gap-3 p-4 rounded-2xl bg-gray-50/80 border border-gray-100 text-left w-full hover:bg-gray-100/80 transition-colors">
             <Flag className="h-5 w-5 text-[#1B2333] shrink-0 mt-0.5" />
-            <div>
+            <div className="text-xl">
               <p className="font-semibold text-[#1B2333] text-base">Un comportement inapproprié</p>
               <p className="text-gray-500 text-sm">Signalez-le à notre équipe</p>
             </div>
