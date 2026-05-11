@@ -304,7 +304,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
               "w-full bg-[hsl(var(--cream))]/60 border-2 rounded-2xl text-xl leading-relaxed text-[#1B2333] placeholder:text-gray-400 resize-none min-h-[160px] max-h-[300px] overflow-y-auto focus:outline-none focus:ring-0 px-6 py-5 transition-all shadow-sm",
               isListening
                 ? "border-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--gold)/0.12)]"
-                : "border-amber-100/80 focus:border-[hsl(var(--gold))]",
+                : "focus:border-[hsl(var(--gold))] border-[#e2a036]",
               className,
             )}
             ref={setRefs}
