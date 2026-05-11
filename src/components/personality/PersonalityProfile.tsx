@@ -66,7 +66,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
     // Section 3 is rendered separately (two-column lists)
     {
       subtitle: "Votre rythme de vie",
-      title: "4. Votre quotidien et rapport au stress",
+      title: "Vos affinités et vos rejets",
       paragraphs: [g(profile.balanceStress)],
       image: imageUrl(profile.imageSlug, gender, "daily", fallbackDaily),
     },
