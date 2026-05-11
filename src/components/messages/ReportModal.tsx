@@ -208,7 +208,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
                 setStep("intro");
                 if (isListening) forceStopDictation();
               }}
-              className="flex items-center gap-2 text-gray-500 hover:text-[#1B2333] transition-colors text-lg"
+              className="flex items-center gap-2 text-gray-500 hover:text-[#1B2333] transition-colors text-xl"
             >
               <ArrowLeft className="h-5 w-5" />
               Retour
@@ -219,13 +219,13 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
             </div>
 
             <h2 className="text-center font-heading font-bold text-[#1B2333] text-3xl">Que s'est-il passé ?</h2>
-            <p className="text-center text-foreground text-lg">
+            <p className="text-center text-foreground text-xl">
               Sélectionnez un motif et décrivez la situation en détail.
             </p>
 
             <div className="space-y-6 pt-2">
               <div className="space-y-2">
-                <Label className="text-lg font-medium text-[#1B2333]">
+                <Label className="font-medium text-[#1B2333] text-xl">
                   Motif principal <span className="text-destructive">*</span>
                 </Label>
                 <Select value={reason} onValueChange={setReason}>
@@ -256,7 +256,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
 
               {/* Le bloc détails se grise et se verrouille si aucun motif n'est choisi */}
               <div className={`space-y-3 transition-all duration-300 ${!reason ? "opacity-50" : "opacity-100"}`}>
-                <Label className="text-lg font-medium text-[#1B2333]">Détails supplémentaires</Label>
+                <Label className="font-medium text-[#1B2333] text-xl">Détails supplémentaires</Label>
 
                 <div className="flex items-center gap-4 mb-1">
                   <button
@@ -301,7 +301,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
                   }`}
                   maxLength={1000}
                 />
-                <p className="text-gray-500 text-right text-sm mt-1">{reportText.length}/1000</p>
+                <p className="text-gray-500 text-right mt-1 text-xl">{reportText.length}/1000</p>
               </div>
 
               <Button
