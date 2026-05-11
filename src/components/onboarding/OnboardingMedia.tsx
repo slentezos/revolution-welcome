@@ -576,7 +576,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
               </Button>
               <button
                 onClick={() => setShowStudioModal(false)}
-                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 font-medium transition-colors text-xl"
+                className="h-14 w-full rounded-xl border border-[#1B2333]/15 text-[#1B2333] hover:bg-gray-50 font-medium transition-colors text-2xl"
               >
                 Essayer seul(e) d'abord
               </button>
