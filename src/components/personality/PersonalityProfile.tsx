@@ -258,7 +258,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
                   </h2>
                   <div className="w-12 h-px bg-[hsl(var(--gold))] mb-10" />
 
-                  <h3 className="font-heading text-2xl font-semibold text-foreground mb-5">
+                  <h3 className="font-heading font-semibold text-foreground mb-5 text-3xl">
                     {profile.attractions.comfortTitle}
                   </h3>
                   <ul className="space-y-4 mb-10">
