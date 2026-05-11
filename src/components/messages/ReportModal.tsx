@@ -256,7 +256,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
 
               {/* Le bloc détails se grise et se verrouille si aucun motif n'est choisi */}
               <div className={`space-y-3 transition-all duration-300 ${!reason ? "opacity-50" : "opacity-100"}`}>
-                <Label className="text-lg font-medium text-[#1B2333]">Détails supplémentaires</Label>
+                <Label className="font-medium text-[#1B2333] text-xl">Détails supplémentaires</Label>
 
                 <div className="flex items-center gap-4 mb-1">
                   <button
