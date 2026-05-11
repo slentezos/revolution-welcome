@@ -225,7 +225,7 @@ export default function ReportModal({ open, onOpenChange, name, onUnmatchInstead
 
             <div className="space-y-6 pt-2">
               <div className="space-y-2">
-                <Label className="text-lg font-medium text-[#1B2333]">
+                <Label className="font-medium text-[#1B2333] text-xl">
                   Motif principal <span className="text-destructive">*</span>
                 </Label>
                 <Select value={reason} onValueChange={setReason}>
