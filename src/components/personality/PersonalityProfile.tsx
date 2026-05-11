@@ -272,7 +272,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
                     ))}
                   </ul>
 
-                  <h3 className="font-heading text-2xl font-semibold text-foreground mb-5">
+                  <h3 className="font-heading font-semibold text-foreground mb-5 text-3xl">
                     {profile.attractions.drainTitle}
                   </h3>
                   <ul className="space-y-4">
