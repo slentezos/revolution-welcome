@@ -164,7 +164,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
         </div>
 
         <div className="bg-[hsl(var(--navy))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
-          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
+          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
             Ce qui vous fragilise
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-[hsl(var(--cream))] mb-10">
