@@ -102,7 +102,7 @@ function PricingModal({
                 </div>
                 <div className="flex items-center gap-4 mb-8 mt-4">
                   <Phone className="h-7 w-7 text-gold-light" />
-                  <span className="font-medium tracking-[0.2em] uppercase text-white/80 text-xl">Conciergerie</span>
+                  <span className="font-medium tracking-[0.2em] uppercase text-white/80 text-2xl">Conciergerie</span>
                 </div>
                 <h3 className="font-heading text-3xl sm:text-4xl text-primary-foreground mb-3">
                   L'Accompagnement Privé
