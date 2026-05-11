@@ -726,7 +726,7 @@ export default function Messages() {
 
                     <div className="mt-12 flex items-center gap-4 animate-bounce">
                       <ArrowLeft className="h-6 w-6 text-[hsl(var(--gold))]" />
-                      <span className="text-slate-400 font-semibold text-lg uppercase tracking-widest">
+                      <span className="uppercase tracking-widest font-medium bg-[#e2a336] text-slate-50 text-2xl px-4 py-2 rounded-lg">
                         Choisissez un profil pour commencer
                       </span>
                     </div>
