@@ -197,7 +197,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">{section.title}</h2>
               <div className="w-12 h-px bg-[hsl(var(--gold))] mb-8" />
               {section.paragraphs.map((p, i) => (
-                <p key={i} className="text-xl text-muted-foreground leading-relaxed mb-6 last:mb-0">
+                <p key={i} className="text-muted-foreground leading-relaxed mb-6 last:mb-0 text-2xl">
                   {p}
                 </p>
               ))}
