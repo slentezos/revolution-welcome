@@ -155,7 +155,7 @@ export default function Header() {
                   <div className="flex items-center mx-0 gap-px px-0">
                     {link.label}
                     {"badge" in link && (link as any).badge > 0 && (
-                      <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-slate-900 text-[10px] text-white font-bold ml-1">
+                      <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-slate-900 text-white font-bold ml-1 text-xl">
                         {(link as any).badge}
                       </span>
                     )}
