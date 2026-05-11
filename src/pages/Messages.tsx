@@ -800,7 +800,7 @@ export default function Messages() {
                 placeholder={`Bonjour ${selectedChat?.name ?? ""}, …`}
                 value={displayValue}
                 onChange={handleTextareaChange}
-                className={`flex text-xl backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 overflow-y-auto w-full min-h-[240px] resize-none bg-[hsl(var(--cream))]/60 border-2 rounded-2xl font-medium px-6 py-5 leading-relaxed transition-all duration-300 focus:border-[hsl(var(--gold))] ${isListening ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5 shadow-[inset_0_0_10px_rgba(var(--gold),0.05)]" : "border-[#e2a036]"}`}
+                className={`flex backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--gold))] disabled:cursor-not-allowed disabled:opacity-50 overflow-y-auto w-full min-h-[240px] resize-none bg-[hsl(var(--cream))]/60 border-2 rounded-2xl font-medium px-6 py-5 leading-relaxed transition-all duration-300 focus:border-[hsl(var(--gold))] border-[#e2a036] text-2xl ${isListening ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/5 shadow-[inset_0_0_10px_rgba(var(--gold),0.05)]" : ""}`}
                 style={{ fontSize: `${Math.max(chatFontSize, 20)}px` }}
               />
             </div>
