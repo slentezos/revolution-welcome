@@ -385,10 +385,10 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     >
                       <Headphones className="h-7 w-7 animate-pulse" />
                       <div className="text-left">
-                        <p className="font-bold leading-tight text-xl">
+                        <p className="leading-tight text-2xl font-semibold">
                           Vous ne savez pas comment faire ? Optez pour un accompagnement personnalisé
                         </p>
-                        <p className="opacity-80 underline text-xl text-primary font-medium">
+                        <p className="opacity-80 underline text-primary font-medium text-2xl text-[#1a2232]">
                           Offre promotionnelle jusqu’au 30 Septembre (35€)
                         </p>
                       </div>
