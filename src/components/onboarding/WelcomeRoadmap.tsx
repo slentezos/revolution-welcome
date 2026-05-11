@@ -138,7 +138,7 @@ const STEPS = [
     title: "Le Quiz des 3 Préférences",
     duration: "3 minutes",
     description: "Un court questionnaire ludique pour mieux comprendre vos attentes.",
-    highlights: ["Questions simples et bienveillantes", "Aucune mauvaise réponse", "Résultats confidentiels"],
+    highlights: ["Questions bienveillantes", "Aucune mauvaise réponse", "Résultats confidentiels"],
   },
   {
     number: "02",
@@ -310,7 +310,7 @@ export default function WelcomeRoadmap({
                 )}
                 <button
                   onClick={() => setActiveStep(activeStep - 1)}
-                  className="text-white/60 hover:text-white flex items-center justify-center gap-2 text-lg font-medium transition-colors"
+                  className="text-white/60 hover:text-white flex items-center justify-center gap-2 text-Xl font-medium transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4" /> Revenir à l'étape {activeStep === 1 ? "accueil" : activeStep - 1}
                 </button>
