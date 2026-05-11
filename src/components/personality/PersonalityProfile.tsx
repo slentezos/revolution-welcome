@@ -191,7 +191,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
         const textBlock = (
           <div className="flex items-center px-8 md:px-16 lg:px-20 py-16 md:py-20 bg-[hsl(var(--cream))]">
             <div className="max-w-xl">
-              <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-xl">
+              <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
                 {section.subtitle}
               </p>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">{section.title}</h2>
