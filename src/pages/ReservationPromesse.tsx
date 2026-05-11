@@ -386,7 +386,7 @@ export default function ReservationPromesse() {
           <h2 data-reveal className="font-heading text-5xl md:text-7xl mb-8">
             Tout est inclus pour 89 €
           </h2>
-          <p data-reveal data-reveal-delay="100" className="text-white/50 mb-20 text-2xl font-light">
+          <p data-reveal data-reveal-delay="100" className="mb-20 text-2xl text-white font-normal">
             Un paiement unique, sans abonnement, sans surprise.
           </p>
 
