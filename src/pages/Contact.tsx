@@ -89,7 +89,7 @@ export default function Contact() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="font-medium text-foreground text-xl">Prénom</label>
+                      <label className="font-medium text-foreground text-2xl">Prénom</label>
                       <Input
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
@@ -98,7 +98,7 @@ export default function Contact() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="font-medium text-foreground text-xl">Nom</label>
+                      <label className="font-medium text-foreground text-2xl">Nom</label>
                       <Input
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
@@ -109,7 +109,7 @@ export default function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="font-medium text-foreground text-xl">Email</label>
+                    <label className="font-medium text-foreground text-2xl">Email</label>
                     <Input
                       type="email"
                       value={formData.email}
@@ -120,7 +120,7 @@ export default function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="font-medium text-foreground text-xl">Sujet</label>
+                    <label className="font-medium text-foreground text-2xl">Sujet</label>
                     <Input
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
@@ -130,7 +130,7 @@ export default function Contact() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="font-medium text-foreground text-xl">Message</label>
+                    <label className="font-medium text-foreground text-2xl">Message</label>
                     <Textarea
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}

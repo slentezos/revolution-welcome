@@ -46,7 +46,7 @@ export default function EditorialArticle() {
               className="w-14 h-14 rounded-full object-cover" />
             
             <div>
-              <p className="font-medium text-foreground text-xl">
+              <p className="font-medium text-foreground text-2xl">
                 Rédigé par <span className="font-semibold">{article.author.name}</span>
               </p>
               <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
