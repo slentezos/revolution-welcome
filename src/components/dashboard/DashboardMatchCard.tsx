@@ -81,12 +81,12 @@ export default function DashboardMatchCard({ match, onView }: DashboardMatchCard
                 {match.name}, <span className="text-muted-foreground">{match.age} ans</span>
               </h4>
               <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 font-medium text-foreground text-xl">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 font-medium text-foreground text-2xl">
                   <MapPin className="h-4 w-4 text-gold" />
                   {match.location} <span className="text-muted-foreground">(Résidence)</span>
                 </span>
                 {(match as any).secondaryLocation && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 font-medium text-foreground text-xl">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 font-medium text-foreground text-2xl">
                     <MapPin className="h-4 w-4 text-gold" />
                     {(match as any).secondaryLocation} <span className="text-muted-foreground">(Secondaire)</span>
                   </span>

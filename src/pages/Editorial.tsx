@@ -101,7 +101,7 @@ export default function Editorial() {
                 className="w-12 h-12 rounded-full object-cover" />
               
                 <div>
-                  <p className="font-medium text-foreground text-xl">{featured.author.name}</p>
+                  <p className="font-medium text-foreground text-2xl">{featured.author.name}</p>
                   <p className="text-muted-foreground text-2xl">
                     {featured.date} · {featured.readTime} de lecture
                   </p>

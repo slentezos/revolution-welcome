@@ -260,7 +260,7 @@ export default function WelcomeRoadmap({
               <div className="bg-white/50 backdrop-blur-sm border border-border p-6 rounded-2xl space-y-4 shadow-sm">
                 <div className="flex items-center gap-2 text-gold">
                   <span className="text-xl">⏱️</span>{" "}
-                  <span className="font-bold uppercase tracking-wider text-xl">
+                  <span className="font-bold uppercase tracking-wider text-2xl">
                     Durée estimée : {STEPS[activeStep - 1].duration}
                   </span>
                 </div>
@@ -278,7 +278,7 @@ export default function WelcomeRoadmap({
                     <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">
                       <Check className="h-4 w-4 text-gold" />
                     </div>
-                    <span className="font-medium text-foreground text-xl">{h}</span>
+                    <span className="font-medium text-foreground text-2xl">{h}</span>
                   </div>
                 ))}
               </div>
