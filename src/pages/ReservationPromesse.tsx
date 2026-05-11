@@ -372,7 +372,7 @@ export default function ReservationPromesse() {
           <p
             data-reveal
             data-reveal-delay="300"
-            className="text-muted-foreground leading-relaxed text-xl max-w-2xl mx-auto"
+            className="text-muted-foreground leading-relaxed max-w-2xl mx-auto text-2xl"
           >
             D'ici <strong>24 à 48 heures</strong>, vous recevrez un email contenant votre profil finalisé. Vous pourrez
             tout vérifier sereinement avant l'activation officielle.
