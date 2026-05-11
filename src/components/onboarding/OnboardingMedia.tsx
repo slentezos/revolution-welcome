@@ -539,7 +539,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   <ShieldCheck className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-[#1B2333] leading-tight text-xl">Accompagnement</p>
+                  <p className="font-bold text-[#1B2333] leading-tight text-2xl">Accompagnement</p>
                   <p className="text-[#1B2333]/70 leading-snug mt-1 text-2xl">
                     Un expert vous guide pour vos photos et vidéo.
                   </p>
@@ -550,7 +550,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                   <MonitorOff className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-[#1B2333] leading-tight text-xl">Confidentialité</p>
+                  <p className="font-bold text-[#1B2333] leading-tight text-2xl">Confidentialité</p>
                   <p className="text-[#1B2333]/70 leading-snug mt-1 text-2xl">
                     Nous enregistrons la vidéo avec vous. Aucun accès à votre ordinateur.
                   </p>
