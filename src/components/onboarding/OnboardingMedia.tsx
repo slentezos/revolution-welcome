@@ -552,7 +552,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 <div>
                   <p className="font-bold text-[#1B2333] leading-tight text-xl">Confidentialité</p>
                   <p className="text-[#1B2333]/70 leading-snug mt-1 text-2xl">
-                    Via Google Meet. Aucun accès à votre ordinateur.
+                    Nous enregistrons la vidéo avec vous. Aucun accès à votre ordinateur.
                   </p>
                 </div>
               </div>
