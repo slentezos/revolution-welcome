@@ -310,7 +310,7 @@ export default function WelcomeRoadmap({
                 )}
                 <button
                   onClick={() => setActiveStep(activeStep - 1)}
-                  className="text-white/60 hover:text-white flex items-center justify-center gap-2 text-Xl font-medium transition-colors"
+                  className="text-white/60 hover:text-white flex items-center justify-center gap-2 text-Xl font-medium transition-colors text-2xl"
                 >
                   <ArrowLeft className="h-4 w-4" /> Revenir à l'étape {activeStep === 1 ? "accueil" : activeStep - 1}
                 </button>
