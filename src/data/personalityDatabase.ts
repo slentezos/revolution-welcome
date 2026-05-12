@@ -160,7 +160,7 @@ export const personalityDatabase: Record<string, PersonalityProfileData> = {
       drain: ["rigides, négatives ou contrôlantes", "trop exigeantes ou dans la dépendance affective", "dans l’analyse permanente, qui coupent tout élan", "qui veulent tout définir, cadrer ou planifier à l’excès", "fermées d’esprit ou peu ouvertes au changement"]
     },
     signature: "Vous avez besoin de légèreté pour entrer en relation… et de complicité pour vous engager."
-  }
+  },
 soutien: {
     id: "soutien",
     title: "Le Soutien chaleureux et engagé",
@@ -217,7 +217,7 @@ soutien: {
       drain: ["intrusives ou ne respectant pas votre espace personnel", "brusques, autoritaires ou dans le contrôle", "cyniques, dures, insensibles, conflictuelles", "peu authentiques ou artificielles dans leur comportement", "qui imposent un rythme sans place à la réflexion"]
     },
     signature: "En échange de votre indépendance… vous offrez au monde beauté et douceur."
-  }
+  },
 guide: {
     id: "guide",
     title: "Le Guide impliqué et structurant",
@@ -274,7 +274,7 @@ guide: {
       drain: ["les relations fusionnelles ou envahissantes", "Les attentes émotionnelles excessives", "les environnements rigides, les conventions pesantes", "les conflits répétitifs sans solution concrète", "les analyses pointilleuses sans passage à l’action"]
     },
     signature: "Vous avez besoin de temps pour vous ouvrir… et de confiance pour vous maintenir."
-  }
+  },
 organisateur: {
     id: "organisateur",
     title: "L’Organisateur fiable et méthodique",
@@ -351,3 +351,4 @@ organisateur: {
     },
     signature: "Vous avez besoin de stimulation pour vous investir… et de liberté pour vous attacher"
   }
+};
