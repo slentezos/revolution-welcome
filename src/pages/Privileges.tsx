@@ -369,41 +369,10 @@ export default function Privileges() {
 
           {/* Grille 2 cartes Conciergerie */}
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto text-left">
-            {/* Card 1 — Pack Clé en main */}
+            {/* Card 1 — Coaching Vidéo */}
             <div
               data-reveal
               data-reveal-delay="200"
-              className="bg-white border border-slate-200/70 p-10 flex flex-col rounded-sm"
-            >
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-14 h-14 border border-slate-200 flex items-center justify-center rounded-sm">
-                  <PhoneCall className="h-6 w-6 text-[hsl(var(--gold))]" />
-                </div>
-                <h3 className="font-heading text-3xl text-foreground md:text-4xl">Pack "Clé en main"</h3>
-              </div>
-
-              <p className="text-foreground/70 text-xl leading-relaxed mb-8 flex-1">
-                Notre équipe vous appelle et remplit l'intégralité de votre profil pour vous (questionnaire de personnalité + infos). Coaching vidéo inclus.
-              </p>
-
-              <div className="flex items-baseline gap-2 mb-8 pb-8 border-b border-slate-100">
-                <span className="font-heading text-4xl text-foreground">89€</span>
-                <span className="text-xl text-muted-foreground">— une fois</span>
-              </div>
-
-              <button
-                onClick={() => setModalOpen(true)}
-                className="w-full bg-foreground text-white py-5 text-lg uppercase tracking-widest font-medium transition-all hover:bg-[hsl(var(--gold))] min-h-[64px] flex items-center justify-center gap-2"
-              >
-                Ajouter le pack
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Card 2 — Coaching Vidéo */}
-            <div
-              data-reveal
-              data-reveal-delay="350"
               className="bg-white border border-slate-200/70 p-10 flex flex-col rounded-sm"
             >
               <div className="flex items-center gap-4 mb-8">
@@ -427,6 +396,37 @@ export default function Privileges() {
                 className="w-full bg-foreground text-white py-5 text-lg uppercase tracking-widest font-medium transition-all hover:bg-[hsl(var(--gold))] min-h-[64px] flex items-center justify-center gap-2"
               >
                 Ajouter le coaching
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Card 2 — Pack Clé en main */}
+            <div
+              data-reveal
+              data-reveal-delay="350"
+              className="bg-white border border-slate-200/70 p-10 flex flex-col rounded-sm"
+            >
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 border border-slate-200 flex items-center justify-center rounded-sm">
+                  <PhoneCall className="h-6 w-6 text-[hsl(var(--gold))]" />
+                </div>
+                <h3 className="font-heading text-3xl text-foreground md:text-4xl">Pack "Clé en main"</h3>
+              </div>
+
+              <p className="text-foreground/70 text-xl leading-relaxed mb-8 flex-1">
+                Notre équipe vous appelle et remplit l'intégralité de votre profil pour vous (questionnaire de personnalité + infos). Coaching vidéo inclus.
+              </p>
+
+              <div className="flex items-baseline gap-2 mb-8 pb-8 border-b border-slate-100">
+                <span className="font-heading text-4xl text-foreground">89€</span>
+                <span className="text-xl text-muted-foreground">— une fois</span>
+              </div>
+
+              <button
+                onClick={() => setModalOpen(true)}
+                className="w-full bg-foreground text-white py-5 text-lg uppercase tracking-widest font-medium transition-all hover:bg-[hsl(var(--gold))] min-h-[64px] flex items-center justify-center gap-2"
+              >
+                Ajouter le pack
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
