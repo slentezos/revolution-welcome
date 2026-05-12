@@ -477,7 +477,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
           <div
             className={cn(
               "flex items-center gap-5 p-6 rounded-3xl border transition-all cursor-pointer py-0 my-0",
-              confirmedAge ? "bg-emerald-50/50 border-emerald-200" : "bg-white border-[#E5E0D8]",
+              confirmedAge ? "bg-emerald-50/50 border-emerald-200" : "bg-white border-transparent",
             )}
             onClick={() => setConfirmedAge(!confirmedAge)}
           >
