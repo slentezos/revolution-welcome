@@ -175,6 +175,17 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
         );
       })}
 
+      {/* Visual transition */}
+      <section className="relative h-[40vh] md:h-[50vh] w-full border-y border-[hsl(var(--gold))]/20">
+        <img
+          decoding="async"
+          src={imageUrl(profile.imageSlug, gender, "transition", fallbackHero)}
+          onError={handleImgError(fallbackHero)}
+          alt=""
+          className="object-cover w-full h-full"
+        />
+      </section>
+
       {/* 3. VOS POINTS FORTS / VOS FRAGILITÉS */}
       <section className="grid lg:grid-cols-2 gap-0">
         <div className="bg-[hsl(var(--cream))] px-8 md:px-16 lg:px-20 py-16 md:py-20 border-t border-border/20">
