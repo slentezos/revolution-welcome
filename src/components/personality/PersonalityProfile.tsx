@@ -115,7 +115,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
           </div>
 
           <button onClick={scrollToIntro} className="flex flex-col items-center gap-4 group cursor-pointer mt-8">
-            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity text-sm md:text-base">
+            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity text-xl md:text-base">
               Lire votre analyse
             </span>
             <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-[hsl(var(--gold))]/30 flex items-center justify-center animate-slow-float bg-[hsl(var(--gold))]/5 group-hover:bg-[hsl(var(--gold))]/20 transition-all shadow-[0_0_15px_rgba(var(--gold),0.1)]">
