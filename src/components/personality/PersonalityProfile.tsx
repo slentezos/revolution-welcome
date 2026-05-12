@@ -66,13 +66,13 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
     // Section 3 is rendered separately (two-column lists)
     {
       subtitle: "Votre rythme de vie",
-      title: "Vos affinités et vos rejets",
+      title: "Votre rapport aux autres",
       paragraphs: [g(profile.balanceStress)],
       image: imageUrl(profile.imageSlug, gender, "daily", fallbackDaily),
     },
     {
       subtitle: "Vos compatibilités",
-      title: "5. Vos affinités et vos rejets",
+      title: "5. Votre rapport aux autres",
       paragraphs: [g(profile.rapportToOthers)],
       image: imageUrl(profile.imageSlug, gender, "affinities", fallbackAffinities),
     },
