@@ -495,10 +495,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             </p>
           </div>
 
-          <div className="flex items-center justify-between">
-            <p className="font-medium text-gray-400 hidden md:block text-2xl">
-              Votre sécurité est notre priorité absolue.
-            </p>
+          <div className="flex items-center justify-end">
             <div className="flex gap-4 w-full md:w-auto">
               <Button
                 variant="outline"
