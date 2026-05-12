@@ -19,6 +19,12 @@ import {
   Loader2,
   MonitorOff,
   Info,
+  User,
+  Smartphone,
+  Clock,
+  Mic,
+  MessageCircle,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -596,74 +602,79 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <X className="h-6 w-6 group-hover:rotate-90 transition-transform duration-300" />
           </button>
 
-          <div className="flex flex-col lg:flex-row h-full overflow-hidden">
-            <div className="flex-1 p-8 lg:p-10 bg-white relative flex flex-col justify-center gap-4 h-full">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50" />
+          <div className="flex flex-col lg:flex-row h-full max-h-[90vh] overflow-hidden">
+            <div className="flex-1 flex flex-col bg-white relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#FCF9F5] rounded-full -mr-32 -mt-32 opacity-50 pointer-events-none" />
 
-              <div className="relative z-10 flex flex-col gap-4">
-                <header className="shrink-0">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-3">
-                    <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
-                    <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-xl">
-                      Guide Privé
-                    </span>
-                  </div>
-                  <DialogTitle className="font-heading text-4xl md:text-5xl text-[#1B2333] leading-[1.1]">
-                    L'art de se <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
-                  </DialogTitle>
-                </header>
+              <header className="relative z-10 px-8 lg:px-10 pt-8 lg:pt-10 pb-4 shrink-0">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.05)] mb-3">
+                  <Sparkles className="h-4 w-4 text-[hsl(var(--gold))]" />
+                  <span className="font-bold tracking-[0.2em] uppercase text-[hsl(var(--gold))] text-xl">
+                    Guide Privé
+                  </span>
+                </div>
+                <DialogTitle className="font-heading text-4xl md:text-5xl text-[#1B2333] leading-[1.1]">
+                  L'art de se <span className="italic font-serif text-[hsl(var(--gold))]">présenter</span>
+                </DialogTitle>
+              </header>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 shrink-0">
+              <div className="relative z-10 flex-1 overflow-y-auto px-8 lg:px-10 py-2">
+                <ul className="flex flex-col gap-3">
                   {[
-                    { icon: Eye, title: "Le Regard", desc: "Plongez vos yeux dans l'objectif." },
-                    { icon: Sun, title: "La Lumière", desc: "Face à une fenêtre, c'est l'idéal." },
-                    { icon: Heart, title: "L'Émotion", desc: "Parlez de vos vraies passions." },
-                    { icon: Volume2, title: "La Sérénité", desc: "Le silence pour être écouté(e)." },
+                    { icon: User, title: "L'essentiel, c'est vous", desc: "Votre visage, votre voix, votre expression." },
+                    { icon: Sun, title: "La Lumière", desc: "Arrière-plan neutre, environnement calme, lumière vers vous. Ne soyez pas à contre-jour." },
+                    { icon: Smartphone, title: "Le Cadrage", desc: "Pour une meilleure visualisation, choisissez l'orientation horizontale de votre mobile." },
+                    { icon: Eye, title: "Le Regard", desc: "Regardez votre interlocuteur, évitez les yeux baissés." },
+                    { icon: Clock, title: "Le Tempo", desc: "Prenez votre temps : avec l'émotion, on a tendance à s'emballer." },
+                    { icon: Mic, title: "Le Naturel", desc: "Soyez naturel, vivant, changez de rythme. Surtout, ne lisez pas un texte." },
+                    { icon: MessageCircle, title: "Évitez les banalités", desc: '"Je recherche l\'amour, le compagnon fidèle…" — allez plus loin.' },
+                    { icon: Heart, title: "Racontez-vous", desc: "Une anecdote, un projet, une activité qui vous tient à cœur. Imaginez un dialogue, la personne en face de vous." },
+                    { icon: RotateCcw, title: "Recommencez", desc: "N'hésitez pas à refaire votre prise autant de fois qu'il le faut." },
                   ].map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-4">
-                      <div className="w-14 h-14 shrink-0 flex items-center justify-center rounded-2xl bg-[#FCF9F5] border border-[#E5E0D8]">
-                        <item.icon className="h-7 w-7 text-[#1B2333]" />
+                    <li key={idx} className="flex items-start gap-4 p-3 rounded-2xl border border-[#E5E0D8]/60 bg-white/60">
+                      <div className="w-12 h-12 shrink-0 flex items-center justify-center rounded-xl bg-[#FCF9F5] border border-[#E5E0D8]">
+                        <item.icon className="h-6 w-6 text-[hsl(var(--gold))]" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-bold text-[#1B2333] text-2xl leading-tight">{item.title}</h4>
-                        <p className="text-[#1B2333]/70 text-xl leading-snug">{item.desc}</p>
+                        <h4 className="font-bold text-[#1B2333] text-xl leading-tight">{item.title}</h4>
+                        <p className="text-[#1B2333]/70 text-lg leading-snug mt-0.5">{item.desc}</p>
                       </div>
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
+              </div>
 
-                <div className="flex flex-col gap-3 mt-4 shrink-0 max-w-lg">
-                  <Button
-                    onClick={() => setShowVideoTutorial(false)}
-                    className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-xl"
-                  >
-                    J'ai compris, je commence seul(e)
-                  </Button>
+              <div className="relative z-10 flex flex-col gap-3 px-8 lg:px-10 py-5 border-t border-[#E5E0D8] bg-white shrink-0">
+                <Button
+                  onClick={() => setShowVideoTutorial(false)}
+                  className="h-16 w-full rounded-2xl bg-[#1B2333] text-white font-bold shadow-md hover:bg-[#1B2333]/90 text-xl"
+                >
+                  J'ai compris, je commence seul(e)
+                </Button>
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowVideoTutorial(false);
-                      setShowStudioModal(true);
-                    }}
-                    className="w-full flex items-center gap-4 p-4 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)] text-left shrink-0 min-h-[64px]"
-                  >
-                    <div className="shrink-0 w-12 h-12 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
-                      <Headphones className="h-6 w-6 text-[hsl(var(--gold))] animate-pulse" />
-                    </div>
-                    <div className="flex-1 min-w-0 flex flex-col">
-                      <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
-                        Accompagnement personnalisé
-                      </p>
-                      <p className="text-[hsl(var(--gold))] opacity-80 text-primary font-semibold text-xl">Nous vous filmons en visio (35€)</p>
-                    </div>
-                    <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowVideoTutorial(false);
+                    setShowStudioModal(true);
+                  }}
+                  className="w-full flex items-center gap-4 p-4 border-[1.5px] border-[hsl(var(--gold))] rounded-2xl bg-white group/btn transition-all hover:bg-[hsl(var(--gold)/0.03)] text-left shrink-0 min-h-[64px]"
+                >
+                  <div className="shrink-0 w-12 h-12 rounded-full bg-[hsl(var(--gold)/0.1)] flex items-center justify-center">
+                    <Headphones className="h-6 w-6 text-[hsl(var(--gold))] animate-pulse" />
+                  </div>
+                  <div className="flex-1 min-w-0 flex flex-col">
+                    <p className="font-bold text-[hsl(var(--gold))] text-xl leading-snug whitespace-normal">
+                      Accompagnement personnalisé
+                    </p>
+                    <p className="text-[hsl(var(--gold))] opacity-80 text-primary font-semibold text-xl">Nous vous filmons en visio (35€)</p>
+                  </div>
+                  <ArrowRight className="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" />
+                </button>
               </div>
             </div>
 
-            <div className="hidden lg:block w-[360px] shrink-0 relative h-full">
+            <div className="hidden lg:block w-[360px] shrink-0 relative">
               <img
                 decoding="async"
                 src={coupleGarden}
