@@ -41,38 +41,34 @@ export function getProfile(id: string): PersonalityProfileData | undefined {
 
 export const personalityDatabase: Record<string, PersonalityProfileData> = {
   // 1. LE STRATÈGE (INTP)
-  strategiste: {
+ strategiste: {
     id: "strategiste",
     title: "Le Stratège indépendant et analytique",
     imageSlug: "strategiste",
     metrics: [
-      { label: "Se ressource dans le calme", value: 75 },
-      { label: "Préfère l'abstrait", value: 60 },
-      { label: "Décide avec la tête", value: 85 },
-      { label: "Aime la flexibilité", value: 55 },
+      { label: "Se ressource dans le calme", value: "xx" },
+      { label: "Préfère l’abstrait", value: "xx" },
+      { label: "Décide avec la tête", value: "xx" },
+      { label: "Aime la flexibilité", value: "xx" }
     ],
-    intro:
-      "Vous cherchez à le comprendre en profondeur à travers la logique et l’analyse. Votre curiosité intellectuelle alimente votre créativité. On vous qualifie volontiers d’esprit original. Vous avez tendance à approfondir les idées, parfois jusqu’à repousser le moment de les concrétiser, voire à remettre en question une idée même après l’avoir adoptée.\n\nVous évoluez clairement dans le domaine des idées. Vous voyez le monde à travers les concepts. Les échanges superficiels vous lassent vite. Vous faites preuve d’honnêteté intellectuelle. Vous n’êtes pas dogmatique : vous savez remettre en question vos opinions et reconnaissez vos erreurs à condition que la contradiction soit sensée et bien construite.",
-    strengths: [
+    fonctionnement: "Vous cherchez à le comprendre en profondeur à travers la logique et l’analyse. Votre curiosité intellectuelle alimente votre créativité. On vous qualifie volontiers d’esprit original. Vous avez tendance à approfondir les idées, parfois jusqu’à repousser le moment de les concrétiser, voire à remettre en question une idée même après l’avoir adoptée.\n\nVous évoluez clairement dans le domaine des idées. Vous voyez le monde à travers les concepts. Les échanges superficiels vous lassent vite. Vous faites preuve d’honnêteté intellectuelle. Vous n’êtes pas dogmatique : vous savez remettre en question vos opinions et reconnaissez vos erreurs à condition que la contradiction soit sensée et bien construite.",
+    rapportAuxAutres: "Vous êtes pragmatique, factuel(le). Les objectifs et les résultats sont primordiaux. Vous attendez de même de votre entourage. Vous cherchez à comprendre les situations sans émotions. Votre capacité d’analyse et de recul aident les autres à clarifier leurs idées, à envisager différentes perspectives, à dépassionner les débats. Exigeant(e) sur la qualité des idées et la cohérence des opinions, vous ne discutez pas pour meubler le vide, les mots ont leur importance.\n\nVos relations sont sélectives, stimulantes intellectuellement et basées sur la liberté d’être soi. L’autre peut être différent, mais vous supportez mal les réactions émotionnelles, les jugements sans recul ou les contradictions stériles. Vous pouvez sembler distant(e) car vous exprimez peu vos émotions.",
+    equilibre: "Vous vous ressourcez dans la solitude et avez besoin de calme pour réfléchir. Vous refusez les cadres trop rigides, les décisions précipitées. Réfléchi, vous ne réagissez pas à chaud. Indépendant(e) d’esprit, vous résistez à la pression sociale, aux opinions toutes faites et aux approches émotionnelles.\n\nVous ne parlez pas facilement de ce que vous ressentez. Cela peut donner l’impression que vous êtes en retrait au moment où l’on attend une implication de votre part. Quand le ton monte, vous évitez de vous emporter. Face au stress, vous cherchez des explications et des solutions rationnelles.",
+    visionAmour: "Pour vous, l’amour se comprend avant de se vivre. Les élans trop rapides vous mettent mal à l’aise. Vous avez besoin de temps et d’espace. Votre prudence peut vous faire paraitre distant(e) et peu motivé(e).\n\nVous êtes attiré(e) par des profils expressifs, chaleureux et non directifs. Votre attachement est discret, mais sincère et durable. Les difficultés apparaissent lorsque l’autre attend des preuves émotionnelles que vous ne savez pas toujours formuler.",
+    pointsForts: [
       "Vous êtes créatif(ve) et curieux(se) intellectuellement",
       "Vous prenez des décisions réfléchies, rarement impulsives",
       "Vous êtes indépendant(e) et difficile à influencer",
       "Vous cherchez à comprendre en profondeur",
-      "Vous êtes exigent envers vous-même",
+      "Vous êtes exigent envers vous-même"
     ],
-    weaknesses: [
+    fragilites: [
       "Vous avez tendance à analyser au lieu de vivre le moment.",
       "Vous n’associez pas toujours l’autre à votre réflexion.",
       "À force de réfléchir, vous retardez la décision.",
       "Vous ressentez profondément mais vous exprimez peu.",
-      "Votre manque de spontanéité peut passer pour de la froideur",
+      "Votre manque de spontanéité peut passer pour de la froideur"
     ],
-    loveVision:
-      "Pour vous, l’amour se comprend avant de se vivre. Les élans trop rapides vous mettent mal à l’aise. Vous avez besoin de temps et d’espace. Votre prudence peut vous faire paraitre distant(e) et peu motivé(e).\n\nVous êtes attiré(e) par des profils expressifs, chaleureux et non directifs. Votre attachement est discret, mais sincère et durable. Les difficultés apparaissent lorsque l’autre attend des preuves émotionnelles que vous ne savez pas toujours formuler.",
-    balanceStress:
-      "Vous cherchez à le comprendre en profondeur à travers la logique et l’analyse. Votre curiosité intellectuelle alimente votre créativité. On vous qualifie volontiers d’esprit original. Vous avez tendance à approfondir les idées, parfois jusqu’à repousser le moment de les concrétiser, voire à remettre en question une idée même après l’avoir adoptée.\n\n Vous évoluez clairement dans le domaine des idées. Vous voyez le monde à travers les concepts. Les échanges superficiels vous lassent vite. Vous faites preuve d’honnêteté intellectuelle. Vous n’êtes pas dogmatique : vous savez remettre en question vos opinions et reconnaissez vos erreurs à condition que la contradiction soit sensée et bien construite.",
-    rapportToOthers:
-      "Vous êtes pragmatique, factuel(le). Les objectifs et les résultats sont primordiaux. Vous attendez de même de votre entourage. Vous cherchez à comprendre les situations sans émotions. Votre capacité d’analyse et de recul aident les autres à clarifier leurs idées, à envisager différentes perspectives, à dépassionner les débats. Exigeant(e) sur la qualité des idées et la cohérence des opinions, vous ne discutez pas pour meubler le vide, les mots ont leur importance. \n\n\n Vos relations sont sélectives, stimulantes intellectuellement et basées sur la liberté d’être soi. L’autre peut être différent, mais vous supportez mal les réactions émotionnelles, les jugements sans recul ou les contradictions stériles. Vous pouvez sembler distant(e) car vous exprimez peu vos émotions.",
     attractions: {
       comfortTitle: "Vous vous sentez bien avec des personnes ou les situations",
       comfort: [
@@ -80,7 +76,7 @@ export const personalityDatabase: Record<string, PersonalityProfileData> = {
         "respectueuses de votre rythme et de votre créativité",
         "curieuses, ouvertes et stimulantes intellectuellement",
         "capables d’échanger librement, sans jugement ni rigidité",
-        "apportant chaleur et spontanéité, sans chercher à vous cadrer",
+        "apportant chaleur et spontanéité, sans chercher à vous cadrer"
       ],
       drainTitle: "Vous vous épuisez avec les personnes ou les situations",
       drain: [
@@ -88,11 +84,11 @@ export const personalityDatabase: Record<string, PersonalityProfileData> = {
         "trop souvent imprévisibles, déstabilisantes, versatiles",
         "rigides et dirigistes qui imposent leur façon de penser",
         "les échanges en surface qui ne stimulent pas votre réflexion",
-        "les discours superficiels, incohérents ou malhonnêtes",
-      ],
+        "les discours superficiels, incohérents ou malhonnêtes"
+      ]
     },
-    signature: "Vous avez besoin de calme pour aller à la rencontre de l’autre… et de clarté pour vous engager.",
-  },
+    signature: "Vous avez besoin de calme pour aller à la rencontre de l’autre… et de clarté pour vous engager."
+  }
 
   // 2. LE VISIONNAIRE (INFJ)
   visionnaire: {
