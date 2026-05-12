@@ -398,7 +398,8 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 )}
               </div>
               <div className="flex items-center justify-between px-4 py-0 my-0">
-                <p className="text-muted-foreground mb-8 text-2xl">Votre sourire est votre plus belle signature.</p>
+                <p className="text-muted-foreground mb-8 text-2xl">
+                </p>
                 <button
                   onClick={() => setShowVideoTutorial(true)}
                   className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-[hsl(var(--gold))] rounded-full font-bold hover:bg-[hsl(var(--gold))]/20 transition-all text-xl bg-[#1a2232]"
