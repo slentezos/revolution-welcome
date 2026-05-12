@@ -168,7 +168,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
             Ce qui vous fragilise
           </p>
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-[hsl(var(--cream))] mb-10">
-            Vos points faibles
+            Vos fragilités
           </h2>
           <ul className="space-y-5">
             {profile.weaknesses.map((item, i) => (
@@ -254,7 +254,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
                     Ce qui vous attire
                   </p>
                   <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">
-                    3. Vos attirances et frustrations
+                    Vos attirances et frustrations
                   </h2>
                   <div className="w-12 h-px bg-[hsl(var(--gold))] mb-10" />
 
