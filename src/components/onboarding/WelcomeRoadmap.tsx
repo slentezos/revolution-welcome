@@ -112,7 +112,7 @@ function PricingModal({
                 <h3 className="font-heading text-3xl sm:text-4xl text-primary-foreground mb-3">
                   L'Accompagnement Privé
                 </h3>
-                <p className="text-gold-light font-medium mb-6 text-2xl">89 € — une fois</p>
+                <p className="text-gold-light font-medium mb-6 text-3xl">89 €</p>
                 <ul className="space-y-5 mb-10 flex-grow">
                   {CONCIERGE_BENEFITS.map((benefit, i) => (
                     <li key={i} className="flex items-start gap-4">
