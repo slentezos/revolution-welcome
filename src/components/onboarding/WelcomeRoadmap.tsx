@@ -151,7 +151,7 @@ const STEPS = [
     title: "Photos & Vidéo",
     duration: "15 minutes",
     description: "Ajoutez vos plus belles photos et enregistrez une courte vidéo de présentation.",
-    highlights: ["Jusqu'à 4 photos", "Tutoriel + possibilité d'assistance ", "Tutoriel inclus"],
+    highlights: ["Jusqu'à 4 photos", "Possibilité d’assistance technique ", "Tutoriel inclus"],
   },
   {
     number: "03",
