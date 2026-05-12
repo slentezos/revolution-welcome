@@ -363,7 +363,7 @@ export default function Privileges() {
               data-reveal-delay="350"
               className="text-lg text-foreground/70 leading-relaxed mb-16 max-w-4xl mx-auto md:text-2xl"
             >
-              Allez au-delà de l'algorithme. Profitez d'une expertise humaine sur-mesure pour vous accompagner dans la création de votre profil.
+              Au-delà de l'algorithme, profitez d'une expertise humaine sur-mesure pour vous accompagner dans la création de votre profil.
             </p>
           </div>
 
