@@ -19,6 +19,12 @@ import {
   Loader2,
   MonitorOff,
   Info,
+  User,
+  Smartphone,
+  Clock,
+  Mic,
+  MessageCircle,
+  RotateCcw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
