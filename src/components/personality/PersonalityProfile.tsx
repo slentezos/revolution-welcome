@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Check, X, ArrowDown } from "lucide-react";
 import { getProfile, genderize, type Gender, type PersonalityProfileData } from "@/data/personalityDatabase";
 
-// Fallback imagery (existing assets). Real per-profile images can be dropped at
-// /public/assets/personalities/{gender}/{slug}-hero.jpg etc. and will be picked up automatically.
+// Fallback imagery
 import fallbackHero from "@/assets/personality-hero.jpg";
 import fallbackLove from "@/assets/personality-love.jpg";
 import fallbackStrengths from "@/assets/personality-strengths.jpg";
@@ -25,7 +24,6 @@ const slowFloatAnimation = `
 
 function imageUrl(slug: string | undefined, gender: Gender, suffix: string, fallback: string) {
   if (!slug) return fallback;
-  // Public assets: served as-is. If file is missing, the <img> onError swap to fallback.
   return `/assets/personalities/${gender}/${slug}-${suffix}.jpg`;
 }
 
@@ -49,48 +47,41 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
 
   const heroSrc = imageUrl(profile.imageSlug, gender, "hero", fallbackHero);
 
-  // Alternating sections (text + short image), matching the screenshot order.
-  const sections: { subtitle: string; title: string; paragraphs: string[]; image: string }[] = [
-    {
-      subtitle: "Votre façon d'aimer",
-      title: "Votre vision de l'amour",
-      paragraphs: [g(profile.loveVision)],
-      image: imageUrl(profile.imageSlug, gender, "love", fallbackLove),
-    },
-    {
-      subtitle: "Ce qui vous définit",
-      title: "2. Votre fonctionnement ",
-      paragraphs: [g(profile.intro)],
-      image: imageUrl(profile.imageSlug, gender, "strengths", fallbackStrengths),
-    },
-    // Section 3 is rendered separately (two-column lists)
-    {
-      subtitle: "Votre rythme de vie",
-      title: "Votre rapport aux autres",
-      paragraphs: [g(profile.balanceStress)],
-      image: imageUrl(profile.imageSlug, gender, "daily", fallbackDaily),
-    },
-    {
-      subtitle: "Vos compatibilités",
-      title: "5. Votre rapport aux autres",
-      paragraphs: [g(profile.rapportToOthers)],
-      image: imageUrl(profile.imageSlug, gender, "affinities", fallbackAffinities),
-    },
-  ];
-
-  const attractionsImage = imageUrl(profile.imageSlug, gender, "attractions", fallbackCouple);
-
   const handleImgError = (fallback: string) => (e: React.SyntheticEvent<HTMLImageElement>) => {
     if (e.currentTarget.src !== window.location.origin + fallback) {
       e.currentTarget.src = fallback;
     }
   };
 
+  // LES 4 SECTIONS TEXTUELLES DANS L'ORDRE EXACT DU DOCUMENT EXCEL
+  const sections = [
+    {
+      title: "Votre fonctionnement",
+      paragraphs: profile.fonctionnement ? profile.fonctionnement.split("\n\n") : [],
+      image: imageUrl(profile.imageSlug, gender, "strengths", fallbackStrengths),
+    },
+    {
+      title: "Votre rapport aux autres",
+      paragraphs: profile.rapportAuxAutres ? profile.rapportAuxAutres.split("\n\n") : [],
+      image: imageUrl(profile.imageSlug, gender, "affinities", fallbackAffinities),
+    },
+    {
+      title: "Votre équilibre",
+      paragraphs: profile.equilibre ? profile.equilibre.split("\n\n") : [],
+      image: imageUrl(profile.imageSlug, gender, "daily", fallbackDaily),
+    },
+    {
+      title: "Votre vision de l'amour",
+      paragraphs: profile.visionAmour ? profile.visionAmour.split("\n\n") : [],
+      image: imageUrl(profile.imageSlug, gender, "love", fallbackLove),
+    },
+  ];
+
   return (
     <div className="-mx-4 sm:-mx-6 md:-mx-8 lg:-mx-0">
       <style>{slowFloatAnimation}</style>
 
-      {/* HERO */}
+      {/* 1. HERO SECTION (TITRE & METRIQUES) */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <img
           decoding="async"
@@ -103,7 +94,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
         <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--navy))] via-transparent to-transparent opacity-60" />
 
         <div className="relative z-10 text-center px-6 py-16 max-w-5xl mx-auto w-full flex flex-col items-center">
-          <p className="text-[hsl(var(--gold))] tracking-[0.3em] uppercase font-medium mb-4 md:mb-6 md:text-lg lg:text-xl text-2xl">
+          <p className="text-[hsl(var(--gold))] tracking-[0.3em] uppercase font-medium mb-4 md:mb-6 text-sm md:text-lg lg:text-xl">
             Votre profil de personnalité
           </p>
 
@@ -112,19 +103,19 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
           </h1>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-5 mt-6 mb-16">
-            {profile.metrics.map((m) => (
+            {profile.metrics?.map((m) => (
               <div
                 key={m.label}
                 className="bg-[hsl(var(--cream))]/10 backdrop-blur-md border border-[hsl(var(--cream))]/20 rounded-full px-6 md:px-8 py-3 md:py-4 shadow-lg"
               >
-                <span className="text-[hsl(var(--cream))] md:text-xl font-medium text-2xl">{m.label}</span>
-                <span className="text-[hsl(var(--gold))] md:text-xl font-bold ml-3 text-2xl">{m.value}%</span>
+                <span className="text-[hsl(var(--cream))] text-lg md:text-xl font-medium">{m.label}</span>
+                <span className="text-[hsl(var(--gold))] text-lg md:text-xl font-bold ml-3">{m.value}%</span>
               </div>
             ))}
           </div>
 
           <button onClick={scrollToIntro} className="flex flex-col items-center gap-4 group cursor-pointer mt-8">
-            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity md:text-base text-2xl">
+            <span className="text-[hsl(var(--gold))] uppercase tracking-widest font-bold opacity-80 group-hover:opacity-100 transition-opacity text-sm md:text-base">
               Lire votre analyse
             </span>
             <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-[hsl(var(--gold))]/30 flex items-center justify-center animate-slow-float bg-[hsl(var(--gold))]/5 group-hover:bg-[hsl(var(--gold))]/20 transition-all shadow-[0_0_15px_rgba(var(--gold),0.1)]">
@@ -134,70 +125,20 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
         </div>
       </section>
 
-      {/* INTRO / SIGNATURE */}
-      <section ref={introRef} className="bg-[hsl(var(--cream))]">
-        <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 text-center md:py-0">
-          <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto mb-12" />
-          <p className="font-heading text-2xl md:text-4xl text-foreground leading-relaxed italic pb-[40px]">
-            « {profile.signature} »
-          </p>
-        </div>
-      </section>
+      {/* Anchor for scroll */}
+      <div ref={introRef} />
 
-      {/* CE QUI VOUS DISTINGUE — Strengths (gold) / Weaknesses (dark) */}
-      <section className="grid lg:grid-cols-2 gap-0">
-        <div className="bg-[hsl(var(--cream))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
-          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
-            Ce qui vous distingue
-          </p>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-10">Vos points forts</h2>
-          <ul className="space-y-5">
-            {profile.strengths.map((item, i) => (
-              <li key={i} className="flex items-start gap-4">
-                <span className="w-8 h-8 rounded-full bg-[hsl(var(--gold))]/15 flex items-center justify-center shrink-0 mt-0.5">
-                  <Check className="w-4 h-4 text-[hsl(var(--gold))]" />
-                </span>
-                <span className="text-xl text-foreground leading-relaxed">{g(item)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="bg-[hsl(var(--navy))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
-          <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
-            Ce qui vous fragilise
-          </p>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-[hsl(var(--cream))] mb-10">
-            Vos fragilités
-          </h2>
-          <ul className="space-y-5">
-            {profile.weaknesses.map((item, i) => (
-              <li key={i} className="flex items-start gap-4">
-                <span className="w-8 h-8 rounded-full bg-[hsl(var(--cream))]/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <X className="w-4 h-4 text-[hsl(var(--cream))]/60" />
-                </span>
-                <span className="text-xl text-[hsl(var(--cream))]/85 leading-relaxed">{g(item)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ALTERNATING SECTIONS (1, 2, 4, 5) */}
+      {/* 2. LES 4 SECTIONS TEXTUELLES (BOUCLE) */}
       {sections.map((section, idx) => {
-        // MODIFICATION ICI: Inversion du motif pour basculer les images des sections 4 et 5
-        const imageLeft = idx === 0 || idx === 3;
+        const imageLeft = idx % 2 === 0;
 
         const textBlock = (
           <div className="flex items-center px-8 md:px-16 lg:px-20 py-16 md:py-20 bg-[hsl(var(--cream))]">
             <div className="max-w-xl">
-              <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
-                {section.subtitle}
-              </p>
               <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">{section.title}</h2>
               <div className="w-12 h-px bg-[hsl(var(--gold))] mb-8" />
               {section.paragraphs.map((p, i) => (
-                <p key={i} className="text-muted-foreground leading-relaxed mb-6 last:mb-0 text-2xl">
+                <p key={i} className="text-xl text-muted-foreground leading-relaxed mb-6 last:mb-0">
                   {p}
                 </p>
               ))}
@@ -217,8 +158,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
           </div>
         );
 
-        // Insert section 3 (Attractions: comfort/drain) between idx=1 (section 2) and idx=2 (section 4)
-        const block = (
+        return (
           <section key={section.title} className="grid lg:grid-cols-2 gap-0">
             {imageLeft ? (
               <>
@@ -233,69 +173,93 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
             )}
           </section>
         );
-
-        if (idx === 1) {
-          return (
-            <div key={section.title}>
-              {block}
-              {/* SECTION 3 — Attractions / Frustrations (two lists) */}
-              <section className="grid lg:grid-cols-2 gap-0">
-                <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[480px]">
-                  <img
-                    decoding="async"
-                    src={attractionsImage}
-                    onError={handleImgError(fallbackCouple)}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                </div>
-                <div className="bg-[hsl(var(--cream))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
-                  <p className="text-[hsl(var(--gold))] tracking-[0.25em] uppercase font-medium mb-4 text-2xl">
-                    Ce qui vous attire
-                  </p>
-                  <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-8">
-                    Vos attirances et frustrations
-                  </h2>
-                  <div className="w-12 h-px bg-[hsl(var(--gold))] mb-10" />
-
-                  <h3 className="font-heading font-semibold text-foreground mb-5 text-3xl">
-                    {profile.attractions.comfortTitle}
-                  </h3>
-                  <ul className="space-y-4 mb-10 text-2xl">
-                    {profile.attractions.comfort.map((item, i) => (
-                      <li key={i} className="flex items-start gap-4">
-                        <span className="w-7 h-7 rounded-full bg-[hsl(var(--gold))]/15 flex items-center justify-center shrink-0 mt-1">
-                          <Check className="w-4 h-4 text-[hsl(var(--gold))]" />
-                        </span>
-                        <span className="text-xl text-muted-foreground leading-relaxed">{g(item)}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <h3 className="font-heading font-semibold text-foreground mb-5 text-3xl">
-                    {profile.attractions.drainTitle}
-                  </h3>
-                  <ul className="space-y-4">
-                    {profile.attractions.drain.map((item, i) => (
-                      <li key={i} className="flex items-start gap-4">
-                        <span className="w-7 h-7 rounded-full bg-foreground/10 flex items-center justify-center shrink-0 mt-1">
-                          <X className="w-4 h-4 text-foreground/60" />
-                        </span>
-                        <span className="text-xl text-muted-foreground leading-relaxed">{g(item)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </section>
-            </div>
-          );
-        }
-
-        return block;
       })}
 
-      {/* CTA FOOTER */}
-      <section className="bg-[hsl(var(--cream))]">
+      {/* 3. VOS POINTS FORTS / VOS FRAGILITÉS */}
+      <section className="grid lg:grid-cols-2 gap-0">
+        <div className="bg-[hsl(var(--cream))] px-8 md:px-16 lg:px-20 py-16 md:py-20 border-t border-border/20">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-10">Vos points forts</h2>
+          <ul className="space-y-5">
+            {profile.pointsForts?.map((item, i) => (
+              <li key={i} className="flex items-start gap-4">
+                <span className="w-8 h-8 rounded-full bg-[hsl(var(--gold))]/15 flex items-center justify-center shrink-0 mt-0.5">
+                  <Check className="w-4 h-4 text-[hsl(var(--gold))]" />
+                </span>
+                <span className="text-xl text-foreground leading-relaxed">{g(item)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="bg-[hsl(var(--navy))] px-8 md:px-16 lg:px-20 py-16 md:py-20 border-t border-border/10">
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-[hsl(var(--cream))] mb-10">Vos fragilités</h2>
+          <ul className="space-y-5">
+            {profile.fragilites?.map((item, i) => (
+              <li key={i} className="flex items-start gap-4">
+                <span className="w-8 h-8 rounded-full bg-[hsl(var(--cream))]/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <X className="w-4 h-4 text-[hsl(var(--cream))]/60" />
+                </span>
+                <span className="text-xl text-[hsl(var(--cream))]/85 leading-relaxed">{g(item)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 4. VOS ATTIRANCES / FRUSTRATIONS */}
+      <section className="grid lg:grid-cols-2 gap-0">
+        <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[480px]">
+          <img
+            decoding="async"
+            src={imageUrl(profile.imageSlug, gender, "attractions", fallbackCouple)}
+            onError={handleImgError(fallbackCouple)}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
+        <div className="bg-[hsl(var(--cream))] px-8 md:px-16 lg:px-20 py-16 md:py-20">
+          <h3 className="font-heading font-semibold text-foreground mb-8 text-3xl md:text-4xl">
+            Vous vous sentez bien avec des personnes ou les situations
+          </h3>
+          <ul className="space-y-4 mb-12 text-2xl">
+            {profile.attractions?.comfort?.map((item, i) => (
+              <li key={i} className="flex items-start gap-4">
+                <span className="w-7 h-7 rounded-full bg-[hsl(var(--gold))]/15 flex items-center justify-center shrink-0 mt-1">
+                  <Check className="w-4 h-4 text-[hsl(var(--gold))]" />
+                </span>
+                <span className="text-xl text-muted-foreground leading-relaxed">{g(item)}</span>
+              </li>
+            ))}
+          </ul>
+
+          <h3 className="font-heading font-semibold text-foreground mb-8 text-3xl md:text-4xl">
+            Vous vous épuisez avec les personnes ou les situations
+          </h3>
+          <ul className="space-y-4">
+            {profile.attractions?.drain?.map((item, i) => (
+              <li key={i} className="flex items-start gap-4">
+                <span className="w-7 h-7 rounded-full bg-foreground/10 flex items-center justify-center shrink-0 mt-1">
+                  <X className="w-4 h-4 text-foreground/60" />
+                </span>
+                <span className="text-xl text-muted-foreground leading-relaxed">{g(item)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 5. SIGNATURE */}
+      <section className="bg-[hsl(var(--cream))] border-t border-[hsl(var(--gold))]/20">
+        <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 text-center">
+          <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto mb-12" />
+          <p className="font-heading text-2xl md:text-4xl text-foreground leading-relaxed italic">
+            « {profile.signature} »
+          </p>
+        </div>
+      </section>
+
+      {/* 6. CTA FOOTER */}
+      <section className="bg-white">
         <div className="max-w-2xl mx-auto px-6 py-16 md:py-24 text-center">
           <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto mb-10" />
           <p className="font-heading text-2xl md:text-3xl text-foreground mb-10 font-sans">
