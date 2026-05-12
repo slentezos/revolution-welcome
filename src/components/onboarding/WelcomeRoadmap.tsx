@@ -151,7 +151,7 @@ const STEPS = [
     title: "Photos & Vidéo",
     duration: "15 minutes",
     description: "Ajoutez vos plus belles photos et enregistrez une courte vidéo de présentation.",
-    highlights: ["Jusqu'à 4 photos", "Possibilité d’assistance technique ", "Tutoriel inclus"],
+    highlights: ["Jusqu'à 4 photos", "Votre vidéo et son tutoriel", "Possibilité d’assistance technique"],
   },
   {
     number: "03",
@@ -231,7 +231,8 @@ export default function WelcomeRoadmap({
               Votre parcours <br /> en 4 étapes clés
             </h1>
             <p className="text-muted-foreground text-xl sm:text-2xl max-w-2xl mx-auto leading-relaxed italic font-light">
-              "L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes aujourd'hui peuvent faire toute la différence demain."
+              "L'inscription va vous prendre un peu de temps mais le jeu en vaut la chandelle. Quelques minutes
+              aujourd'hui peuvent faire toute la différence demain."
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
               <button
