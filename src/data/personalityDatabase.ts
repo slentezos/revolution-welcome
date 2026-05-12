@@ -17,14 +17,20 @@ export interface PersonalityProfileData {
   title: string;
   imageSlug?: string;
   metrics: PersonalityMetric[];
-  intro: string;
-  strengths: string[];
-  weaknesses: string[];
-  loveVision: string;
-  balanceStress: string;
-  rapportToOthers: string;
-  attractions: PersonalityAttractions;
-  signature: string;
+  intro?: string;
+  strengths?: string[];
+  weaknesses?: string[];
+  loveVision?: string;
+  balanceStress?: string;
+  rapportToOthers?: string;
+  fonctionnement?: string;
+  rapportAuxAutres?: string;
+  equilibre?: string;
+  visionAmour?: string;
+  pointsForts?: string[];
+  fragilites?: string[];
+  attractions?: PersonalityAttractions;
+  signature?: string;
 }
 
 export function genderize(text: string, gender: Gender): string {
