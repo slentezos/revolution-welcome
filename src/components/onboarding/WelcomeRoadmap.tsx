@@ -143,7 +143,7 @@ const STEPS = [
     title: "Le Quiz des 3 Préférences",
     duration: "5 minutes",
     description: "Un court questionnaire ludique pour mieux partager vos centres d’intérêt",
-    highlights: ["Questions bienveillantes", "Aucune mauvaise réponse", "Résultats confidentiels"],
+    highlights: ["Questions bienveillantes", "Aucune mauvaise réponse", "Une manière de vous connaître "],
   },
   {
     number: "02",
