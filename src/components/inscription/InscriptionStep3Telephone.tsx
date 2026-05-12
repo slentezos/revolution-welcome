@@ -78,7 +78,7 @@ export default function InscriptionStep3Telephone({ formData, setFormData, onNex
         <p className="text-muted-foreground text-2xl">
           {codeSent
             ? <>Un code à 6 chiffres a été envoyé au<br />+33 {formData.phone}</>
-            : "Pour votre sécurité, nous vérifions votre numéro de téléphone"}
+            : "Pour votre sécurité, nous vérifions votre numéro de téléphone. Celui-ci ne sera jamais partagé sans votre accord préalable. "}
         </p>
       </div>
 
