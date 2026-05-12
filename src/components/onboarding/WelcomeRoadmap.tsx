@@ -165,7 +165,7 @@ const STEPS = [
     number: "04",
     icon: Brain,
     title: "Test de Personnalité",
-    duration: "15 à 20 min",
+    duration: "15 min",
     description: "Un test psychologique simple pour affiner vos correspondances et révéler vos traits dominants.\n",
     highlights: ["Méthode éprouvée", "Traits dominants", "Qualité des affinités"],
   },
