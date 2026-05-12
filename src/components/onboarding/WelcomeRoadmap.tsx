@@ -17,7 +17,7 @@ import {
 /* ─── PRICING MODAL (Inchangée) ─── */
 const CONCIERGE_BENEFITS = [
   "Nous vous aidons à remplir l'intégralité ensemble de votre profil pour vous",
-  "Nous remplissons l'intégralité ensemble de votre profil pour vous",
+  "Nous remplissons ensemble l'intégralité ensemble de votre profil pour vous",
   "Accompagnement pas à pas pour votre vidéo",
   "Zéro stress technique, nous nous occupons de tout",
 ];
