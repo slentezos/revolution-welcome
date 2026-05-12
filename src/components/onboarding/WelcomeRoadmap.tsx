@@ -149,9 +149,9 @@ const STEPS = [
     number: "02",
     icon: Camera,
     title: "Photos & Vidéo",
-    duration: "5 à 10 min",
-    description: "Montrez qui vous êtes vraiment. Ajoutez vos plus belles photos et enregistrez une courte vidéo de présentation.\n",
-    highlights: ["Jusqu'à 4 photos", "Vidéo de personnalité", "Tutoriel inclus"],
+    duration: "15 minutes",
+    description: "Ajoutez vos plus belles photos et enregistrez une courte vidéo de présentation.",
+    highlights: ["Jusqu'à 4 photos", "Tutoriel + possibilité d'assistance ", "Tutoriel inclus"],
   },
   {
     number: "03",
