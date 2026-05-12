@@ -16,7 +16,7 @@ import {
 
 /* ─── PRICING MODAL (Inchangée) ─── */
 const CONCIERGE_BENEFITS = [
-  "Un entretien téléphonique privé de 45 minutes",
+  "Nous vous aidons à remplir l'intégralité ensemble de votre profil pour vous",
   "Nous remplissons l'intégralité ensemble de votre profil pour vous",
   "Accompagnement pas à pas pour votre vidéo",
   "Zéro stress technique, nous nous occupons de tout",
@@ -88,11 +88,11 @@ function PricingModal({
                   </span>
                 </div>
                 <h3 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">À votre rythme</h3>
-                <p className="text-gold font-medium mb-6 text-2xl">Inclus dans vos 3 mois offerts</p>
+                <p className="text-gold font-medium mb-6 text-2xl">Formule incluse dans vos 3 mois offerts</p>
                 <div className="divider-gold mb-8" />
                 <p className="text-foreground/80 leading-relaxed flex-grow mb-10 text-2xl">
-                  Vous complétez votre portrait sereinement, étape par étape : quiz, photos, vidéo, profil et test de
-                  personnalité.
+                  Vous complétez votre portrait étape par étape :<br />
+                  Quiz des 3 préférences, photos & vidéo, Mon / Son profil et test de personnalité.
                 </p>
                 <button
                   onClick={onStartAutonomous}
@@ -125,7 +125,7 @@ function PricingModal({
                   onClick={onStartConcierge}
                   className="w-full bg-gold text-white min-h-[64px] py-5 font-semibold text-xl rounded-sm"
                 >
-                  Choisir l'accompagnement privé
+                  Découvrez l'accompagnement privé
                 </button>
               </div>
             </div>
