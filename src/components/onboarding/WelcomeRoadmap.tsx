@@ -141,7 +141,7 @@ const STEPS = [
     number: "01",
     icon: HelpCircle,
     title: "Le Quiz des 3 Préférences",
-    duration: "3 minutes",
+    duration: "5 minutes",
     description: "Un court questionnaire ludique pour mieux comprendre vos attentes.",
     highlights: ["Questions bienveillantes", "Aucune mauvaise réponse", "Résultats confidentiels"],
   },
