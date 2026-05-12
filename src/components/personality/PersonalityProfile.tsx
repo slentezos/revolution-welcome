@@ -59,7 +59,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
     },
     {
       subtitle: "Ce qui vous définit",
-      title: "2. Vos forces et fragilités",
+      title: "2. Votre fonctionnement ",
       paragraphs: [g(profile.intro)],
       image: imageUrl(profile.imageSlug, gender, "strengths", fallbackStrengths),
     },
