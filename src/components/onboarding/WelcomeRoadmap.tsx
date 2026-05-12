@@ -125,7 +125,7 @@ function PricingModal({
                   onClick={onStartConcierge}
                   className="w-full bg-gold text-white min-h-[64px] py-5 font-semibold text-xl rounded-sm"
                 >
-                  Choisir l'accompagnement privé
+                  Découvrez l'accompagnement privé
                 </button>
               </div>
             </div>
