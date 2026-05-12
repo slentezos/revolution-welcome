@@ -35,9 +35,7 @@ export default function PersonalityResultPage({ answers, onContinue }: Personali
     })();
   }, []);
 
-  // Affiche le profil "Le Stratège" — la base de données peut être étendue
-  // dans `src/data/personalityDatabase.ts` pour ajouter les 15 autres profils.
-  const profileId = "strategiste";
+  const profileId = searchParams.get("profile") || "strategiste";
 
   if (isViewMode) {
     return (
