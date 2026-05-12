@@ -628,7 +628,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                     { icon: Clock, title: "Le Tempo", desc: "Prenez votre temps : avec l'émotion, on a tendance à s'emballer." },
                     { icon: Mic, title: "Le Naturel", desc: "Soyez naturel, vivant, changez de rythme. Surtout, ne lisez pas un texte." },
                     { icon: MessageCircle, title: "Évitez les banalités", desc: '"Je recherche l\'amour, le compagnon fidèle…" — allez plus loin.' },
-                    { icon: Heart, title: "Racontez-vous", desc: "Une anecdote, un projet, une activité qui vous tient à cœur. Imaginez un dialogue, la personne en face de vous." },
+                    { icon: Heart, title: "Racontez-vous", desc: "Une anecdote, un projet, une activité qui vous tient à cœur. Imaginez un dialogue : la personne est en face de vous." },
                     { icon: RotateCcw, title: "Recommencez", desc: "N'hésitez pas à refaire votre prise autant de fois qu'il le faut." },
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start gap-4 p-3 rounded-2xl border border-[#E5E0D8]/60 bg-white/60">
