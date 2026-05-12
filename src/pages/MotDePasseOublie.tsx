@@ -57,7 +57,7 @@ export default function MotDePasseOublie() {
         <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 py-12">
           <div className="max-w-md w-full mx-auto text-center">
             <Link to="/" className="font-heading text-3xl font-semibold text-primary mb-8 block">
-              Toi & Moi
+              Kalimera
             </Link>
 
             <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">

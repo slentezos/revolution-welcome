@@ -46,6 +46,9 @@ export default function LifeLoversSection() {
             <p className="text-xl">
               Il n'y a pas de honte à afficher son besoin d'amour, d'émotions partagées, de complicité heureuse.
             </p>
+            <p className="text-xl">
+              
+            </p>
           </div>
         </div>
       </div>
