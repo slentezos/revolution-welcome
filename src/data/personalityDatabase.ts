@@ -103,7 +103,7 @@ export const personalityDatabase: Record<string, PersonalityProfileData> = {
       drain: ["froides, purement rationnelles", "source de conflits permanents", "faisant preuve de rigidité et d'intrusion", "rejetant le ressenti au profit de la logique", "utilisant l'ironie ou le cynisme"]
     },
     signature: "Vous avez besoin de douceur pour vous ouvrir… et de confiance pour rester."
-  }
+  },
   protecteur: {
     id: "protecteur",
     title: "Le Protecteur solide et attentionné",
