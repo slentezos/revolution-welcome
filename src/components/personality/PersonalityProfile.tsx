@@ -182,14 +182,14 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
       })}
 
       {/* BANDEAU VISUEL DE TRANSITION - HAUTEUR RÉDUITE */}
-      <section className="relative w-full h-[200px] md:h-[300px] overflow-hidden border-y border-[hsl(var(--gold))]/20">
+      <section className="relative w-full h-[200px] md:h-[100px] overflow-hidden border-y border-[hsl(var(--gold))]/20">
         <img
           src={imageUrl(profile.imageSlug, gender, "transition", fallbackHero)}
           onError={handleImgError(fallbackHero)}
           className="absolute inset-0 w-full h-full object-cover object-center"
           alt=""
         />
-        <div className="absolute inset-0 bg-black/50" /> {/* Overlay sombre pour le contraste */}
+        <div className="absolute inset-0 bg-black/60" /> {/* Overlay sombre pour le contraste */}
       </section>
 
       {/* 3. VOS POINTS FORTS / VOS FRAGILITÉS */}
