@@ -156,7 +156,7 @@ const STEPS = [
   {
     number: "03",
     icon: ClipboardList,
-    title: "Mon Profil",
+    title: "Mon / Son Profil",
     duration: "15 à 20 min",
     description: "Décrivez-vous en détail et esquissez le portrait de la personne que vous aimeriez rencontrer.\n",
     highlights: ["Description approfondie", "Portrait de l'autre", "Vos valeurs et passions"],
