@@ -88,7 +88,7 @@ export const personalityDatabase: Record<string, PersonalityProfileData> = {
       ]
     },
     signature: "Vous avez besoin de calme pour aller à la rencontre de l’autre… et de clarté pour vous engager."
-  }
+  },
 
   // 2. LE VISIONNAIRE (INFJ)
   visionnaire: {
