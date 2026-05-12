@@ -138,7 +138,7 @@ export default function PersonalityProfile({ profileId, gender, onContinue }: Pe
       <section ref={introRef} className="bg-[hsl(var(--cream))]">
         <div className="max-w-4xl mx-auto px-6 md:px-12 py-16 text-center md:py-0">
           <div className="w-16 h-px bg-[hsl(var(--gold))] mx-auto mb-12" />
-          <p className="font-heading text-2xl md:text-4xl text-foreground leading-relaxed italic">
+          <p className="font-heading text-2xl md:text-4xl text-foreground leading-relaxed italic pb-[40px]">
             « {profile.signature} »
           </p>
         </div>
