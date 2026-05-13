@@ -245,7 +245,7 @@ export function ModerationView() {
               className="mt-6 p-4 rounded-md text-sm"
               style={{ background: NAVY, border: `1px solid ${BORDER}` }}
             >
-              <div className="opacity-60 text-xs uppercase tracking-wider mb-2">Métadonnées</div>
+              <div className="opacity-60 uppercase tracking-wider mb-2 text-lg">Métadonnées</div>
               <div className="grid grid-cols-2 gap-2">
                 <Meta label="Étape" value={deriveTunnelStep(active)} />
                 <Meta label="Statut" value={active.account_status ?? "—"} />
