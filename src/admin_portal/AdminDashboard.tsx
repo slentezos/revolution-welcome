@@ -46,12 +46,7 @@ function SectionRouter() {
       {section === "command-center" && <CommandCenterView />}
       {section === "members" && <MembersView />}
       {section === "moderation" && <ModerationView />}
-      {section === "expansion" && (
-        <PlaceholderView
-          title="Expansion & marchés"
-          description="Pilotez la liste d'attente, l'ouverture de nouvelles villes et le suivi des leads par région."
-        />
-      )}
+      {section === "expansion" && <ExpansionView />}
       {section === "finops" && (
         <PlaceholderView
           title="FinOps & abonnements"
