@@ -177,7 +177,7 @@ function ZoneTable({
           <h2 id="zone-table-title" className="font-semibold text-xl">
             Répartition Géographique
           </h2>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             Cliquez une ligne pour explorer les codes postaux du département.
           </p>
         </div>
