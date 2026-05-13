@@ -439,7 +439,7 @@ function TargetCard({
       <header className="flex items-center justify-between gap-2">
         <div>
           <h3 className="font-semibold text-xl">{label}</h3>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             Préfixe {prefix} · Seuil {fmtNumber(threshold)}
           </p>
         </div>
