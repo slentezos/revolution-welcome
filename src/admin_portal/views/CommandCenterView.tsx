@@ -464,7 +464,7 @@ function ActivityFeed({ events }: { events: Analytics["recentActivity"] }) {
               <span style={{ color: MUTED }}> · {e.location}</span>
             </span>
           </div>
-          <span className="tabular-nums text-xs shrink-0 ml-3" style={{ color: MUTED }}>
+          <span className="tabular-nums shrink-0 ml-3 text-lg" style={{ color: MUTED }}>
             {fmtAgo(e.at)}
           </span>
         </li>
