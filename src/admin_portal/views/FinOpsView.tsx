@@ -717,13 +717,13 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
 
 function Th({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <th className={`px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-80 ${className}`}>
+    <th className={`px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-80 bg-slate-50 ${className}`}>
       {children}
     </th>
   );
 }
 function Td({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <td className={`px-4 py-3 align-middle text-sm ${className}`}>{children}</td>;
+  return <td className={`px-4 py-3 align-middle text-base ${className}`}>{children}</td>;
 }
 
 function TypePill({ t }: { t: TxType }) {
