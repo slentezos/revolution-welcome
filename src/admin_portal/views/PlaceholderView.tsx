@@ -43,9 +43,9 @@ export function PlaceholderView({
           >
             Module · {String(i + 1).padStart(2, "0")}
           </div>
-          <div className="text-base" style={{ color: TEXT_MUTED }}>
+          <div className="text-xl" style={{ color: TEXT_MUTED }}>
             Emplacement réservé pour un widget modulaire
-            <span className="block text-sm opacity-70 mt-1">
+            <span className="block opacity-70 mt-1 text-lg">
               Connectez ici un composant de la suite.
             </span>
           </div>
