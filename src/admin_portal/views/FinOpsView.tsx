@@ -376,7 +376,7 @@ function Scoreboard({
           value={fmtPct(churnRate)}
           tone={churnAlert ? "danger" : "default"}
           footer={
-            <span className="text-xs" style={{ color: churnAlert ? RED : "#94A3B8" }}>
+            <span className="text-lg" style={{ color: churnAlert ? RED : "#94A3B8" }}>
               {churnAlert ? "⚠ Au-dessus du seuil 5 %" : "Sous le seuil de 5 %"}
             </span>
           }
