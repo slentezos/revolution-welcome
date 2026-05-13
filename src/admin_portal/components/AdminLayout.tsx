@@ -78,7 +78,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
             const active = s.id === section;
             return (
               <div key={s.id} className="contents">
-                {s.separatorBefore && (
+                {"separatorBefore" in s && s.separatorBefore && (
                   <div
                     role="separator"
                     aria-hidden
