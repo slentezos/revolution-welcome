@@ -344,7 +344,7 @@ function Scoreboard({
           tone="gold"
           footer={
             <>
-              <div className="flex items-center justify-between text-xs opacity-70 mb-1">
+              <div className="flex items-center justify-between opacity-70 mb-1 text-lg">
                 <span>Objectif {fmtEuroCompact(MRR_GOAL)}</span>
                 <span>{pct}%</span>
               </div>
