@@ -454,7 +454,7 @@ function ActivityFeed({ events }: { events: Analytics["recentActivity"] }) {
   return (
     <ul className="divide-y" style={{ borderColor: BORDER }}>
       {events.map((e, i) => (
-        <li key={i} className="flex items-center justify-between py-2.5 text-sm"
+        <li key={i} className="flex items-center justify-between py-2.5 text-lg"
           style={{ borderColor: BORDER, borderTopWidth: i === 0 ? 0 : 1 } as any}>
           <div className="flex items-center gap-3 min-w-0">
             <span className="inline-flex h-2 w-2 rounded-full shrink-0"
