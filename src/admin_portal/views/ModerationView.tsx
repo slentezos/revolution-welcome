@@ -397,7 +397,7 @@ function RejectModal({
       >
         <header className="p-5 border-b" style={{ borderColor: BORDER }}>
           <h3 className="text-lg font-semibold">Motif de Rejet</h3>
-          <p className="text-xs opacity-60 mt-1">
+          <p className="opacity-60 mt-1 text-xl">
             {`${user.first_name} ${user.last_name}`.trim() || user.email}
           </p>
         </header>
