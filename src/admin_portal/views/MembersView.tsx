@@ -407,7 +407,7 @@ function StepBadge({ stepIndex, label }: { stepIndex: number; label: string }) {
           style={{ width: `${pct * 100}%`, background: GOLD }}
         />
       </div>
-      <span className="text-xs">{label}</span>
+      <span className="text-lg">{label}</span>
     </div>
   );
 }
@@ -428,7 +428,7 @@ function FinancialPill({
   const c = map[tone];
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-medium"
+      className="inline-block px-2 py-0.5 rounded-md font-medium text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {label}
