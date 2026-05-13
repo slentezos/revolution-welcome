@@ -172,15 +172,15 @@ export function ModerationView() {
                   style={{ background: isActive ? "rgba(201,169,97,0.08)" : "transparent" }}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium truncate">
+                    <span className="font-medium truncate text-lg">
                       {`${u.first_name} ${u.last_name}`.trim() || u.email}
                     </span>
                     <SlaBadge since={u.updated_at} />
                   </div>
-                  <div className="text-xs opacity-60 mt-0.5">
+                  <div className="opacity-60 mt-0.5 text-lg">
                     {calcAge(u.birth_date) ?? "?"} ans · {shortLocation(u)}
                   </div>
-                  <div className="text-xs opacity-50 mt-1">
+                  <div className="opacity-50 mt-1 text-lg">
                     Soumis {formatRelativeFr(u.updated_at)}
                   </div>
                 </button>
