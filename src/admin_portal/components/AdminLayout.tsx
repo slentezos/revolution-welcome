@@ -117,9 +117,40 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           </div>
         )}
 
+        {/* Theme toggle (Day/Night) */}
+        <div
+          className="px-3 pb-3 pt-1"
+          style={{ borderTop: `1px solid ${NAVY_BORDER}` }}
+        >
+          <button
+            onClick={toggleTheme}
+            className="w-full h-12 flex items-center gap-3 px-3 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{
+              background: "var(--ap-hover)",
+              color: TEXT_MUTED,
+              outlineColor: GOLD,
+            }}
+            aria-label={theme === "light" ? "Activer le mode nuit" : "Activer le mode jour"}
+            title={theme === "light" ? "Mode nuit" : "Mode jour"}
+          >
+            <span
+              className="h-7 w-7 rounded-full grid place-items-center shrink-0"
+              style={{ background: GOLD, color: "var(--ap-surface)" }}
+              aria-hidden
+            >
+              {theme === "light" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </span>
+            {sidebarOpen && (
+              <span className="text-base">
+                {theme === "light" ? "Mode jour" : "Mode nuit"}
+              </span>
+            )}
+          </button>
+        </div>
+
         <button
           onClick={toggleSidebar}
-          className="h-12 border-t flex items-center justify-center gap-2 text-base hover:bg-white/5 transition-colors"
+          className="h-12 border-t flex items-center justify-center gap-2 text-base hover:bg-[var(--ap-hover)] transition-colors"
           style={{ borderColor: NAVY_BORDER, color: TEXT_MUTED }}
           aria-label={sidebarOpen ? "Réduire le menu" : "Étendre le menu"}
         >
