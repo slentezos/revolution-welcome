@@ -356,13 +356,13 @@ export function MembersView() {
                   <div className="text-right whitespace-nowrap">
                     <button
                       onClick={() => setDetailUser(u)}
-                      className="text-sm underline opacity-80 hover:opacity-100 mr-3"
+                      className="underline opacity-80 hover:opacity-100 mr-3 text-lg"
                     >
                       Détails
                     </button>
                     <button
                       onClick={() => handleRefund(u)}
-                      className="text-sm underline opacity-70 hover:opacity-100 mr-3"
+                      className="underline opacity-70 hover:opacity-100 mr-3 text-lg"
                       style={{ color: GOLD }}
                     >
                       Rembourser
@@ -370,7 +370,7 @@ export function MembersView() {
                     <button
                       onClick={() => handleBlock(u)}
                       disabled={isMaster}
-                      className="text-sm font-semibold px-3 py-1.5 rounded-md disabled:opacity-30"
+                      className="font-semibold px-3 py-1.5 rounded-md disabled:opacity-30 text-lg"
                       style={{ background: RED, color: "#fff" }}
                     >
                       Bloquer
