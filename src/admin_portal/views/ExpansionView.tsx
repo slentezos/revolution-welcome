@@ -24,11 +24,11 @@ import {
 } from "../lib/expansion";
 import { toast } from "sonner";
 
-const SURFACE = "#0F1828";
-const BORDER = "#1F2A44";
-const GOLD = "#C5A059";
-const NAVY = "#0E1626";
-const TEXT = "#E5E7EB";
+const SURFACE = "var(--ap-surface)";
+const BORDER = "var(--ap-border)";
+const GOLD = "var(--ap-gold)";
+const NAVY = "var(--ap-bg)";
+const TEXT = "var(--ap-text)";
 const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F1828]";
 

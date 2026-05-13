@@ -15,11 +15,11 @@ import { useQuery } from "@tanstack/react-query";
 import { adminSupabase } from "../lib/supabase";
 import { toast } from "sonner";
 
-const SURFACE = "#0F1828";
-const BORDER = "#1F2A44";
-const GOLD = "#C5A059";
-const NAVY = "#0E1626";
-const TEXT = "#E5E7EB";
+const SURFACE = "var(--ap-surface)";
+const BORDER = "var(--ap-border)";
+const GOLD = "var(--ap-gold)";
+const NAVY = "var(--ap-bg)";
+const TEXT = "var(--ap-text)";
 const GREEN = "#4ADE80";
 const RED = "#F87171";
 const BLUE = "#60A5FA";

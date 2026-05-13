@@ -15,12 +15,12 @@ import { useAdminSection } from "../core/useAdminSection";
 import { useAdminContext } from "../core/AdminProviders";
 import { AdminCommandPalette } from "./AdminCommandPalette";
 
-const NAVY = "#0E1626";
-const NAVY_SURFACE = "#141E33";
-const NAVY_BORDER = "#1F2A44";
-const GOLD = "#C9A961";
-const TEXT = "#E5E7EB";
-const TEXT_MUTED = "#94A3B8";
+const NAVY = "var(--ap-bg)";
+const NAVY_SURFACE = "var(--ap-surface)";
+const NAVY_BORDER = "var(--ap-border)";
+const GOLD = "var(--ap-gold)";
+const TEXT = "var(--ap-text)";
+const TEXT_MUTED = "var(--ap-muted)";
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const { sidebarOpen, toggleSidebar } = useAdminContext();
