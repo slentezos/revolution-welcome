@@ -1,4 +1,5 @@
 import { LogOut, Search, Settings, User as UserIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -16,6 +17,9 @@ import { useUIState } from "@/core/ui-state";
 export function AdminHeader() {
   const { user } = useAuth();
   const { setCommandPaletteOpen } = useUIState();
+  const navigate = useNavigate();
+
+  const handleLogout = () => navigate("/login");
 
   return (
     <header className="h-16 border-b border-border bg-card flex items-center gap-4 px-6 sticky top-0 z-30">
@@ -58,7 +62,7 @@ export function AdminHeader() {
             <Settings className="mr-2 h-4 w-4" /> Paramètres
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-base text-destructive">
+          <DropdownMenuItem onClick={handleLogout} className="text-base text-destructive focus:text-destructive cursor-pointer">
             <LogOut className="mr-2 h-4 w-4" /> Déconnexion
           </DropdownMenuItem>
         </DropdownMenuContent>
