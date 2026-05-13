@@ -1,6 +1,6 @@
-const BORDER = "#1F2A44";
-const GOLD = "#C9A961";
-const TEXT_MUTED = "#94A3B8";
+const BORDER = "var(--ap-border)";
+const GOLD = "var(--ap-gold)";
+const TEXT_MUTED = "var(--ap-muted)";
 
 /**
  * High-density modular page container used by routes whose widgets

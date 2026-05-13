@@ -1,6 +1,8 @@
 import { useState, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AdminContextProvider } from "./AdminContext";
+import { AdminThemeProvider } from "./AdminTheme";
+import "../admin-theme.css";
 
 /**
  * Root providers for the Admin Portal.
@@ -29,7 +31,9 @@ export function AdminProviders({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AdminContextProvider>{children}</AdminContextProvider>
+      <AdminThemeProvider>
+        <AdminContextProvider>{children}</AdminContextProvider>
+      </AdminThemeProvider>
     </QueryClientProvider>
   );
 }

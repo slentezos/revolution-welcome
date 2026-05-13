@@ -7,15 +7,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAdminSection } from "../core/useAdminSection";
 
 /* ---------- 2026 Executive palette ---------- */
-const SURFACE = "#0E1626";
+const SURFACE = "var(--ap-surface)";
 const SURFACE_2 = "#131C30";
-const BORDER = "#1E2A44";
-const GOLD = "#C9A961";
-const GOLD_SOFT = "#A88E4F";
-const NAVY = "#0A1120";
-const TEXT = "#F1F5F9";
-const MUTED = "#8B97AE";
-const DANGER = "#F87171";
+const BORDER = "var(--ap-border)";
+const GOLD = "var(--ap-gold)";
+const GOLD_SOFT = "var(--ap-gold-soft)";
+const NAVY = "var(--ap-bg)";
+const TEXT = "var(--ap-text)";
+const MUTED = "var(--ap-muted)";
+const DANGER = "var(--ap-danger)";
 const FONT = "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif";
 
 type Scope = "france" | "paris" | "idf" | "expansion";

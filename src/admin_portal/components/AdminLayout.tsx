@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeft, Command, LogOut, Search, User } from "lucide-react";
+import { ChevronLeft, Command, LogOut, Moon, Search, Sun, User } from "lucide-react";
+import { useAdminTheme } from "../core/AdminTheme";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,23 +16,25 @@ import { useAdminSection } from "../core/useAdminSection";
 import { useAdminContext } from "../core/AdminProviders";
 import { AdminCommandPalette } from "./AdminCommandPalette";
 
-const NAVY = "#0E1626";
-const NAVY_SURFACE = "#141E33";
-const NAVY_BORDER = "#1F2A44";
-const GOLD = "#C9A961";
-const TEXT = "#E5E7EB";
-const TEXT_MUTED = "#94A3B8";
+const NAVY = "var(--ap-bg)";
+const NAVY_SURFACE = "var(--ap-surface)";
+const NAVY_BORDER = "var(--ap-border)";
+const GOLD = "var(--ap-gold)";
+const TEXT = "var(--ap-text)";
+const TEXT_MUTED = "var(--ap-muted)";
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const { sidebarOpen, toggleSidebar } = useAdminContext();
   const { section, setSection } = useAdminSection();
+  const { theme, toggleTheme } = useAdminTheme();
   const current = ADMIN_SECTIONS.find((s) => s.id === section);
 
   return (
     <div
+      data-admin-theme={theme}
       className="min-h-screen flex font-sans antialiased"
       style={{
-        background: "#070B14",
+        background: "var(--ap-bg)",
         color: TEXT,
         fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       }}
@@ -41,8 +44,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         className="shrink-0 flex flex-col border-r transition-[width] duration-200 ease-out"
         style={{
           width: sidebarOpen ? 264 : 76,
-          background: NAVY,
+          background: "var(--ap-surface)",
           borderColor: NAVY_BORDER,
+          boxShadow: "var(--ap-elev-1)",
         }}
       >
         <div
@@ -113,9 +117,40 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           </div>
         )}
 
+        {/* Theme toggle (Day/Night) */}
+        <div
+          className="px-3 pb-3 pt-1"
+          style={{ borderTop: `1px solid ${NAVY_BORDER}` }}
+        >
+          <button
+            onClick={toggleTheme}
+            className="w-full h-12 flex items-center gap-3 px-3 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{
+              background: "var(--ap-hover)",
+              color: TEXT_MUTED,
+              outlineColor: GOLD,
+            }}
+            aria-label={theme === "light" ? "Activer le mode nuit" : "Activer le mode jour"}
+            title={theme === "light" ? "Mode nuit" : "Mode jour"}
+          >
+            <span
+              className="h-7 w-7 rounded-full grid place-items-center shrink-0"
+              style={{ background: GOLD, color: "var(--ap-surface)" }}
+              aria-hidden
+            >
+              {theme === "light" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </span>
+            {sidebarOpen && (
+              <span className="text-base">
+                {theme === "light" ? "Mode jour" : "Mode nuit"}
+              </span>
+            )}
+          </button>
+        </div>
+
         <button
           onClick={toggleSidebar}
-          className="h-12 border-t flex items-center justify-center gap-2 text-base hover:bg-white/5 transition-colors"
+          className="h-12 border-t flex items-center justify-center gap-2 text-base hover:bg-[var(--ap-hover)] transition-colors"
           style={{ borderColor: NAVY_BORDER, color: TEXT_MUTED }}
           aria-label={sidebarOpen ? "Réduire le menu" : "Étendre le menu"}
         >
@@ -132,7 +167,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         <header
           className="h-16 px-6 flex items-center gap-4 border-b sticky top-0 z-30 backdrop-blur"
           style={{
-            background: "rgba(7, 11, 20, 0.85)",
+            background: "var(--ap-header-bg)",
             borderColor: NAVY_BORDER,
           }}
         >
@@ -163,7 +198,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               });
               window.dispatchEvent(ev);
             }}
-            className="hidden md:flex items-center gap-2 h-10 px-3 rounded-md border text-base hover:bg-white/5 transition-colors"
+            className="hidden md:flex items-center gap-2 h-10 px-3 rounded-md border text-base hover:bg-[var(--ap-hover)] transition-colors"
             style={{ borderColor: NAVY_BORDER, color: TEXT_MUTED }}
           >
             <Search className="h-4 w-4" />
@@ -180,7 +215,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="h-10 w-10 rounded-full grid place-items-center border hover:bg-white/5 transition-colors"
+                className="h-10 w-10 rounded-full grid place-items-center border hover:bg-[var(--ap-hover)] transition-colors"
                 style={{ borderColor: NAVY_BORDER }}
                 aria-label="Compte administrateur"
               >
@@ -259,7 +294,7 @@ function NavButton({
         e.preventDefault();
         onClick();
       }}
-      className="group flex items-center gap-3 h-12 px-3 rounded-md transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0E1626]"
+      className="group flex items-center gap-3 h-12 px-3 rounded-md transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 "
       style={{
         background: active ? "rgba(201, 169, 97, 0.10)" : "transparent",
         color: active ? GOLD : TEXT_MUTED,

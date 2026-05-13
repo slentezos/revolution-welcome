@@ -15,12 +15,12 @@ import {
 import { formatDateShortFr } from "@/admin_portal/lib/dates";
 import { toast } from "sonner";
 
-const NAVY = "#0E1626";
-const SURFACE = "#141E33";
-const BORDER = "#1F2A44";
-const GOLD = "#C9A961";
-const TEXT = "#F8FAFC";
-const MUTED = "#94A3B8";
+const NAVY = "var(--ap-bg)";
+const SURFACE = "var(--ap-surface)";
+const BORDER = "var(--ap-border)";
+const GOLD = "var(--ap-gold)";
+const TEXT = "var(--ap-text)";
+const MUTED = "var(--ap-muted)";
 
 type DraftArticle = {
   id?: string;

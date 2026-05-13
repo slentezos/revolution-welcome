@@ -37,12 +37,12 @@ type AdminUser = {
   media: { media_type: string; file_path: string; created_at: string }[];
 };
 
-const SURFACE = "#0F1828";
-const BORDER = "#1F2A44";
-const GOLD = "#C9A961";
-const NAVY = "#0E1626";
+const SURFACE = "var(--ap-surface)";
+const BORDER = "var(--ap-border)";
+const GOLD = "var(--ap-gold)";
+const NAVY = "var(--ap-bg)";
 const RED = "#DC2626";
-const TEXT = "#E5E7EB";
+const TEXT = "var(--ap-text)";
 const ROW_H = 64;
 
 const fmtFr = (d: string | Date | null | undefined) =>
