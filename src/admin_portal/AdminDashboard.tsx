@@ -5,6 +5,7 @@ import { ADMIN_SECTIONS } from "./core/navigation";
 import { CommandCenterView } from "./views/CommandCenterView";
 import { MembersView } from "./views/MembersView";
 import { ModerationView } from "./views/ModerationView";
+import { ExpansionView } from "./views/ExpansionView";
 import { PlaceholderView } from "./views/PlaceholderView";
 import { ProtectedRoute } from "./core/ProtectedRoute";
 import { AdminErrorBoundary } from "./core/AdminErrorBoundary";
@@ -45,12 +46,7 @@ function SectionRouter() {
       {section === "command-center" && <CommandCenterView />}
       {section === "members" && <MembersView />}
       {section === "moderation" && <ModerationView />}
-      {section === "expansion" && (
-        <PlaceholderView
-          title="Expansion & marchés"
-          description="Pilotez la liste d'attente, l'ouverture de nouvelles villes et le suivi des leads par région."
-        />
-      )}
+      {section === "expansion" && <ExpansionView />}
       {section === "finops" && (
         <PlaceholderView
           title="FinOps & abonnements"
