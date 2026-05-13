@@ -275,7 +275,7 @@ function ZoneTable({
                     {isOpen && (
                       <tr style={{ background: NAVY, borderTop: `1px solid ${BORDER}` }}>
                         <td colSpan={columns.length} className="px-6 py-4">
-                          <div className="text-xs uppercase tracking-wider opacity-60 mb-2">
+                          <div className="uppercase tracking-wider opacity-60 mb-2 text-lg">
                             Codes postaux — {row.original.topCity} ({row.original.dept})
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
