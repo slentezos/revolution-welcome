@@ -70,19 +70,31 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           )}
         </div>
 
-        <nav className="flex-1 p-3 flex flex-col gap-1">
+        <nav
+          className="flex-1 p-3 flex flex-col gap-1"
+          aria-label="Navigation principale"
+        >
           {ADMIN_SECTIONS.map((s) => {
             const active = s.id === section;
             return (
-              <NavButton
-                key={s.id}
-                id={s.id}
-                label={s.label}
-                Icon={s.icon}
-                active={active}
-                collapsed={!sidebarOpen}
-                onClick={() => setSection(s.id)}
-              />
+              <div key={s.id} className="contents">
+                {s.separatorBefore && (
+                  <div
+                    role="separator"
+                    aria-hidden
+                    className="my-2 h-px"
+                    style={{ background: NAVY_BORDER }}
+                  />
+                )}
+                <NavButton
+                  id={s.id}
+                  label={s.label}
+                  Icon={s.icon}
+                  active={active}
+                  collapsed={!sidebarOpen}
+                  onClick={() => setSection(s.id)}
+                />
+              </div>
             );
           })}
         </nav>
