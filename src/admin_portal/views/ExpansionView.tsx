@@ -322,7 +322,7 @@ function LiquidityBadge({ tier }: { tier: ZoneRow["liquidity"] }) {
   const c = map[tier];
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-semibold"
+      className="inline-block px-2 py-0.5 rounded-md font-semibold text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {c.label}
