@@ -121,17 +121,17 @@ export function CommandCenterView() {
         style={{ background: SURFACE, borderColor: BORDER }}>
         <ScopeToggle value={scope} onChange={setScope} />
         <div className="flex items-center gap-2">
-          <span className="hidden md:inline text-sm" style={{ color: MUTED }}>
+          <span className="hidden md:inline text-lg" style={{ color: MUTED }}>
             <span className="inline-flex h-1.5 w-1.5 rounded-full mr-1.5 align-middle animate-pulse" style={{ background: GOLD }} />
             Live · 60s
           </span>
           <button onClick={exportFunnelCsv} disabled={!block}
-            className="h-9 px-3.5 rounded-md text-sm font-semibold tracking-tight transition-opacity disabled:opacity-40 hover:opacity-90"
+            className="h-9 px-3.5 rounded-md font-semibold tracking-tight transition-opacity disabled:opacity-40 hover:opacity-90 text-xl"
             style={{ background: GOLD, color: NAVY }}>
             Export Matrix CSV
           </button>
           <button onClick={() => setSection("moderation")}
-            className="h-9 px-3.5 rounded-md text-sm font-semibold tracking-tight border transition-colors hover:bg-white/[0.04]"
+            className="h-9 px-3.5 rounded-md font-semibold tracking-tight border transition-colors hover:bg-white/[0.04] text-xl"
             style={{ borderColor: GOLD_SOFT, color: GOLD }}>
             Modération
           </button>
@@ -195,12 +195,12 @@ export function CommandCenterView() {
 function ScopeToggle({ value, onChange }: { value: Scope; onChange: (s: Scope) => void }) {
   const items: Scope[] = ["france", "paris", "idf", "expansion"];
   return (
-    <div className="flex flex-wrap gap-1 p-1 rounded-md border" style={{ borderColor: BORDER, background: SURFACE_2 }}>
+    <div className="flex flex-wrap gap-1 p-1 rounded-md border bg-slate-50" style={{ borderColor: BORDER, background: SURFACE_2 }}>
       {items.map((s) => {
         const active = value === s;
         return (
           <button key={s} onClick={() => onChange(s)}
-            className="h-8 px-3 rounded text-sm font-medium tracking-tight transition-all"
+            className="h-8 px-3 rounded font-medium tracking-tight transition-all text-xl"
             style={{
               background: active ? GOLD : "transparent",
               color: active ? NAVY : MUTED,
@@ -221,8 +221,8 @@ function Panel({ title, subtitle, children, className = "" }: {
     <section className={`rounded-lg border p-4 ${className}`}
       style={{ background: SURFACE, borderColor: BORDER, boxShadow: "0 1px 0 rgba(255,255,255,0.02) inset" }}>
       <header className="mb-3.5">
-        <h2 className="text-base font-semibold tracking-tight" style={{ color: GOLD }}>{title}</h2>
-        {subtitle && <p className="text-sm mt-0.5" style={{ color: MUTED }}>{subtitle}</p>}
+        <h2 className="text-xl font-semibold tracking-tight text-slate-950" style={{ color: GOLD }}>{title}</h2>
+        {subtitle && <p className="mt-0.5 text-xl" style={{ color: MUTED }}>{subtitle}</p>}
       </header>
       {children}
     </section>
@@ -235,7 +235,7 @@ function Kpi({ label, value, sub, tone }: { label: string; value: string; sub?: 
       <div className="text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: MUTED }}>{label}</div>
       <div className="text-2xl font-semibold tabular-nums tracking-tight"
         style={{ color: tone === "warn" ? DANGER : TEXT }}>{value}</div>
-      {sub && <div className="text-xs mt-1" style={{ color: MUTED }}>{sub}</div>}
+      {sub && <div className="mt-1 text-lg" style={{ color: MUTED }}>{sub}</div>}
     </div>
   );
 }

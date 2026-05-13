@@ -241,7 +241,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               <DropdownMenuLabel className="text-base">
                 Administrateur
                 <div
-                  className="font-normal text-sm mt-0.5"
+                  className="font-normal mt-0.5 text-xl"
                   style={{ color: TEXT_MUTED }}
                 >
                   Internal access
