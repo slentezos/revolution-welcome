@@ -427,7 +427,7 @@ function RejectModal({
               rows={4}
               maxLength={1000}
               placeholder="Indications précises pour aider le membre à corriger…"
-              className="mt-1 w-full px-3 py-2 rounded-md border text-sm resize-none"
+              className="mt-1 w-full px-3 py-2 rounded-md border text-lg resize-none"
               style={{ background: NAVY, borderColor: BORDER, color: TEXT }}
             />
             {errors.custom_text && (
