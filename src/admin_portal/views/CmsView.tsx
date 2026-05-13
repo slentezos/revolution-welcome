@@ -727,7 +727,7 @@ function LivePreview({
  * Form primitives
  * ============================================================ */
 const inputCls =
-  "w-full rounded-md border bg-transparent px-3 py-2 text-xl text-slate-100 outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+  "w-full rounded-md border bg-transparent px-3 py-2 text-xl outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-slate-950";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
