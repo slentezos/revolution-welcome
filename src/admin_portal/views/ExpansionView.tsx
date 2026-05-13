@@ -391,7 +391,7 @@ function LaunchCockpit({ leads }: { leads: Lead[] }) {
           <h2 id="cockpit-title" className="font-semibold text-xl">
             Cockpit de Lancement
           </h2>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             Seuil de lancement par zone : 1 000 pré-inscrits seniors.
           </p>
         </div>
