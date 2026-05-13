@@ -493,9 +493,9 @@ function DetailsSlideOver({ user, onClose }: { user: AdminUser; onClose: () => v
               Réponses Quiz ({quiz.length})
             </h4>
             {loading ? (
-              <p className="opacity-60 text-sm">Chargement…</p>
+              <p className="opacity-60 text-lg">Chargement…</p>
             ) : quiz.length === 0 ? (
-              <p className="opacity-60 text-sm">Aucune réponse enregistrée.</p>
+              <p className="opacity-60 text-lg">Aucune réponse enregistrée.</p>
             ) : (
               <ul className="space-y-1.5">
                 {quiz.map((q, i) => (
