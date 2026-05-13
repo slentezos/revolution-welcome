@@ -703,7 +703,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
           </tbody>
         </table>
         {filteredRows.length > 500 && (
-          <div className="px-4 py-3 text-xs opacity-60 border-t" style={{ borderColor: BORDER }}>
+          <div className="px-4 py-3 opacity-60 border-t text-lg" style={{ borderColor: BORDER }}>
             Affichage limité aux 500 premières lignes — utilisez l'export CSV pour la liste complète.
           </div>
         )}
