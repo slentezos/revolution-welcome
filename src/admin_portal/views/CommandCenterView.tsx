@@ -311,7 +311,7 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
   return (
     <div className="space-y-4">
       <div>
-        <div className="flex items-baseline justify-between text-sm mb-1.5">
+        <div className="flex items-baseline justify-between mb-1.5 text-lg">
           <span style={{ color: TEXT }}>Ratio H / F · IDF</span>
           <span className="tabular-nums" style={{ color: MUTED }}>
             <span style={{ color: TEXT, fontWeight: 600 }}>{menPct}%</span> H ·{" "}
