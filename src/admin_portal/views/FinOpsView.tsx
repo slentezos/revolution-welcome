@@ -332,7 +332,7 @@ function Scoreboard({
       </div>
 
       {error && (
-        <div className="px-4 py-3 text-sm rounded-md border" style={{ color: RED, borderColor: BORDER, background: SURFACE }}>
+        <div className="px-4 py-3 rounded-md border text-lg" style={{ color: RED, borderColor: BORDER, background: SURFACE }}>
           {error}
         </div>
       )}
