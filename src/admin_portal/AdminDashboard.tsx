@@ -6,6 +6,7 @@ import { CommandCenterView } from "./views/CommandCenterView";
 import { MembersView } from "./views/MembersView";
 import { ModerationView } from "./views/ModerationView";
 import { ExpansionView } from "./views/ExpansionView";
+import { FinOpsView } from "./views/FinOpsView";
 import { PlaceholderView } from "./views/PlaceholderView";
 import { ProtectedRoute } from "./core/ProtectedRoute";
 import { AdminErrorBoundary } from "./core/AdminErrorBoundary";
