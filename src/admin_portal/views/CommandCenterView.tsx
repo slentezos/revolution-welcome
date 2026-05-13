@@ -254,7 +254,7 @@ function FunnelWidget({ steps }: { steps: FunnelStep[] }) {
           <div key={s.step} className="space-y-1">
             <div className="flex items-baseline justify-between gap-3 text-sm">
               <span style={{ color: TEXT }}>
-                <span style={{ color: MUTED }} className="tabular-nums mr-2">{String(i + 1).padStart(2, "0")}</span>
+                <span style={{ color: MUTED }} className="tabular-nums mr-2 text-xl">{String(i + 1).padStart(2, "0")}</span>
                 {s.step}
               </span>
               <span className="tabular-nums" style={{ color: MUTED }}>

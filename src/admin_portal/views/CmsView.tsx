@@ -876,7 +876,7 @@ function RelatedPicker({
               color: TEXT,
             }}
           >
-            <span className="truncate">{a.title}</span>
+            <span className="truncate text-lg">{a.title}</span>
             {on && <span className="text-xs" style={{ color: GOLD }}>✓</span>}
           </button>
         );

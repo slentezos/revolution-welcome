@@ -306,7 +306,7 @@ function NavButton({
       aria-current={active ? "page" : undefined}
     >
       <Icon className="h-5 w-5 shrink-0" />
-      {!collapsed && <span className="truncate">{label}</span>}
+      {!collapsed && <span className="truncate text-lg">{label}</span>}
     </Link>
   );
 }
