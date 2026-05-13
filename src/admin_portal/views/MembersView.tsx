@@ -322,7 +322,7 @@ export function MembersView() {
                       )}
                       {isMaster && (
                         <span
-                          className="ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider"
+                          className="ml-2 inline-block px-1.5 py-0.5 rounded uppercase tracking-wider text-lg"
                           style={{ background: GOLD, color: NAVY }}
                         >
                           Maître
@@ -468,7 +468,7 @@ function DetailsSlideOver({ user, onClose }: { user: AdminUser; onClose: () => v
             <h3 className="text-lg font-semibold">
               {`${user.first_name} ${user.last_name}`.trim() || user.email}
             </h3>
-            <p className="text-xs opacity-60">{user.email}</p>
+            <p className="opacity-60 text-lg">{user.email}</p>
           </div>
           <button onClick={onClose} className="text-base opacity-70 hover:opacity-100">
             Fermer ✕
@@ -523,8 +523,8 @@ function Meta({ label, value }: { label: string; value: React.ReactNode }) {
       className="flex items-baseline justify-between gap-3 py-1.5 border-b"
       style={{ borderColor: BORDER }}
     >
-      <span className="text-xs uppercase tracking-wider opacity-60">{label}</span>
-      <span className="text-sm font-medium">{value || <span className="opacity-40">—</span>}</span>
+      <span className="uppercase tracking-wider opacity-60 text-lg">{label}</span>
+      <span className="font-medium text-lg">{value || <span className="opacity-40">—</span>}</span>
     </div>
   );
 }

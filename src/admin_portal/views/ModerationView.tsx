@@ -334,8 +334,8 @@ function MediaTile({ title, media }: { title: string; media?: Media }) {
 function Meta({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-wider opacity-50">{label}</div>
-      <div className="text-sm font-medium">{value || "—"}</div>
+      <div className="text-[10px] uppercase tracking-wider opacity-50 text-lg">{label}</div>
+      <div className="font-medium text-lg">{value || "—"}</div>
     </div>
   );
 }
