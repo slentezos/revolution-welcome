@@ -415,7 +415,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
                 </p>
                 <button
                   onClick={() => setShowVideoTutorial(true)}
-                  className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] text-slate-50 rounded-full font-bold hover:bg-[hsl(var(--gold))]/20 transition-all text-xl bg-[#1a2232]"
+                  className="flex items-center gap-2 px-6 py-3 bg-[hsl(var(--gold))]/10 border border-[hsl(var(--gold))] rounded-full font-bold hover:bg-[hsl(var(--gold))]/20 transition-all text-xl bg-[#1a2232] text-slate-50"
                 >
                   <Lightbulb className="h-5 w-5" /> Conseils vidéo
                 </button>
