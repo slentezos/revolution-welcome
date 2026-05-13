@@ -295,7 +295,7 @@ function ZoneTable({
                               </div>
                             ))}
                             {row.original.postalBreakdown.length === 0 && (
-                              <p className="opacity-60 text-sm">Aucun détail disponible.</p>
+                              <p className="opacity-60 text-lg">Aucun détail disponible.</p>
                             )}
                           </div>
                         </td>
