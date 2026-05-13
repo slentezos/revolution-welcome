@@ -167,7 +167,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         <header
           className="h-16 px-6 flex items-center gap-4 border-b sticky top-0 z-30 backdrop-blur"
           style={{
-            background: "rgba(7, 11, 20, 0.85)",
+            background: "var(--ap-header-bg)",
             borderColor: NAVY_BORDER,
           }}
         >
