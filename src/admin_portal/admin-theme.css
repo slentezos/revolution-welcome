@@ -17,6 +17,7 @@
   --ap-elev-1: 0 1px 2px rgba(27, 35, 51, 0.06), 0 1px 1px rgba(27, 35, 51, 0.04);
   --ap-elev-2: 0 4px 12px rgba(27, 35, 51, 0.08);
   --ap-hover: rgba(27, 35, 51, 0.04);
+  --ap-header-bg: rgba(255, 255, 255, 0.85);
 }
 
 [data-admin-theme="dark"] {
