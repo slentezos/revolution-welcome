@@ -478,7 +478,7 @@ function TrialWidget({ profiles }: { profiles: ProfileFin[] }) {
           <h3 id="trial-title" className="font-semibold text-xl">
             Période d'Essai « 3 Mois Offerts »
           </h3>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             Suivi de la <em>Conversion de Gratuité</em> et des essais en cours.
           </p>
         </div>
