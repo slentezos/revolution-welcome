@@ -9,7 +9,7 @@ import {
   CartesianGrid,
   ReferenceLine,
 } from "recharts";
-import { adminSupabase } from "../lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { useAdminSection } from "../core/useAdminSection";
 
 const SURFACE = "#0F1828";
@@ -49,7 +49,7 @@ export function CommandCenterView() {
     let cancel = false;
     const load = async () => {
       try {
-        const { data: res, error } = await adminSupabase.functions.invoke("admin-analytics");
+        const { data: res, error } = await supabase.functions.invoke("admin-analytics");
         if (error) throw error;
         if (!cancel) setData(res as Analytics);
       } catch (e: any) {
