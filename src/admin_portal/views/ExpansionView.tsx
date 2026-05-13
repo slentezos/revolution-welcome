@@ -722,7 +722,7 @@ function SourcePill({ src }: { src: string }) {
   const c = map[src] ?? { bg: "rgba(148,163,184,0.12)", fg: "#94A3B8" };
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-medium"
+      className="inline-block px-2 py-0.5 rounded-md font-medium text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {src}
