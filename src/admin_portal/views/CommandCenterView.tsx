@@ -430,7 +430,7 @@ function VelocityWidget({ kpis }: { kpis?: ScopeBlock["kpis"] }) {
         <MiniStat label="Inactifs > 7j" value={fmt(kpis.churnRisk)}
           tone={kpis.churnRisk > 0 ? "warn" : undefined} />
       </div>
-      <div className="rounded border p-3 text-sm leading-relaxed"
+      <div className="rounded border p-3 leading-relaxed text-lg"
         style={{ borderColor: aged ? GOLD : BORDER, background: SURFACE_2, color: aged ? GOLD : MUTED }}>
         {aged
           ? `Alerte SLA : un actif attend depuis ${kpis.oldestPendingMinutes} min — au-delà du seuil de 60 min.`
