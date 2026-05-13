@@ -282,7 +282,7 @@ function ZoneTable({
                             {row.original.postalBreakdown.slice(0, 24).map((p) => (
                               <div
                                 key={p.postal_code}
-                                className="flex items-center justify-between px-3 py-2 rounded-md border text-sm"
+                                className="flex items-center justify-between px-3 py-2 rounded-md border text-lg"
                                 style={{ borderColor: BORDER }}
                               >
                                 <div className="min-w-0 truncate text-lg">
