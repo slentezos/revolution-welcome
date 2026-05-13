@@ -192,7 +192,7 @@ function ZoneTable({
       </header>
 
       {error && (
-        <div className="px-4 py-3 text-sm" style={{ color: "#F87171" }}>
+        <div className="px-4 py-3 text-lg" style={{ color: "#F87171" }}>
           {error}
         </div>
       )}
