@@ -32,7 +32,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <div
       data-admin-theme={theme}
-      className="min-h-screen flex font-sans antialiased"
+      className="h-screen w-full flex font-sans antialiased overflow-hidden"
       style={{
         background: "var(--ap-bg)",
         color: TEXT,
@@ -41,9 +41,11 @@ export function AdminLayout({ children }: { children: ReactNode }) {
     >
       {/* Sidebar */}
       <aside
-        className="shrink-0 flex flex-col border-r transition-[width] duration-200 ease-out"
+        className="shrink-0 flex-shrink-0 flex flex-col border-r transition-[width] duration-200 ease-out h-full overflow-hidden"
         style={{
           width: sidebarOpen ? 264 : 76,
+          minWidth: sidebarOpen ? 264 : 76,
+          maxWidth: sidebarOpen ? 264 : 76,
           background: "var(--ap-surface)",
           borderColor: NAVY_BORDER,
           boxShadow: "var(--ap-elev-1)",
@@ -162,7 +164,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* Main column */}
-      <div className="flex-1 min-w-0 flex flex-col">
+      <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden">
         {/* Top header */}
         <header
           className="h-16 px-6 flex items-center gap-4 border-b sticky top-0 z-30 backdrop-blur"
