@@ -431,7 +431,7 @@ function RejectModal({
               style={{ background: NAVY, borderColor: BORDER, color: TEXT }}
             />
             {errors.custom_text && (
-              <span className="block mt-1 text-xs" style={{ color: "#F87171" }}>
+              <span className="block mt-1 text-lg" style={{ color: "#F87171" }}>
                 {errors.custom_text.message}
               </span>
             )}
