@@ -591,7 +591,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
           <h2 id="leads-title" className="font-semibold text-xl">
             Matrice des Leads
           </h2>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             {fmtNumber(filteredRows.length)} pré-inscription(s) — {fmtNumber(data.length)} au total
           </p>
         </div>
