@@ -10,6 +10,7 @@ import { FinOpsView } from "./views/FinOpsView";
 import { CmsView } from "./views/CmsView";
 import { PlaceholderView } from "./views/PlaceholderView";
 import { SettingsPage } from "@/pages/settings/SettingsPage";
+import { useAdminRole } from "./core/useAdminRole";
 import { ProtectedRoute } from "./core/ProtectedRoute";
 import { AdminErrorBoundary } from "./core/AdminErrorBoundary";
 import { useNoIndex } from "./core/useNoIndex";
@@ -32,7 +33,7 @@ export default function AdminDashboard() {
 
 function SectionRouter() {
   const { section } = useAdminSection();
-  const { isModerator } = require("./core/useAdminRole").useAdminRole() as { isModerator: boolean };
+  const { isModerator } = useAdminRole();
   const meta = ADMIN_SECTIONS.find((s) => s.id === section);
 
   const blockedForModerator = isModerator && !["members", "moderation"].includes(section);
