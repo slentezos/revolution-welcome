@@ -221,7 +221,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               >
                 <Avatar className="h-9 w-9">
                   <AvatarFallback
-                    className="text-base font-semibold"
+                    className="font-semibold text-xl"
                     style={{ background: NAVY_SURFACE, color: GOLD }}
                   >
                     AD
