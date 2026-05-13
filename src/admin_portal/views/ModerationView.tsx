@@ -445,7 +445,7 @@ function RejectModal({
           <button
             type="button"
             onClick={onClose}
-            className="h-10 px-4 rounded-md text-sm border"
+            className="h-10 px-4 rounded-md border text-lg"
             style={{ borderColor: BORDER, color: TEXT, background: NAVY }}
           >
             Annuler
