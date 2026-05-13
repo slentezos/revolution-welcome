@@ -485,7 +485,7 @@ function MiniStat({ label, value, accent, tone }: { label: string; value: string
 
 function Empty({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded border p-3 text-sm" style={{ borderColor: BORDER, color: MUTED }}>
+    <div className="rounded border p-3 text-lg" style={{ borderColor: BORDER, color: MUTED }}>
       {children}
     </div>
   );
