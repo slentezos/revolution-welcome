@@ -690,7 +690,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
                     <button
                       onClick={() => refund(t)}
                       disabled={t.status === "Remboursé"}
-                      className={`h-8 px-3 rounded-md text-sm font-semibold disabled:opacity-30 ${FOCUS_RING}`}
+                      className={`h-8 px-3 rounded-md font-semibold disabled:opacity-30 ${FOCUS_RING} text-lg`}
                       style={{
                         background: "rgba(220,38,38,0.15)",
                         color: RED,
