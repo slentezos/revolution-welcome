@@ -219,7 +219,7 @@ export function ModerationView() {
               <div className="flex gap-2">
                 <button
                   onClick={() => setRejectOpen(true)}
-                  className="h-10 px-4 rounded-md font-semibold text-sm"
+                  className="h-10 px-4 rounded-md font-semibold text-lg"
                   style={{ background: RED, color: "#fff" }}
                   title="Raccourci : R"
                 >
@@ -227,7 +227,7 @@ export function ModerationView() {
                 </button>
                 <button
                   onClick={handleApprove}
-                  className="h-10 px-4 rounded-md font-semibold text-sm"
+                  className="h-10 px-4 rounded-md font-semibold text-lg"
                   style={{ background: GREEN, color: "#fff" }}
                   title="Raccourci : A"
                 >
