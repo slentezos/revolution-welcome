@@ -364,12 +364,12 @@ function Scoreboard({
         <KpiCard
           label="Abonnés Actifs"
           value={fmtNumber(paying)}
-          footer={<span className="text-xs opacity-60">Hors période d'essai 3 mois</span>}
+          footer={<span className="opacity-60 text-lg">Hors période d'essai 3 mois</span>}
         />
         <KpiCard
           label="LTV Moyenne"
           value={fmtEuro(ltv)}
-          footer={<span className="text-xs opacity-60">Revenu cumulé par membre payant</span>}
+          footer={<span className="opacity-60 text-lg">Revenu cumulé par membre payant</span>}
         />
         <KpiCard
           label="Taux de Churn"
