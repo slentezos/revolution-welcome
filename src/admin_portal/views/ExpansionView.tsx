@@ -693,7 +693,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
                   style={{ borderColor: BORDER }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-3 align-middle text-sm">
+                    <td key={cell.id} className="px-4 py-3 align-middle text-lg">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
