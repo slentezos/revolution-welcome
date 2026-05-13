@@ -301,7 +301,7 @@ function MediaTile({ title, media }: { title: string; media?: Media }) {
       style={{ borderColor: BORDER, background: NAVY }}
     >
       <div
-        className="px-3 py-2 text-xs uppercase tracking-wider opacity-70 border-b"
+        className="px-3 py-2 text-xs uppercase tracking-wider opacity-70 border-b bg-slate-50"
         style={{ borderColor: BORDER }}
       >
         {title}
