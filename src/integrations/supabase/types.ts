@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      articles: {
+        Row: {
+          author_bio: string | null
+          author_id: string | null
+          author_linkedin: string | null
+          author_name: string | null
+          author_twitter: string | null
+          content: string | null
+          cover_image_alt: string | null
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          primary_topic: string | null
+          published_at: string | null
+          related_article_ids: string[]
+          seo_metadata: Json
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_bio?: string | null
+          author_id?: string | null
+          author_linkedin?: string | null
+          author_name?: string | null
+          author_twitter?: string | null
+          content?: string | null
+          cover_image_alt?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          primary_topic?: string | null
+          published_at?: string | null
+          related_article_ids?: string[]
+          seo_metadata?: Json
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_bio?: string | null
+          author_id?: string | null
+          author_linkedin?: string | null
+          author_name?: string | null
+          author_twitter?: string | null
+          content?: string | null
+          cover_image_alt?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          primary_topic?: string | null
+          published_at?: string | null
+          related_article_ids?: string[]
+          seo_metadata?: Json
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profile_media: {
         Row: {
           created_at: string
