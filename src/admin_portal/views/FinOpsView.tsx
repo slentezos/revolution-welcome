@@ -634,7 +634,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
       </header>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
+        <table className="w-full text-left text-lg">
           <thead style={{ background: "#172238" }}>
             <tr>
               <Th>Membre</Th>
