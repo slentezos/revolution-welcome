@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          payload: Json
+          target_user_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          payload?: Json
+          target_user_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          payload?: Json
+          target_user_id?: string | null
+        }
+        Relationships: []
+      }
+      admin_invites: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string
+          role: Database["public"]["Enums"]["app_role"]
+          token: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by: string
+          role: Database["public"]["Enums"]["app_role"]
+          token: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          token?: string
+        }
+        Relationships: []
+      }
       articles: {
         Row: {
           author_avatar_url: string | null
@@ -134,6 +194,7 @@ export type Database = {
         Row: {
           account_status: string
           active_location: string
+          anonymized_at: string | null
           birth_date: string | null
           city_name: string | null
           created_at: string
@@ -162,6 +223,7 @@ export type Database = {
         Insert: {
           account_status?: string
           active_location?: string
+          anonymized_at?: string | null
           birth_date?: string | null
           city_name?: string | null
           created_at?: string
@@ -190,6 +252,7 @@ export type Database = {
         Update: {
           account_status?: string
           active_location?: string
+          anonymized_at?: string | null
           birth_date?: string | null
           city_name?: string | null
           created_at?: string
@@ -324,9 +387,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin_or_higher: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "moderator" | "user" | "superadmin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -454,7 +518,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "moderator", "user", "superadmin"],
     },
   },
 } as const

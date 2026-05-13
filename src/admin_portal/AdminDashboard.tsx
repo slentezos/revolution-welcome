@@ -9,6 +9,8 @@ import { ExpansionView } from "./views/ExpansionView";
 import { FinOpsView } from "./views/FinOpsView";
 import { CmsView } from "./views/CmsView";
 import { PlaceholderView } from "./views/PlaceholderView";
+import { SettingsPage } from "@/pages/settings/SettingsPage";
+import { useAdminRole } from "./core/useAdminRole";
 import { ProtectedRoute } from "./core/ProtectedRoute";
 import { AdminErrorBoundary } from "./core/AdminErrorBoundary";
 import { useNoIndex } from "./core/useNoIndex";
@@ -31,7 +33,10 @@ export default function AdminDashboard() {
 
 function SectionRouter() {
   const { section } = useAdminSection();
+  const { isModerator } = useAdminRole();
   const meta = ADMIN_SECTIONS.find((s) => s.id === section);
+
+  const blockedForModerator = isModerator && !["members", "moderation"].includes(section);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
@@ -45,17 +50,23 @@ function SectionRouter() {
         <p className="mt-1 opacity-60 text-xl">{meta?.description}</p>
       </header>
 
-      {section === "command-center" && <CommandCenterView />}
-      {section === "members" && <MembersView />}
-      {section === "moderation" && <ModerationView />}
-      {section === "expansion" && <ExpansionView />}
-      {section === "finops" && <FinOpsView />}
-      {section === "events" && (
-        <PlaceholderView title="Gestion des Événements" slots={6} />
-      )}
-      {section === "cms" && <CmsView />}
-      {section === "settings" && (
-        <PlaceholderView title="Paramètres" slots={4} />
+      {blockedForModerator ? (
+        <div className="rounded-xl border p-8 text-center text-xl opacity-70">
+          Accès non autorisé pour votre rôle.
+        </div>
+      ) : (
+        <>
+          {section === "command-center" && <CommandCenterView />}
+          {section === "members" && <MembersView />}
+          {section === "moderation" && <ModerationView />}
+          {section === "expansion" && <ExpansionView />}
+          {section === "finops" && <FinOpsView />}
+          {section === "events" && (
+            <PlaceholderView title="Gestion des Événements" slots={6} />
+          )}
+          {section === "cms" && <CmsView />}
+          {section === "settings" && <SettingsPage />}
+        </>
       )}
     </div>
   );

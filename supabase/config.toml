@@ -8,3 +8,15 @@ verify_jwt = false
 
 [functions.admin-moderate-user]
 verify_jwt = false
+
+[functions.admin-gdpr-export]
+verify_jwt = false
+
+[functions.admin-gdpr-anonymize]
+verify_jwt = false
+
+[functions.admin-list-team]
+verify_jwt = false
+
+[functions.admin-invite-collaborator]
+verify_jwt = false

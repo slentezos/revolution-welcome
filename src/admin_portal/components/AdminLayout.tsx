@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ADMIN_SECTIONS, type AdminSectionId } from "../core/navigation";
 import { useAdminSection } from "../core/useAdminSection";
 import { useAdminContext } from "../core/AdminProviders";
+import { useAdminRole } from "../core/useAdminRole";
 import { AdminCommandPalette } from "./AdminCommandPalette";
 
 const NAVY = "var(--ap-bg)";
@@ -27,6 +28,16 @@ export function AdminLayout({ children }: { children: ReactNode }) {
   const { sidebarOpen, toggleSidebar } = useAdminContext();
   const { section, setSection } = useAdminSection();
   const { theme, toggleTheme } = useAdminTheme();
+  const { isSuperAdmin, isModerator } = useAdminRole();
+  const visibleSections = ADMIN_SECTIONS.filter((s) => {
+    if (s.id === "settings") return isSuperAdmin;
+    if (s.id === "finops" && isModerator) return false;
+    if (s.id === "expansion" && isModerator) return false;
+    if (s.id === "events" && isModerator) return false;
+    if (s.id === "cms" && isModerator) return false;
+    if (s.id === "command-center" && isModerator) return false;
+    return true;
+  });
   const current = ADMIN_SECTIONS.find((s) => s.id === section);
 
   return (
@@ -80,7 +91,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           className="flex-1 p-3 flex flex-col gap-1"
           aria-label="Navigation principale"
         >
-          {ADMIN_SECTIONS.map((s) => {
+          {visibleSections.map((s) => {
             const active = s.id === section;
             return (
               <div key={s.id} className="contents">
