@@ -1,31 +1,56 @@
-const SURFACE = "#0F1828";
 const BORDER = "#1F2A44";
 const GOLD = "#C9A961";
+const TEXT_MUTED = "#94A3B8";
 
+/**
+ * High-density modular page container used by routes whose widgets
+ * are still being assembled (Événements, CMS, Paramètres…).
+ *
+ * Layout:
+ *  - Inherits the H1 + description rendered by SectionRouter.
+ *  - Below: a dense grid of dashed-border slots ready to host modular widgets.
+ */
 export function PlaceholderView({
   title,
-  description,
+  slots = 6,
 }: {
   title: string;
-  description: string;
+  description?: string;
+  slots?: number;
 }) {
   return (
     <section
-      className="rounded-xl border p-10 grid place-items-center min-h-[320px]"
-      style={{ background: SURFACE, borderColor: BORDER }}
+      aria-label={title}
+      className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
     >
-      <div className="text-center max-w-lg">
+      {Array.from({ length: slots }).map((_, i) => (
         <div
-          className="inline-block px-3 py-1 rounded-full border text-base mb-4"
-          style={{ borderColor: BORDER, color: GOLD }}
+          key={i}
+          className="rounded-xl border-2 border-dashed p-6 min-h-[180px] flex flex-col justify-between transition-colors hover:border-[color:var(--gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+          style={{
+            borderColor: BORDER,
+            background: "rgba(20, 30, 51, 0.35)",
+            // expose gold for hover via CSS var
+            ["--gold" as string]: GOLD,
+          }}
+          tabIndex={0}
+          role="region"
+          aria-label={`Emplacement widget ${i + 1}`}
         >
-          Bientôt disponible
+          <div
+            className="text-[11px] uppercase tracking-[0.18em]"
+            style={{ color: GOLD }}
+          >
+            Module · {String(i + 1).padStart(2, "0")}
+          </div>
+          <div className="text-base" style={{ color: TEXT_MUTED }}>
+            Emplacement réservé pour un widget modulaire
+            <span className="block text-sm opacity-70 mt-1">
+              Connectez ici un composant de la suite.
+            </span>
+          </div>
         </div>
-        <h2 className="text-2xl font-semibold mb-3" style={{ color: "#F8FAFC" }}>
-          {title}
-        </h2>
-        <p className="text-base opacity-70 leading-relaxed">{description}</p>
-      </div>
+      ))}
     </section>
   );
 }

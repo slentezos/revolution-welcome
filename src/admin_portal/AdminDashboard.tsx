@@ -49,6 +49,13 @@ function SectionRouter() {
       {section === "moderation" && <ModerationView />}
       {section === "expansion" && <ExpansionView />}
       {section === "finops" && <FinOpsView />}
+      {section === "events" && (
+        <PlaceholderView title="Gestion des Événements" slots={6} />
+      )}
+      {section === "cms" && <PlaceholderView title="CMS & Blog" slots={6} />}
+      {section === "settings" && (
+        <PlaceholderView title="Paramètres" slots={4} />
+      )}
     </div>
   );
 }

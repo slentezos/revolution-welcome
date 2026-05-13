@@ -70,19 +70,31 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           )}
         </div>
 
-        <nav className="flex-1 p-3 flex flex-col gap-1">
+        <nav
+          className="flex-1 p-3 flex flex-col gap-1"
+          aria-label="Navigation principale"
+        >
           {ADMIN_SECTIONS.map((s) => {
             const active = s.id === section;
             return (
-              <NavButton
-                key={s.id}
-                id={s.id}
-                label={s.label}
-                Icon={s.icon}
-                active={active}
-                collapsed={!sidebarOpen}
-                onClick={() => setSection(s.id)}
-              />
+              <div key={s.id} className="contents">
+                {"separatorBefore" in s && s.separatorBefore && (
+                  <div
+                    role="separator"
+                    aria-hidden
+                    className="my-2 h-px"
+                    style={{ background: NAVY_BORDER }}
+                  />
+                )}
+                <NavButton
+                  id={s.id}
+                  label={s.label}
+                  Icon={s.icon}
+                  active={active}
+                  collapsed={!sidebarOpen}
+                  onClick={() => setSection(s.id)}
+                />
+              </div>
             );
           })}
         </nav>
@@ -247,13 +259,16 @@ function NavButton({
         e.preventDefault();
         onClick();
       }}
-      className="group flex items-center gap-3 h-12 px-3 rounded-md transition-colors text-base"
+      className="group flex items-center gap-3 h-12 px-3 rounded-md transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0E1626]"
       style={{
         background: active ? "rgba(201, 169, 97, 0.10)" : "transparent",
         color: active ? GOLD : TEXT_MUTED,
         boxShadow: active ? "inset 2px 0 0 0 " + GOLD : undefined,
+        outlineColor: GOLD,
       }}
       title={collapsed ? label : undefined}
+      aria-label={label}
+      aria-current={active ? "page" : undefined}
     >
       <Icon className="h-5 w-5 shrink-0" />
       {!collapsed && <span className="truncate">{label}</span>}
