@@ -5,14 +5,23 @@ import { ADMIN_SECTIONS } from "./core/navigation";
 import { CommandCenterView } from "./views/CommandCenterView";
 import { MembersView } from "./views/MembersView";
 import { PlaceholderView } from "./views/PlaceholderView";
+import { ProtectedRoute } from "./core/ProtectedRoute";
+import { AdminErrorBoundary } from "./core/AdminErrorBoundary";
+import { useNoIndex } from "./core/useNoIndex";
 
 export default function AdminDashboard() {
+  useNoIndex();
+
   return (
-    <AdminProviders>
-      <AdminLayout>
-        <SectionRouter />
-      </AdminLayout>
-    </AdminProviders>
+    <ProtectedRoute>
+      <AdminErrorBoundary>
+        <AdminProviders>
+          <AdminLayout>
+            <SectionRouter />
+          </AdminLayout>
+        </AdminProviders>
+      </AdminErrorBoundary>
+    </ProtectedRoute>
   );
 }
 

@@ -87,6 +87,20 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           })}
         </nav>
 
+        {sidebarOpen && (
+          <div
+            className="px-4 pb-3 pt-2 flex items-center gap-2"
+            style={{ color: TEXT_MUTED }}
+          >
+            <span
+              className="inline-block h-2 w-2 rounded-full"
+              style={{ background: "#10B981", boxShadow: "0 0 8px #10B981" }}
+              aria-hidden
+            />
+            <span className="text-base">v1.0 · Production Ready</span>
+          </div>
+        )}
+
         <button
           onClick={toggleSidebar}
           className="h-12 border-t flex items-center justify-center gap-2 text-base hover:bg-white/5 transition-colors"
