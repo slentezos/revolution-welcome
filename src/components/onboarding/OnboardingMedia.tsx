@@ -692,12 +692,6 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
       </Dialog>
 
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="max-w-md p-10 text-center rounded-[2.5rem] z-[9999] outline-none">
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
-              <Check className="h-10 w-10 text-emerald-600" />
-            </div>
-      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl max-h-[90vh] overflow-y-auto p-8 sm:p-10 rounded-[2rem] bg-[hsl(var(--cream))] border border-[hsl(var(--gold))]/40 z-[9999]">
           <div className="h-1.5 w-20 bg-[hsl(var(--gold))] rounded-full mb-2" />
           <DialogTitle className="font-heading text-3xl sm:text-4xl text-[#1B2333] font-bold leading-tight">
