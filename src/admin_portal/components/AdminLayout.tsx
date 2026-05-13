@@ -26,13 +26,15 @@ const TEXT_MUTED = "var(--ap-muted)";
 export function AdminLayout({ children }: { children: ReactNode }) {
   const { sidebarOpen, toggleSidebar } = useAdminContext();
   const { section, setSection } = useAdminSection();
+  const { theme, toggleTheme } = useAdminTheme();
   const current = ADMIN_SECTIONS.find((s) => s.id === section);
 
   return (
     <div
+      data-admin-theme={theme}
       className="min-h-screen flex font-sans antialiased"
       style={{
-        background: "#070B14",
+        background: "var(--ap-bg)",
         color: TEXT,
         fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
       }}
@@ -42,8 +44,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         className="shrink-0 flex flex-col border-r transition-[width] duration-200 ease-out"
         style={{
           width: sidebarOpen ? 264 : 76,
-          background: NAVY,
+          background: "var(--ap-surface)",
           borderColor: NAVY_BORDER,
+          boxShadow: "var(--ap-elev-1)",
         }}
       >
         <div
