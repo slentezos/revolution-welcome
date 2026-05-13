@@ -334,13 +334,13 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
         ) : (
           <div className="space-y-1.5">
             {data.topZones.map((z, i) => (
-              <div key={z.label} className="flex items-center justify-between rounded border px-3 py-2 text-sm"
+              <div key={z.label} className="flex items-center justify-between rounded border px-3 py-2 text-lg"
                 style={{ borderColor: BORDER, background: SURFACE_2 }}>
                 <div className="flex items-center gap-3">
-                  <span className="tabular-nums text-xs" style={{ color: GOLD }}>#{i + 1}</span>
+                  <span className="tabular-nums text-lg" style={{ color: GOLD }}>#{i + 1}</span>
                   <span style={{ color: TEXT, fontWeight: 600 }}>{z.label}</span>
                 </div>
-                <div className="tabular-nums text-xs" style={{ color: MUTED }}>
+                <div className="tabular-nums text-lg" style={{ color: MUTED }}>
                   {z.total} profils · {z.men}H / {z.women}F
                 </div>
               </div>
