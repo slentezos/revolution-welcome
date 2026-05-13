@@ -734,7 +734,7 @@ function TypePill({ t }: { t: TxType }) {
   const c = map[t];
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-medium"
+      className="inline-block px-2 py-0.5 rounded-md font-medium text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {t}
@@ -751,7 +751,7 @@ function StatusPill({ s }: { s: TxStatus }) {
   const c = map[s];
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-medium"
+      className="inline-block px-2 py-0.5 rounded-md font-medium text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {s}
