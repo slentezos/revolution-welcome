@@ -93,6 +93,23 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
     localStorage.setItem(STORAGE_KEY_PREFIX + profileId, JSON.stringify(answers));
   }, [answers, profileId]);
 
+  // ── Welcome dialog (final phase intro) — opens once per session ──
+  useEffect(() => {
+    if (readOnly) return;
+    const seenKey = `final_phase_welcome_seen_${profileId}`;
+    if (sessionStorage.getItem(seenKey)) return;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("first_name")
+        .eq("id", profileId)
+        .maybeSingle();
+      setWelcomeFirstName(data?.first_name || "");
+      setShowWelcome(true);
+      sessionStorage.setItem(seenKey, "1");
+    })();
+  }, [profileId, readOnly]);
+
   // ── Initialisation ──
   useEffect(() => {
     if (scrollNodes.length > 0 && !activeNodeId) {
