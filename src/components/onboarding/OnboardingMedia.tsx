@@ -282,6 +282,12 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
           });
         }
       }
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("first_name")
+        .eq("id", profileId)
+        .maybeSingle();
+      if (profileData?.first_name) setFirstName(profileData.first_name);
       setShowSaveDialog(true);
     } catch (error: any) {
       toast({ title: "Erreur", description: error.message, variant: "destructive" });
