@@ -183,7 +183,7 @@ export function CommandCenterView() {
         </Panel>
       </div>
 
-      <div className="text-xs text-right" style={{ color: MUTED }}>
+      <div className="text-right text-lg" style={{ color: MUTED }}>
         {data?.meta && `Données générées le ${new Date(data.meta.generatedAt).toLocaleString("fr-FR")} · ${fmt(data.meta.totalLeads)} pré-inscriptions · ${fmt(data.meta.totalUsers)} comptes`}
       </div>
     </div>
