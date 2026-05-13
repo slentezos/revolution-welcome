@@ -478,7 +478,7 @@ function TargetCard({
       <button
         onClick={launch}
         disabled={!ready}
-        className={`mt-4 w-full h-10 rounded-md font-semibold text-sm disabled:opacity-30 disabled:cursor-not-allowed transition-opacity ${FOCUS_RING}`}
+        className={`mt-4 w-full h-10 rounded-md font-semibold disabled:opacity-30 disabled:cursor-not-allowed transition-opacity ${FOCUS_RING} text-lg`}
         style={{ background: ready ? GOLD : "rgba(197,160,89,0.18)", color: ready ? NAVY : GOLD }}
       >
         Lancer Campagne Email
