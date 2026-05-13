@@ -457,7 +457,7 @@ function TargetCard({
       <div className="mt-4">
         <div className="flex items-baseline justify-between">
           <span className="text-2xl font-semibold tabular-nums">{fmtNumber(count)}</span>
-          <span className="text-xs opacity-60">/ {fmtNumber(threshold)} ({pct}%)</span>
+          <span className="opacity-60 text-lg">/ {fmtNumber(threshold)} ({pct}%)</span>
         </div>
         <div
           className="mt-2 h-2 rounded-full overflow-hidden"
