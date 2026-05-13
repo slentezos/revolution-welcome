@@ -198,7 +198,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               });
               window.dispatchEvent(ev);
             }}
-            className="hidden md:flex items-center gap-2 h-10 px-3 rounded-md border text-base hover:bg-white/5 transition-colors"
+            className="hidden md:flex items-center gap-2 h-10 px-3 rounded-md border text-base hover:bg-[var(--ap-hover)] transition-colors"
             style={{ borderColor: NAVY_BORDER, color: TEXT_MUTED }}
           >
             <Search className="h-4 w-4" />
@@ -215,7 +215,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
-                className="h-10 w-10 rounded-full grid place-items-center border hover:bg-white/5 transition-colors"
+                className="h-10 w-10 rounded-full grid place-items-center border hover:bg-[var(--ap-hover)] transition-colors"
                 style={{ borderColor: NAVY_BORDER }}
                 aria-label="Compte administrateur"
               >
@@ -294,7 +294,7 @@ function NavButton({
         e.preventDefault();
         onClick();
       }}
-      className="group flex items-center gap-3 h-12 px-3 rounded-md transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0E1626]"
+      className="group flex items-center gap-3 h-12 px-3 rounded-md transition-colors text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 "
       style={{
         background: active ? "rgba(201, 169, 97, 0.10)" : "transparent",
         color: active ? GOLD : TEXT_MUTED,
