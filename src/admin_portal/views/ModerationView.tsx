@@ -308,7 +308,7 @@ function MediaTile({ title, media }: { title: string; media?: Media }) {
       </div>
       <div className="aspect-video flex items-center justify-center">
         {!media ? (
-          <span className="opacity-40 text-sm">Non fourni</span>
+          <span className="opacity-40 text-lg">Non fourni</span>
         ) : url ? (
           media.media_type.includes("video") ? (
             <video src={url} controls className="w-full h-full object-contain" />
