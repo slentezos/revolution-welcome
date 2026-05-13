@@ -242,7 +242,7 @@ export function ModerationView() {
             </div>
 
             <div
-              className="mt-6 p-4 rounded-md text-sm"
+              className="mt-6 p-4 rounded-md text-lg"
               style={{ background: NAVY, border: `1px solid ${BORDER}` }}
             >
               <div className="opacity-60 uppercase tracking-wider mb-2 text-lg">Métadonnées</div>
