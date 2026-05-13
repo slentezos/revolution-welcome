@@ -230,7 +230,7 @@ export function MembersView() {
           Friction &gt; 48h
         </label>
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-xs opacity-60 hidden md:inline">
+          <span className="opacity-60 hidden md:inline text-lg">
             {filtered.length.toLocaleString("fr-FR")} membre(s)
           </span>
           <button
