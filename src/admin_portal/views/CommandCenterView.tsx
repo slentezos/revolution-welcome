@@ -350,7 +350,7 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
       </div>
 
       <div>
-        <div className="text-sm mb-2" style={{ color: TEXT }}>
+        <div className="mb-2 text-lg" style={{ color: TEXT }}>
           Market Imbalance <span style={{ color: MUTED }}>(dominance ≥ 65%)</span>
         </div>
         {data.imbalanceAlerts.length === 0 ? (
@@ -358,10 +358,10 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
             {data.imbalanceAlerts.map((a) => (
-              <div key={a.label} className="flex items-center justify-between rounded border px-2.5 py-1.5 text-sm"
+              <div key={a.label} className="flex items-center justify-between rounded border px-2.5 py-1.5 text-lg"
                 style={{ borderColor: GOLD_SOFT, background: SURFACE_2 }}>
                 <span style={{ color: TEXT, fontWeight: 600 }}>{a.label}</span>
-                <span className="tabular-nums text-xs" style={{ color: MUTED }}>
+                <span className="tabular-nums text-lg" style={{ color: MUTED }}>
                   {a.men}H / {a.women}F · <span style={{ color: GOLD }}>{a.dominantPct}%</span>
                 </span>
               </div>
