@@ -224,7 +224,7 @@ export function CmsView() {
                   <div className="font-medium truncate">{a.title || "(Sans titre)"}</div>
                   <div className="flex items-center gap-2 mt-0.5">
                     <StatusBadge status={a.status as any} />
-                    <span className="text-[11px]" style={{ color: MUTED }}>
+                    <span className="text-xl" style={{ color: MUTED }}>
                       {formatDateFr(a.updated_at)}
                     </span>
                   </div>
@@ -425,7 +425,7 @@ export function CmsView() {
 
         <Section title="JSON-LD (BlogPosting) — Aperçu">
           <pre
-            className="text-[11px] leading-relaxed p-3 rounded-md overflow-x-auto"
+            className="text-xl leading-relaxed p-3 rounded-md overflow-x-auto"
             style={{ background: NAVY, border: `1px solid ${BORDER}`, color: MUTED }}
           >
             {JSON.stringify(jsonLd, null, 2)}
@@ -499,7 +499,7 @@ function Field({
           {label}
         </span>
         {hint && (
-          <span className="text-[11px]" style={{ color: warn ? "#FCA5A5" : MUTED }}>
+          <span className="text-xl" style={{ color: warn ? "#FCA5A5" : MUTED }}>
             {hint}
           </span>
         )}
@@ -549,7 +549,7 @@ function EntityTagPicker({
     <div className="space-y-3">
       {(Object.keys(ENTITY_OPTIONS) as EntityCategory[]).map((cat) => (
         <div key={cat}>
-          <div className="text-[11px] mb-1.5 uppercase tracking-wider" style={{ color: MUTED }}>
+          <div className="text-xl mb-1.5 uppercase tracking-wider" style={{ color: MUTED }}>
             {labels[cat]}
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -616,7 +616,7 @@ function RelatedPicker({
           </button>
         );
       })}
-      <div className="text-[11px] mt-1" style={{ color: MUTED }}>
+      <div className="text-xl mt-1" style={{ color: MUTED }}>
         {value.length} / {MAX} sélectionnés
       </div>
     </div>
