@@ -208,11 +208,11 @@ export function ModerationView() {
                   </h3>
                   <SlaBadge since={active.updated_at} />
                 </div>
-                <p className="text-sm opacity-60 mt-1">
+                <p className="opacity-60 mt-1 text-lg">
                   {calcAge(active.birth_date) ?? "?"} ans · {active.gender ?? "—"} ·{" "}
                   {shortLocation(active)}
                 </p>
-                <p className="text-xs opacity-50 mt-1">
+                <p className="opacity-50 mt-1 text-lg">
                   Soumis le {format(new Date(active.updated_at), "dd/MM/yyyy 'à' HH:mm")}
                 </p>
               </div>
