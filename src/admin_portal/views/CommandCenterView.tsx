@@ -107,8 +107,8 @@ export function CommandCenterView() {
 
   if (error) {
     return (
-      <div style={{ fontFamily: FONT }} className="rounded-lg border p-6 text-base"
-        style={{ background: SURFACE, borderColor: BORDER, color: DANGER, fontFamily: FONT } as any}>
+      <div className="rounded-lg border p-6 text-base"
+        style={{ background: SURFACE, borderColor: BORDER, color: DANGER, fontFamily: FONT }}>
         Erreur d'analyse : {error}
       </div>
     );
