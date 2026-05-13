@@ -71,6 +71,7 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [confirmedAge, setConfirmedAge] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [firstName, setFirstName] = useState<string>("");
 
   // États Vidéo
   const [isPlaying, setIsPlaying] = useState(false);
