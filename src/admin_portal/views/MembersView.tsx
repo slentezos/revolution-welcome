@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { adminSupabase } from "../lib/supabase";
 import { supabase } from "@/integrations/supabase/client";
 import { formatRelativeFr } from "../lib/dates";
@@ -42,9 +43,19 @@ const GOLD = "#C9A961";
 const NAVY = "#0E1626";
 const RED = "#DC2626";
 const TEXT = "#E5E7EB";
+const ROW_H = 64;
 
 const fmtFr = (d: string | Date | null | undefined) =>
   d ? format(typeof d === "string" ? new Date(d) : d, "dd/MM/yyyy") : "—";
+
+/** Color band for "Dernière Activité": <24h vert, <7j ambre, sinon rouge. */
+function activityTone(iso: string | null | undefined): { fg: string; bg: string; label: string } {
+  if (!iso) return { fg: "#94A3B8", bg: "rgba(148,163,184,0.10)", label: "—" };
+  const ageH = (Date.now() - new Date(iso).getTime()) / 3_600_000;
+  if (ageH < 24) return { fg: "#4ADE80", bg: "rgba(34,197,94,0.10)", label: formatRelativeFr(iso) };
+  if (ageH < 24 * 7) return { fg: "#FBBF24", bg: "rgba(245,158,11,0.10)", label: formatRelativeFr(iso) };
+  return { fg: "#F87171", bg: "rgba(220,38,38,0.10)", label: formatRelativeFr(iso) };
+}
 
 export function MembersView() {
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -71,6 +82,17 @@ export function MembersView() {
   useEffect(() => {
     reload();
   }, []);
+
+  // Listen for cross-component requests (Cmd+K palette → open a specific member).
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const id = (e as CustomEvent<string>).detail;
+      const u = users.find((x) => x.id === id);
+      if (u) setDetailUser(u);
+    };
+    window.addEventListener("admin:open-member", onOpen as EventListener);
+    return () => window.removeEventListener("admin:open-member", onOpen as EventListener);
+  }, [users]);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -155,6 +177,15 @@ export function MembersView() {
     }
   };
 
+  // Virtualization
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const rowVirtualizer = useVirtualizer({
+    count: filtered.length,
+    getScrollElement: () => scrollerRef.current,
+    estimateSize: () => ROW_H,
+    overscan: 12,
+  });
+
   return (
     <section
       className="rounded-xl border overflow-hidden"
@@ -198,7 +229,10 @@ export function MembersView() {
           />
           Friction &gt; 48h
         </label>
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto flex items-center gap-2">
+          <span className="text-xs opacity-60 hidden md:inline">
+            {filtered.length.toLocaleString("fr-FR")} membre(s)
+          </span>
           <button
             onClick={reload}
             className="h-10 px-4 rounded-md border text-base hover:opacity-80"
@@ -223,104 +257,131 @@ export function MembersView() {
         </div>
       )}
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr style={{ background: "#172238" }}>
-              <Th>Nom</Th>
-              <Th>Âge</Th>
-              <Th>Genre</Th>
-              <Th>Localisation</Th>
-              <Th>Étape du Tunnel</Th>
-              <Th>Statut Financier</Th>
-              <Th>Dernière Activité</Th>
-              <Th className="text-right">Actions</Th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={8} className="px-5 py-12 text-center opacity-60 text-base">
-                  Chargement…
-                </td>
-              </tr>
-            ) : filtered.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="px-5 py-12 text-center opacity-60 text-base">
-                  Aucun membre.
-                </td>
-              </tr>
-            ) : (
-              filtered.map((u) => {
-                const step = deriveTunnelStep(u);
-                const fin = deriveFinancialStatus(u);
-                const stuck = isStuckOver48h(u);
-                const isMaster = u.email === MASTER_ADMIN_EMAIL;
-                return (
-                  <tr
-                    key={u.id}
-                    className="border-t hover:bg-white/[0.02] transition-colors"
-                    style={{ borderColor: BORDER }}
-                  >
-                    <Td>
-                      <div className="font-medium">
-                        {`${u.first_name} ${u.last_name}`.trim() || (
-                          <span className="opacity-50">{u.email}</span>
-                        )}
-                        {isMaster && (
-                          <span
-                            className="ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider"
-                            style={{ background: GOLD, color: NAVY }}
-                          >
-                            Maître
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-xs opacity-50">{u.email}</div>
-                    </Td>
-                    <Td>{calcAge(u.birth_date) ?? <Dash />}</Td>
-                    <Td className="capitalize">{u.gender || <Dash />}</Td>
-                    <Td>{shortLocation(u)}</Td>
-                    <Td>
-                      <StepBadge stepIndex={tunnelStepIndex(step)} label={tunnelStepLabel(step)} />
-                    </Td>
-                    <Td>
-                      <FinancialPill {...fin} />
-                    </Td>
-                    <Td>
-                      <span className={stuck ? "text-amber-400 font-medium" : ""}>
-                        {formatRelativeFr(u.updated_at)}
-                      </span>
-                    </Td>
-                    <Td className="text-right whitespace-nowrap">
-                      <button
-                        onClick={() => setDetailUser(u)}
-                        className="text-sm underline opacity-80 hover:opacity-100 mr-3"
-                      >
-                        Détails
-                      </button>
-                      <button
-                        onClick={() => handleRefund(u)}
-                        className="text-sm underline opacity-70 hover:opacity-100 mr-3"
-                        style={{ color: GOLD }}
-                      >
-                        Rembourser
-                      </button>
-                      <button
-                        onClick={() => handleBlock(u)}
-                        disabled={isMaster}
-                        className="text-sm font-semibold px-3 py-1.5 rounded-md disabled:opacity-30"
-                        style={{ background: RED, color: "#fff" }}
-                      >
-                        Bloquer
-                      </button>
-                    </Td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+      {/* Sticky header (grid) */}
+      <div
+        className="grid items-center px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-70"
+        style={{
+          background: "#172238",
+          borderBottom: `1px solid ${BORDER}`,
+          gridTemplateColumns: GRID_COLS,
+        }}
+      >
+        <div>Nom</div>
+        <div>Âge</div>
+        <div>Genre</div>
+        <div>Localisation</div>
+        <div>Étape du Tunnel</div>
+        <div>Statut Financier</div>
+        <div>Dernière Activité</div>
+        <div className="text-right">Actions</div>
+      </div>
+
+      {/* Virtualized rows */}
+      <div
+        ref={scrollerRef}
+        className="overflow-y-auto"
+        style={{ height: "min(70vh, 760px)" }}
+      >
+        {loading ? (
+          <div className="px-5 py-12 text-center opacity-60 text-base">Chargement…</div>
+        ) : filtered.length === 0 ? (
+          <div className="px-5 py-12 text-center opacity-60 text-base">Aucun membre.</div>
+        ) : (
+          <div
+            style={{
+              height: rowVirtualizer.getTotalSize(),
+              position: "relative",
+              width: "100%",
+            }}
+          >
+            {rowVirtualizer.getVirtualItems().map((vi) => {
+              const u = filtered[vi.index];
+              const step = deriveTunnelStep(u);
+              const fin = deriveFinancialStatus(u);
+              const stuck = isStuckOver48h(u);
+              const isMaster = u.email === MASTER_ADMIN_EMAIL;
+              const tone = activityTone(u.updated_at);
+              return (
+                <div
+                  key={u.id}
+                  className="grid items-center px-4 hover:bg-white/[0.02] transition-colors border-t"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    transform: `translateY(${vi.start}px)`,
+                    height: ROW_H,
+                    width: "100%",
+                    borderColor: BORDER,
+                    gridTemplateColumns: GRID_COLS,
+                  }}
+                >
+                  <div>
+                    <div className="font-medium text-sm truncate">
+                      {`${u.first_name} ${u.last_name}`.trim() || (
+                        <span className="opacity-50">{u.email}</span>
+                      )}
+                      {isMaster && (
+                        <span
+                          className="ml-2 inline-block px-1.5 py-0.5 rounded text-[10px] uppercase tracking-wider"
+                          style={{ background: GOLD, color: NAVY }}
+                        >
+                          Maître
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-xs opacity-50 truncate">{u.email}</div>
+                  </div>
+                  <div className="text-sm">{calcAge(u.birth_date) ?? <Dash />}</div>
+                  <div className="text-sm capitalize">{u.gender || <Dash />}</div>
+                  <div className="text-sm truncate">{shortLocation(u)}</div>
+                  <div>
+                    <StepBadge stepIndex={tunnelStepIndex(step)} label={tunnelStepLabel(step)} />
+                  </div>
+                  <div>
+                    <FinancialPill {...fin} />
+                  </div>
+                  <div>
+                    <span
+                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium"
+                      style={{ background: tone.bg, color: tone.fg }}
+                    >
+                      <span
+                        className="inline-block w-1.5 h-1.5 rounded-full"
+                        style={{ background: tone.fg }}
+                      />
+                      {tone.label}
+                      {stuck && <span className="opacity-80">· bloqué</span>}
+                    </span>
+                  </div>
+                  <div className="text-right whitespace-nowrap">
+                    <button
+                      onClick={() => setDetailUser(u)}
+                      className="text-sm underline opacity-80 hover:opacity-100 mr-3"
+                    >
+                      Détails
+                    </button>
+                    <button
+                      onClick={() => handleRefund(u)}
+                      className="text-sm underline opacity-70 hover:opacity-100 mr-3"
+                      style={{ color: GOLD }}
+                    >
+                      Rembourser
+                    </button>
+                    <button
+                      onClick={() => handleBlock(u)}
+                      disabled={isMaster}
+                      className="text-sm font-semibold px-3 py-1.5 rounded-md disabled:opacity-30"
+                      style={{ background: RED, color: "#fff" }}
+                    >
+                      Bloquer
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {detailUser && (
@@ -330,16 +391,8 @@ export function MembersView() {
   );
 }
 
-function Th({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <th className={`px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-70 ${className}`}>
-      {children}
-    </th>
-  );
-}
-function Td({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <td className={`px-4 py-3 align-middle text-sm ${className}`}>{children}</td>;
-}
+const GRID_COLS = "minmax(220px,1.4fr) 60px 90px minmax(180px,1.2fr) minmax(180px,1fr) 120px minmax(160px,1fr) minmax(280px,auto)";
+
 function Dash() {
   return <span className="opacity-40">—</span>;
 }
@@ -445,14 +498,14 @@ function DetailsSlideOver({ user, onClose }: { user: AdminUser; onClose: () => v
             ) : quiz.length === 0 ? (
               <p className="opacity-60 text-sm">Aucune réponse enregistrée.</p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-1.5">
                 {quiz.map((q, i) => (
                   <li
                     key={i}
-                    className="flex items-start justify-between gap-3 py-2 border-b text-sm"
+                    className="flex items-start justify-between gap-3 py-1.5 border-b text-[13px] leading-tight"
                     style={{ borderColor: BORDER }}
                   >
-                    <span className="opacity-70">{q.question_id}</span>
+                    <span className="opacity-70 font-mono text-[12px]">{q.question_id}</span>
                     <span className="font-medium text-right">{q.answer_value}</span>
                   </li>
                 ))}
@@ -467,7 +520,10 @@ function DetailsSlideOver({ user, onClose }: { user: AdminUser; onClose: () => v
 
 function Meta({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 py-1.5 border-b" style={{ borderColor: BORDER }}>
+    <div
+      className="flex items-baseline justify-between gap-3 py-1.5 border-b"
+      style={{ borderColor: BORDER }}
+    >
       <span className="text-xs uppercase tracking-wider opacity-60">{label}</span>
       <span className="text-sm font-medium">{value || <span className="opacity-40">—</span>}</span>
     </div>
