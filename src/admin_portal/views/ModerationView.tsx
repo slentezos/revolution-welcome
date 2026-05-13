@@ -316,7 +316,7 @@ function MediaTile({ title, media }: { title: string; media?: Media }) {
             <img src={url} alt={title} className="w-full h-full object-contain" />
           )
         ) : (
-          <span className="opacity-50 text-xs">Chargement du média…</span>
+          <span className="opacity-50 text-lg">Chargement du média…</span>
         )}
       </div>
       {media && (
