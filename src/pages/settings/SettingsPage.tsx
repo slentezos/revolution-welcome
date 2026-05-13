@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
-import { useAdminRole } from "../core/useAdminRole";
+import { useAdminRole } from "@/admin_portal/core/useAdminRole";
 import { toast } from "sonner";
 
 const SURFACE = "var(--ap-surface)";
