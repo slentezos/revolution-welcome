@@ -419,7 +419,7 @@ function RejectModal({
           </label>
 
           <label className="block">
-            <span className="text-xs uppercase tracking-wider opacity-70">
+            <span className="uppercase tracking-wider opacity-70 text-lg">
               Instructions du Concierge
             </span>
             <textarea
