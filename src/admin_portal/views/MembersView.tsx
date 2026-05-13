@@ -230,7 +230,7 @@ export function MembersView() {
           Friction &gt; 48h
         </label>
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-xs opacity-60 hidden md:inline">
+          <span className="opacity-60 hidden md:inline text-lg">
             {filtered.length.toLocaleString("fr-FR")} membre(s)
           </span>
           <button
@@ -259,7 +259,7 @@ export function MembersView() {
 
       {/* Sticky header (grid) */}
       <div
-        className="grid items-center px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-70 bg-slate-50"
+        className="grid items-center px-4 py-3 font-medium uppercase tracking-wider opacity-70 bg-slate-50 text-lg"
         style={{
           borderBottom: `1px solid ${BORDER}`,
           gridTemplateColumns: GRID_COLS,
@@ -316,7 +316,7 @@ export function MembersView() {
                   }}
                 >
                   <div>
-                    <div className="font-medium text-sm truncate">
+                    <div className="font-medium truncate text-lg">
                       {`${u.first_name} ${u.last_name}`.trim() || (
                         <span className="opacity-50">{u.email}</span>
                       )}
@@ -329,11 +329,11 @@ export function MembersView() {
                         </span>
                       )}
                     </div>
-                    <div className="text-xs opacity-50 truncate">{u.email}</div>
+                    <div className="opacity-50 truncate text-lg">{u.email}</div>
                   </div>
-                  <div className="text-sm">{calcAge(u.birth_date) ?? <Dash />}</div>
-                  <div className="text-sm capitalize">{u.gender || <Dash />}</div>
-                  <div className="text-sm truncate">{shortLocation(u)}</div>
+                  <div className="text-lg">{calcAge(u.birth_date) ?? <Dash />}</div>
+                  <div className="capitalize text-lg">{u.gender || <Dash />}</div>
+                  <div className="truncate text-lg">{shortLocation(u)}</div>
                   <div>
                     <StepBadge stepIndex={tunnelStepIndex(step)} label={tunnelStepLabel(step)} />
                   </div>
@@ -342,7 +342,7 @@ export function MembersView() {
                   </div>
                   <div>
                     <span
-                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium"
+                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-medium text-lg"
                       style={{ background: tone.bg, color: tone.fg }}
                     >
                       <span
@@ -356,13 +356,13 @@ export function MembersView() {
                   <div className="text-right whitespace-nowrap">
                     <button
                       onClick={() => setDetailUser(u)}
-                      className="text-sm underline opacity-80 hover:opacity-100 mr-3"
+                      className="underline opacity-80 hover:opacity-100 mr-3 text-lg"
                     >
                       Détails
                     </button>
                     <button
                       onClick={() => handleRefund(u)}
-                      className="text-sm underline opacity-70 hover:opacity-100 mr-3"
+                      className="underline opacity-70 hover:opacity-100 mr-3 text-lg"
                       style={{ color: GOLD }}
                     >
                       Rembourser
@@ -370,7 +370,7 @@ export function MembersView() {
                     <button
                       onClick={() => handleBlock(u)}
                       disabled={isMaster}
-                      className="text-sm font-semibold px-3 py-1.5 rounded-md disabled:opacity-30"
+                      className="font-semibold px-3 py-1.5 rounded-md disabled:opacity-30 text-lg"
                       style={{ background: RED, color: "#fff" }}
                     >
                       Bloquer
@@ -407,7 +407,7 @@ function StepBadge({ stepIndex, label }: { stepIndex: number; label: string }) {
           style={{ width: `${pct * 100}%`, background: GOLD }}
         />
       </div>
-      <span className="text-xs">{label}</span>
+      <span className="text-lg">{label}</span>
     </div>
   );
 }
@@ -428,7 +428,7 @@ function FinancialPill({
   const c = map[tone];
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-medium"
+      className="inline-block px-2 py-0.5 rounded-md font-medium text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {label}
@@ -475,7 +475,7 @@ function DetailsSlideOver({ user, onClose }: { user: AdminUser; onClose: () => v
           </button>
         </div>
 
-        <div className="p-5 space-y-6 text-sm">
+        <div className="p-5 space-y-6 text-lg">
           <Meta label="Téléphone" value={user.phone} />
           <Meta label="Date de naissance" value={fmtFr(user.birth_date)} />
           <Meta label="Âge" value={calcAge(user.birth_date)?.toString() ?? "—"} />
@@ -493,9 +493,9 @@ function DetailsSlideOver({ user, onClose }: { user: AdminUser; onClose: () => v
               Réponses Quiz ({quiz.length})
             </h4>
             {loading ? (
-              <p className="opacity-60 text-sm">Chargement…</p>
+              <p className="opacity-60 text-lg">Chargement…</p>
             ) : quiz.length === 0 ? (
-              <p className="opacity-60 text-sm">Aucune réponse enregistrée.</p>
+              <p className="opacity-60 text-lg">Aucune réponse enregistrée.</p>
             ) : (
               <ul className="space-y-1.5">
                 {quiz.map((q, i) => (

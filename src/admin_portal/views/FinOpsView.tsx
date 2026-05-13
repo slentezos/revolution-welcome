@@ -317,14 +317,14 @@ function Scoreboard({
           <h2 className="font-semibold text-xl" style={{ color: TEXT }}>
             Trésorerie & Indicateurs Clés
           </h2>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             {loading ? "Chargement…" : "Synchronisation Stripe/Supabase en temps réel."}
           </p>
         </div>
         <button
           onClick={onRefresh}
           disabled={loading || refreshing}
-          className={`h-9 px-3 rounded-md border text-sm disabled:opacity-50 ${FOCUS_RING}`}
+          className={`h-9 px-3 rounded-md border disabled:opacity-50 ${FOCUS_RING} text-lg`}
           style={{ borderColor: BORDER, color: TEXT, background: NAVY }}
         >
           {refreshing ? "Synchronisation…" : "Rafraîchir"}
@@ -332,7 +332,7 @@ function Scoreboard({
       </div>
 
       {error && (
-        <div className="px-4 py-3 text-sm rounded-md border" style={{ color: RED, borderColor: BORDER, background: SURFACE }}>
+        <div className="px-4 py-3 rounded-md border text-lg" style={{ color: RED, borderColor: BORDER, background: SURFACE }}>
           {error}
         </div>
       )}
@@ -344,7 +344,7 @@ function Scoreboard({
           tone="gold"
           footer={
             <>
-              <div className="flex items-center justify-between text-xs opacity-70 mb-1">
+              <div className="flex items-center justify-between opacity-70 mb-1 text-lg">
                 <span>Objectif {fmtEuroCompact(MRR_GOAL)}</span>
                 <span>{pct}%</span>
               </div>
@@ -364,19 +364,19 @@ function Scoreboard({
         <KpiCard
           label="Abonnés Actifs"
           value={fmtNumber(paying)}
-          footer={<span className="text-xs opacity-60">Hors période d'essai 3 mois</span>}
+          footer={<span className="opacity-60 text-lg">Hors période d'essai 3 mois</span>}
         />
         <KpiCard
           label="LTV Moyenne"
           value={fmtEuro(ltv)}
-          footer={<span className="text-xs opacity-60">Revenu cumulé par membre payant</span>}
+          footer={<span className="opacity-60 text-lg">Revenu cumulé par membre payant</span>}
         />
         <KpiCard
           label="Taux de Churn"
           value={fmtPct(churnRate)}
           tone={churnAlert ? "danger" : "default"}
           footer={
-            <span className="text-xs" style={{ color: churnAlert ? RED : "#94A3B8" }}>
+            <span className="text-lg" style={{ color: churnAlert ? RED : "#94A3B8" }}>
               {churnAlert ? "⚠ Au-dessus du seuil 5 %" : "Sous le seuil de 5 %"}
             </span>
           }
@@ -435,7 +435,7 @@ function ChartCard({
     >
       <header className="mb-3">
         <h3 className="font-semibold text-xl">{title}</h3>
-        {subtitle && <p className="text-xs opacity-60 mt-0.5">{subtitle}</p>}
+        {subtitle && <p className="opacity-60 mt-0.5 text-lg">{subtitle}</p>}
       </header>
       {children}
     </section>
@@ -478,7 +478,7 @@ function TrialWidget({ profiles }: { profiles: ProfileFin[] }) {
           <h3 id="trial-title" className="font-semibold text-xl">
             Période d'Essai « 3 Mois Offerts »
           </h3>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             Suivi de la <em>Conversion de Gratuité</em> et des essais en cours.
           </p>
         </div>
@@ -505,7 +505,7 @@ function TrialWidget({ profiles }: { profiles: ProfileFin[] }) {
             {active.slice(0, 6).map((u) => (
               <li
                 key={u.user_id}
-                className="flex items-center justify-between px-3 py-2 rounded-md border text-sm"
+                className="flex items-center justify-between px-3 py-2 rounded-md border text-lg"
                 style={{ borderColor: BORDER, background: NAVY }}
               >
                 <span className="truncate">
@@ -594,7 +594,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
           <h3 id="tx-title" className="font-semibold text-xl">
             Flux de Revenus
           </h3>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             {fmtNumber(rows.length)} mouvement(s) — {fmtEuroCompact(totals.sum)} encaissés ·{" "}
             <span style={{ color: totals.failed > 0 ? RED : "inherit" }}>
               {fmtNumber(totals.failed)} échec(s)
@@ -634,7 +634,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
       </header>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
+        <table className="w-full text-left text-lg">
           <thead style={{ background: "#172238" }}>
             <tr>
               <Th>Membre</Th>
@@ -690,7 +690,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
                     <button
                       onClick={() => refund(t)}
                       disabled={t.status === "Remboursé"}
-                      className={`h-8 px-3 rounded-md text-sm font-semibold disabled:opacity-30 ${FOCUS_RING}`}
+                      className={`h-8 px-3 rounded-md font-semibold disabled:opacity-30 ${FOCUS_RING} text-lg`}
                       style={{
                         background: "rgba(220,38,38,0.15)",
                         color: RED,
@@ -706,7 +706,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
           </tbody>
         </table>
         {rows.length > 300 && (
-          <div className="px-4 py-3 text-xs opacity-60 border-t" style={{ borderColor: BORDER }}>
+          <div className="px-4 py-3 opacity-60 border-t text-lg" style={{ borderColor: BORDER }}>
             Affichage limité aux 300 dernières transactions — utilisez l'export CSV pour la liste complète.
           </div>
         )}
@@ -717,7 +717,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
 
 function Th({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <th className={`px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-80 bg-slate-50 ${className}`}>
+    <th className={`px-4 py-3 font-medium uppercase tracking-wider opacity-80 bg-slate-50 text-lg ${className}`}>
       {children}
     </th>
   );
@@ -734,7 +734,7 @@ function TypePill({ t }: { t: TxType }) {
   const c = map[t];
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-medium"
+      className="inline-block px-2 py-0.5 rounded-md font-medium text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {t}
@@ -751,7 +751,7 @@ function StatusPill({ s }: { s: TxStatus }) {
   const c = map[s];
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-medium"
+      className="inline-block px-2 py-0.5 rounded-md font-medium text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {s}

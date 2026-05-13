@@ -183,7 +183,7 @@ export function CommandCenterView() {
         </Panel>
       </div>
 
-      <div className="text-xs text-right" style={{ color: MUTED }}>
+      <div className="text-right text-lg" style={{ color: MUTED }}>
         {data?.meta && `Données générées le ${new Date(data.meta.generatedAt).toLocaleString("fr-FR")} · ${fmt(data.meta.totalLeads)} pré-inscriptions · ${fmt(data.meta.totalUsers)} comptes`}
       </div>
     </div>
@@ -252,7 +252,7 @@ function FunnelWidget({ steps }: { steps: FunnelStep[] }) {
         const convPct = prev > 0 ? Math.round((s.count / prev) * 100) : 100;
         return (
           <div key={s.step} className="space-y-1">
-            <div className="flex items-baseline justify-between gap-3 text-sm">
+            <div className="flex items-baseline justify-between gap-3 text-lg">
               <span style={{ color: TEXT }}>
                 <span style={{ color: MUTED }} className="tabular-nums mr-2 text-xl">{String(i + 1).padStart(2, "0")}</span>
                 {s.step}
@@ -311,7 +311,7 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
   return (
     <div className="space-y-4">
       <div>
-        <div className="flex items-baseline justify-between text-sm mb-1.5">
+        <div className="flex items-baseline justify-between mb-1.5 text-lg">
           <span style={{ color: TEXT }}>Ratio H / F · IDF</span>
           <span className="tabular-nums" style={{ color: MUTED }}>
             <span style={{ color: TEXT, fontWeight: 600 }}>{menPct}%</span> H ·{" "}
@@ -326,7 +326,7 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
       </div>
 
       <div>
-        <div className="text-sm mb-2" style={{ color: TEXT }}>
+        <div className="mb-2 text-lg" style={{ color: TEXT }}>
           Top 3 Arrondissements / Villes <span style={{ color: MUTED }}>(par activité)</span>
         </div>
         {data.topZones.length === 0 ? (
@@ -334,13 +334,13 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
         ) : (
           <div className="space-y-1.5">
             {data.topZones.map((z, i) => (
-              <div key={z.label} className="flex items-center justify-between rounded border px-3 py-2 text-sm"
+              <div key={z.label} className="flex items-center justify-between rounded border px-3 py-2 text-lg"
                 style={{ borderColor: BORDER, background: SURFACE_2 }}>
                 <div className="flex items-center gap-3">
-                  <span className="tabular-nums text-xs" style={{ color: GOLD }}>#{i + 1}</span>
+                  <span className="tabular-nums text-lg" style={{ color: GOLD }}>#{i + 1}</span>
                   <span style={{ color: TEXT, fontWeight: 600 }}>{z.label}</span>
                 </div>
-                <div className="tabular-nums text-xs" style={{ color: MUTED }}>
+                <div className="tabular-nums text-lg" style={{ color: MUTED }}>
                   {z.total} profils · {z.men}H / {z.women}F
                 </div>
               </div>
@@ -350,7 +350,7 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
       </div>
 
       <div>
-        <div className="text-sm mb-2" style={{ color: TEXT }}>
+        <div className="mb-2 text-lg" style={{ color: TEXT }}>
           Market Imbalance <span style={{ color: MUTED }}>(dominance ≥ 65%)</span>
         </div>
         {data.imbalanceAlerts.length === 0 ? (
@@ -358,10 +358,10 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
             {data.imbalanceAlerts.map((a) => (
-              <div key={a.label} className="flex items-center justify-between rounded border px-2.5 py-1.5 text-sm"
+              <div key={a.label} className="flex items-center justify-between rounded border px-2.5 py-1.5 text-lg"
                 style={{ borderColor: GOLD_SOFT, background: SURFACE_2 }}>
                 <span style={{ color: TEXT, fontWeight: 600 }}>{a.label}</span>
-                <span className="tabular-nums text-xs" style={{ color: MUTED }}>
+                <span className="tabular-nums text-lg" style={{ color: MUTED }}>
                   {a.men}H / {a.women}F · <span style={{ color: GOLD }}>{a.dominantPct}%</span>
                 </span>
               </div>
@@ -380,7 +380,7 @@ function ExpansionWidget({ data }: { data?: Analytics["expansion"] }) {
   }
   return (
     <div className="space-y-2.5">
-      <div className="text-xs" style={{ color: MUTED }}>
+      <div className="text-lg" style={{ color: MUTED }}>
         Seuil de Lancement : <span style={{ color: TEXT, fontWeight: 600 }}>{data.launchTarget}</span> profils par département
       </div>
       {data.departments.map((d, i) => {
@@ -388,13 +388,13 @@ function ExpansionWidget({ data }: { data?: Analytics["expansion"] }) {
         return (
           <div key={d.code} className="rounded border px-3 py-2.5"
             style={{ borderColor: ready ? GOLD : BORDER, background: SURFACE_2 }}>
-            <div className="flex items-baseline justify-between text-sm mb-1.5">
+            <div className="flex items-baseline justify-between mb-1.5 text-lg">
               <div className="flex items-center gap-2.5">
-                <span className="tabular-nums text-xs" style={{ color: GOLD }}>#{i + 1}</span>
+                <span className="tabular-nums text-lg" style={{ color: GOLD }}>#{i + 1}</span>
                 <span style={{ color: TEXT, fontWeight: 600 }}>{d.name}</span>
-                <span className="text-xs tabular-nums" style={{ color: MUTED }}>· {d.code}</span>
+                <span className="tabular-nums text-lg" style={{ color: MUTED }}>· {d.code}</span>
               </div>
-              <div className="tabular-nums text-xs" style={{ color: MUTED }}>
+              <div className="tabular-nums text-lg" style={{ color: MUTED }}>
                 <span style={{ color: TEXT, fontWeight: 600 }}>{d.total}</span>/{d.launchTarget} ·{" "}
                 <span style={{ color: ready ? GOLD : TEXT }}>{d.pctOfTarget}%</span>
               </div>
@@ -404,7 +404,7 @@ function ExpansionWidget({ data }: { data?: Analytics["expansion"] }) {
                 style={{ width: `${d.pctOfTarget}%`,
                   background: ready ? GOLD : `linear-gradient(90deg, ${GOLD_SOFT}, ${GOLD})` }} />
             </div>
-            <div className="text-xs mt-1.5" style={{ color: MUTED }}>
+            <div className="mt-1.5 text-lg" style={{ color: MUTED }}>
               {d.preregs} pré-inscriptions · {d.profiles} profils ·{" "}
               {ready ? <span style={{ color: GOLD }}>Prêt au lancement</span>
                      : <span>{d.launchTarget - d.total} profils restants</span>}
@@ -430,7 +430,7 @@ function VelocityWidget({ kpis }: { kpis?: ScopeBlock["kpis"] }) {
         <MiniStat label="Inactifs > 7j" value={fmt(kpis.churnRisk)}
           tone={kpis.churnRisk > 0 ? "warn" : undefined} />
       </div>
-      <div className="rounded border p-3 text-sm leading-relaxed"
+      <div className="rounded border p-3 leading-relaxed text-lg"
         style={{ borderColor: aged ? GOLD : BORDER, background: SURFACE_2, color: aged ? GOLD : MUTED }}>
         {aged
           ? `Alerte SLA : un actif attend depuis ${kpis.oldestPendingMinutes} min — au-delà du seuil de 60 min.`
@@ -454,7 +454,7 @@ function ActivityFeed({ events }: { events: Analytics["recentActivity"] }) {
   return (
     <ul className="divide-y" style={{ borderColor: BORDER }}>
       {events.map((e, i) => (
-        <li key={i} className="flex items-center justify-between py-2.5 text-sm"
+        <li key={i} className="flex items-center justify-between py-2.5 text-lg"
           style={{ borderColor: BORDER, borderTopWidth: i === 0 ? 0 : 1 } as any}>
           <div className="flex items-center gap-3 min-w-0">
             <span className="inline-flex h-2 w-2 rounded-full shrink-0"
@@ -464,7 +464,7 @@ function ActivityFeed({ events }: { events: Analytics["recentActivity"] }) {
               <span style={{ color: MUTED }}> · {e.location}</span>
             </span>
           </div>
-          <span className="tabular-nums text-xs shrink-0 ml-3" style={{ color: MUTED }}>
+          <span className="tabular-nums shrink-0 ml-3 text-lg" style={{ color: MUTED }}>
             {fmtAgo(e.at)}
           </span>
         </li>
@@ -485,7 +485,7 @@ function MiniStat({ label, value, accent, tone }: { label: string; value: string
 
 function Empty({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded border p-3 text-sm" style={{ borderColor: BORDER, color: MUTED }}>
+    <div className="rounded border p-3 text-lg" style={{ borderColor: BORDER, color: MUTED }}>
       {children}
     </div>
   );

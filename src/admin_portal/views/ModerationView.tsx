@@ -172,15 +172,15 @@ export function ModerationView() {
                   style={{ background: isActive ? "rgba(201,169,97,0.08)" : "transparent" }}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-medium truncate">
+                    <span className="font-medium truncate text-lg">
                       {`${u.first_name} ${u.last_name}`.trim() || u.email}
                     </span>
                     <SlaBadge since={u.updated_at} />
                   </div>
-                  <div className="text-xs opacity-60 mt-0.5">
+                  <div className="opacity-60 mt-0.5 text-lg">
                     {calcAge(u.birth_date) ?? "?"} ans · {shortLocation(u)}
                   </div>
-                  <div className="text-xs opacity-50 mt-1">
+                  <div className="opacity-50 mt-1 text-lg">
                     Soumis {formatRelativeFr(u.updated_at)}
                   </div>
                 </button>
@@ -208,18 +208,18 @@ export function ModerationView() {
                   </h3>
                   <SlaBadge since={active.updated_at} />
                 </div>
-                <p className="text-sm opacity-60 mt-1">
+                <p className="opacity-60 mt-1 text-lg">
                   {calcAge(active.birth_date) ?? "?"} ans · {active.gender ?? "—"} ·{" "}
                   {shortLocation(active)}
                 </p>
-                <p className="text-xs opacity-50 mt-1">
+                <p className="opacity-50 mt-1 text-lg">
                   Soumis le {format(new Date(active.updated_at), "dd/MM/yyyy 'à' HH:mm")}
                 </p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setRejectOpen(true)}
-                  className="h-10 px-4 rounded-md font-semibold text-sm"
+                  className="h-10 px-4 rounded-md font-semibold text-lg"
                   style={{ background: RED, color: "#fff" }}
                   title="Raccourci : R"
                 >
@@ -227,7 +227,7 @@ export function ModerationView() {
                 </button>
                 <button
                   onClick={handleApprove}
-                  className="h-10 px-4 rounded-md font-semibold text-sm"
+                  className="h-10 px-4 rounded-md font-semibold text-lg"
                   style={{ background: GREEN, color: "#fff" }}
                   title="Raccourci : A"
                 >
@@ -242,10 +242,10 @@ export function ModerationView() {
             </div>
 
             <div
-              className="mt-6 p-4 rounded-md text-sm"
+              className="mt-6 p-4 rounded-md text-lg"
               style={{ background: NAVY, border: `1px solid ${BORDER}` }}
             >
-              <div className="opacity-60 text-xs uppercase tracking-wider mb-2">Métadonnées</div>
+              <div className="opacity-60 uppercase tracking-wider mb-2 text-lg">Métadonnées</div>
               <div className="grid grid-cols-2 gap-2">
                 <Meta label="Étape" value={deriveTunnelStep(active)} />
                 <Meta label="Statut" value={active.account_status ?? "—"} />
@@ -301,14 +301,14 @@ function MediaTile({ title, media }: { title: string; media?: Media }) {
       style={{ borderColor: BORDER, background: NAVY }}
     >
       <div
-        className="px-3 py-2 text-xs uppercase tracking-wider opacity-70 border-b bg-slate-50"
+        className="px-3 py-2 uppercase tracking-wider opacity-70 border-b bg-slate-50 text-lg"
         style={{ borderColor: BORDER }}
       >
         {title}
       </div>
       <div className="aspect-video flex items-center justify-center">
         {!media ? (
-          <span className="opacity-40 text-sm">Non fourni</span>
+          <span className="opacity-40 text-lg">Non fourni</span>
         ) : url ? (
           media.media_type.includes("video") ? (
             <video src={url} controls className="w-full h-full object-contain" />
@@ -316,7 +316,7 @@ function MediaTile({ title, media }: { title: string; media?: Media }) {
             <img src={url} alt={title} className="w-full h-full object-contain" />
           )
         ) : (
-          <span className="opacity-50 text-xs">Chargement du média…</span>
+          <span className="opacity-50 text-lg">Chargement du média…</span>
         )}
       </div>
       {media && (
@@ -404,7 +404,7 @@ function RejectModal({
 
         <div className="p-5 space-y-4">
           <label className="block">
-            <span className="text-xs uppercase tracking-wider opacity-70">Motif</span>
+            <span className="uppercase tracking-wider opacity-70 text-lg">Motif</span>
             <select
               {...register("reason")}
               className="mt-1 w-full h-10 px-3 rounded-md border text-base"
@@ -419,7 +419,7 @@ function RejectModal({
           </label>
 
           <label className="block">
-            <span className="text-xs uppercase tracking-wider opacity-70">
+            <span className="uppercase tracking-wider opacity-70 text-lg">
               Instructions du Concierge
             </span>
             <textarea
@@ -427,11 +427,11 @@ function RejectModal({
               rows={4}
               maxLength={1000}
               placeholder="Indications précises pour aider le membre à corriger…"
-              className="mt-1 w-full px-3 py-2 rounded-md border text-sm resize-none"
+              className="mt-1 w-full px-3 py-2 rounded-md border text-lg resize-none"
               style={{ background: NAVY, borderColor: BORDER, color: TEXT }}
             />
             {errors.custom_text && (
-              <span className="block mt-1 text-xs" style={{ color: "#F87171" }}>
+              <span className="block mt-1 text-lg" style={{ color: "#F87171" }}>
                 {errors.custom_text.message}
               </span>
             )}
@@ -445,7 +445,7 @@ function RejectModal({
           <button
             type="button"
             onClick={onClose}
-            className="h-10 px-4 rounded-md text-sm border"
+            className="h-10 px-4 rounded-md border text-lg"
             style={{ borderColor: BORDER, color: TEXT, background: NAVY }}
           >
             Annuler
@@ -453,7 +453,7 @@ function RejectModal({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="h-10 px-4 rounded-md font-semibold text-sm disabled:opacity-40"
+            className="h-10 px-4 rounded-md font-semibold text-lg disabled:opacity-40"
             style={{ background: RED, color: "#fff" }}
           >
             {isSubmitting ? "Envoi…" : "Confirmer le rejet"}

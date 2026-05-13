@@ -177,14 +177,14 @@ function ZoneTable({
           <h2 id="zone-table-title" className="font-semibold text-xl">
             Répartition Géographique
           </h2>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             Cliquez une ligne pour explorer les codes postaux du département.
           </p>
         </div>
         <button
           onClick={onRefresh}
           disabled={loading || refreshing}
-          className={`h-9 px-3 rounded-md border text-sm disabled:opacity-50 ${FOCUS_RING}`}
+          className={`h-9 px-3 rounded-md border disabled:opacity-50 ${FOCUS_RING} text-lg`}
           style={{ borderColor: BORDER, color: TEXT, background: NAVY }}
         >
           {refreshing ? "Synchronisation…" : "Rafraîchir"}
@@ -192,13 +192,13 @@ function ZoneTable({
       </header>
 
       {error && (
-        <div className="px-4 py-3 text-sm" style={{ color: "#F87171" }}>
+        <div className="px-4 py-3 text-lg" style={{ color: "#F87171" }}>
           {error}
         </div>
       )}
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm" role="grid">
+        <table className="w-full text-left text-lg" role="grid">
           <thead style={{ background: "#172238" }}>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
@@ -207,7 +207,7 @@ function ZoneTable({
                   return (
                     <th
                       key={h.id}
-                      className="px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-80"
+                      className="px-4 py-3 font-medium uppercase tracking-wider opacity-80 text-lg"
                       aria-sort={
                         sortDir === "asc"
                           ? "ascending"
@@ -267,7 +267,7 @@ function ZoneTable({
                       aria-expanded={isOpen}
                     >
                       {row.getVisibleCells().map((cell) => (
-                        <td key={cell.id} className="px-4 py-3 align-middle text-sm">
+                        <td key={cell.id} className="px-4 py-3 align-middle text-lg">
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </td>
                       ))}
@@ -275,14 +275,14 @@ function ZoneTable({
                     {isOpen && (
                       <tr style={{ background: NAVY, borderTop: `1px solid ${BORDER}` }}>
                         <td colSpan={columns.length} className="px-6 py-4">
-                          <div className="text-xs uppercase tracking-wider opacity-60 mb-2">
+                          <div className="uppercase tracking-wider opacity-60 mb-2 text-lg">
                             Codes postaux — {row.original.topCity} ({row.original.dept})
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                             {row.original.postalBreakdown.slice(0, 24).map((p) => (
                               <div
                                 key={p.postal_code}
-                                className="flex items-center justify-between px-3 py-2 rounded-md border text-sm"
+                                className="flex items-center justify-between px-3 py-2 rounded-md border text-lg"
                                 style={{ borderColor: BORDER }}
                               >
                                 <div className="min-w-0 truncate text-lg">
@@ -295,7 +295,7 @@ function ZoneTable({
                               </div>
                             ))}
                             {row.original.postalBreakdown.length === 0 && (
-                              <p className="opacity-60 text-sm">Aucun détail disponible.</p>
+                              <p className="opacity-60 text-lg">Aucun détail disponible.</p>
                             )}
                           </div>
                         </td>
@@ -322,7 +322,7 @@ function LiquidityBadge({ tier }: { tier: ZoneRow["liquidity"] }) {
   const c = map[tier];
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-semibold"
+      className="inline-block px-2 py-0.5 rounded-md font-semibold text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {c.label}
@@ -391,7 +391,7 @@ function LaunchCockpit({ leads }: { leads: Lead[] }) {
           <h2 id="cockpit-title" className="font-semibold text-xl">
             Cockpit de Lancement
           </h2>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             Seuil de lancement par zone : 1 000 pré-inscrits seniors.
           </p>
         </div>
@@ -439,7 +439,7 @@ function TargetCard({
       <header className="flex items-center justify-between gap-2">
         <div>
           <h3 className="font-semibold text-xl">{label}</h3>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             Préfixe {prefix} · Seuil {fmtNumber(threshold)}
           </p>
         </div>
@@ -457,7 +457,7 @@ function TargetCard({
       <div className="mt-4">
         <div className="flex items-baseline justify-between">
           <span className="text-2xl font-semibold tabular-nums">{fmtNumber(count)}</span>
-          <span className="text-xs opacity-60">/ {fmtNumber(threshold)} ({pct}%)</span>
+          <span className="opacity-60 text-lg">/ {fmtNumber(threshold)} ({pct}%)</span>
         </div>
         <div
           className="mt-2 h-2 rounded-full overflow-hidden"
@@ -478,7 +478,7 @@ function TargetCard({
       <button
         onClick={launch}
         disabled={!ready}
-        className={`mt-4 w-full h-10 rounded-md font-semibold text-sm disabled:opacity-30 disabled:cursor-not-allowed transition-opacity ${FOCUS_RING}`}
+        className={`mt-4 w-full h-10 rounded-md font-semibold disabled:opacity-30 disabled:cursor-not-allowed transition-opacity ${FOCUS_RING} text-lg`}
         style={{ background: ready ? GOLD : "rgba(197,160,89,0.18)", color: ready ? NAVY : GOLD }}
       >
         Lancer Campagne Email
@@ -591,7 +591,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
           <h2 id="leads-title" className="font-semibold text-xl">
             Matrice des Leads
           </h2>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             {fmtNumber(filteredRows.length)} pré-inscription(s) — {fmtNumber(data.length)} au total
           </p>
         </div>
@@ -637,7 +637,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
       </header>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm" role="grid">
+        <table className="w-full text-left text-lg" role="grid">
           <thead style={{ background: "#172238" }}>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
@@ -646,7 +646,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
                   return (
                     <th
                       key={h.id}
-                      className="px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-80"
+                      className="px-4 py-3 font-medium uppercase tracking-wider opacity-80 text-lg"
                       aria-sort={
                         sortDir === "asc"
                           ? "ascending"
@@ -693,7 +693,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
                   style={{ borderColor: BORDER }}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-3 align-middle text-sm">
+                    <td key={cell.id} className="px-4 py-3 align-middle text-lg">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
@@ -703,7 +703,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
           </tbody>
         </table>
         {filteredRows.length > 500 && (
-          <div className="px-4 py-3 text-xs opacity-60 border-t" style={{ borderColor: BORDER }}>
+          <div className="px-4 py-3 opacity-60 border-t text-lg" style={{ borderColor: BORDER }}>
             Affichage limité aux 500 premières lignes — utilisez l'export CSV pour la liste complète.
           </div>
         )}
@@ -722,7 +722,7 @@ function SourcePill({ src }: { src: string }) {
   const c = map[src] ?? { bg: "rgba(148,163,184,0.12)", fg: "#94A3B8" };
   return (
     <span
-      className="inline-block px-2 py-0.5 rounded-md text-xs font-medium"
+      className="inline-block px-2 py-0.5 rounded-md font-medium text-lg"
       style={{ background: c.bg, color: c.fg }}
     >
       {src}
