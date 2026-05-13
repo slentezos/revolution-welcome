@@ -697,17 +697,48 @@ export default function OnboardingMedia({ profileId, onComplete }: OnboardingMed
             <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
               <Check className="h-10 w-10 text-emerald-600" />
             </div>
-            <DialogTitle className="font-heading text-3xl text-[#1B2333] font-bold">C'est enregistré !</DialogTitle>
-            <Button
-              onClick={() => {
-                setShowSaveDialog(false);
-                onComplete();
-              }}
-              className="w-full h-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl"
-            >
-              Continuer
-            </Button>
+      <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+        <DialogContent className="w-[calc(100%-2rem)] sm:max-w-2xl max-h-[90vh] overflow-y-auto p-8 sm:p-10 rounded-[2rem] bg-[hsl(var(--cream))] border border-[hsl(var(--gold))]/40 z-[9999]">
+          <div className="h-1.5 w-20 bg-[hsl(var(--gold))] rounded-full mb-2" />
+          <DialogTitle className="font-heading text-3xl sm:text-4xl text-[#1B2333] font-bold leading-tight">
+            Étape validée avec succès
+          </DialogTitle>
+          <div className="text-[#1B2333] text-xl leading-relaxed space-y-4 mt-2">
+            <p>Bonjour{firstName ? ` ${firstName}` : ""},</p>
+            <p>
+              Nous confirmons la bonne réception de vos éléments (quiz, photos et vidéo). Vous recevrez une confirmation
+              par email sous 24 heures pour procéder à la suite de votre adhésion.
+            </p>
+            <p>
+              L'immédiateté est devenue la norme numérique, et nous sommes conscients que suspendre votre progression
+              pendant 24 heures constitue une friction dans votre parcours. Néanmoins, Kalimera fait le choix de
+              l'exigence contre celui de la précipitation.
+            </p>
+            <p>
+              Pour garantir votre sécurité et préserver la qualité des interactions à venir, notre équipe a décidé de
+              procéder à une vérification manuelle de chaque dossier.
+            </p>
+            <p>
+              Ce protocole est la seule méthode garantissant une communauté épurée de tout profil factice ou
+              malveillant. Il protège votre sécurité et la qualité des interactions à venir : nous traitons votre
+              identité avec le soin qu'elle mérite.
+            </p>
+            <p>
+              Dès que votre dossier sera validé par nos services, vous recevrez un email contenant votre lien d'accès
+              exclusif. Il vous permettra de finaliser votre portrait et d'activer officiellement votre visibilité au
+              sein de notre communauté.
+            </p>
+            <p className="font-semibold">L'équipe Kalimera</p>
           </div>
+          <Button
+            onClick={() => {
+              setShowSaveDialog(false);
+              onComplete();
+            }}
+            className="w-full h-16 rounded-2xl bg-[#1B2333] text-white text-xl font-bold shadow-xl mt-4 hover:bg-[#1B2333]/90"
+          >
+            J'ai compris
+          </Button>
         </DialogContent>
       </Dialog>
 
