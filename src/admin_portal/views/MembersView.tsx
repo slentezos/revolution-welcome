@@ -259,9 +259,8 @@ export function MembersView() {
 
       {/* Sticky header (grid) */}
       <div
-        className="grid items-center px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-70"
+        className="grid items-center px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-70 bg-slate-50"
         style={{
-          background: "#172238",
           borderBottom: `1px solid ${BORDER}`,
           gridTemplateColumns: GRID_COLS,
         }}
