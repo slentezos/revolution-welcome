@@ -637,7 +637,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
       </header>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm" role="grid">
+        <table className="w-full text-left text-lg" role="grid">
           <thead style={{ background: "#172238" }}>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
