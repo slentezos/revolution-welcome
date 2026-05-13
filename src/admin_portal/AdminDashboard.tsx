@@ -9,6 +9,7 @@ import { ExpansionView } from "./views/ExpansionView";
 import { FinOpsView } from "./views/FinOpsView";
 import { CmsView } from "./views/CmsView";
 import { PlaceholderView } from "./views/PlaceholderView";
+import { SettingsPage } from "@/pages/settings/SettingsPage";
 import { ProtectedRoute } from "./core/ProtectedRoute";
 import { AdminErrorBoundary } from "./core/AdminErrorBoundary";
 import { useNoIndex } from "./core/useNoIndex";
@@ -54,9 +55,7 @@ function SectionRouter() {
         <PlaceholderView title="Gestion des Événements" slots={6} />
       )}
       {section === "cms" && <CmsView />}
-      {section === "settings" && (
-        <PlaceholderView title="Paramètres" slots={4} />
-      )}
+      {section === "settings" && <SettingsPage />}
     </div>
   );
 }
