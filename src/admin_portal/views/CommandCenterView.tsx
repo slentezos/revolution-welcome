@@ -252,7 +252,7 @@ function FunnelWidget({ steps }: { steps: FunnelStep[] }) {
         const convPct = prev > 0 ? Math.round((s.count / prev) * 100) : 100;
         return (
           <div key={s.step} className="space-y-1">
-            <div className="flex items-baseline justify-between gap-3 text-sm">
+            <div className="flex items-baseline justify-between gap-3 text-lg">
               <span style={{ color: TEXT }}>
                 <span style={{ color: MUTED }} className="tabular-nums mr-2 text-xl">{String(i + 1).padStart(2, "0")}</span>
                 {s.step}
