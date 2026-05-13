@@ -31,7 +31,9 @@ export function AdminProviders({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AdminContextProvider>{children}</AdminContextProvider>
+      <AdminThemeProvider>
+        <AdminContextProvider>{children}</AdminContextProvider>
+      </AdminThemeProvider>
     </QueryClientProvider>
   );
 }
