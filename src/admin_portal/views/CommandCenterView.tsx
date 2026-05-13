@@ -380,7 +380,7 @@ function ExpansionWidget({ data }: { data?: Analytics["expansion"] }) {
   }
   return (
     <div className="space-y-2.5">
-      <div className="text-xs" style={{ color: MUTED }}>
+      <div className="text-lg" style={{ color: MUTED }}>
         Seuil de Lancement : <span style={{ color: TEXT, fontWeight: 600 }}>{data.launchTarget}</span> profils par département
       </div>
       {data.departments.map((d, i) => {
@@ -388,13 +388,13 @@ function ExpansionWidget({ data }: { data?: Analytics["expansion"] }) {
         return (
           <div key={d.code} className="rounded border px-3 py-2.5"
             style={{ borderColor: ready ? GOLD : BORDER, background: SURFACE_2 }}>
-            <div className="flex items-baseline justify-between text-sm mb-1.5">
+            <div className="flex items-baseline justify-between mb-1.5 text-lg">
               <div className="flex items-center gap-2.5">
-                <span className="tabular-nums text-xs" style={{ color: GOLD }}>#{i + 1}</span>
+                <span className="tabular-nums text-lg" style={{ color: GOLD }}>#{i + 1}</span>
                 <span style={{ color: TEXT, fontWeight: 600 }}>{d.name}</span>
-                <span className="text-xs tabular-nums" style={{ color: MUTED }}>· {d.code}</span>
+                <span className="tabular-nums text-lg" style={{ color: MUTED }}>· {d.code}</span>
               </div>
-              <div className="tabular-nums text-xs" style={{ color: MUTED }}>
+              <div className="tabular-nums text-lg" style={{ color: MUTED }}>
                 <span style={{ color: TEXT, fontWeight: 600 }}>{d.total}</span>/{d.launchTarget} ·{" "}
                 <span style={{ color: ready ? GOLD : TEXT }}>{d.pctOfTarget}%</span>
               </div>
@@ -404,7 +404,7 @@ function ExpansionWidget({ data }: { data?: Analytics["expansion"] }) {
                 style={{ width: `${d.pctOfTarget}%`,
                   background: ready ? GOLD : `linear-gradient(90deg, ${GOLD_SOFT}, ${GOLD})` }} />
             </div>
-            <div className="text-xs mt-1.5" style={{ color: MUTED }}>
+            <div className="mt-1.5 text-lg" style={{ color: MUTED }}>
               {d.preregs} pré-inscriptions · {d.profiles} profils ·{" "}
               {ready ? <span style={{ color: GOLD }}>Prêt au lancement</span>
                      : <span>{d.launchTarget - d.total} profils restants</span>}
