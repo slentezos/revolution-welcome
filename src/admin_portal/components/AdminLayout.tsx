@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeft, Command, LogOut, Search, User } from "lucide-react";
+import { ChevronLeft, Command, LogOut, Moon, Search, Sun, User } from "lucide-react";
+import { useAdminTheme } from "../core/AdminTheme";
 import {
   DropdownMenu,
   DropdownMenuContent,
