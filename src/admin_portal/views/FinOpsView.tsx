@@ -314,7 +314,7 @@ function Scoreboard({
     <section className="space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-base font-semibold" style={{ color: TEXT }}>
+          <h2 className="font-semibold text-xl" style={{ color: TEXT }}>
             Trésorerie & Indicateurs Clés
           </h2>
           <p className="text-xs opacity-60 mt-0.5">
@@ -434,7 +434,7 @@ function ChartCard({
       style={{ background: SURFACE, borderColor: BORDER, color: TEXT }}
     >
       <header className="mb-3">
-        <h3 className="text-base font-semibold">{title}</h3>
+        <h3 className="font-semibold text-xl">{title}</h3>
         {subtitle && <p className="text-xs opacity-60 mt-0.5">{subtitle}</p>}
       </header>
       {children}
@@ -475,7 +475,7 @@ function TrialWidget({ profiles }: { profiles: ProfileFin[] }) {
     >
       <header className="flex items-center justify-between mb-3">
         <div>
-          <h3 id="trial-title" className="text-base font-semibold">
+          <h3 id="trial-title" className="font-semibold text-xl">
             Période d'Essai « 3 Mois Offerts »
           </h3>
           <p className="text-xs opacity-60 mt-0.5">
@@ -591,7 +591,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
         style={{ borderColor: BORDER }}
       >
         <div>
-          <h3 id="tx-title" className="text-base font-semibold">
+          <h3 id="tx-title" className="font-semibold text-xl">
             Flux de Revenus
           </h3>
           <p className="text-xs opacity-60 mt-0.5">
@@ -648,13 +648,13 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-4 py-12 text-center opacity-60 text-base">
+                <td colSpan={6} className="px-4 py-12 text-center opacity-60 text-xl">
                   Chargement…
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-12 text-center opacity-60 text-base">
+                <td colSpan={6} className="px-4 py-12 text-center opacity-60 text-xl">
                   Aucune transaction.
                 </td>
               </tr>

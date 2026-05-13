@@ -156,8 +156,8 @@ export function ModerationView() {
     >
       <aside className="border-r" style={{ borderColor: BORDER }}>
         <div className="p-4 border-b" style={{ borderColor: BORDER }}>
-          <h3 className="text-base font-semibold">File de Modération</h3>
-          <p className="text-xs opacity-60 mt-1">
+          <h3 className="font-semibold text-xl">File de Modération</h3>
+          <p className="opacity-60 mt-1 text-xl">
             {loading ? "Chargement…" : `${users.length} profil(s) en attente`}
           </p>
         </div>
@@ -188,7 +188,7 @@ export function ModerationView() {
             );
           })}
           {!loading && users.length === 0 && (
-            <li className="px-4 py-8 text-center text-sm opacity-60">
+            <li className="px-4 py-8 text-center opacity-60 text-xl">
               File vide. Tous les profils sont traités.
             </li>
           )}
@@ -197,7 +197,7 @@ export function ModerationView() {
 
       <div className="p-6">
         {!active ? (
-          <p className="opacity-60 text-base">Sélectionnez un profil à modérer.</p>
+          <p className="opacity-60 text-xl">Sélectionnez un profil à modérer.</p>
         ) : (
           <>
             <header className="flex items-start justify-between gap-4 mb-6">
@@ -397,7 +397,7 @@ function RejectModal({
       >
         <header className="p-5 border-b" style={{ borderColor: BORDER }}>
           <h3 className="text-lg font-semibold">Motif de Rejet</h3>
-          <p className="text-xs opacity-60 mt-1">
+          <p className="opacity-60 mt-1 text-xl">
             {`${user.first_name} ${user.last_name}`.trim() || user.email}
           </p>
         </header>

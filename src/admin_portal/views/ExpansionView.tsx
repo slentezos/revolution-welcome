@@ -174,7 +174,7 @@ function ZoneTable({
         style={{ borderColor: BORDER }}
       >
         <div>
-          <h2 id="zone-table-title" className="text-base font-semibold">
+          <h2 id="zone-table-title" className="font-semibold text-xl">
             Répartition Géographique
           </h2>
           <p className="text-xs opacity-60 mt-0.5">
@@ -235,13 +235,13 @@ function ZoneTable({
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center opacity-60 text-base">
+                <td colSpan={columns.length} className="px-4 py-12 text-center opacity-60 text-xl">
                   Chargement…
                 </td>
               </tr>
             ) : table.getRowModel().rows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center opacity-60 text-base">
+                <td colSpan={columns.length} className="px-4 py-12 text-center opacity-60 text-xl">
                   Aucun département actif.
                 </td>
               </tr>
@@ -388,7 +388,7 @@ function LaunchCockpit({ leads }: { leads: Lead[] }) {
         style={{ borderColor: BORDER }}
       >
         <div>
-          <h2 id="cockpit-title" className="text-base font-semibold">
+          <h2 id="cockpit-title" className="font-semibold text-xl">
             Cockpit de Lancement
           </h2>
           <p className="text-xs opacity-60 mt-0.5">
@@ -438,7 +438,7 @@ function TargetCard({
     >
       <header className="flex items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-semibold">{label}</h3>
+          <h3 className="font-semibold text-xl">{label}</h3>
           <p className="text-xs opacity-60 mt-0.5">
             Préfixe {prefix} · Seuil {fmtNumber(threshold)}
           </p>
@@ -588,7 +588,7 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
         style={{ borderColor: BORDER }}
       >
         <div>
-          <h2 id="leads-title" className="text-base font-semibold">
+          <h2 id="leads-title" className="font-semibold text-xl">
             Matrice des Leads
           </h2>
           <p className="text-xs opacity-60 mt-0.5">
@@ -674,13 +674,13 @@ function LeadMatrix({ leads, loading }: { leads: Lead[]; loading: boolean }) {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center opacity-60 text-base">
+                <td colSpan={columns.length} className="px-4 py-12 text-center opacity-60 text-xl">
                   Chargement…
                 </td>
               </tr>
             ) : filteredRows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center opacity-60 text-base">
+                <td colSpan={columns.length} className="px-4 py-12 text-center opacity-60 text-xl">
                   Aucun lead ne correspond aux filtres.
                 </td>
               </tr>
