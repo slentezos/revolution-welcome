@@ -33,6 +33,7 @@
   --ap-elev-1: none;
   --ap-elev-2: 0 8px 24px rgba(0, 0, 0, 0.35);
   --ap-hover: rgba(255, 255, 255, 0.05);
+  --ap-header-bg: rgba(14, 22, 38, 0.85);
 }
 
 [data-admin-theme] {
