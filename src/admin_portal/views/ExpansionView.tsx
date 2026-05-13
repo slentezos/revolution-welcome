@@ -249,9 +249,8 @@ function ZoneTable({
               table.getRowModel().rows.map((row) => {
                 const isOpen = expanded === row.original.dept;
                 return (
-                  <>
+                  <FragmentRow key={row.id}>
                     <tr
-                      key={row.id}
                       tabIndex={0}
                       onClick={() => setExpanded(isOpen ? null : row.original.dept)}
                       onKeyDown={(e) => {
@@ -302,7 +301,7 @@ function ZoneTable({
                         </td>
                       </tr>
                     )}
-                  </>
+                  </FragmentRow>
                 );
               })
             )}
