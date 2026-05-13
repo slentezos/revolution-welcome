@@ -207,7 +207,7 @@ function ZoneTable({
                   return (
                     <th
                       key={h.id}
-                      className="px-4 py-3 text-xs font-medium uppercase tracking-wider opacity-80"
+                      className="px-4 py-3 font-medium uppercase tracking-wider opacity-80 text-lg"
                       aria-sort={
                         sortDir === "asc"
                           ? "ascending"
