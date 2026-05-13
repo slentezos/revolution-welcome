@@ -13,6 +13,8 @@ const Events = lazy(() => import("@/pages/admin/Events"));
 const CMS = lazy(() => import("@/pages/admin/CMS"));
 const Login = lazy(() => import("@/pages/admin/Login"));
 const NotFound = lazy(() => import("@/pages/admin/NotFound"));
+const PublicSite = lazy(() => import("@/pages/portal/PublicSite"));
+const ClientApp = lazy(() => import("@/pages/portal/ClientApp"));
 
 const withSuspense = (node: React.ReactNode) => (
   <Suspense fallback={<GlobalLoading />}>{node}</Suspense>
@@ -20,6 +22,8 @@ const withSuspense = (node: React.ReactNode) => (
 
 const router = createBrowserRouter([
   { path: "/login", element: withSuspense(<Login />) },
+  { path: "/public", element: withSuspense(<PublicSite />) },
+  { path: "/app", element: withSuspense(<ClientApp />) },
   {
     element: <ProtectedRoute />,
     children: [
