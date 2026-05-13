@@ -313,6 +313,66 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
         onConfirm={() => setEditUnlocked(true)}
       />
 
+      {/* Final phase welcome dialog */}
+      <Dialog open={showWelcome} onOpenChange={setShowWelcome}>
+        <DialogContent className="max-w-2xl bg-[hsl(var(--cream))] border-2 border-[hsl(var(--gold))] p-0 overflow-hidden">
+          <div className="max-h-[85vh] overflow-y-auto p-8 md:p-10">
+            <DialogHeader>
+              <div className="w-2 h-2 rounded-full bg-[hsl(var(--gold))] mb-4" />
+              <DialogTitle className="font-heading text-3xl md:text-4xl font-semibold text-[#1B2333] text-left leading-tight">
+                Dossier validé : Phase finale de votre intégration
+              </DialogTitle>
+            </DialogHeader>
+
+            <DialogDescription asChild>
+              <div className="mt-6 space-y-4 text-[#1B2333] text-lg leading-relaxed text-left">
+                <p>Bonjour {welcomeFirstName || "{Prénom}"},</p>
+                <p>
+                  Notre équipe a vérifié et approuvé votre dossier. Votre identité est confirmée. Vous accédez dès à
+                  présent à la phase la plus structurante de votre parcours.
+                </p>
+                <p>
+                  Pour que notre système puisse vous présenter des profils véritablement compatibles, nous devons
+                  comprendre votre mode de vie et votre fonctionnement. Ce processus final est dense, mais il est le
+                  moteur de notre précision. Il se divise en deux modules consécutifs :
+                </p>
+                <ol className="list-decimal pl-6 space-y-2 marker:text-[hsl(var(--gold))] marker:font-bold">
+                  <li>
+                    <span className="font-semibold">Votre Profil (50 questions)</span> : Vos habitudes au quotidien et
+                    vos attentes concrètes.
+                  </li>
+                  <li>
+                    <span className="font-semibold">Test de Personnalité (40 questions)</span> : Votre manière
+                    d'interagir et de prendre des décisions.
+                  </li>
+                </ol>
+                <p>
+                  Nous vous recommandons de vous installer au calme et de prévoir une vingtaine de minutes. Si vous
+                  devez interrompre votre saisie, votre progression sera automatiquement sauvegardée. Vous pourrez
+                  reprendre exactement là où vous vous étiez arrêté en cliquant à nouveau sur le lien reçu par email,
+                  ou en vous connectant simplement avec votre email ou votre numéro de téléphone.
+                </p>
+                <p>
+                  À l'issue de ces questions, vous accéderez à l'analyse détaillée de votre personnalité. Votre profil
+                  deviendra alors officiellement visible par la communauté, marquant ainsi le point de départ effectif
+                  de vos 3 mois d'accès offerts.
+                </p>
+                <p className="font-semibold">L'équipe Kalimera</p>
+              </div>
+            </DialogDescription>
+
+            <div className="mt-8 flex justify-center">
+              <button
+                onClick={() => setShowWelcome(false)}
+                className="px-8 py-4 bg-[#1B2333] text-white rounded-full font-bold text-xl hover:bg-[#1B2333]/90 transition-all min-h-[56px] border-2 border-[hsl(var(--gold))]"
+              >
+                Commencer mon analyse
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* ── Sticky Progress Header ── */}
       <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md pt-8 pb-4 shadow-sm border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
