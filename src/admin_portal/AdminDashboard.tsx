@@ -37,12 +37,12 @@ function SectionRouter() {
     <div className="space-y-6 animate-in fade-in duration-200">
       <header>
         <h1
-          className="text-3xl font-semibold tracking-tight"
+          className="text-3xl font-semibold tracking-tight text-slate-950"
           style={{ color: "#F8FAFC" }}
         >
           {meta?.label}
         </h1>
-        <p className="text-base mt-1 opacity-60">{meta?.description}</p>
+        <p className="mt-1 opacity-60 text-xl">{meta?.description}</p>
       </header>
 
       {section === "command-center" && <CommandCenterView />}

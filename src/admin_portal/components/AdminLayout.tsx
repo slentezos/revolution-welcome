@@ -67,7 +67,7 @@ export function AdminLayout({ children }: { children: ReactNode }) {
               >
                 Kalimera
               </div>
-              <div className="text-base font-semibold" style={{ color: GOLD }}>
+              <div className="font-semibold text-xl" style={{ color: GOLD }}>
                 Private Admin
               </div>
             </div>

@@ -282,9 +282,9 @@ export function MembersView() {
         style={{ height: "min(70vh, 760px)" }}
       >
         {loading ? (
-          <div className="px-5 py-12 text-center opacity-60 text-base">Chargement…</div>
+          <div className="px-5 py-12 text-center opacity-60 text-xl">Chargement…</div>
         ) : filtered.length === 0 ? (
-          <div className="px-5 py-12 text-center opacity-60 text-base">Aucun membre.</div>
+          <div className="px-5 py-12 text-center opacity-60 text-xl">Aucun membre.</div>
         ) : (
           <div
             style={{
@@ -489,7 +489,7 @@ function DetailsSlideOver({ user, onClose }: { user: AdminUser; onClose: () => v
           <Meta label="Médias uploadés" value={String(user.media.length)} />
 
           <div>
-            <h4 className="text-base font-semibold mb-2" style={{ color: GOLD }}>
+            <h4 className="font-semibold mb-2 text-xl" style={{ color: GOLD }}>
               Réponses Quiz ({quiz.length})
             </h4>
             {loading ? (
