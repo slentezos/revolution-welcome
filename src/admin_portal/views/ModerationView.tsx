@@ -453,7 +453,7 @@ function RejectModal({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="h-10 px-4 rounded-md font-semibold text-sm disabled:opacity-40"
+            className="h-10 px-4 rounded-md font-semibold text-lg disabled:opacity-40"
             style={{ background: RED, color: "#fff" }}
           >
             {isSubmitting ? "Envoi…" : "Confirmer le rejet"}
