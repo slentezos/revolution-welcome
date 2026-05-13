@@ -23,14 +23,14 @@ const portals: PortalCard[] = [
     title: "Espace Client",
     subtitle: "Dashboard senior et onboarding",
     icon: User,
-    to: "/app",
+    to: "/dashboard",
     cta: "Entrer dans l'espace",
   },
   {
     title: "Command Center",
     subtitle: "Back-office sécurisé",
     icon: Shield,
-    to: "/",
+    to: "/admin",
     cta: "Ouvrir l'admin",
   },
 ];

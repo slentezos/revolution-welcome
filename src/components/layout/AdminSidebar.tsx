@@ -21,13 +21,13 @@ import {
 } from "@/components/ui/sidebar";
 
 const items = [
-  { titleKey: "Command Center", url: "/", icon: LayoutDashboard },
-  { titleKey: "Matrice des Membres", url: "/members", icon: Users },
-  { titleKey: "Hub de Modération", url: "/moderation", icon: ShieldAlert },
-  { titleKey: "Radar d'Expansion", url: "/expansion", icon: Radar },
-  { titleKey: "FinOps & Abonnements", url: "/finops", icon: Wallet },
-  { titleKey: "Gestion des Événements", url: "/events", icon: CalendarDays },
-  { titleKey: "CMS & Blog", url: "/cms", icon: Newspaper },
+  { titleKey: "Command Center", url: "/admin", icon: LayoutDashboard },
+  { titleKey: "Matrice des Membres", url: "/admin/members", icon: Users },
+  { titleKey: "Hub de Modération", url: "/admin/moderation", icon: ShieldAlert },
+  { titleKey: "Radar d'Expansion", url: "/admin/expansion", icon: Radar },
+  { titleKey: "FinOps & Abonnements", url: "/admin/finops", icon: Wallet },
+  { titleKey: "Gestion des Événements", url: "/admin/events", icon: CalendarDays },
+  { titleKey: "CMS & Blog", url: "/admin/cms", icon: Newspaper },
 ] as const;
 
 export function AdminSidebar() {
@@ -57,7 +57,7 @@ export function AdminSidebar() {
                   <SidebarMenuButton asChild tooltip={item.titleKey} className="h-12 text-base">
                     <NavLink
                       to={item.url}
-                      end={item.url === "/"}
+                      end={item.url === "/admin"}
                       className={({ isActive }) =>
                         `flex items-center gap-3 ${
                           isActive

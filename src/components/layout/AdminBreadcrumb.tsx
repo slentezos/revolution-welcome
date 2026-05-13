@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 const labels: Record<string, string> = {
-  "": "Command Center",
+  admin: "Command Center",
   members: "Matrice des Membres",
   moderation: "Hub de Modération",
   expansion: "Radar d'Expansion",
@@ -22,22 +22,24 @@ const labels: Record<string, string> = {
 export function AdminBreadcrumb() {
   const { pathname } = useLocation();
   const segments = pathname.split("/").filter(Boolean);
+  // Drop leading "admin" — root crumb represents it.
+  const trail = segments[0] === "admin" ? segments.slice(1) : segments;
 
   return (
     <Breadcrumb>
       <BreadcrumbList className="text-base">
         <BreadcrumbItem>
-          {segments.length === 0 ? (
+          {trail.length === 0 ? (
             <BreadcrumbPage className="font-semibold text-navy">Command Center</BreadcrumbPage>
           ) : (
             <BreadcrumbLink asChild>
-              <Link to="/">Command Center</Link>
+              <Link to="/admin">Command Center</Link>
             </BreadcrumbLink>
           )}
         </BreadcrumbItem>
-        {segments.map((seg, i) => {
-          const isLast = i === segments.length - 1;
-          const href = "/" + segments.slice(0, i + 1).join("/");
+        {trail.map((seg, i) => {
+          const isLast = i === trail.length - 1;
+          const href = "/admin/" + trail.slice(0, i + 1).join("/");
           return (
             <Fragment key={href}>
               <BreadcrumbSeparator />

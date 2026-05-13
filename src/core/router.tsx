@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { ProtectedRoute } from "@/core/ProtectedRoute";
 import { GlobalLoading } from "@/components/system/GlobalLoading";
+import { OnboardingGuard } from "@/core/OnboardingGuard";
 
 const CommandCenter = lazy(() => import("@/pages/admin/CommandCenter"));
 const Members = lazy(() => import("@/pages/admin/Members"));
@@ -14,7 +15,8 @@ const CMS = lazy(() => import("@/pages/admin/CMS"));
 const Login = lazy(() => import("@/pages/admin/Login"));
 const NotFound = lazy(() => import("@/pages/admin/NotFound"));
 const PublicSite = lazy(() => import("@/pages/portal/PublicSite"));
-const ClientApp = lazy(() => import("@/pages/portal/ClientApp"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Onboarding = lazy(() => import("@/pages/Onboarding"));
 
 const withSuspense = (node: React.ReactNode) => (
   <Suspense fallback={<GlobalLoading />}>{node}</Suspense>
@@ -23,20 +25,29 @@ const withSuspense = (node: React.ReactNode) => (
 const router = createBrowserRouter([
   { path: "/login", element: withSuspense(<Login />) },
   { path: "/public", element: withSuspense(<PublicSite />) },
-  { path: "/app", element: withSuspense(<ClientApp />) },
+  { path: "/dashboard", element: withSuspense(<Dashboard />) },
   {
+    path: "/onboarding",
+    element: withSuspense(
+      <OnboardingGuard>
+        <Onboarding />
+      </OnboardingGuard>
+    ),
+  },
+  {
+    path: "/admin",
     element: <ProtectedRoute />,
     children: [
       {
         element: <DashboardLayout />,
         children: [
-          { path: "/", element: withSuspense(<CommandCenter />) },
-          { path: "/members", element: withSuspense(<Members />) },
-          { path: "/moderation", element: withSuspense(<Moderation />) },
-          { path: "/expansion", element: withSuspense(<Expansion />) },
-          { path: "/finops", element: withSuspense(<FinOps />) },
-          { path: "/events", element: withSuspense(<Events />) },
-          { path: "/cms", element: withSuspense(<CMS />) },
+          { index: true, element: withSuspense(<CommandCenter />) },
+          { path: "members", element: withSuspense(<Members />) },
+          { path: "moderation", element: withSuspense(<Moderation />) },
+          { path: "expansion", element: withSuspense(<Expansion />) },
+          { path: "finops", element: withSuspense(<FinOps />) },
+          { path: "events", element: withSuspense(<Events />) },
+          { path: "cms", element: withSuspense(<CMS />) },
         ],
       },
     ],
