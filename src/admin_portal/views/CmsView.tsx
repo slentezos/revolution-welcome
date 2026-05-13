@@ -560,7 +560,7 @@ function EntityTagPicker({
                   key={opt}
                   type="button"
                   onClick={() => toggle(cat, opt)}
-                  className="text-xs px-2 py-1 rounded-full border transition-colors focus-visible:outline-none focus-visible:ring-2"
+                  className="px-2 py-1 rounded-full border transition-colors focus-visible:outline-none focus-visible:ring-2 text-xl"
                   style={{
                     background: on ? GOLD : "transparent",
                     color: on ? NAVY : TEXT,
