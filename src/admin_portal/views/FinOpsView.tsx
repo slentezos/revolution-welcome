@@ -317,7 +317,7 @@ function Scoreboard({
           <h2 className="font-semibold text-xl" style={{ color: TEXT }}>
             Trésorerie & Indicateurs Clés
           </h2>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             {loading ? "Chargement…" : "Synchronisation Stripe/Supabase en temps réel."}
           </p>
         </div>
