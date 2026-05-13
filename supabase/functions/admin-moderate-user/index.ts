@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
         .from("profiles")
         .update({
           account_status: "approved",
-          onboarding_step: "quiz_50",
+          onboarding_step: "quiz_50_ready",
           updated_at: new Date().toISOString(),
         })
         .eq("user_id", user_id);
