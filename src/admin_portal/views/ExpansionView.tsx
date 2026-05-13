@@ -124,11 +124,11 @@ function ZoneTable({
         header: "Zone",
         cell: (c) => (
           <div className="min-w-0">
-            <div className="font-semibold">
+            <div className="font-semibold text-lg">
               {c.row.original.topCity}{" "}
               <span className="opacity-50 font-normal">({c.row.original.dept})</span>
             </div>
-            <div className="text-xs opacity-60 truncate">
+            <div className="opacity-60 truncate text-lg">
               {c.row.original.region || "—"}
             </div>
           </div>
@@ -285,7 +285,7 @@ function ZoneTable({
                                 className="flex items-center justify-between px-3 py-2 rounded-md border text-sm"
                                 style={{ borderColor: BORDER }}
                               >
-                                <div className="min-w-0 truncate">
+                                <div className="min-w-0 truncate text-lg">
                                   <span className="font-medium">{p.postal_code}</span>{" "}
                                   <span className="opacity-60">{p.city}</span>
                                 </div>
@@ -444,7 +444,7 @@ function TargetCard({
           </p>
         </div>
         <span
-          className="inline-block px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider"
+          className="inline-block px-2 py-0.5 rounded font-bold uppercase tracking-wider text-lg"
           style={{
             background: ready ? GOLD : "rgba(148,163,184,0.12)",
             color: ready ? NAVY : "#94A3B8",
