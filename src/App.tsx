@@ -35,6 +35,7 @@ import ReservationPromesse from "./pages/ReservationPromesse";
 import ReservationCalendrier from "./pages/ReservationCalendrier";
 import ReservationPaiement from "./pages/ReservationPaiement";
 import ReservationSucces from "./pages/ReservationSucces";
+import AdminDashboard from "./admin_portal/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +77,7 @@ const App = () => (
           <Route path="/reservation/calendrier" element={<ReservationCalendrier />} />
           <Route path="/reservation/paiement" element={<ReservationPaiement />} />
           <Route path="/reservation/succes" element={<ReservationSucces />} />
+          <Route path="/portal-secret-admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
