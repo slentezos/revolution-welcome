@@ -404,7 +404,7 @@ function RejectModal({
 
         <div className="p-5 space-y-4">
           <label className="block">
-            <span className="text-xs uppercase tracking-wider opacity-70">Motif</span>
+            <span className="uppercase tracking-wider opacity-70 text-lg">Motif</span>
             <select
               {...register("reason")}
               className="mt-1 w-full h-10 px-3 rounded-md border text-base"
