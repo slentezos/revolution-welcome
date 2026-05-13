@@ -324,7 +324,7 @@ function Scoreboard({
         <button
           onClick={onRefresh}
           disabled={loading || refreshing}
-          className={`h-9 px-3 rounded-md border text-sm disabled:opacity-50 ${FOCUS_RING}`}
+          className={`h-9 px-3 rounded-md border disabled:opacity-50 ${FOCUS_RING} text-lg`}
           style={{ borderColor: BORDER, color: TEXT, background: NAVY }}
         >
           {refreshing ? "Synchronisation…" : "Rafraîchir"}
