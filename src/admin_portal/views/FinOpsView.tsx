@@ -706,7 +706,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
           </tbody>
         </table>
         {rows.length > 300 && (
-          <div className="px-4 py-3 text-xs opacity-60 border-t" style={{ borderColor: BORDER }}>
+          <div className="px-4 py-3 opacity-60 border-t text-lg" style={{ borderColor: BORDER }}>
             Affichage limité aux 300 dernières transactions — utilisez l'export CSV pour la liste complète.
           </div>
         )}
