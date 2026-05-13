@@ -44,12 +44,7 @@ function SectionRouter() {
 
       {section === "command-center" && <CommandCenterView />}
       {section === "members" && <MembersView />}
-      {section === "moderation" && (
-        <PlaceholderView
-          title="Modération & qualité"
-          description="Gérez les signalements, la modération des profils et la qualité des interactions au sein de la communauté."
-        />
-      )}
+      {section === "moderation" && <ModerationView />}
       {section === "expansion" && (
         <PlaceholderView
           title="Expansion & marchés"
