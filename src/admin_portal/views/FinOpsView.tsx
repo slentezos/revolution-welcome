@@ -594,7 +594,7 @@ function TransactionMatrix({ tx, loading }: { tx: Tx[]; loading: boolean }) {
           <h3 id="tx-title" className="font-semibold text-xl">
             Flux de Revenus
           </h3>
-          <p className="text-xs opacity-60 mt-0.5">
+          <p className="opacity-60 mt-0.5 text-lg">
             {fmtNumber(rows.length)} mouvement(s) — {fmtEuroCompact(totals.sum)} encaissés ·{" "}
             <span style={{ color: totals.failed > 0 ? RED : "inherit" }}>
               {fmtNumber(totals.failed)} échec(s)
