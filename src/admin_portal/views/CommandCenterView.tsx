@@ -326,7 +326,7 @@ function IdfWidget({ data }: { data?: Analytics["idf"] }) {
       </div>
 
       <div>
-        <div className="text-sm mb-2" style={{ color: TEXT }}>
+        <div className="mb-2 text-lg" style={{ color: TEXT }}>
           Top 3 Arrondissements / Villes <span style={{ color: MUTED }}>(par activité)</span>
         </div>
         {data.topZones.length === 0 ? (
