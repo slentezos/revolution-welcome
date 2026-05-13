@@ -193,28 +193,28 @@ export function CmsView() {
         style={{ background: SURFACE, borderColor: BORDER }}
       >
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold tracking-wide" style={{ color: TEXT }}>
+          <h2 className="font-semibold tracking-wide text-xl" style={{ color: TEXT }}>
             Articles
           </h2>
           <button
             onClick={() => setSelectedId(null)}
-            className="text-xs px-2 py-1 rounded-md font-medium focus-visible:outline-none focus-visible:ring-2"
+            className="font-medium text-xl px-2 py-1 rounded-md focus-visible:outline-none focus-visible:ring-2"
             style={{ background: GOLD, color: NAVY }}
           >
             + Nouveau
           </button>
         </div>
         {isLoading ? (
-          <p className="text-sm" style={{ color: MUTED }}>Chargement…</p>
+          <p className="text-xl" style={{ color: MUTED }}>Chargement…</p>
         ) : articles.length === 0 ? (
-          <p className="text-sm" style={{ color: MUTED }}>Aucun article.</p>
+          <p className="text-xl" style={{ color: MUTED }}>Aucun article.</p>
         ) : (
           <ul className="space-y-1">
             {articles.map((a) => (
               <li key={a.id}>
                 <button
                   onClick={() => setSelectedId(a.id)}
-                  className="w-full text-left px-2 py-2 rounded-md text-sm transition-colors"
+                  className="w-full text-left px-2 py-2 rounded-md text-xl transition-colors"
                   style={{
                     background: selectedId === a.id ? "rgba(201,169,97,0.12)" : "transparent",
                     color: TEXT,
@@ -440,7 +440,7 @@ export function CmsView() {
                 onClick={() => {
                   if (confirm("Supprimer cet article ?")) deleteMutation.mutate(draft.id!);
                 }}
-                className="text-sm px-3 py-2 rounded-md border"
+                className="text-xl px-3 py-2 rounded-md border"
                 style={{ borderColor: BORDER, color: "#FCA5A5" }}
               >
                 Supprimer
@@ -450,7 +450,7 @@ export function CmsView() {
           <button
             onClick={() => saveMutation.mutate()}
             disabled={!draft.title || saveMutation.isPending}
-            className="text-sm font-semibold px-4 py-2 rounded-md disabled:opacity-50"
+            className="text-xl font-semibold px-4 py-2 rounded-md disabled:opacity-50"
             style={{ background: GOLD, color: NAVY }}
           >
             {saveMutation.isPending ? "Enregistrement…" : "Enregistrer"}
@@ -462,7 +462,7 @@ export function CmsView() {
 }
 
 const inputCls =
-  "w-full rounded-md border bg-transparent px-3 py-2 text-sm text-slate-100 outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
+  "w-full rounded-md border bg-transparent px-3 py-2 text-xl text-slate-100 outline-none focus-visible:ring-2 focus-visible:ring-offset-2";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -471,7 +471,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
       style={{ background: SURFACE, borderColor: BORDER }}
     >
       <h3
-        className="text-[11px] uppercase tracking-[0.18em] font-semibold"
+        className="uppercase tracking-[0.18em] font-semibold text-xl"
         style={{ color: GOLD }}
       >
         {title}
@@ -495,7 +495,7 @@ function Field({
   return (
     <label className="block">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-xs font-medium" style={{ color: TEXT }}>
+        <span className="font-medium text-xl" style={{ color: TEXT }}>
           {label}
         </span>
         {hint && (
@@ -594,7 +594,7 @@ function RelatedPicker({
     else toast.warning(`Maximum ${MAX} articles reliés`);
   };
   if (articles.length === 0)
-    return <p className="text-sm" style={{ color: MUTED }}>Aucun autre article disponible.</p>;
+    return <p className="text-xl" style={{ color: MUTED }}>Aucun autre article disponible.</p>;
   return (
     <div className="space-y-1 max-h-48 overflow-y-auto">
       {articles.map((a) => {
@@ -604,7 +604,7 @@ function RelatedPicker({
             key={a.id}
             type="button"
             onClick={() => toggle(a.id)}
-            className="w-full text-left text-sm px-2 py-1.5 rounded-md border flex items-center justify-between"
+            className="w-full text-left text-xl px-2 py-1.5 rounded-md border flex items-center justify-between"
             style={{
               background: on ? "rgba(201,169,97,0.1)" : "transparent",
               borderColor: on ? GOLD : BORDER,
