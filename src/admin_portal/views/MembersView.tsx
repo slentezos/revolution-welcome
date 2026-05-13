@@ -475,7 +475,7 @@ function DetailsSlideOver({ user, onClose }: { user: AdminUser; onClose: () => v
           </button>
         </div>
 
-        <div className="p-5 space-y-6 text-sm">
+        <div className="p-5 space-y-6 text-lg">
           <Meta label="Téléphone" value={user.phone} />
           <Meta label="Date de naissance" value={fmtFr(user.birth_date)} />
           <Meta label="Âge" value={calcAge(user.birth_date)?.toString() ?? "—"} />
