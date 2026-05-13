@@ -48,12 +48,7 @@ function SectionRouter() {
       {section === "members" && <MembersView />}
       {section === "moderation" && <ModerationView />}
       {section === "expansion" && <ExpansionView />}
-      {section === "finops" && (
-        <PlaceholderView
-          title="FinOps & abonnements"
-          description="Suivez les revenus, les abonnements actifs, les remboursements et les indicateurs financiers clés."
-        />
-      )}
+      {section === "finops" && <FinOpsView />}
     </div>
   );
 }
