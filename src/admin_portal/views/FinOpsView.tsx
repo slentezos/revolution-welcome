@@ -435,7 +435,7 @@ function ChartCard({
     >
       <header className="mb-3">
         <h3 className="font-semibold text-xl">{title}</h3>
-        {subtitle && <p className="text-xs opacity-60 mt-0.5">{subtitle}</p>}
+        {subtitle && <p className="opacity-60 mt-0.5 text-lg">{subtitle}</p>}
       </header>
       {children}
     </section>
