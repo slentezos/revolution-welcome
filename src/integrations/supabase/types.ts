@@ -16,11 +16,13 @@ export type Database = {
     Tables: {
       articles: {
         Row: {
+          author_avatar_url: string | null
           author_bio: string | null
           author_id: string | null
           author_linkedin: string | null
           author_name: string | null
           author_twitter: string | null
+          category: string | null
           content: string | null
           cover_image_alt: string | null
           cover_image_url: string | null
@@ -28,7 +30,9 @@ export type Database = {
           excerpt: string | null
           id: string
           primary_topic: string | null
+          publication_date: string | null
           published_at: string | null
+          read_time_minutes: number | null
           related_article_ids: string[]
           seo_metadata: Json
           slug: string
@@ -37,11 +41,13 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          author_avatar_url?: string | null
           author_bio?: string | null
           author_id?: string | null
           author_linkedin?: string | null
           author_name?: string | null
           author_twitter?: string | null
+          category?: string | null
           content?: string | null
           cover_image_alt?: string | null
           cover_image_url?: string | null
@@ -49,7 +55,9 @@ export type Database = {
           excerpt?: string | null
           id?: string
           primary_topic?: string | null
+          publication_date?: string | null
           published_at?: string | null
+          read_time_minutes?: number | null
           related_article_ids?: string[]
           seo_metadata?: Json
           slug: string
@@ -58,11 +66,13 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          author_avatar_url?: string | null
           author_bio?: string | null
           author_id?: string | null
           author_linkedin?: string | null
           author_name?: string | null
           author_twitter?: string | null
+          category?: string | null
           content?: string | null
           cover_image_alt?: string | null
           cover_image_url?: string | null
@@ -70,7 +80,9 @@ export type Database = {
           excerpt?: string | null
           id?: string
           primary_topic?: string | null
+          publication_date?: string | null
           published_at?: string | null
+          read_time_minutes?: number | null
           related_article_ids?: string[]
           seo_metadata?: Json
           slug?: string

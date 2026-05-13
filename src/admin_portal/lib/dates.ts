@@ -10,6 +10,10 @@ const safeParse = (value: string | Date): Date =>
 export const formatDateFr = (value: string | Date): string =>
   format(safeParse(value), "d MMMM yyyy", { locale: fr });
 
+/** Example: "12/05/2026" */
+export const formatDateShortFr = (value: string | Date): string =>
+  format(safeParse(value), "dd/MM/yyyy", { locale: fr });
+
 /** Example: "12/05/2026 14:32" */
 export const formatDateTimeFr = (value: string | Date): string =>
   format(safeParse(value), "dd/MM/yyyy HH:mm", { locale: fr });
