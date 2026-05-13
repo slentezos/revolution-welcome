@@ -48,6 +48,8 @@ export default function OnboardingProfile({ profileId, onComplete, readOnly = fa
   const { toast } = useToast();
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [editUnlocked, setEditUnlocked] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [welcomeFirstName, setWelcomeFirstName] = useState("");
 
   // Cooldown logic for "son profil" fields
   const isCooldownLocked = cooldown?.isCompleted && cooldown?.isLocked;
