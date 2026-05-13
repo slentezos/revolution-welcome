@@ -75,7 +75,7 @@ export function shortLocation(p: {
   city_name?: string | null;
 }): string {
   const cp = p.postal_code?.trim();
-  const dept = cp?.length >= 2 ? cp.slice(0, 2) : null;
+  const dept = cp && cp.length >= 2 ? cp.slice(0, 2) : null;
   const city = p.city_name?.trim();
   if (cp && city) return `${cp} · ${city} (${dept})`;
   if (cp) return `${cp} (${dept})`;
