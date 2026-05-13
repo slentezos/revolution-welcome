@@ -505,7 +505,7 @@ function TrialWidget({ profiles }: { profiles: ProfileFin[] }) {
             {active.slice(0, 6).map((u) => (
               <li
                 key={u.user_id}
-                className="flex items-center justify-between px-3 py-2 rounded-md border text-sm"
+                className="flex items-center justify-between px-3 py-2 rounded-md border text-lg"
                 style={{ borderColor: BORDER, background: NAVY }}
               >
                 <span className="truncate">
