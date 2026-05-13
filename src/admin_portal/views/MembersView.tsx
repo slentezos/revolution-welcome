@@ -316,7 +316,7 @@ export function MembersView() {
                   }}
                 >
                   <div>
-                    <div className="font-medium text-sm truncate">
+                    <div className="font-medium truncate text-lg">
                       {`${u.first_name} ${u.last_name}`.trim() || (
                         <span className="opacity-50">{u.email}</span>
                       )}
@@ -329,11 +329,11 @@ export function MembersView() {
                         </span>
                       )}
                     </div>
-                    <div className="text-xs opacity-50 truncate">{u.email}</div>
+                    <div className="opacity-50 truncate text-lg">{u.email}</div>
                   </div>
-                  <div className="text-sm">{calcAge(u.birth_date) ?? <Dash />}</div>
-                  <div className="text-sm capitalize">{u.gender || <Dash />}</div>
-                  <div className="text-sm truncate">{shortLocation(u)}</div>
+                  <div className="text-lg">{calcAge(u.birth_date) ?? <Dash />}</div>
+                  <div className="capitalize text-lg">{u.gender || <Dash />}</div>
+                  <div className="truncate text-lg">{shortLocation(u)}</div>
                   <div>
                     <StepBadge stepIndex={tunnelStepIndex(step)} label={tunnelStepLabel(step)} />
                   </div>
@@ -342,7 +342,7 @@ export function MembersView() {
                   </div>
                   <div>
                     <span
-                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium"
+                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-medium text-lg"
                       style={{ background: tone.bg, color: tone.fg }}
                     >
                       <span
