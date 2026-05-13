@@ -7,6 +7,7 @@ import { MembersView } from "./views/MembersView";
 import { ModerationView } from "./views/ModerationView";
 import { ExpansionView } from "./views/ExpansionView";
 import { FinOpsView } from "./views/FinOpsView";
+import { CmsView } from "./views/CmsView";
 import { PlaceholderView } from "./views/PlaceholderView";
 import { ProtectedRoute } from "./core/ProtectedRoute";
 import { AdminErrorBoundary } from "./core/AdminErrorBoundary";
@@ -52,7 +53,7 @@ function SectionRouter() {
       {section === "events" && (
         <PlaceholderView title="Gestion des Événements" slots={6} />
       )}
-      {section === "cms" && <PlaceholderView title="CMS & Blog" slots={6} />}
+      {section === "cms" && <CmsView />}
       {section === "settings" && (
         <PlaceholderView title="Paramètres" slots={4} />
       )}
